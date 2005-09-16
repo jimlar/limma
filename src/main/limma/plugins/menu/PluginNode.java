@@ -1,18 +1,18 @@
 package limma.plugins.menu;
 
-import limma.MainWindow;
+import limma.plugins.PluginManager;
 
 public class PluginNode extends MenuNode {
     private String plugin;
-    private MainWindow window;
+    private PluginManager pluginManager;
 
-    public PluginNode(String title, String plugin, MainWindow window) {
+    public PluginNode(String title, String plugin, PluginManager pluginManager) {
         super(title);
         this.plugin = plugin;
-        this.window = window;
+        this.pluginManager = pluginManager;
     }
 
     public void execute() {
-        window.showPlugin(plugin);
+        pluginManager.showPlugin(plugin);
     }
 }

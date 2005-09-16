@@ -112,7 +112,7 @@
     <option name="HIDE_WARNINGS" value="false" />
   </component>
   <component name="FileEditorManager" split-orientation="vertical" split-proportion="0.5">
-    <first-group selected-file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java">
+    <first-group selected-file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicFile.java">
       <entry file="file://$PROJECT_DIR$/src/main/limma/MainWindow.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
           <state line="31" column="23" selection-start="1000" selection-end="1000" vertical-scroll-proportion="0.53509784">
@@ -125,6 +125,13 @@
       <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
           <state line="56" column="0" selection-start="2133" selection-end="2133" vertical-scroll-proportion="0.34407365">
+            <folding />
+          </state>
+        </provider>
+      </entry>
+      <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/SoundPlayerFactory.java" pinned="false">
+        <provider selected="true" editor-type-id="text-editor">
+          <state line="8" column="13" selection-start="183" selection-end="183" vertical-scroll-proportion="0.06904488">
             <folding />
           </state>
         </provider>
@@ -518,6 +525,13 @@
     <entry file="jar://$PROJECT_DIR$/lib/commons-lang-2.0.jar!/org/apache/commons/lang/StringUtils.class">
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="25" selection-start="795" selection-end="795" vertical-scroll-proportion="0.33256617">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/SoundPlayerFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="13" selection-start="183" selection-end="183" vertical-scroll-proportion="0.06904488">
           <folding />
         </state>
       </provider>

@@ -85,11 +85,8 @@
     <UpdateInfo EnvName="UPDATE_PROJECT" date="9/17/05 7:41 PM">
       <FileInformation>
         <MODIFIED>
-          <PATH>$PROJECT_DIR$/build.xml</PATH>
-          <PATH>$PROJECT_DIR$/limma.iws</PATH>
           <PATH>$PROJECT_DIR$/build/classes/limma/Main.class</PATH>
           <PATH>$PROJECT_DIR$/build/classes/limma/MainWindow.class</PATH>
-          <PATH>$PROJECT_DIR$/src/main/limma/plugins/music/MP3Player.java</PATH>
         </MODIFIED>
         <MERGED_WITH_CONFLICTS />
         <MERGED />

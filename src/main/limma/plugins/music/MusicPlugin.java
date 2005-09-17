@@ -12,7 +12,7 @@ import java.util.*;
 
 public class MusicPlugin extends JPanel implements Plugin {
     private DefaultListModel fileListModel;
-    private JList fileList;
+    private FileList fileList;
     private FlacPlayer flacPlayer;
     private MP3Player mp3Player;
     private JLabel artistLabel;
@@ -20,17 +20,18 @@ public class MusicPlugin extends JPanel implements Plugin {
     private JLabel albumLabel;
     private JLabel yearLabel;
     private JLabel genreLabel;
+    private MusicFile playingFile;
 
     public MusicPlugin() {
         setOpaque(false);
-        setLayout(new BorderLayout(5, 20));
+        setLayout(new GridBagLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         fileListModel = new DefaultListModel();
-        fileList = new JList(fileListModel);
+        fileList = new FileList();
         JScrollPane scrollPane = new JScrollPane(fileList);
-        add(scrollPane, BorderLayout.CENTER);
-        scrollPane.setBorder(BorderFactory.createLineBorder(Color.white, 1));
+        add(scrollPane, new GridBagConstraints(0, 0, 1, 1, 1, 0.6, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        scrollPane.setBorder(BorderFactory.createEtchedBorder());
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         fileList.setOpaque(false);
@@ -38,8 +39,8 @@ public class MusicPlugin extends JPanel implements Plugin {
         scrollPane.getViewport().setOpaque(false);
 
         JPanel infoPanel = new JPanel();
-        add(infoPanel, BorderLayout.SOUTH);
-        infoPanel.setBorder(BorderFactory.createLineBorder(Color.white, 1));
+        add(infoPanel, new GridBagConstraints(0, 2, 1, 1, 1, 0.4, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(20, 0, 0, 0), 0, 0));
+        infoPanel.setBorder(BorderFactory.createEtchedBorder());
         infoPanel.setOpaque(false);
 
         infoPanel.setLayout(new GridBagLayout());
@@ -64,7 +65,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         infoPanel.add(new JLabel("Genre:"), getConstraint(4, true));
         infoPanel.add(genreLabel, getConstraint(4, false));
 
-        fileList.setCellRenderer(new MusicListCellRenderer());
+        fileList.setCellRenderer(new MusicListCellRenderer(this));
         flacPlayer = new FlacPlayer();
         mp3Player = new MP3Player();
     }
@@ -93,7 +94,7 @@ public class MusicPlugin extends JPanel implements Plugin {
 
     public void activatePlugin() {
         fileListModel.clear();
-        File musicDir = new File("/media/music/Fu Manchu");
+        File musicDir = new File("/media/music/Down");
         try {
             scanAndAddFiles(musicDir);
         } catch (ID3Exception e) {
@@ -111,19 +112,8 @@ public class MusicPlugin extends JPanel implements Plugin {
                 MusicFile file = (MusicFile) fileList.getSelectedValue();
                 play(file);
                 break;
-            case KeyEvent.VK_UP:
-                if (fileList.getSelectedIndex() > 0) {
-                    fileList.setSelectedIndex(fileList.getSelectedIndex() - 1);
-                    fileList.scrollRectToVisible(fileList.getCellBounds(fileList.getSelectedIndex(), fileList.getSelectedIndex()));
-                }
-                break;
-            case KeyEvent.VK_DOWN:
-                if (fileList.getSelectedIndex() < fileListModel.getSize() - 1) {
-                    fileList.setSelectedIndex(fileList.getSelectedIndex() + 1);
-                    fileList.scrollRectToVisible(fileList.getCellBounds(fileList.getSelectedIndex(), fileList.getSelectedIndex()));
-                }
-                break;
         }
+        fileList.processKeyEvent(e);
     }
 
     private void play(MusicFile file) {
@@ -141,6 +131,8 @@ public class MusicPlugin extends JPanel implements Plugin {
         albumLabel.setText(file.getAlbum());
         yearLabel.setText(String.valueOf(file.getYear()));
         genreLabel.setText(file.getGenre());
+
+        playingFile = file;
     }
 
     private void scanAndAddFiles(File dir) throws ID3Exception {
@@ -157,6 +149,20 @@ public class MusicPlugin extends JPanel implements Plugin {
             } else if (file.getName().endsWith(".mp3") || file.getName().endsWith(".flac")) {
                 fileListModel.addElement(new MusicFile(file));
             }
+        }
+    }
+
+    public MusicFile getPlayingFile() {
+        return playingFile;
+    }
+
+    private class FileList extends JList {
+        public FileList() {
+            super(fileListModel);
+        }
+
+        public void processKeyEvent(KeyEvent e) {
+            super.processKeyEvent(e);
         }
     }
 }

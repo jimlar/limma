@@ -81,7 +81,28 @@
     <option name="FILE_HISTORY_DIALOG_COMMENTS_SPLITTER_PROPORTION" value="0.8" />
     <option name="FILE_HISTORY_DIALOG_SPLITTER_PROPORTION" value="0.5" />
   </component>
-  <component name="CvsTabbedWindow" />
+  <component name="CvsTabbedWindow">
+    <UpdateInfo EnvName="UPDATE_PROJECT" date="9/17/05 7:47 PM">
+      <FileInformation>
+        <MODIFIED>
+          <PATH>$PROJECT_DIR$/limma.iws</PATH>
+        </MODIFIED>
+        <MERGED_WITH_CONFLICTS />
+        <MERGED />
+        <UNKNOWN />
+        <LOCALLY_ADDED />
+        <LOCALLY_REMOVED />
+        <UPDATED />
+        <REMOVED_FROM_REPOSITORY />
+        <UNKNOWN_TYPE />
+        <CREATED />
+        <MOD_REMOVED_FROM_SERVER />
+        <LOCALLY_REMOVED_MODIFIED_ON_SERVER />
+        <RESTORED />
+        <CREATED_BY_SECOND_PARTY />
+      </FileInformation>
+    </UpdateInfo>
+  </component>
   <component name="DaemonCodeAnalyzer">
     <disable_hints />
   </component>
@@ -122,7 +143,7 @@
       </entry>
       <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="25" column="43" selection-start="707" selection-end="707" vertical-scroll-proportion="0.12765957">
+          <state line="25" column="43" selection-start="707" selection-end="707" vertical-scroll-proportion="0.13475177">
             <folding />
           </state>
         </provider>
@@ -150,14 +171,14 @@
       </entry>
       <entry file="file://$PROJECT_DIR$/src/main/limma/MainWindow.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="35" column="17" selection-start="1240" selection-end="1240" vertical-scroll-proportion="0.39716312">
+          <state line="35" column="17" selection-start="1240" selection-end="1240" vertical-scroll-proportion="0.45271868">
             <folding />
           </state>
         </provider>
       </entry>
       <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/menu/MenuPlugin.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="14" column="40" selection-start="403" selection-end="403" vertical-scroll-proportion="0.100472815">
+          <state line="14" column="40" selection-start="403" selection-end="403" vertical-scroll-proportion="0.10638298">
             <folding />
           </state>
         </provider>
@@ -185,20 +206,14 @@
   <component name="J2EEProjectPane" />
   <component name="NamedScopeManager" />
   <component name="PackagesPane">
-    <expanded_node url="limma.plugins" module="limma" type="package" />
-    <expanded_node url="" module="limma" type="module" />
     <expanded_node url="limma" module="limma" type="package" />
+    <expanded_node url="" module="limma" type="module" />
     <expanded_node url="limma.plugins.music" module="limma" type="package" />
+    <expanded_node url="limma.plugins" module="limma" type="package" />
   </component>
   <component name="ProjectPane">
-    <expanded_node url="file://$PROJECT_DIR$/src" module="limma" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$/src/main" module="limma" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$/src/main/limma/plugins" module="limma" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$/src/main/limma/plugins/music" module="limma" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$" module="limma" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$/src/main/limma" module="limma" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$/src/main/limma/plugins/menu" module="limma" type="directory" />
     <expanded_node url="" module="limma" type="module" />
+    <expanded_node url="file://$PROJECT_DIR$" module="limma" type="directory" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" splitterProportion="0.5">
@@ -240,8 +255,8 @@
     <property name="cvs_file_history_treeWidth6" value="179" />
     <property name="cvs_file_history_flatOrder5" value="5" />
     <property name="cvs_file_history_flatWidth5" value="179" />
-    <property name="cvs_file_history_treeOrder2" value="2" />
     <property name="cvs_file_history_treeWidth3" value="179" />
+    <property name="cvs_file_history_treeOrder2" value="2" />
     <property name="cvs_file_history_treeWidth5" value="179" />
     <property name="cvs_file_history_flatOrder6" value="6" />
     <property name="cvs_file_history_flatWidth0" value="179" />
@@ -295,10 +310,11 @@
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <module name="limma" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
+        <option name="DEBUG_PORT" value="32888" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="false" />
       </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
       <RunnerSettings RunnerId="Profile ">
         <option name="myStartupWithAllocations" value="false" />
         <option name="myStartupWithSampling" value="false" />
@@ -307,10 +323,9 @@
         <option name="myCaptureCPUOnExit" value="false" />
         <option name="mySnapshotsDir" />
       </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Profile " />
       <ConfigurationWrapper RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Profile " />
     </configuration>
   </component>
   <component name="SelectInManager">
@@ -388,7 +403,7 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33040616" order="8" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.4" order="6" />
       <window_info id="TestDox" active="false" anchor="right" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="3" />
-      <window_info id="Profile" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33039647" order="-1" />
+      <window_info id="Profile" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33039647" order="8" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="8" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="true" internal_type="docked" type="docked" visible="false" weight="0.2496112" order="1" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="true" internal_type="docked" type="docked" visible="false" weight="0.20965971" order="2" />
@@ -534,23 +549,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/menu/MenuPlugin.java">
+    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="40" selection-start="403" selection-end="403" vertical-scroll-proportion="0.100472815">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/menu/MenuCellRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="0" selection-start="1693" selection-end="1693" vertical-scroll-proportion="0.8333333">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicListCellRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="0" selection-start="1450" selection-end="1450" vertical-scroll-proportion="0.6560284">
+        <state line="25" column="43" selection-start="707" selection-end="707" vertical-scroll-proportion="0.13475177">
           <folding />
         </state>
       </provider>
@@ -562,9 +563,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/limma/MainWindow.java">
+    <entry file="file://$PROJECT_DIR$/.cvsignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="17" selection-start="1240" selection-end="1240" vertical-scroll-proportion="0.39716312">
+        <state line="2" column="0" selection-start="7" selection-end="7" vertical-scroll-proportion="0.035460994">
           <folding />
         </state>
       </provider>
@@ -576,16 +577,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java">
+    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicListCellRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="43" selection-start="707" selection-end="707" vertical-scroll-proportion="0.12765957">
+        <state line="38" column="0" selection-start="1450" selection-end="1450" vertical-scroll-proportion="0.6560284">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.cvsignore">
+    <entry file="file://$PROJECT_DIR$/src/main/limma/MainWindow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="7" selection-end="7" vertical-scroll-proportion="0.035460994">
+        <state line="35" column="17" selection-start="1240" selection-end="1240" vertical-scroll-proportion="0.45271868">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/menu/MenuPlugin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="40" selection-start="403" selection-end="403" vertical-scroll-proportion="0.10638298">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/menu/MenuCellRenderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="0" selection-start="1693" selection-end="1693" vertical-scroll-proportion="0.8333333">
           <folding />
         </state>
       </provider>

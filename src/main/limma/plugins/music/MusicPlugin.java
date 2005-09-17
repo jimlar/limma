@@ -93,7 +93,7 @@ public class MusicPlugin extends JPanel implements Plugin {
 
     public void activatePlugin() {
         fileListModel.clear();
-        File musicDir = new File("/media/music/Rolling Stones");
+        File musicDir = new File("/media/music/Fu Manchu");
         try {
             scanAndAddFiles(musicDir);
         } catch (ID3Exception e) {

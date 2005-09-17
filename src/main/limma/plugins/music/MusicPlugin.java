@@ -15,6 +15,11 @@ public class MusicPlugin extends JPanel implements Plugin {
     private JList fileList;
     private FlacPlayer flacPlayer;
     private MP3Player mp3Player;
+    private JLabel artistLabel;
+    private JLabel titleLabel;
+    private JLabel albumLabel;
+    private JLabel yearLabel;
+    private JLabel genreLabel;
 
     public MusicPlugin() {
         setOpaque(false);
@@ -37,17 +42,29 @@ public class MusicPlugin extends JPanel implements Plugin {
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.white, 1));
         infoPanel.setOpaque(false);
 
-        fileList.setCellRenderer(new ListCellRenderer() {
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                MusicFile file = (MusicFile) value;
-                JLabel label = new JLabel(file.getArtist() + " - " + file.getTitle());
-                label.setForeground(Color.white);
-                if (isSelected) {
-                    label.setBorder(BorderFactory.createLineBorder(Color.white, 1));
-                }
-                return label;
-            }
-        });
+        infoPanel.setLayout(new GridLayout(5, 2));
+        artistLabel = new JLabel();
+        titleLabel = new JLabel();
+        albumLabel = new JLabel();
+        yearLabel = new JLabel();
+        genreLabel = new JLabel();
+        artistLabel.setForeground(Color.white);
+        titleLabel.setForeground(Color.white);
+        albumLabel.setForeground(Color.white);
+        yearLabel.setForeground(Color.white);
+        genreLabel.setForeground(Color.white);
+        infoPanel.add(new JLabel("Artist:"));
+        infoPanel.add(artistLabel);
+        infoPanel.add(new JLabel("Title:"));
+        infoPanel.add(titleLabel);
+        infoPanel.add(new JLabel("Album:"));
+        infoPanel.add(albumLabel);
+        infoPanel.add(new JLabel("Year:"));
+        infoPanel.add(yearLabel);
+        infoPanel.add(new JLabel("Genre:"));
+        infoPanel.add(genreLabel);
+
+        fileList.setCellRenderer(new MusicListCellRenderer());
         flacPlayer = new FlacPlayer();
         mp3Player = new MP3Player();
     }
@@ -102,6 +119,12 @@ public class MusicPlugin extends JPanel implements Plugin {
         } else if (file.isMP3()) {
             mp3Player.play(file.getFile());
         }
+
+        artistLabel.setText(file.getArtist());
+        titleLabel.setText(file.getTitle());
+        albumLabel.setText(file.getAlbum());
+        yearLabel.setText(String.valueOf(file.getYear()));
+        genreLabel.setText(file.getGenre());
     }
 
     private void scanAndAddFiles(File dir) throws ID3Exception {
@@ -120,4 +143,5 @@ public class MusicPlugin extends JPanel implements Plugin {
             }
         }
     }
+
 }

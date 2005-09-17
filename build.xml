@@ -4,6 +4,7 @@
         <fileset dir="lib">
             <include name="*.jar"/>
         </fileset>
+        <pathelement path="build/classes"/>
     </path>
 
     <target name="clean">
@@ -12,5 +13,9 @@
 
     <target name="compile">
         <javac classpathref="production.classpath" srcdir="src/main" destdir="build/classes"/>
+    </target>
+
+    <target name="run" depends="compile">
+        <java classname="limma.Main" classpathref="production.classpath" fork="yes" spawn="yes"/>
     </target>
 </project>

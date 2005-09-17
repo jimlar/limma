@@ -25,6 +25,7 @@ public class MP3Player implements SoundPlayer {
 
         public PlayerThread(File soundFile) {
             this.soundFile = soundFile;
+            setPriority(MIN_PRIORITY);
         }
 
         public void shutdown() {

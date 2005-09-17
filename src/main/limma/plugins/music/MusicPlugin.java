@@ -42,7 +42,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.white, 1));
         infoPanel.setOpaque(false);
 
-        infoPanel.setLayout(new GridLayout(5, 2));
+        infoPanel.setLayout(new GridBagLayout());
         artistLabel = new JLabel();
         titleLabel = new JLabel();
         albumLabel = new JLabel();
@@ -53,20 +53,34 @@ public class MusicPlugin extends JPanel implements Plugin {
         albumLabel.setForeground(Color.white);
         yearLabel.setForeground(Color.white);
         genreLabel.setForeground(Color.white);
-        infoPanel.add(new JLabel("Artist:"));
-        infoPanel.add(artistLabel);
-        infoPanel.add(new JLabel("Title:"));
-        infoPanel.add(titleLabel);
-        infoPanel.add(new JLabel("Album:"));
-        infoPanel.add(albumLabel);
-        infoPanel.add(new JLabel("Year:"));
-        infoPanel.add(yearLabel);
-        infoPanel.add(new JLabel("Genre:"));
-        infoPanel.add(genreLabel);
+        infoPanel.add(new JLabel("Artist:"), getConstraint(0, true));
+        infoPanel.add(artistLabel, getConstraint(0, false));
+        infoPanel.add(new JLabel("Title:"), getConstraint(1, true));
+        infoPanel.add(titleLabel, getConstraint(1, false));
+        infoPanel.add(new JLabel("Album:"), getConstraint(2, true));
+        infoPanel.add(albumLabel, getConstraint(2, false));
+        infoPanel.add(new JLabel("Year:"), getConstraint(3, true));
+        infoPanel.add(yearLabel, getConstraint(3, false));
+        infoPanel.add(new JLabel("Genre:"), getConstraint(4, true));
+        infoPanel.add(genreLabel, getConstraint(4, false));
 
         fileList.setCellRenderer(new MusicListCellRenderer());
         flacPlayer = new FlacPlayer();
         mp3Player = new MP3Player();
+    }
+
+    private GridBagConstraints getConstraint(int row, boolean isLabel) {
+        return new GridBagConstraints(isLabel ? 0 : 1,
+                row,
+                1,
+                1,
+                isLabel ? 0 : 1,
+                0,
+                GridBagConstraints.NORTHWEST,
+                isLabel ? GridBagConstraints.NONE : GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 0, 0),
+                0,
+                0);
     }
 
     public String getPluginName() {
@@ -79,7 +93,7 @@ public class MusicPlugin extends JPanel implements Plugin {
 
     public void activatePlugin() {
         fileListModel.clear();
-        File musicDir = new File("/media/music/Coldplay");
+        File musicDir = new File("/media/music/Rolling Stones");
         try {
             scanAndAddFiles(musicDir);
         } catch (ID3Exception e) {
@@ -100,11 +114,13 @@ public class MusicPlugin extends JPanel implements Plugin {
             case KeyEvent.VK_UP:
                 if (fileList.getSelectedIndex() > 0) {
                     fileList.setSelectedIndex(fileList.getSelectedIndex() - 1);
+                    fileList.scrollRectToVisible(fileList.getCellBounds(fileList.getSelectedIndex(), fileList.getSelectedIndex()));
                 }
                 break;
             case KeyEvent.VK_DOWN:
                 if (fileList.getSelectedIndex() < fileListModel.getSize() - 1) {
                     fileList.setSelectedIndex(fileList.getSelectedIndex() + 1);
+                    fileList.scrollRectToVisible(fileList.getCellBounds(fileList.getSelectedIndex(), fileList.getSelectedIndex()));
                 }
                 break;
         }
@@ -143,5 +159,4 @@ public class MusicPlugin extends JPanel implements Plugin {
             }
         }
     }
-
 }

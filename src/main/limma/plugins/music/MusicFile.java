@@ -20,6 +20,7 @@ public class MusicFile extends Object {
         this.file = file;
         MP3File mp3File = new MP3File(file);
         title = file.getName();
+        artist = file.getParentFile().getName();
 
         try {
             if (mp3File.getID3V2Tag() != null) {

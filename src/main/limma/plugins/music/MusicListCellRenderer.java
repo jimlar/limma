@@ -23,7 +23,7 @@ class MusicListCellRenderer implements ListCellRenderer {
 
 
         public Dimension getPreferredSize() {
-            return new Dimension(1, 30);
+            return new Dimension(1, 22);
         }
 
         public void paint(Graphics g) {
@@ -33,7 +33,7 @@ class MusicListCellRenderer implements ListCellRenderer {
             String text = file.getArtist() + ": " + file.getTitle();
             Font font = Font.decode("SansSerif");
             font = font.deriveFont(Font.BOLD);
-            font = font.deriveFont((float) 30);
+            font = font.deriveFont((float) 20);
             g.setFont(font);
             g.setColor(Color.black);
             g.drawString(text, 1, font.getSize() / 2 + 11);

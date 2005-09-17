@@ -18,11 +18,6 @@ public class MainWindow extends JFrame implements PluginManager {
     private Plugin currentPlugin;
 
     public MainWindow() {
-        super(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration());
-
-        this.setUndecorated(true);
-        this.setResizable(false);
-
         ImageIcon background = new ImageIcon("background.jpg");
         mainPanel = new ImagePanel(background);
         mainPanel.setOpaque(false);
@@ -43,8 +38,6 @@ public class MainWindow extends JFrame implements PluginManager {
             }
         });
         validate();
-        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
-        requestFocus();
     }
 
     private Plugin getCurrentPlugin() {

@@ -1,16 +1,18 @@
 package limma;
 
-import limma.plugins.music.MP3Player;
-import limma.plugins.music.MP3Player;
-import limma.plugins.music.FlacPlayer;
-import limma.plugins.menu.MenuListModel;
-import limma.plugins.menu.MenuNode;
-
-import java.io.File;
+import java.awt.*;
 
 public class Main {
 
     public static void main(String[] args) {
         MainWindow mainWindow = new MainWindow();
+/*
+        mainWindow.setVisible(true);
+        mainWindow.setSize(300, 400);
+        */
+        mainWindow.setUndecorated(true);
+        mainWindow.setResizable(false);
+        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(mainWindow);
+        mainWindow.requestFocus();
     }
 }

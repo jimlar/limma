@@ -36,9 +36,9 @@ class MusicListCellRenderer implements ListCellRenderer {
             font = font.deriveFont((float) 30);
             g.setFont(font);
             g.setColor(Color.black);
-            g.drawString(text, 60 + 1, font.getSize() / 2 + 11);
+            g.drawString(text, 1, font.getSize() / 2 + 11);
             g.setColor(Color.white);
-            g.drawString(text, 60, font.getSize() / 2 + 9);
+            g.drawString(text, 0, font.getSize() / 2 + 9);
             super.paint(g);
         }
     }

@@ -112,7 +112,7 @@
     <option name="HIDE_WARNINGS" value="false" />
   </component>
   <component name="FileEditorManager" split-orientation="vertical" split-proportion="0.5">
-    <first-group selected-file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicListCellRenderer.java">
+    <first-group selected-file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java">
       <entry file="file://$PROJECT_DIR$/src/main/limma/MainWindow.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
           <state line="45" column="0" selection-start="1504" selection-end="1504" vertical-scroll-proportion="0.63829786">
@@ -122,14 +122,14 @@
       </entry>
       <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="146" column="0" selection-start="4977" selection-end="4977" vertical-scroll-proportion="0.8758865">
+          <state line="81" column="55" selection-start="2736" selection-end="2736" vertical-scroll-proportion="0.21276596">
             <folding />
           </state>
         </provider>
       </entry>
       <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicListCellRenderer.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="27" column="0" selection-start="967" selection-end="967" vertical-scroll-proportion="0.4609929">
+          <state line="40" column="31" selection-start="1578" selection-end="1578" vertical-scroll-proportion="0.69148934">
             <folding />
           </state>
         </provider>
@@ -530,16 +530,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicListCellRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="0" selection-start="967" selection-end="967" vertical-scroll-proportion="0.4609929">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="146" column="0" selection-start="4977" selection-end="4977" vertical-scroll-proportion="0.8758865">
+        <state line="81" column="55" selection-start="2736" selection-end="2736" vertical-scroll-proportion="0.21276596">
           <folding />
         </state>
       </provider>
@@ -561,6 +554,13 @@
     <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/menu/MenuCellRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="48" column="0" selection-start="582" selection-end="1693" vertical-scroll-proportion="0.8333333">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicListCellRenderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="31" selection-start="1578" selection-end="1578" vertical-scroll-proportion="0.69148934">
           <folding />
         </state>
       </provider>

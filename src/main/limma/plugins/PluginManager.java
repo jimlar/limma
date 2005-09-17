@@ -1,5 +1,7 @@
 package limma.plugins;
 
 public interface PluginManager {
-    void showPlugin(String plugin);
+    void activatePlugin(String plugin);
+
+    void activateMenu();
 }

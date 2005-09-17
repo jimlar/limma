@@ -13,6 +13,6 @@ public class PluginNode extends MenuNode {
     }
 
     public void execute() {
-        pluginManager.showPlugin(plugin);
+        pluginManager.activatePlugin(plugin);
     }
 }

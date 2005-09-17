@@ -6,21 +6,23 @@ import org.blinkenlights.jid3.ID3Exception;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.*;
 
 public class MusicPlugin extends JPanel implements Plugin {
     private DefaultListModel fileListModel;
+    private JList fileList;
+    private FlacPlayer flacPlayer;
+    private MP3Player mp3Player;
 
-    public MusicPlugin(final PluginManager pluginManager) {
+    public MusicPlugin() {
         setOpaque(false);
         setLayout(new BorderLayout(5, 20));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         fileListModel = new DefaultListModel();
-        JList fileList = new JList(fileListModel);
+        fileList = new JList(fileListModel);
         JScrollPane scrollPane = new JScrollPane(fileList);
         add(scrollPane, BorderLayout.CENTER);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.white, 1));
@@ -35,13 +37,6 @@ public class MusicPlugin extends JPanel implements Plugin {
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.white, 1));
         infoPanel.setOpaque(false);
 
-        fileList.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    pluginManager.showPlugin("menu");
-                }
-            }
-        });
         fileList.setCellRenderer(new ListCellRenderer() {
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 MusicFile file = (MusicFile) value;
@@ -53,6 +48,8 @@ public class MusicPlugin extends JPanel implements Plugin {
                 return label;
             }
         });
+        flacPlayer = new FlacPlayer();
+        mp3Player = new MP3Player();
     }
 
     public String getPluginName() {
@@ -65,11 +62,45 @@ public class MusicPlugin extends JPanel implements Plugin {
 
     public void activatePlugin() {
         fileListModel.clear();
-        File musicDir = new File("/media/music");
+        File musicDir = new File("/media/music/Korn");
         try {
             scanAndAddFiles(musicDir);
         } catch (ID3Exception e) {
             e.printStackTrace();
+        }
+        fileList.setSelectedIndex(0);
+    }
+
+    public void keyPressed(KeyEvent e, PluginManager pluginManager) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_ESCAPE:
+                pluginManager.activateMenu();
+                break;
+            case KeyEvent.VK_ENTER:
+                MusicFile file = (MusicFile) fileList.getSelectedValue();
+                play(file);
+                break;
+            case KeyEvent.VK_UP:
+                if (fileList.getSelectedIndex() > 0) {
+                    fileList.setSelectedIndex(fileList.getSelectedIndex() - 1);
+                }
+                break;
+            case KeyEvent.VK_DOWN:
+                if (fileList.getSelectedIndex() < fileListModel.getSize() - 1) {
+                    fileList.setSelectedIndex(fileList.getSelectedIndex() + 1);
+                }
+                break;
+        }
+    }
+
+    private void play(MusicFile file) {
+        flacPlayer.stop();
+        mp3Player.stop();
+
+        if (file.isFlac()) {
+            flacPlayer.play(file.getFile());
+        } else if (file.isMP3()) {
+            mp3Player.play(file.getFile());
         }
     }
 
@@ -84,7 +115,7 @@ public class MusicPlugin extends JPanel implements Plugin {
             File file = (File) i.next();
             if (file.isDirectory()) {
                 scanAndAddFiles(file);
-            } else if (file.getName().endsWith(".mp3") || file.getName().endsWith(".flac")){
+            } else if (file.getName().endsWith(".mp3") || file.getName().endsWith(".flac")) {
                 fileListModel.addElement(new MusicFile(file));
             }
         }

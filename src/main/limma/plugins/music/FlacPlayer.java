@@ -14,12 +14,14 @@ public class FlacPlayer implements SoundPlayer {
     private PlayerThread thread;
 
     public void play(File file) {
+        thread = new PlayerThread(file);
+        thread.start();
+    }
+
+    public void stop() {
         if (thread != null) {
             thread.shutdown();
         }
-
-        thread = new PlayerThread(file);
-        thread.start();
     }
 
     private static class PlayerThread extends Thread {

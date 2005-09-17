@@ -1,19 +1,16 @@
 package limma.plugins.menu;
 
-import limma.plugins.menu.*;
-import limma.plugins.PluginManager;
 import limma.plugins.Plugin;
-import limma.MainWindow;
+import limma.plugins.PluginManager;
 
 import javax.swing.*;
+import java.awt.event.KeyEvent;
 
 public class MenuPlugin extends JList implements Plugin {
+    private MenuListModel listModel;
 
     public MenuPlugin(PluginManager pluginManager) {
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        setSelectedIndex(0);
-
-        addKeyListener(new MenuKeyListener());
 
         setCellRenderer(new MenuCellRenderer());
         setOpaque(false);
@@ -29,7 +26,9 @@ public class MenuPlugin extends JList implements Plugin {
         settingsNode.add(new MenuNode("Video Settings"));
         settingsNode.add(new MenuNode("News Settings"));
 
-        setModel(new MenuListModel(root));
+        listModel = new MenuListModel(root);
+        setModel(listModel);
+        setSelectedIndex(0);
     }
 
     public String getPluginName() {
@@ -41,5 +40,37 @@ public class MenuPlugin extends JList implements Plugin {
     }
 
     public void activatePlugin() {
+    }
+
+    public void keyPressed(KeyEvent e, PluginManager pluginManager) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_ENTER:
+                MenuNode selectedNode = (MenuNode) getSelectedValue();
+                selectedNode.execute();
+                if (!selectedNode.getChildren().isEmpty()) {
+                    listModel.setCurrent(selectedNode);
+                    setSelectedIndex(0);
+                }
+                break;
+            case KeyEvent.VK_ESCAPE:
+                MenuNode currentNode = listModel.getCurrent();
+                if (currentNode.getParent() == null) {
+                    System.exit(0);
+                } else {
+                    listModel.setCurrent(currentNode.getParent());
+                    setSelectedIndex(currentNode.getParent().getChildren().indexOf(currentNode));
+                }
+                break;
+            case KeyEvent.VK_UP:
+                if (getSelectedIndex() > 0) {
+                    setSelectedIndex(getSelectedIndex() - 1);
+                }
+                break;
+            case KeyEvent.VK_DOWN:
+                if (getSelectedIndex() < listModel.getSize() - 1) {
+                    setSelectedIndex(getSelectedIndex() + 1);
+                }
+                break;
+        }
     }
 }

@@ -1,10 +1,10 @@
 package limma.plugins.music;
 
-import org.blinkenlights.jid3.MP3File;
+import org.apache.commons.lang.StringUtils;
 import org.blinkenlights.jid3.ID3Exception;
+import org.blinkenlights.jid3.MP3File;
 import org.blinkenlights.jid3.v1.ID3V1Tag;
 import org.blinkenlights.jid3.v2.ID3V2Tag;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 
@@ -67,5 +67,13 @@ public class MusicFile extends Object {
 
     public String getGenre() {
         return genre;
+    }
+
+    public boolean isFlac() {
+        return file.getName().toLowerCase().endsWith(".flac");
+    }
+
+    public boolean isMP3() {
+        return file.getName().toLowerCase().endsWith(".mp3");
     }
 }

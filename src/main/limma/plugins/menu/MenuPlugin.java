@@ -2,23 +2,25 @@ package limma.plugins.menu;
 
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
+import limma.swing.AntialiasList;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class MenuPlugin extends JList implements Plugin {
+public class MenuPlugin extends JPanel implements Plugin {
     private MenuListModel listModel;
+    private AntialiasList list;
 
     public MenuPlugin(PluginManager pluginManager) {
-        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        setCellRenderer(new MenuCellRenderer());
         setOpaque(false);
 
         MenuNode root = new MenuNode("root");
-        root.add(new MenuNode("Watch TV"));
-        root.add(new MenuNode("Watch Videos"));
-        root.add(new PluginNode("Listen to music", "music", pluginManager));
+        root.add(new MenuNode("TV"));
+        root.add(new MenuNode("Video"));
+        root.add(new PluginNode("Music", "music", pluginManager));
+        root.add(new MenuNode("Games"));
+        root.add(new MenuNode("Pictures"));
         MenuNode settingsNode = new MenuNode("Settings");
         root.add(settingsNode);
         settingsNode.add(new MenuNode("Appearance"));
@@ -27,8 +29,13 @@ public class MenuPlugin extends JList implements Plugin {
         settingsNode.add(new MenuNode("News Settings"));
 
         listModel = new MenuListModel(root);
-        setModel(listModel);
-        setSelectedIndex(0);
+        list = new AntialiasList(listModel);
+        list.setCellRenderer(new MenuCellRenderer());
+
+        list.setSelectedIndex(0);
+
+        setLayout(new GridBagLayout());
+        add(list, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
     }
 
     public String getPluginName() {
@@ -45,11 +52,11 @@ public class MenuPlugin extends JList implements Plugin {
     public void keyPressed(KeyEvent e, PluginManager pluginManager) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ENTER:
-                MenuNode selectedNode = (MenuNode) getSelectedValue();
+                MenuNode selectedNode = (MenuNode) list.getSelectedValue();
                 selectedNode.execute();
                 if (!selectedNode.getChildren().isEmpty()) {
                     listModel.setCurrent(selectedNode);
-                    setSelectedIndex(0);
+                    list.setSelectedIndex(0);
                 }
                 break;
             case KeyEvent.VK_ESCAPE:
@@ -58,19 +65,10 @@ public class MenuPlugin extends JList implements Plugin {
                     System.exit(0);
                 } else {
                     listModel.setCurrent(currentNode.getParent());
-                    setSelectedIndex(currentNode.getParent().getChildren().indexOf(currentNode));
-                }
-                break;
-            case KeyEvent.VK_UP:
-                if (getSelectedIndex() > 0) {
-                    setSelectedIndex(getSelectedIndex() - 1);
-                }
-                break;
-            case KeyEvent.VK_DOWN:
-                if (getSelectedIndex() < listModel.getSize() - 1) {
-                    setSelectedIndex(getSelectedIndex() + 1);
+                    list.setSelectedIndex(currentNode.getParent().getChildren().indexOf(currentNode));
                 }
                 break;
         }
+        list.processKeyEvent(e);
     }
 }

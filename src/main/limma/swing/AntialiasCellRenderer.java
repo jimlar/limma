@@ -1,32 +1,22 @@
-package limma.plugins.music;
+package limma.swing;
 
 import javax.swing.*;
 import java.awt.*;
 
-class MusicListCellRenderer implements ListCellRenderer {
-    private MusicPlugin musicPlugin;
-
-    public MusicListCellRenderer(MusicPlugin musicPlugin) {
-        this.musicPlugin = musicPlugin;
-    }
+class AntialiasCellRenderer implements ListCellRenderer {
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        return new ListItemComponent((MusicFile) value, cellHasFocus, isSelected);
+        return new ListItemComponent(value.toString(), isSelected);
     }
 
     private static class ListItemComponent extends JComponent {
-        private MusicFile file;
         private boolean selected;
         private static final int FONT_SIZE = 30;
+        private String text;
 
-        public ListItemComponent(MusicFile file, boolean hasFocus, boolean isSelected) {
-            this.file = file;
+        public ListItemComponent(String text, boolean isSelected) {
+            this.text = text;
             selected = isSelected;
-            if (hasFocus) {
-                setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1), BorderFactory.createLineBorder(Color.yellow.brighter(), 1)));
-            } else {
-                setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-            }
         }
 
 
@@ -44,7 +34,6 @@ class MusicListCellRenderer implements ListCellRenderer {
                 g.fillRect(0, 0, (int) clipBounds.getWidth(), (int) clipBounds.getHeight());
             }
 
-            String text = file.getArtist() + ": " + file.getTitle();
             Font font = Font.decode("SansSerif");
             font = font.deriveFont(Font.BOLD);
             font = font.deriveFont((float) FONT_SIZE);

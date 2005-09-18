@@ -4,6 +4,7 @@ import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.plugins.menu.MenuPlugin;
 import limma.plugins.music.MusicPlugin;
+import limma.swing.ImagePanel;
 
 import javax.swing.*;
 import java.awt.*;

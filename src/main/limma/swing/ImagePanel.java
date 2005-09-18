@@ -1,9 +1,7 @@
-package limma;
+package limma.swing;
 
-import java.awt.Graphics;
-
-import javax.swing.JPanel;
-import javax.swing.ImageIcon;
+import javax.swing.*;
+import java.awt.*;
 
 public class ImagePanel extends JPanel {
     private final ImageIcon background;

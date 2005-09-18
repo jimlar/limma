@@ -2,6 +2,7 @@ package limma.plugins.music;
 
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
+import limma.swing.AntialiasList;
 import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class MusicPlugin extends JPanel implements Plugin {
     private DefaultListModel fileListModel;
-    private FileList fileList;
+    private AntialiasList antialiasList;
     private FlacPlayer flacPlayer;
     private MP3Player mp3Player;
     private JLabel artistLabel;
@@ -32,14 +33,12 @@ public class MusicPlugin extends JPanel implements Plugin {
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         fileListModel = new DefaultListModel();
-        fileList = new FileList();
-        fileList.setCellRenderer(new MusicListCellRenderer(this));
-        JScrollPane scrollPane = new JScrollPane(fileList);
+        antialiasList = new AntialiasList(fileListModel);
+        JScrollPane scrollPane = new JScrollPane(antialiasList);
         add(scrollPane, new GridBagConstraints(0, 0, 1, 1, 1, 0.6, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         scrollPane.setBorder(BorderFactory.createEtchedBorder());
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        fileList.setOpaque(false);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
 
@@ -116,18 +115,28 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     private void reloadFileList() {
-        setStatus("Loading file list...");
         fileListModel.clear();
-        for (Iterator i = loadFiles().iterator(); i.hasNext();) {
-            MusicFile file = (MusicFile) i.next();
-            fileListModel.addElement(file);
-        }
-        fileList.setSelectedIndex(0);
-        setStatus("");
+        setStatus("Loading file list...");
+
+        new Thread() {
+            public void run() {
+                for (Iterator i = loadFiles().iterator(); i.hasNext();) {
+                    MusicFile file = (MusicFile) i.next();
+                    fileListModel.addElement(file);
+                }
+
+                antialiasList.setSelectedIndex(0);
+                setStatus("");
+            }
+        }.start();
     }
 
-    private void setStatus(String message) {
-        statusLabel.setText(message);
+    private void setStatus(final String message) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                statusLabel.setText(message);
+            }
+        });
     }
 
     private List loadFiles() {
@@ -152,7 +161,7 @@ public class MusicPlugin extends JPanel implements Plugin {
                 break;
             case KeyEvent.VK_ENTER:
             case KeyEvent.VK_P:
-                MusicFile file = (MusicFile) fileList.getSelectedValue();
+                MusicFile file = (MusicFile) antialiasList.getSelectedValue();
                 play(file);
                 break;
             case KeyEvent.VK_S:
@@ -160,10 +169,9 @@ public class MusicPlugin extends JPanel implements Plugin {
                 break;
             case KeyEvent.VK_R:
                 scanFiles();
-                reloadFileList();
                 break;
         }
-        fileList.processKeyEvent(e);
+        antialiasList.processKeyEvent(e);
     }
 
     private void stop() {
@@ -197,21 +205,26 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     private void scanFiles() {
-        File musicDir = new File("/media/music");
-        setStatus("Scanning for music files in " + musicDir.getAbsolutePath());
-        ArrayList files = new ArrayList();
-        scanAndAddFiles(musicDir, files);
-        ObjectOutputStream out = null;
-        try {
-            out = new ObjectOutputStream(new FileOutputStream(MUSIC_CACHE));
-            out.writeObject(files);
+        new Thread() {
+            public void run() {
+                File musicDir = new File("/media/music");
+                setStatus("Scanning for music files in " + musicDir.getAbsolutePath());
+                ArrayList files = new ArrayList();
+                scanAndAddFiles(musicDir, files);
+                ObjectOutputStream out = null;
+                try {
+                    out = new ObjectOutputStream(new FileOutputStream(MUSIC_CACHE));
+                    out.writeObject(files);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            IOUtils.closeQuietly(out);
-            setStatus("");
-        }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    IOUtils.closeQuietly(out);
+                    setStatus("");
+                }
+                reloadFileList();
+            }
+        }.start();
     }
 
     private void scanAndAddFiles(File dir, List result) {
@@ -235,13 +248,4 @@ public class MusicPlugin extends JPanel implements Plugin {
         return playingFile;
     }
 
-    private class FileList extends JList {
-        public FileList() {
-            super(fileListModel);
-        }
-
-        public void processKeyEvent(KeyEvent e) {
-            super.processKeyEvent(e);
-        }
-    }
 }

@@ -78,4 +78,8 @@ public class MusicFile extends Object implements Serializable {
     public boolean isMP3() {
         return file.getName().toLowerCase().endsWith(".mp3");
     }
+
+    public String toString() {
+        return getArtist() + ": " + getTitle();
+    }
 }

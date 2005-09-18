@@ -2,13 +2,14 @@ package limma.plugins.music;
 
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
-import org.blinkenlights.jid3.ID3Exception;
+import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
+import java.io.*;
 import java.util.*;
+import java.util.List;
 
 public class MusicPlugin extends JPanel implements Plugin {
     private DefaultListModel fileListModel;
@@ -20,7 +21,10 @@ public class MusicPlugin extends JPanel implements Plugin {
     private JLabel albumLabel;
     private JLabel yearLabel;
     private JLabel genreLabel;
+    private JLabel statusLabel;
     private MusicFile playingFile;
+    private static final File MUSIC_CACHE = new File("music.cache");
+    private boolean hasBeenActivated;
 
     public MusicPlugin() {
         setOpaque(false);
@@ -29,6 +33,7 @@ public class MusicPlugin extends JPanel implements Plugin {
 
         fileListModel = new DefaultListModel();
         fileList = new FileList();
+        fileList.setCellRenderer(new MusicListCellRenderer(this));
         JScrollPane scrollPane = new JScrollPane(fileList);
         add(scrollPane, new GridBagConstraints(0, 0, 1, 1, 1, 0.6, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         scrollPane.setBorder(BorderFactory.createEtchedBorder());
@@ -38,34 +43,45 @@ public class MusicPlugin extends JPanel implements Plugin {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
 
-        JPanel infoPanel = new JPanel();
-        add(infoPanel, new GridBagConstraints(0, 2, 1, 1, 1, 0.4, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(20, 0, 0, 0), 0, 0));
-        infoPanel.setBorder(BorderFactory.createEtchedBorder());
-        infoPanel.setOpaque(false);
+        JPanel currentTrackPanel = new JPanel(new GridBagLayout());
+        add(currentTrackPanel, new GridBagConstraints(0, 1, 1, 1, 0.8, 0.2, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(20, 0, 0, 0), 0, 0));
+        currentTrackPanel.setBorder(BorderFactory.createEtchedBorder());
+        currentTrackPanel.setOpaque(false);
 
-        infoPanel.setLayout(new GridBagLayout());
         artistLabel = new JLabel();
         titleLabel = new JLabel();
         albumLabel = new JLabel();
         yearLabel = new JLabel();
         genreLabel = new JLabel();
+        statusLabel = new JLabel();
         artistLabel.setForeground(Color.white);
         titleLabel.setForeground(Color.white);
         albumLabel.setForeground(Color.white);
         yearLabel.setForeground(Color.white);
         genreLabel.setForeground(Color.white);
-        infoPanel.add(new JLabel("Artist:"), getConstraint(0, true));
-        infoPanel.add(artistLabel, getConstraint(0, false));
-        infoPanel.add(new JLabel("Title:"), getConstraint(1, true));
-        infoPanel.add(titleLabel, getConstraint(1, false));
-        infoPanel.add(new JLabel("Album:"), getConstraint(2, true));
-        infoPanel.add(albumLabel, getConstraint(2, false));
-        infoPanel.add(new JLabel("Year:"), getConstraint(3, true));
-        infoPanel.add(yearLabel, getConstraint(3, false));
-        infoPanel.add(new JLabel("Genre:"), getConstraint(4, true));
-        infoPanel.add(genreLabel, getConstraint(4, false));
+        statusLabel.setForeground(Color.white);
+        currentTrackPanel.add(new JLabel("Artist:"), getConstraint(0, true));
+        currentTrackPanel.add(artistLabel, getConstraint(0, false));
+        currentTrackPanel.add(new JLabel("Title:"), getConstraint(1, true));
+        currentTrackPanel.add(titleLabel, getConstraint(1, false));
+        currentTrackPanel.add(new JLabel("Album:"), getConstraint(2, true));
+        currentTrackPanel.add(albumLabel, getConstraint(2, false));
+        currentTrackPanel.add(new JLabel("Year:"), getConstraint(3, true));
+        currentTrackPanel.add(yearLabel, getConstraint(3, false));
+        currentTrackPanel.add(new JLabel("Genre:"), getConstraint(4, true));
+        currentTrackPanel.add(genreLabel, getConstraint(4, false));
+        currentTrackPanel.add(new JLabel("-----"), getConstraint(5, true));
+        currentTrackPanel.add(new JLabel("Status:"), getConstraint(6, true));
+        currentTrackPanel.add(statusLabel, getConstraint(6, false));
 
-        fileList.setCellRenderer(new MusicListCellRenderer(this));
+        JPanel shortKeysPanel = new JPanel(new GridBagLayout());
+        add(shortKeysPanel, new GridBagConstraints(0, 2, 1, 1, 0.2, 0.2, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(20, 0, 0, 0), 0, 0));
+        shortKeysPanel.setBorder(BorderFactory.createEtchedBorder());
+        shortKeysPanel.setOpaque(false);
+        shortKeysPanel.add(new JLabel("P - play"), getConstraint(0, false));
+        shortKeysPanel.add(new JLabel("S - stop"), getConstraint(1, false));
+        shortKeysPanel.add(new JLabel("R - rescan music directory:"), getConstraint(2, false));
+
         flacPlayer = new FlacPlayer();
         mp3Player = new MP3Player();
     }
@@ -93,14 +109,40 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     public void activatePlugin() {
+        if (!hasBeenActivated) {
+            reloadFileList();
+            hasBeenActivated = true;
+        }
+    }
+
+    private void reloadFileList() {
+        setStatus("Loading file list...");
         fileListModel.clear();
-        File musicDir = new File("/media/music/Down");
-        try {
-            scanAndAddFiles(musicDir);
-        } catch (ID3Exception e) {
-            e.printStackTrace();
+        for (Iterator i = loadFiles().iterator(); i.hasNext();) {
+            MusicFile file = (MusicFile) i.next();
+            fileListModel.addElement(file);
         }
         fileList.setSelectedIndex(0);
+        setStatus("");
+    }
+
+    private void setStatus(String message) {
+        statusLabel.setText(message);
+    }
+
+    private List loadFiles() {
+        ObjectInputStream in = null;
+        try {
+            in = new ObjectInputStream(new FileInputStream(MUSIC_CACHE));
+            return (List) in.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+        return Collections.EMPTY_LIST;
     }
 
     public void keyPressed(KeyEvent e, PluginManager pluginManager) {
@@ -109,11 +151,30 @@ public class MusicPlugin extends JPanel implements Plugin {
                 pluginManager.activateMenu();
                 break;
             case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_P:
                 MusicFile file = (MusicFile) fileList.getSelectedValue();
                 play(file);
                 break;
+            case KeyEvent.VK_S:
+                stop();
+                break;
+            case KeyEvent.VK_R:
+                scanFiles();
+                reloadFileList();
+                break;
         }
         fileList.processKeyEvent(e);
+    }
+
+    private void stop() {
+        flacPlayer.stop();
+        mp3Player.stop();
+        playingFile = null;
+        artistLabel.setText("");
+        titleLabel.setText("");
+        albumLabel.setText("");
+        yearLabel.setText("");
+        genreLabel.setText("");
     }
 
     private void play(MusicFile file) {
@@ -135,7 +196,25 @@ public class MusicPlugin extends JPanel implements Plugin {
         playingFile = file;
     }
 
-    private void scanAndAddFiles(File dir) throws ID3Exception {
+    private void scanFiles() {
+        File musicDir = new File("/media/music");
+        setStatus("Scanning for music files in " + musicDir.getAbsolutePath());
+        ArrayList files = new ArrayList();
+        scanAndAddFiles(musicDir, files);
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(MUSIC_CACHE));
+            out.writeObject(files);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(out);
+            setStatus("");
+        }
+    }
+
+    private void scanAndAddFiles(File dir, List result) {
         ArrayList files = new ArrayList(Arrays.asList(dir.listFiles()));
         Collections.sort(files, new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -145,9 +224,9 @@ public class MusicPlugin extends JPanel implements Plugin {
         for (Iterator i = files.iterator(); i.hasNext();) {
             File file = (File) i.next();
             if (file.isDirectory()) {
-                scanAndAddFiles(file);
+                scanAndAddFiles(file, result);
             } else if (file.getName().endsWith(".mp3") || file.getName().endsWith(".flac")) {
-                fileListModel.addElement(new MusicFile(file));
+                result.add(new MusicFile(file));
             }
         }
     }

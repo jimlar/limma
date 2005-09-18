@@ -40,8 +40,8 @@ class MusicListCellRenderer implements ListCellRenderer {
 
             if (selected) {
                 Rectangle clipBounds = g.getClipBounds();
-                graphics2D.setPaint(new GradientPaint(0, 0, Color.blue, (float) clipBounds.getWidth(), (float) clipBounds.getHeight(), Color.black));
-                graphics2D.fillRect(0, 0, (int) clipBounds.getWidth(), (int) clipBounds.getHeight());
+                g.setColor(SystemColor.textHighlight);
+                g.fillRect(0, 0, (int) clipBounds.getWidth(), (int) clipBounds.getHeight());
             }
 
             String text = file.getArtist() + ": " + file.getTitle();

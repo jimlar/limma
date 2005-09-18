@@ -7,8 +7,9 @@ import org.blinkenlights.jid3.v1.ID3V1Tag;
 import org.blinkenlights.jid3.v2.ID3V2Tag;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class MusicFile extends Object {
+public class MusicFile extends Object implements Serializable {
     private File file;
     private String artist;
     private String title;

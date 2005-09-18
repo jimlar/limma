@@ -10,8 +10,5 @@ public interface Plugin {
 
     void activatePlugin();
 
-    /**
-     * @return true if event was consumed
-     */
     void keyPressed(KeyEvent e, PluginManager pluginManager);
 }

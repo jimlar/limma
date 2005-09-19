@@ -207,7 +207,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     private void scanFiles() {
         new Thread() {
             public void run() {
-                File musicDir = new File("/media/music");
+                File musicDir = new File("/music");
                 setStatus("Scanning for music files in " + musicDir.getAbsolutePath());
                 ArrayList files = new ArrayList();
                 scanAndAddFiles(musicDir, files);
@@ -228,7 +228,11 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     private void scanAndAddFiles(File dir, List result) {
-        ArrayList files = new ArrayList(Arrays.asList(dir.listFiles()));
+        File[] fileArray = dir.listFiles();
+        if (fileArray == null) {
+            return;
+        }
+        ArrayList files = new ArrayList(Arrays.asList(fileArray));
         Collections.sort(files, new Comparator() {
             public int compare(Object o1, Object o2) {
                 return ((File) o1).getName().compareToIgnoreCase(((File) o2).getName());

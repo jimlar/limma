@@ -82,4 +82,19 @@ public class MusicFile extends Object implements Serializable {
     public String toString() {
         return getArtist() + ": " + getTitle();
     }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MusicFile)) return false;
+
+        final MusicFile musicFile = (MusicFile) o;
+
+        if (!file.equals(musicFile.file)) return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        return file.hashCode();
+    }
 }

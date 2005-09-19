@@ -28,7 +28,7 @@ public class MainWindow extends JFrame implements PluginManager {
 
         addPlugin(new MenuPlugin(this));
         addPlugin(new MusicPlugin());
-        activatePlugin("menu");
+        enterPlugin("menu");
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             public boolean dispatchKeyEvent(KeyEvent e) {
@@ -51,14 +51,14 @@ public class MainWindow extends JFrame implements PluginManager {
         pluginsByName.put(name, plugin);
     }
 
-    public void activatePlugin(String name) {
+    public void enterPlugin(String name) {
         Plugin plugin = (Plugin) pluginsByName.get(name);
         currentPlugin = plugin;
-        plugin.activatePlugin();
+        plugin.pluginEntered();
         pluginCardsManager.show(mainPanel, name);
     }
 
-    public void activateMenu() {
-        activatePlugin("menu");
+    public void exitPlugin() {
+        enterPlugin("menu");
     }
 }

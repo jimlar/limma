@@ -46,7 +46,7 @@ public class MenuPlugin extends JPanel implements Plugin {
         return this;
     }
 
-    public void activatePlugin() {
+    public void pluginEntered() {
     }
 
     public void keyPressed(KeyEvent e, PluginManager pluginManager) {

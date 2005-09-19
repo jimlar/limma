@@ -7,7 +7,6 @@ import java.util.List;
 class MusicListModel extends AbstractListModel {
     private List musicFiles = Collections.EMPTY_LIST;
 
-
     public int getSize() {
         return musicFiles.size();
     }
@@ -24,6 +23,17 @@ class MusicListModel extends AbstractListModel {
         }
         if (musicFiles.size() > 0) {
             fireIntervalAdded(this, 0, musicFiles.size() - 1);
+        }
+    }
+
+    public int indexOf(Object o) {
+        return musicFiles.indexOf(o);
+    }
+
+    public void fireChanged(MusicFile file) {
+        int i = indexOf(file);
+        if (i != -1) {
+            fireContentsChanged(this, i, i);
         }
     }
 }

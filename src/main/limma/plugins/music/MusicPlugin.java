@@ -3,6 +3,7 @@ package limma.plugins.music;
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.plugins.music.player.MusicPlayer;
+import limma.swing.AntialiasCellRenderer;
 import limma.swing.AntialiasList;
 import org.apache.commons.io.IOUtils;
 
@@ -18,8 +19,9 @@ public class MusicPlugin extends JPanel implements Plugin {
     private AntialiasList musicList;
     private MusicPlayer musicPlayer;
     private static final File MUSIC_CACHE = new File("music.cache");
-    private boolean hasBeenActivated;
+    private boolean hasBeenEntered;
     private CurrentTrackPanel currentTrackPanel;
+    private MusicFile playedFile;
 
     public MusicPlugin() {
         setOpaque(false);
@@ -31,6 +33,7 @@ public class MusicPlugin extends JPanel implements Plugin {
 
         musicListModel = new MusicListModel();
         musicList = new AntialiasList(musicListModel);
+        musicList.setCellRenderer(new MusicListCellRenderer());
         JScrollPane scrollPane = new JScrollPane(musicList);
         add(scrollPane, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         scrollPane.setBorder(BorderFactory.createEtchedBorder());
@@ -39,7 +42,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
 
-        musicPlayer = new MusicPlayer();
+        musicPlayer = new MusicPlayer(new LinearPlaylist(musicListModel, this));
     }
 
     public String getPluginName() {
@@ -50,18 +53,17 @@ public class MusicPlugin extends JPanel implements Plugin {
         return this;
     }
 
-    public void activatePlugin() {
-        if (!hasBeenActivated) {
+    public void pluginEntered() {
+        if (!hasBeenEntered) {
             reloadFileList();
-            hasBeenActivated = true;
+            hasBeenEntered = true;
         }
     }
 
     private void reloadFileList() {
-        setStatus("Loading file list...");
-
         new Thread() {
             public void run() {
+                setStatus("Loading file list...");
                 musicListModel.setMusicFiles(loadFiles());
                 musicList.setSelectedIndex(0);
                 setStatus("");
@@ -95,12 +97,10 @@ public class MusicPlugin extends JPanel implements Plugin {
     public void keyPressed(KeyEvent e, PluginManager pluginManager) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
-                pluginManager.activateMenu();
+                pluginManager.exitPlugin();
                 break;
             case KeyEvent.VK_ENTER:
-            case KeyEvent.VK_P:
-                MusicFile file = (MusicFile) musicList.getSelectedValue();
-                play(file);
+                play((MusicFile) musicList.getSelectedValue());
                 break;
             case KeyEvent.VK_S:
                 stop();
@@ -112,15 +112,24 @@ public class MusicPlugin extends JPanel implements Plugin {
         musicList.processKeyEvent(e);
     }
 
-    private void stop() {
+    public void stop() {
+
         musicPlayer.stop();
         currentTrackPanel.setCurrentTrack(null);
+        MusicFile lastPlayed = playedFile;
+        playedFile = null;
+        musicListModel.fireChanged(lastPlayed);
+        musicListModel.fireChanged(playedFile);
     }
 
-    private void play(MusicFile file) {
+    public void play(MusicFile file) {
         musicPlayer.stop();
         musicPlayer.play(file);
         currentTrackPanel.setCurrentTrack(file);
+        MusicFile lastPlayed = playedFile;
+        playedFile = file;
+        musicListModel.fireChanged(lastPlayed);
+        musicListModel.fireChanged(playedFile);
     }
 
     private void scanFiles() {
@@ -164,6 +173,16 @@ public class MusicPlugin extends JPanel implements Plugin {
             } else if (file.getName().endsWith(".mp3") || file.getName().endsWith(".flac")) {
                 result.add(new MusicFile(file));
             }
+        }
+    }
+
+    private class MusicListCellRenderer extends AntialiasCellRenderer {
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            Component listCellRendererComponent = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (value.equals(playedFile)) {
+                listCellRendererComponent.setForeground(Color.gray);
+            }
+            return listCellRendererComponent;
         }
     }
 }

@@ -8,7 +8,7 @@ public interface Plugin {
 
     JComponent getPluginComponent();
 
-    void activatePlugin();
+    void pluginEntered();
 
     void keyPressed(KeyEvent e, PluginManager pluginManager);
 }

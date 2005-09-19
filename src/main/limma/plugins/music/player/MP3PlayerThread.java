@@ -6,13 +6,14 @@ import limma.plugins.music.MusicFile;
 import java.io.FileInputStream;
 
 class MP3PlayerThread extends PlayerThread {
+    private PlayerListener listener;
     private boolean closingDown;
 
-    public MP3PlayerThread(MusicFile musicFile) {
+    public MP3PlayerThread(MusicFile musicFile, PlayerListener listener) {
         super(musicFile);
+        this.listener = listener;
         setPriority(MIN_PRIORITY);
     }
-
 
     public void shutdown() {
         closingDown = true;
@@ -30,6 +31,12 @@ class MP3PlayerThread extends PlayerThread {
             player.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (closingDown) {
+                listener.stopped(getMusicFile());
+            } else {
+                listener.completed(getMusicFile());
+            }
         }
     }
 }

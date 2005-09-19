@@ -7,5 +7,19 @@ General
 
 Music plugin
 ------------
-* Randomness
-* Playlists (smart ones?)
+* Randomness (playlist play order strategies)
+* Playlists (static and smart ones)
+* Temporary playlists (all tracks from current artist)
+* "Look aside" playlists (select a few songs in a queue to be played before the normal strategy takes back control)
+* Exclude/ban track
+
+
+Game plugin
+-----------
+* Support for C64 emulaltor (vice?)
+
+
+Video plugin
+------------
+* Support for multifile videos
+* IMDB info retrieval

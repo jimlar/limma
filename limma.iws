@@ -163,7 +163,7 @@
       </entry>
       <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="209" column="48" selection-start="7537" selection-end="7537" vertical-scroll-proportion="0.11016949">
+          <state line="223" column="17" selection-start="8139" selection-end="8139" vertical-scroll-proportion="0.3644068">
             <folding />
           </state>
         </provider>
@@ -400,7 +400,7 @@
     <frame x="0" y="22" width="1278" height="999" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33040616" order="8" />
+      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33069083" order="8" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="7" />
       <window_info id="Project" active="false" anchor="left" auto_hide="true" internal_type="docked" type="docked" visible="false" weight="0.24027994" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33040616" order="1" />
@@ -573,7 +573,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="209" column="48" selection-start="7537" selection-end="7537" vertical-scroll-proportion="0.11016949">
+        <state line="223" column="17" selection-start="8139" selection-end="8139" vertical-scroll-proportion="0.3644068">
           <folding />
         </state>
       </provider>

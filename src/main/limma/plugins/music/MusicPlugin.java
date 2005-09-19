@@ -1,16 +1,19 @@
 package limma.plugins.music;
 
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.KeyEvent;
+import java.io.*;
+import java.util.*;
+
+import javax.swing.*;
+
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.swing.AntialiasList;
 import org.apache.commons.io.IOUtils;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.io.*;
-import java.util.*;
-import java.util.List;
 
 public class MusicPlugin extends JPanel implements Plugin {
     private DefaultListModel fileListModel;
@@ -87,16 +90,16 @@ public class MusicPlugin extends JPanel implements Plugin {
 
     private GridBagConstraints getConstraint(int row, boolean isLabel) {
         return new GridBagConstraints(isLabel ? 0 : 1,
-                row,
-                1,
-                1,
-                isLabel ? 0 : 1,
-                0,
-                GridBagConstraints.NORTHWEST,
-                isLabel ? GridBagConstraints.NONE : GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 0, 0),
-                0,
-                0);
+                                      row,
+                                      1,
+                                      1,
+                                      isLabel ? 0 : 1,
+                                      0,
+                                      GridBagConstraints.NORTHWEST,
+                                      isLabel ? GridBagConstraints.NONE : GridBagConstraints.HORIZONTAL,
+                                      new Insets(0, 0, 0, 0),
+                                      0,
+                                      0);
     }
 
     public String getPluginName() {

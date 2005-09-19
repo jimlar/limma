@@ -1,56 +1,38 @@
-package limma.plugins.music;
+package limma.plugins.music.player;
 
+import limma.plugins.music.MusicFile;
 import org.kc7bfi.jflac.FLACDecoder;
 import org.kc7bfi.jflac.PCMProcessor;
 import org.kc7bfi.jflac.metadata.StreamInfo;
 import org.kc7bfi.jflac.util.ByteData;
 
 import javax.sound.sampled.*;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class FlacPlayer implements SoundPlayer {
-    private PlayerThread thread;
+class FlacPlayerThread extends PlayerThread {
+    private Processor processor;
 
-    public void play(File file) {
-        thread = new PlayerThread(file);
-        thread.start();
+    public FlacPlayerThread(MusicFile musicFile) {
+        super(musicFile);
     }
 
-    public void stop() {
-        if (thread != null) {
-            thread.shutdown();
-        }
+    public void shutdown() {
+        processor.abort();
+        interrupt();
     }
 
-    private static class PlayerThread extends Thread {
-        private File soundFile;
-        private Processor processor;
+    public void run() {
+        processor = new Processor();
+        try {
+            FileInputStream is = new FileInputStream(getMusicFile().getFile());
+            FLACDecoder decoder = new FLACDecoder(is);
 
-        public PlayerThread(File soundFile) {
-            this.soundFile = soundFile;
-        }
-
-        public void shutdown() {
-            processor.abort();
-            interrupt();
-        }
-
-        public void run() {
-            processor = new Processor();
-            try {
-                FileInputStream is = new FileInputStream(soundFile);
-                FLACDecoder decoder = new FLACDecoder(is);
-
-                decoder.addPCMProcessor(processor);
-                decoder.decode();
-            } catch (IOException eofexception) {
-            } finally {
-                processor.close();
-            }
-
-
+            decoder.addPCMProcessor(processor);
+            decoder.decode();
+        } catch (IOException eofexception) {
+        } finally {
+            processor.close();
         }
     }
 
@@ -88,4 +70,5 @@ public class FlacPlayer implements SoundPlayer {
             }
         }
     }
+
 }

@@ -96,7 +96,6 @@ public class MusicPlugin extends JPanel implements Plugin {
         if (!hasBeenEntered) {
             reloadFileList();
             hasBeenEntered = true;
-            playNextTrack();
         }
     }
 

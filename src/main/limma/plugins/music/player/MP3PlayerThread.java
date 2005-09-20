@@ -6,12 +6,12 @@ import limma.plugins.music.MusicFile;
 import java.io.FileInputStream;
 
 class MP3PlayerThread extends PlayerThread {
-    private PlayerListener listener;
+    private MusicPlayer player;
     private boolean closingDown;
 
-    public MP3PlayerThread(MusicFile musicFile, PlayerListener listener) {
+    public MP3PlayerThread(MusicFile musicFile, MusicPlayer player) {
         super(musicFile);
-        this.listener = listener;
+        this.player = player;
         setPriority(MIN_PRIORITY);
     }
 
@@ -33,9 +33,9 @@ class MP3PlayerThread extends PlayerThread {
             e.printStackTrace();
         } finally {
             if (closingDown) {
-                listener.stopped(getMusicFile());
+                player.signalStopped(getMusicFile());
             } else {
-                listener.completed(getMusicFile());
+                player.signalCompleted(getMusicFile());
             }
         }
     }

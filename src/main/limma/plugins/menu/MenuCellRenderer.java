@@ -40,9 +40,9 @@ public class MenuCellRenderer implements ListCellRenderer {
             font = font.deriveFont((float) 30);
             g.setFont(font);
             g.setColor(Color.black);
-            g.drawString(node.getTitle(), 60 + 1, icon.getIconHeight() / 2 + 11);
+            g.drawString(node.getTitle(), 30 + 1, icon.getIconHeight() / 2 + 11);
             g.setColor(Color.white);
-            g.drawString(node.getTitle(), 60, icon.getIconHeight() / 2 + 9);
+            g.drawString(node.getTitle(), 30, icon.getIconHeight() / 2 + 9);
             super.paint(g);
         }
     }

@@ -5,6 +5,12 @@ General
 * Info/progress popups (instead of the status label)
 
 
+TV plugin
+---------
+* How to do anything? (linux dvb?)
+* Program guides (xmltv?)
+
+
 Music plugin
 ------------
 * Randomness (playlist play order strategies)
@@ -12,14 +18,21 @@ Music plugin
 * Temporary playlists (all tracks from current artist)
 * "Look aside" playlists (select a few songs in a queue to be played before the normal strategy takes back control)
 * Exclude/ban track
+* Tracktime and played time.
 
 
 Game plugin
 -----------
 * Support for C64 emulaltor (vice?)
+* Support for zsnes or snes9x
 
 
 Video plugin
 ------------
 * Support for multifile videos
 * IMDB info retrieval
+
+
+Pictures plugin
+---------------
+

@@ -20,8 +20,6 @@ public class MusicFile extends Object implements Serializable {
     public MusicFile(File file) {
         this.file = file;
         MP3File mp3File = new MP3File(file);
-        title = file.getName();
-        artist = file.getParentFile().getName();
 
         try {
             if (mp3File.getID3V2Tag() != null) {
@@ -44,6 +42,16 @@ public class MusicFile extends Object implements Serializable {
                 this.genre = genre != null ? StringUtils.trim(genre.toString()) : null;
             }
         } catch (ID3Exception e) {
+        }
+
+        if (title == null) {
+            title = file.getName();
+        }
+        if (album == null) {
+            album = file.getParentFile().getName();
+        }
+        if (artist == null) {
+            artist = file.getParentFile().getParentFile().getName();
         }
     }
 

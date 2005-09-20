@@ -12,9 +12,9 @@ public class MusicPlayer {
 
     public void play(MusicFile musicFile) {
         if (musicFile.isMP3()) {
-            thread = new MP3PlayerThread(musicFile, listener);
+            thread = new MP3PlayerThread(musicFile, this);
         } else {
-            thread = new FlacPlayerThread(musicFile, listener);
+            thread = new FlacPlayerThread(musicFile, this);
         }
         thread.start();
     }
@@ -24,5 +24,13 @@ public class MusicPlayer {
             thread.shutdown();
             thread = null;
         }
+    }
+
+    void signalStopped(MusicFile musicFile) {
+        listener.stopped(musicFile);
+    }
+
+    void signalCompleted(MusicFile musicFile) {
+        listener.completed(musicFile);
     }
 }

@@ -3,11 +3,13 @@ package limma.plugins.music;
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.plugins.music.player.MusicPlayer;
+import limma.plugins.music.player.PlayerListener;
 import limma.swing.AntialiasCellRenderer;
 import limma.swing.AntialiasList;
 import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.*;
@@ -22,6 +24,9 @@ public class MusicPlugin extends JPanel implements Plugin {
     private boolean hasBeenEntered;
     private CurrentTrackPanel currentTrackPanel;
     private MusicFile playedFile;
+    private PlayStrategy selectedPlayStrategy;
+    private RandomPlayStrategy randomPlayStrategy;
+    private LinearPlayStrategy linearPlayStrategy;
 
     public MusicPlugin() {
         setOpaque(false);
@@ -36,13 +41,47 @@ public class MusicPlugin extends JPanel implements Plugin {
         musicList.setCellRenderer(new MusicListCellRenderer());
         JScrollPane scrollPane = new JScrollPane(musicList);
         add(scrollPane, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-        scrollPane.setBorder(BorderFactory.createEtchedBorder());
+        TitledBorder titledBorder = BorderFactory.createTitledBorder("Playlist");
+        titledBorder.setTitleFont(Font.decode("SansSerif").deriveFont(Font.BOLD).deriveFont((float) 30));
+        titledBorder.setTitleColor(Color.white);
+        scrollPane.setBorder(titledBorder);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
 
-        musicPlayer = new MusicPlayer(new LinearPlaylist(musicListModel, this));
+        musicPlayer = new MusicPlayer(new PlayerListener() {
+            public void stopped(MusicFile musicFile) {
+            }
+
+            public void completed(MusicFile musicFile) {
+                playNextTrack(musicFile);
+            }
+        });
+        randomPlayStrategy = new RandomPlayStrategy(musicListModel);
+        linearPlayStrategy = new LinearPlayStrategy(musicListModel);
+        selectedPlayStrategy = randomPlayStrategy;
+        currentTrackPanel.setPlayStrategy(selectedPlayStrategy);
+    }
+
+    private void playNextTrack() {
+        playNextTrack(playedFile);
+    }
+
+    private void playNextTrack(MusicFile lastTrack) {
+        boolean jumpToNextTrack = false;
+        if (musicList.getSelectedValue() != null && musicList.getSelectedValue().equals(lastTrack)) {
+            jumpToNextTrack = true;
+        }
+        MusicFile nextFileToPlay = selectedPlayStrategy.getNextFileToPlay(lastTrack);
+        if (nextFileToPlay == null) {
+            stop();
+        } else {
+            play(nextFileToPlay);
+        }
+        if (jumpToNextTrack) {
+            musicList.setSelectedValue(nextFileToPlay, true);
+        }
     }
 
     public String getPluginName() {
@@ -57,6 +96,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         if (!hasBeenEntered) {
             reloadFileList();
             hasBeenEntered = true;
+            playNextTrack();
         }
     }
 
@@ -108,12 +148,26 @@ public class MusicPlugin extends JPanel implements Plugin {
             case KeyEvent.VK_R:
                 scanFiles();
                 break;
+            case KeyEvent.VK_M:
+                cycleStrategy();
+                break;
+            case KeyEvent.VK_N:
+                playNextTrack();
+                break;
         }
         musicList.processKeyEvent(e);
     }
 
-    public void stop() {
+    private void cycleStrategy() {
+        if (selectedPlayStrategy instanceof LinearPlayStrategy) {
+            selectedPlayStrategy = randomPlayStrategy;
+        } else {
+            selectedPlayStrategy = linearPlayStrategy;
+        }
+        currentTrackPanel.setPlayStrategy(selectedPlayStrategy);
+    }
 
+    public void stop() {
         musicPlayer.stop();
         currentTrackPanel.setCurrentTrack(null);
         MusicFile lastPlayed = playedFile;

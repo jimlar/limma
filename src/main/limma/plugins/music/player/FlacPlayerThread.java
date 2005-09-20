@@ -12,12 +12,12 @@ import java.io.IOException;
 
 class FlacPlayerThread extends PlayerThread {
     private Processor processor;
-    private PlayerListener listener;
+    private MusicPlayer player;
     private boolean shutdown;
 
-    public FlacPlayerThread(MusicFile musicFile, PlayerListener listener) {
+    public FlacPlayerThread(MusicFile musicFile, MusicPlayer player) {
         super(musicFile);
-        this.listener = listener;
+        this.player = player;
     }
 
     public void shutdown() {
@@ -38,9 +38,9 @@ class FlacPlayerThread extends PlayerThread {
         } finally {
             processor.close();
             if (shutdown) {
-                listener.stopped(getMusicFile());
+                player.signalStopped(getMusicFile());
             } else {
-                listener.completed(getMusicFile());
+                player.signalCompleted(getMusicFile());
             }
         }
     }

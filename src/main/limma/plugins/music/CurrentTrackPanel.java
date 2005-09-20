@@ -3,6 +3,7 @@ package limma.plugins.music;
 import limma.swing.AntialiasLabel;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 class CurrentTrackPanel extends JPanel {
@@ -12,10 +13,14 @@ class CurrentTrackPanel extends JPanel {
     private AntialiasLabel yearLabel;
     private AntialiasLabel genreLabel;
     private AntialiasLabel statusLabel;
+    private AntialiasLabel playModeLabel;
 
     public CurrentTrackPanel() {
         super(new GridBagLayout());
-        setBorder(BorderFactory.createEtchedBorder());
+        TitledBorder titledBorder = BorderFactory.createTitledBorder("Current track");
+        titledBorder.setTitleFont(Font.decode("SansSerif").deriveFont(Font.BOLD).deriveFont((float) 30));
+        titledBorder.setTitleColor(Color.white);
+        setBorder(titledBorder);
         setOpaque(false);
 
         artistLabel = addLabel("Artist:", 0);
@@ -24,10 +29,13 @@ class CurrentTrackPanel extends JPanel {
         yearLabel = addLabel("Year:", 3);
         genreLabel = addLabel("Genre:", 4);
         statusLabel = addLabel("Status:", 5);
+
+        playModeLabel = new AntialiasLabel();
+        add(playModeLabel, new GridBagConstraints(2, 0, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 10), 0, 0));
     }
 
     private AntialiasLabel addLabel(String labelText, int row) {
-        add(new AntialiasLabel(labelText), new GridBagConstraints(0, row, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+        add(new AntialiasLabel(labelText), new GridBagConstraints(0, row, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 0, 0));
 
         AntialiasLabel value = new AntialiasLabel();
         add(value, new GridBagConstraints(1, row, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 0, 0));
@@ -45,9 +53,13 @@ class CurrentTrackPanel extends JPanel {
             artistLabel.setText(file.getArtist());
             titleLabel.setText(file.getTitle());
             albumLabel.setText(file.getAlbum());
-            yearLabel.setText(String.valueOf(file.getYear()));
+            yearLabel.setText(file.getYear() == 0 ? "" : String.valueOf(file.getYear()));
             genreLabel.setText(file.getGenre());
         }
+    }
+
+    public void setPlayStrategy(PlayStrategy strategy) {
+        playModeLabel.setText(strategy.getName());
     }
 
     public void setStatus(String message) {

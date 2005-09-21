@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AntialiasLabel extends JLabel {
+    public static final Font DEFAULT_FONT = Font.decode("SansSerif").deriveFont(Font.BOLD).deriveFont((float) 20);
 
     public AntialiasLabel() {
         this("");
@@ -11,10 +12,7 @@ public class AntialiasLabel extends JLabel {
 
     public AntialiasLabel(String text) {
         setText(text);
-        Font font = Font.decode("SansSerif");
-        font = font.deriveFont(Font.BOLD);
-        font = font.deriveFont((float) 30);
-        setFont(font);
+        setFont(DEFAULT_FONT);
         setOpaque(false);
         setForeground(Color.white);
     }

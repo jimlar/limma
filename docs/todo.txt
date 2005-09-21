@@ -17,7 +17,6 @@ Music plugin
 * Temporary playlists (all tracks from current artist)
 * "Look aside" playlists (select a few songs in a queue to be played before the normal strategy takes back control)
 * Exclude/ban track
-* Tracktime and played time.
 
 
 Game plugin

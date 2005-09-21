@@ -16,6 +16,8 @@ public class MusicPlayer {
         } else {
             thread = new FlacPlayerThread(musicFile, this);
         }
+        thread.setPriority(Thread.MAX_PRIORITY);
+        thread.setDaemon(true);
         thread.start();
     }
 

@@ -35,10 +35,7 @@ public class MenuCellRenderer implements ListCellRenderer {
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
             icon.paintIcon(this, g, 0, 0);
-            Font font = Font.decode("SansSerif");
-            font = font.deriveFont(Font.BOLD);
-            font = font.deriveFont((float) 30);
-            g.setFont(font);
+            g.setFont(Font.decode("SansSerif").deriveFont(Font.BOLD).deriveFont((float) 30));
             g.setColor(Color.black);
             g.drawString(node.getTitle(), 30 + 1, icon.getIconHeight() / 2 + 11);
             g.setColor(Color.white);

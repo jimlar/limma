@@ -12,6 +12,7 @@
     </target>
 
     <target name="compile">
+        <mkdir dir="build/classes"/>
         <javac classpathref="production.classpath" srcdir="src/main" destdir="build/classes"/>
     </target>
 

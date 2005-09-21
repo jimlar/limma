@@ -1,14 +1,11 @@
 package limma.plugins.music;
 
+import limma.swing.AntialiasLabel;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.border.TitledBorder;
-
-import limma.swing.AntialiasLabel;
 
 class CurrentTrackPanel extends JPanel {
     private AntialiasLabel artistLabel;
@@ -26,7 +23,7 @@ class CurrentTrackPanel extends JPanel {
     public CurrentTrackPanel() {
         super(new GridBagLayout());
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Current track");
-        titledBorder.setTitleFont(Font.decode("SansSerif").deriveFont(Font.BOLD).deriveFont((float) 30));
+        titledBorder.setTitleFont(AntialiasLabel.DEFAULT_FONT);
         titledBorder.setTitleColor(Color.white);
         setBorder(titledBorder);
         setOpaque(false);
@@ -45,7 +42,7 @@ class CurrentTrackPanel extends JPanel {
         bitRateLabel = new AntialiasLabel();
         add(bitRateLabel, new GridBagConstraints(2, 2, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 10, 0, 10), 0, 0));
 
-        new Thread() {
+        Thread playtimeUpdateThread = new Thread() {
             public void run() {
                 while (true) {
                     try {
@@ -60,14 +57,17 @@ class CurrentTrackPanel extends JPanel {
                                 timeLabel.setText(text);
                             }
                         });
-                        Thread.sleep(100);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                     } catch (InvocationTargetException e) {
                         e.printStackTrace();
                     }
                 }
             }
-        }.start();
+        };
+        playtimeUpdateThread.setPriority(Thread.MIN_PRIORITY);
+        playtimeUpdateThread.setDaemon(true);
+        playtimeUpdateThread.start();
     }
 
     private AntialiasLabel addLabel(String labelText, int row) {

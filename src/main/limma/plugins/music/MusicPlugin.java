@@ -5,6 +5,7 @@ import limma.plugins.PluginManager;
 import limma.plugins.music.player.MusicPlayer;
 import limma.plugins.music.player.PlayerListener;
 import limma.swing.AntialiasCellRenderer;
+import limma.swing.AntialiasLabel;
 import limma.swing.AntialiasList;
 import org.apache.commons.io.IOUtils;
 
@@ -31,10 +32,10 @@ public class MusicPlugin extends JPanel implements Plugin {
     public MusicPlugin() {
         setOpaque(false);
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         currentTrackPanel = new CurrentTrackPanel();
-        add(currentTrackPanel, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 20, 0), 0, 0));
+        add(currentTrackPanel, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, 0), 0, 0));
 
         musicListModel = new MusicListModel();
         musicList = new AntialiasList(musicListModel);
@@ -42,7 +43,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         JScrollPane scrollPane = new JScrollPane(musicList);
         add(scrollPane, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Playlist");
-        titledBorder.setTitleFont(Font.decode("SansSerif").deriveFont(Font.BOLD).deriveFont((float) 30));
+        titledBorder.setTitleFont(AntialiasLabel.DEFAULT_FONT);
         titledBorder.setTitleColor(Color.white);
         scrollPane.setBorder(titledBorder);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

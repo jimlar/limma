@@ -149,7 +149,7 @@
     <first-group selected-file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java">
       <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="227" column="0" selection-start="7831" selection-end="7831" vertical-scroll-proportion="0.964539">
+          <state line="21" column="0" selection-start="646" selection-end="646" vertical-scroll-proportion="0.10638298">
             <folding />
           </state>
         </provider>
@@ -177,14 +177,14 @@
       </entry>
       <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicFile.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="107" column="21" selection-start="2525" selection-end="2525" vertical-scroll-proportion="0.8959811">
+          <state line="107" column="21" selection-start="2525" selection-end="2525" vertical-scroll-proportion="0.9468085">
             <folding />
           </state>
         </provider>
       </entry>
       <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/CurrentTrackPanel.java" pinned="false">
         <provider selected="true" editor-type-id="text-editor">
-          <state line="25" column="61" selection-start="889" selection-end="889" vertical-scroll-proportion="0.20938627">
+          <state line="25" column="61" selection-start="889" selection-end="889" vertical-scroll-proportion="0.22503008">
             <folding />
           </state>
         </provider>
@@ -219,19 +219,19 @@
   <component name="J2EEProjectPane" />
   <component name="NamedScopeManager" />
   <component name="PackagesPane">
-    <expanded_node url="limma.plugins.music" module="limma" type="package" />
+    <expanded_node url="" module="limma" type="module" />
     <expanded_node url="limma.plugins" module="limma" type="package" />
     <expanded_node url="limma" module="limma" type="package" />
-    <expanded_node url="" module="limma" type="module" />
+    <expanded_node url="limma.plugins.music" module="limma" type="package" />
   </component>
   <component name="ProjectPane">
-    <expanded_node url="file://$PROJECT_DIR$/src/main/limma/plugins" module="limma" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$/src/main" module="limma" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$/src/main/limma/plugins/music" module="limma" type="directory" />
-    <expanded_node url="file://$PROJECT_DIR$" module="limma" type="directory" />
-    <expanded_node url="" module="limma" type="module" />
-    <expanded_node url="file://$PROJECT_DIR$/src/main/limma" module="limma" type="directory" />
     <expanded_node url="file://$PROJECT_DIR$/src" module="limma" type="directory" />
+    <expanded_node url="file://$PROJECT_DIR$" module="limma" type="directory" />
+    <expanded_node url="file://$PROJECT_DIR$/src/main/limma" module="limma" type="directory" />
+    <expanded_node url="file://$PROJECT_DIR$/src/main/limma/plugins/music" module="limma" type="directory" />
+    <expanded_node url="file://$PROJECT_DIR$/src/main" module="limma" type="directory" />
+    <expanded_node url="" module="limma" type="module" />
+    <expanded_node url="file://$PROJECT_DIR$/src/main/limma/plugins" module="limma" type="directory" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" splitterProportion="0.5">
@@ -274,8 +274,8 @@
     <property name="cvs_file_history_treeWidth6" value="179" />
     <property name="cvs_file_history_flatOrder5" value="5" />
     <property name="cvs_file_history_flatWidth5" value="179" />
-    <property name="cvs_file_history_treeOrder2" value="2" />
     <property name="cvs_file_history_treeWidth3" value="179" />
+    <property name="cvs_file_history_treeOrder2" value="2" />
     <property name="cvs_file_history_treeWidth5" value="179" />
     <property name="cvs_file_history_flatOrder6" value="6" />
     <property name="cvs_file_history_flatWidth0" value="179" />
@@ -532,6 +532,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="0" selection-start="646" selection-end="646" vertical-scroll-proportion="0.10638298">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="36" selection-start="366" selection-end="366" vertical-scroll-proportion="0.24822696">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/player/MP3PlayerThread.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="28" column="26" selection-start="812" selection-end="812" vertical-scroll-proportion="0.4432624">
@@ -548,35 +562,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicFile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="21" selection-start="2525" selection-end="2525" vertical-scroll-proportion="0.8959811">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="36" selection-start="366" selection-end="366" vertical-scroll-proportion="0.24822696">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/MusicPlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="227" column="0" selection-start="7831" selection-end="7831" vertical-scroll-proportion="0.964539">
+        <state line="107" column="21" selection-start="2525" selection-end="2525" vertical-scroll-proportion="0.9468085">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/music/CurrentTrackPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="61" selection-start="889" selection-end="889" vertical-scroll-proportion="0.20938627">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/limma/swing/AntialiasLabel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="46" selection-start="153" selection-end="222" vertical-scroll-proportion="0.088652484">
+        <state line="25" column="61" selection-start="889" selection-end="889" vertical-scroll-proportion="0.22503008">
           <folding />
         </state>
       </provider>
@@ -584,6 +577,13 @@
     <entry file="file://$PROJECT_DIR$/src/main/limma/plugins/menu/MenuCellRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="37" column="89" selection-start="1331" selection-end="1331" vertical-scroll-proportion="0.63829786">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/limma/swing/AntialiasLabel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="46" selection-start="153" selection-end="222" vertical-scroll-proportion="0.088652484">
           <folding />
         </state>
       </provider>

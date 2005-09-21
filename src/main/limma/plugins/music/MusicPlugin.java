@@ -18,10 +18,10 @@ import java.util.*;
 import java.util.List;
 
 public class MusicPlugin extends JPanel implements Plugin {
+    private static final File MUSIC_CACHE = new File("music.cache");
     private MusicListModel musicListModel;
     private AntialiasList musicList;
     private MusicPlayer musicPlayer;
-    private static final File MUSIC_CACHE = new File("music.cache");
     private boolean hasBeenEntered;
     private CurrentTrackPanel currentTrackPanel;
     private MusicFile playedFile;

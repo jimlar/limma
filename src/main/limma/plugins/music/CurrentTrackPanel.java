@@ -1,10 +1,14 @@
 package limma.plugins.music;
 
-import limma.swing.AntialiasLabel;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.TitledBorder;
+
+import limma.swing.AntialiasLabel;
 
 class CurrentTrackPanel extends JPanel {
     private AntialiasLabel artistLabel;
@@ -14,6 +18,10 @@ class CurrentTrackPanel extends JPanel {
     private AntialiasLabel genreLabel;
     private AntialiasLabel statusLabel;
     private AntialiasLabel playModeLabel;
+    private AntialiasLabel timeLabel;
+    private long startTimeMillis = 0;
+    private MusicFile currentTrack;
+    private AntialiasLabel bitRateLabel;
 
     public CurrentTrackPanel() {
         super(new GridBagLayout());
@@ -31,7 +39,35 @@ class CurrentTrackPanel extends JPanel {
         statusLabel = addLabel("Status:", 5);
 
         playModeLabel = new AntialiasLabel();
-        add(playModeLabel, new GridBagConstraints(2, 0, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 10), 0, 0));
+        add(playModeLabel, new GridBagConstraints(2, 0, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 10, 0, 10), 0, 0));
+        timeLabel = new AntialiasLabel();
+        add(timeLabel, new GridBagConstraints(2, 1, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 10, 0, 10), 0, 0));
+        bitRateLabel = new AntialiasLabel();
+        add(bitRateLabel, new GridBagConstraints(2, 2, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 10, 0, 10), 0, 0));
+
+        new Thread() {
+            public void run() {
+                while (true) {
+                    try {
+                        SwingUtilities.invokeAndWait(new Runnable() {
+                            public void run() {
+                                String text = "";
+                                if (currentTrack != null) {
+                                    String playtime = secondsToString((System.currentTimeMillis() - startTimeMillis) / 1000);
+                                    String totalTime = secondsToString(currentTrack.getLenghtInSeconds());
+                                    text = playtime + " / " + totalTime;
+                                }
+                                timeLabel.setText(text);
+                            }
+                        });
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
     }
 
     private AntialiasLabel addLabel(String labelText, int row) {
@@ -43,19 +79,32 @@ class CurrentTrackPanel extends JPanel {
     }
 
     public void setCurrentTrack(MusicFile file) {
+        this.currentTrack = file;
         if (file == null) {
             artistLabel.setText("");
             titleLabel.setText("");
             albumLabel.setText("");
             yearLabel.setText("");
             genreLabel.setText("");
+            timeLabel.setText("");
+            bitRateLabel.setText("");
         } else {
+            startTimeMillis = System.currentTimeMillis();
             artistLabel.setText(file.getArtist());
             titleLabel.setText(file.getTitle());
             albumLabel.setText(file.getAlbum());
             yearLabel.setText(file.getYear() == 0 ? "" : String.valueOf(file.getYear()));
             genreLabel.setText(file.getGenre());
+            bitRateLabel.setText(file.getBitRate() + " kbps");
         }
+    }
+
+    private String secondsToString(long seconds) {
+        String secs = String.valueOf(seconds % 60);
+        if (secs.length() == 1) {
+            secs = "0" + secs;
+        }
+        return seconds / 60 + ":" + secs;
     }
 
     public void setPlayStrategy(PlayStrategy strategy) {

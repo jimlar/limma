@@ -188,7 +188,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     private void scanFiles() {
         new Thread() {
             public void run() {
-                File musicDir = new File("/media/music");
+                File musicDir = new File("/media/music/");
                 setStatus("Scanning for music files in " + musicDir.getAbsolutePath());
                 ArrayList files = new ArrayList();
                 scanAndAddFiles(musicDir, files);

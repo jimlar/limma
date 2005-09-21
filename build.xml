@@ -17,6 +17,8 @@
     </target>
 
     <target name="run" depends="compile">
-        <java classname="limma.Main" classpathref="production.classpath" fork="yes" spawn="yes"/>
+        <java classname="limma.Main" classpathref="production.classpath" fork="yes" spawn="yes">
+             <jvmarg value="-Xincgc"/>
+        </java>
     </target>
 </project>

@@ -19,7 +19,7 @@ public class MenuPlugin extends JPanel implements Plugin {
         root.add(new MenuNode("TV"));
         root.add(new MenuNode("Video"));
         root.add(new PluginNode("Music", "music", pluginManager));
-        root.add(new MenuNode("Games"));
+        root.add(new PluginNode("Games", "game", pluginManager));
         root.add(new MenuNode("Pictures"));
         MenuNode settingsNode = new MenuNode("Settings");
         root.add(settingsNode);

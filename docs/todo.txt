@@ -23,6 +23,7 @@ Game plugin
 -----------
 * Support for C64 emulaltor (vice?)
 * Support for zsnes or snes9x
+* Parsing D64 is not useful (info inside is crap anyways) use filenames instead.
 
 
 Video plugin

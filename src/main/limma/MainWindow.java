@@ -2,6 +2,7 @@ package limma;
 
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
+import limma.plugins.game.GamePlugin;
 import limma.plugins.menu.MenuPlugin;
 import limma.plugins.music.MusicPlugin;
 import limma.swing.ImagePanel;
@@ -28,6 +29,7 @@ public class MainWindow extends JFrame implements PluginManager {
 
         addPlugin(new MenuPlugin(this));
         addPlugin(new MusicPlugin());
+        addPlugin(new GamePlugin());
         enterPlugin("menu");
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {

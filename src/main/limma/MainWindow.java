@@ -49,7 +49,9 @@ public class MainWindow extends JFrame implements PluginManager {
 
     public void addPlugin(Plugin plugin) {
         String name = plugin.getPluginName();
-        mainPanel.add(plugin.getPluginComponent(), name);
+        JComponent pluginComponent = plugin.getPluginComponent();
+        pluginComponent.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.add(pluginComponent, name);
         pluginsByName.put(name, plugin);
     }
 

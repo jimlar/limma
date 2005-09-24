@@ -1,10 +1,12 @@
 package limma.plugins.music;
 
+import limma.swing.SimpleListModel;
+
 
 public class LinearPlayStrategy implements PlayStrategy {
-    private MusicListModel listModel;
+    private SimpleListModel listModel;
 
-    public LinearPlayStrategy(MusicListModel listModel) {
+    public LinearPlayStrategy(SimpleListModel listModel) {
         this.listModel = listModel;
     }
 

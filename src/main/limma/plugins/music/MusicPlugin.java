@@ -7,6 +7,7 @@ import limma.plugins.music.player.PlayerListener;
 import limma.swing.AntialiasCellRenderer;
 import limma.swing.AntialiasLabel;
 import limma.swing.AntialiasList;
+import limma.swing.SimpleListModel;
 import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class MusicPlugin extends JPanel implements Plugin {
     private static final File MUSIC_CACHE = new File("music.cache");
-    private MusicListModel musicListModel;
+    private SimpleListModel musicListModel;
     private AntialiasList musicList;
     private MusicPlayer musicPlayer;
     private boolean hasBeenEntered;
@@ -32,12 +33,11 @@ public class MusicPlugin extends JPanel implements Plugin {
     public MusicPlugin() {
         setOpaque(false);
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         currentTrackPanel = new CurrentTrackPanel();
         add(currentTrackPanel, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, 0), 0, 0));
 
-        musicListModel = new MusicListModel();
+        musicListModel = new SimpleListModel();
         musicList = new AntialiasList(musicListModel);
         musicList.setCellRenderer(new MusicListCellRenderer());
         JScrollPane scrollPane = new JScrollPane(musicList);
@@ -104,7 +104,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         new Thread() {
             public void run() {
                 setStatus("Loading file list...");
-                musicListModel.setMusicFiles(loadFiles());
+                musicListModel.setObjects(loadFiles());
                 musicList.setSelectedIndex(0);
                 setStatus("");
             }

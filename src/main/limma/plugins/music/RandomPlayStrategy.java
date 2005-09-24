@@ -1,12 +1,14 @@
 package limma.plugins.music;
 
+import limma.swing.SimpleListModel;
+
 import java.util.Random;
 
 public class RandomPlayStrategy implements PlayStrategy {
-    private MusicListModel musicListModel;
+    private SimpleListModel musicListModel;
     private Random random;
 
-    public RandomPlayStrategy(MusicListModel musicListModel) {
+    public RandomPlayStrategy(SimpleListModel musicListModel) {
         this.musicListModel = musicListModel;
         random = new Random();
     }

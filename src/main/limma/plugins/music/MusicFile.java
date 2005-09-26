@@ -14,6 +14,7 @@ public class MusicFile extends Object implements Serializable {
     private String genre;
     private long lenghtInSeconds;
     private int bitRate;
+    private String longName;
 
     public MusicFile(File file) {
         this.file = file;
@@ -29,6 +30,7 @@ public class MusicFile extends Object implements Serializable {
         if (artist == null) {
             artist = file.getParentFile().getParentFile().getName();
         }
+        this.longName = getArtist() + ": " + getTitle();
     }
 
     private void readID3WithJavaMP3(File file) {
@@ -86,7 +88,7 @@ public class MusicFile extends Object implements Serializable {
     }
 
     public String toString() {
-        return getArtist() + ": " + getTitle();
+        return longName;
     }
 
     public boolean equals(Object o) {

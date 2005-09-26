@@ -3,6 +3,7 @@ General
 * Skins
 * Database for storage
 * Info/progress popups (instead of the status label)
+* Database
 
 
 TV plugin

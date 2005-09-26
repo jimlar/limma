@@ -22,7 +22,9 @@ class FlacPlayerJob extends PlayerJob {
 
     public void abort() {
         shutdown = true;
-        processor.abort();
+        if (processor != null) {
+            processor.abort();
+        }
         Thread.currentThread().interrupt();
     }
 

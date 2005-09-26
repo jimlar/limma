@@ -6,16 +6,18 @@ import limma.plugins.music.MusicFile;
 import java.io.FileInputStream;
 
 class MP3PlayerJob extends PlayerJob {
-    private MusicPlayer player;
+    private MusicPlayer musicPlayer;
     private boolean closingDown;
+    private Player player;
 
-    public MP3PlayerJob(MusicFile musicFile, MusicPlayer player) {
+    public MP3PlayerJob(MusicFile musicFile, MusicPlayer musicPlayer) {
         super(musicFile);
-        this.player = player;
+        this.musicPlayer = musicPlayer;
     }
 
     public void abort() {
         closingDown = true;
+        player.close();
         Thread.currentThread().interrupt();
     }
 
@@ -23,18 +25,19 @@ class MP3PlayerJob extends PlayerJob {
         FileInputStream fileInputStream = null;
         try {
             fileInputStream = new FileInputStream(getMusicFile().getFile());
-            Player player = new Player(fileInputStream);
-            while (!closingDown && !player.isComplete()) {
-                player.play(1);
-            }
+            player = new Player(fileInputStream);
+            player.play();
             player.close();
+
         } catch (Exception e) {
-            e.printStackTrace();
+            if (!closingDown) {
+                e.printStackTrace();
+            }
         } finally {
             if (closingDown) {
-                player.signalStopped(getMusicFile());
+                musicPlayer.signalStopped(getMusicFile());
             } else {
-                player.signalCompleted(getMusicFile());
+                musicPlayer.signalCompleted(getMusicFile());
             }
         }
     }

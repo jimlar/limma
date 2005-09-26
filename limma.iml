@@ -34,7 +34,9 @@
           <root url="jar://$MODULE_DIR$/lib/jl1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/docs/mp3/jlayer1.0.zip!/JLayer1.0/src" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
@@ -62,7 +64,7 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../download/java_mp3-0.3-src.zip!/src" />
+          <root url="jar://$MODULE_DIR$/docs/mp3/java_mp3-0.3-src.zip!/src" />
         </SOURCES>
       </library>
     </orderEntry>

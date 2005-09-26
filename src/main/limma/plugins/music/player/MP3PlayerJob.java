@@ -17,7 +17,9 @@ class MP3PlayerJob extends PlayerJob {
 
     public void abort() {
         closingDown = true;
-        player.close();
+        if (player != null) {
+            player.close();
+        }
         Thread.currentThread().interrupt();
     }
 

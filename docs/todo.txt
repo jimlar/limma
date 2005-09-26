@@ -19,6 +19,9 @@ Music plugin
 * "Look aside" playlists (select a few songs in a queue to be played before the normal strategy takes back control)
 * Exclude/ban track
 * Album art viewer
+* FF and REW
+* Better fallback names (remove .mp3 and .flac and guess some nice case)
+* Better Bitrate figures: show VBR rates correctly and show flac differently.
 
 
 Game plugin

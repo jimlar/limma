@@ -5,19 +5,18 @@ import limma.plugins.music.MusicFile;
 
 import java.io.FileInputStream;
 
-class MP3PlayerThread extends PlayerThread {
+class MP3PlayerJob extends PlayerJob {
     private MusicPlayer player;
     private boolean closingDown;
 
-    public MP3PlayerThread(MusicFile musicFile, MusicPlayer player) {
+    public MP3PlayerJob(MusicFile musicFile, MusicPlayer player) {
         super(musicFile);
         this.player = player;
-        setPriority(MIN_PRIORITY);
     }
 
-    public void shutdown() {
+    public void abort() {
         closingDown = true;
-        interrupt();
+        Thread.currentThread().interrupt();
     }
 
     public void run() {

@@ -10,20 +10,20 @@ import javax.sound.sampled.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-class FlacPlayerThread extends PlayerThread {
+class FlacPlayerJob extends PlayerJob {
     private Processor processor;
     private MusicPlayer player;
     private boolean shutdown;
 
-    public FlacPlayerThread(MusicFile musicFile, MusicPlayer player) {
+    public FlacPlayerJob(MusicFile musicFile, MusicPlayer player) {
         super(musicFile);
         this.player = player;
     }
 
-    public void shutdown() {
+    public void abort() {
         shutdown = true;
         processor.abort();
-        interrupt();
+        Thread.currentThread().interrupt();
     }
 
     public void run() {
@@ -79,5 +79,4 @@ class FlacPlayerThread extends PlayerThread {
             }
         }
     }
-
 }

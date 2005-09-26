@@ -2,29 +2,39 @@ package limma.plugins.music.player;
 
 import limma.plugins.music.MusicFile;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+
 public class MusicPlayer {
-    private PlayerThread thread;
+    private PlayerJob job;
     private PlayerListener listener;
+    private Executor executor;
 
     public MusicPlayer(PlayerListener listener) {
         this.listener = listener;
+        executor = Executors.newFixedThreadPool(4, new ThreadFactory() {
+            public Thread newThread(Runnable r) {
+                Thread thread = new Thread(r);
+                thread.setDaemon(true);
+                return thread;
+            }
+        });
     }
 
     public void play(MusicFile musicFile) {
         if (musicFile.isMP3()) {
-            thread = new MP3PlayerThread(musicFile, this);
+            job = new MP3PlayerJob(musicFile, this);
         } else {
-            thread = new FlacPlayerThread(musicFile, this);
+            job = new FlacPlayerJob(musicFile, this);
         }
-        thread.setPriority(Thread.MAX_PRIORITY);
-        thread.setDaemon(true);
-        thread.start();
+        executor.execute(job);
     }
 
     public void stop() {
-        if (thread != null) {
-            thread.shutdown();
-            thread = null;
+        if (job != null) {
+            job.abort();
+            job = null;
         }
     }
 

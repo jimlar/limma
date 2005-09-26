@@ -2,10 +2,10 @@ package limma.plugins.music.player;
 
 import limma.plugins.music.MusicFile;
 
-public abstract class PlayerThread extends Thread {
+public abstract class PlayerJob implements Runnable {
     private MusicFile musicFile;
 
-    public PlayerThread(MusicFile musicFile) {
+    public PlayerJob(MusicFile musicFile) {
         this.musicFile = musicFile;
     }
 
@@ -13,5 +13,5 @@ public abstract class PlayerThread extends Thread {
         return musicFile;
     }
 
-    public abstract void shutdown();
+    public abstract void abort();
 }

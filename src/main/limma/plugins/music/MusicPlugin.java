@@ -222,9 +222,10 @@ public class MusicPlugin extends JPanel implements Plugin {
         });
         for (Iterator i = files.iterator(); i.hasNext();) {
             File file = (File) i.next();
+            String name = file.getName().toLowerCase();
             if (file.isDirectory()) {
                 scanAndAddFiles(file, result);
-            } else if (file.getName().endsWith(".mp3") || file.getName().endsWith(".flac")) {
+            } else if (name.endsWith(".mp3") || name.endsWith(".flac")) {
                 result.add(new MusicFile(file));
             }
         }

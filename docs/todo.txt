@@ -23,6 +23,7 @@ Music plugin
 * FF and REW
 * Better fallback names (remove .mp3 and .flac and guess some nice case)
 * Better Bitrate figures: show VBR rates correctly and show flac differently.
+* Played songs can get lost (unstoppable if you press "next" too fast)
 
 
 Game plugin

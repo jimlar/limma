@@ -2,9 +2,7 @@ package limma;
 
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
-import limma.plugins.game.GamePlugin;
 import limma.plugins.menu.MenuPlugin;
-import limma.plugins.music.MusicPlugin;
 import limma.swing.ImagePanel;
 
 import javax.swing.*;
@@ -19,18 +17,13 @@ public class MainWindow extends JFrame implements PluginManager {
     private Map pluginsByName = new HashMap();
     private Plugin currentPlugin;
 
-    public MainWindow() {
+    public MainWindow(Plugin[] plugins) {
         ImageIcon background = new ImageIcon("background.jpg");
         mainPanel = new ImagePanel(background);
         mainPanel.setOpaque(false);
         pluginCardsManager = new CardLayout();
         mainPanel.setLayout(pluginCardsManager);
         this.setContentPane(mainPanel);
-
-        addPlugin(new MenuPlugin(this));
-        addPlugin(new MusicPlugin());
-        addPlugin(new GamePlugin());
-        enterPlugin("menu");
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             public boolean dispatchKeyEvent(KeyEvent e) {
@@ -40,6 +33,13 @@ public class MainWindow extends JFrame implements PluginManager {
                 return true;
             }
         });
+
+        for (int i = 0; i < plugins.length; i++) {
+            Plugin plugin = plugins[i];
+            addPlugin(plugin);
+        }
+        addPlugin(new MenuPlugin(this));
+        enterPlugin("menu");
         validate();
     }
 

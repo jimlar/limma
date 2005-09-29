@@ -1,34 +1,35 @@
 package limma.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Frame;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
 
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
-import javax.swing.SwingUtilities;
+public class ProcessDialog extends JPanel {
+    private JDesktopPane desktopPane;
+    private static final int PADDING = 10;
 
-public class ProcessDialog extends JDialog {
-
-    public ProcessDialog(Frame owner) {
-        super(owner);
-        setUndecorated(true);
-        setLayout(new BorderLayout());
+    public ProcessDialog(JDesktopPane desktopPane) {
+        this.desktopPane = desktopPane;
+        Border emptyBorder = BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING);
+        TitledBorder titledBorder = BorderFactory.createTitledBorder("Please wait...");
+        titledBorder.setTitleColor(Color.white);
+        titledBorder.setTitleFont(AntialiasLabel.DEFAULT_FONT);
+        setBorder(BorderFactory.createCompoundBorder(titledBorder, emptyBorder));
+        setBackground(Color.black);
     }
 
     public void executeInDialog(final Job job) {
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createTitledBorder("Please wait"));
-        add(panel, BorderLayout.CENTER);
-        job.init(panel);
+        final JComponent jComponent = job.init(this);
         try {
             new Thread() {
                 public void run() {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
-                            pack();
+                            desktopPane.add(ProcessDialog.this, JDesktopPane.MODAL_LAYER);
+                            add(jComponent);
                             setVisible(true);
-                            System.out.println("Murkla");
+                            pack();
                         }
                     });
                     try {
@@ -37,17 +38,27 @@ public class ProcessDialog extends JDialog {
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
                                 setVisible(false);
+                                desktopPane.remove(ProcessDialog.this);
                             }
                         });
                     }
                 }
             }.start();
         } finally {
-            remove(panel);
+            remove(jComponent);
         }
     }
 
+    public void pack() {
+        setSize(getPreferredSize());
+        validate();
+        setBounds(getParent().getWidth() / 2 - getWidth() / 2,
+                  getParent().getHeight() / 2 - getHeight() / 2,
+                  getWidth(),
+                  getHeight());
+    }
+
     public static interface Job extends Runnable {
-        void init(JPanel panel);
+        JComponent init(ProcessDialog dialog);
     }
 }

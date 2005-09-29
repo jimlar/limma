@@ -13,7 +13,6 @@ class CurrentTrackPanel extends JPanel {
     private AntialiasLabel albumLabel;
     private AntialiasLabel yearLabel;
     private AntialiasLabel genreLabel;
-    private AntialiasLabel statusLabel;
     private AntialiasLabel playModeLabel;
     private AntialiasLabel timeLabel;
     private long startTimeMillis = 0;
@@ -33,7 +32,6 @@ class CurrentTrackPanel extends JPanel {
         albumLabel = addLabel("Album:", 2);
         yearLabel = addLabel("Year:", 3);
         genreLabel = addLabel("Genre:", 4);
-        statusLabel = addLabel("Status:", 5);
 
         playModeLabel = new AntialiasLabel();
         add(playModeLabel, new GridBagConstraints(2, 0, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 10, 0, 10), 0, 0));
@@ -109,9 +107,5 @@ class CurrentTrackPanel extends JPanel {
 
     public void setPlayStrategy(PlayStrategy strategy) {
         playModeLabel.setText(strategy.getName());
-    }
-
-    public void setStatus(String message) {
-        statusLabel.setText(message);
     }
 }

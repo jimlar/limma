@@ -8,7 +8,9 @@ import limma.swing.ImagePanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class MainWindow extends JFrame implements PluginManager {
@@ -17,37 +19,41 @@ public class MainWindow extends JFrame implements PluginManager {
     private Map pluginsByName = new HashMap();
     private Plugin currentPlugin;
 
-    public MainWindow(Plugin[] plugins) {
+    public MainWindow(GraphicsDevice graphicsDevice, JDesktopPane desktopPane) {
         ImageIcon background = new ImageIcon("background.jpg");
+
+        this.setContentPane(desktopPane);
+        desktopPane.setOpaque(false);
+
         mainPanel = new ImagePanel(background);
         mainPanel.setOpaque(false);
         pluginCardsManager = new CardLayout();
         mainPanel.setLayout(pluginCardsManager);
-        this.setContentPane(mainPanel);
+        desktopPane.add(mainPanel, new Integer(Integer.MIN_VALUE));
+        mainPanel.setSize(graphicsDevice.getDisplayMode().getWidth(), graphicsDevice.getDisplayMode().getHeight());
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             public boolean dispatchKeyEvent(KeyEvent e) {
                 if (e.getID() == KeyEvent.KEY_PRESSED) {
-                    getCurrentPlugin().keyPressed(e, MainWindow.this);
+                    currentPlugin.keyPressed(e, MainWindow.this);
                 }
                 return true;
             }
         });
 
-        for (int i = 0; i < plugins.length; i++) {
-            Plugin plugin = plugins[i];
-            addPlugin(plugin);
-        }
         addPlugin(new MenuPlugin(this));
         enterPlugin("menu");
         validate();
     }
 
-    private Plugin getCurrentPlugin() {
-        return currentPlugin;
+    public void addPlugins(Collection plugins) {
+        for (Iterator iterator = plugins.iterator(); iterator.hasNext();) {
+            Plugin plugin = (Plugin) iterator.next();
+            addPlugin(plugin);
+        }
     }
 
-    public void addPlugin(Plugin plugin) {
+    private void addPlugin(Plugin plugin) {
         String name = plugin.getPluginName();
         JComponent pluginComponent = plugin.getPluginComponent();
         pluginComponent.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

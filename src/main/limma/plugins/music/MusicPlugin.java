@@ -4,10 +4,8 @@ import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.plugins.music.player.MusicPlayer;
 import limma.plugins.music.player.PlayerListener;
-import limma.swing.AntialiasCellRenderer;
-import limma.swing.AntialiasLabel;
-import limma.swing.AntialiasList;
-import limma.swing.SimpleListModel;
+import limma.swing.*;
+import limma.utils.DirectoryScanner;
 import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
@@ -187,57 +185,62 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     private void scanFiles() {
-        new Thread() {
-            public void run() {
-                File musicDir = new File("/media/music/");
-                setStatus("Scanning for music files in " + musicDir.getAbsolutePath());
-                ArrayList files = new ArrayList();
-                scanAndAddFiles(musicDir, files);
-                ObjectOutputStream out = null;
-                try {
-                    out = new ObjectOutputStream(new FileOutputStream(MUSIC_CACHE));
-                    out.writeObject(files);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    IOUtils.closeQuietly(out);
-                    setStatus("");
-                }
-                reloadFileList();
-            }
-        }.start();
-    }
-
-    private void scanAndAddFiles(File dir, List result) {
-        File[] fileArray = dir.listFiles();
-        if (fileArray == null) {
-            return;
-        }
-        ArrayList files = new ArrayList(Arrays.asList(fileArray));
-        Collections.sort(files, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return ((File) o1).getName().compareToIgnoreCase(((File) o2).getName());
-            }
-        });
-        for (Iterator i = files.iterator(); i.hasNext();) {
-            File file = (File) i.next();
-            String name = file.getName().toLowerCase();
-            if (file.isDirectory()) {
-                scanAndAddFiles(file, result);
-            } else if (name.endsWith(".mp3") || name.endsWith(".flac")) {
-                result.add(new MusicFile(file));
-            }
-        }
+        ProcessDialog dialog = new ProcessDialog();
+        dialog.executeInDialog(new ScanFilesJob(this));
     }
 
     private class MusicListCellRenderer extends AntialiasCellRenderer {
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             Component listCellRendererComponent = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (value.equals(playedFile)) {
-                listCellRendererComponent.setForeground(Color.gray);
+                listCellRendererComponent.setForeground(Color.yellow);
             }
             return listCellRendererComponent;
+        }
+    }
+
+    private static class ScanFilesJob implements ProcessDialog.Job {
+        private MusicPlugin musicPlugin;
+        private File musicDir;
+
+        public ScanFilesJob(MusicPlugin musicPlugin) {
+            this.musicPlugin = musicPlugin;
+            musicDir = new File("/media/music/");
+        }
+
+        public void init(JPanel panel) {
+            JLabel label = new JLabel();
+            label.setText("Scanning for music files in " + musicDir.getAbsolutePath());
+            panel.add(label);
+        }
+
+        public void run() {
+            List files = scanForMusicFiles(musicDir);
+            ObjectOutputStream out = null;
+            try {
+                out = new ObjectOutputStream(new FileOutputStream(MUSIC_CACHE));
+                out.writeObject(files);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                IOUtils.closeQuietly(out);
+            }
+            musicPlugin.reloadFileList();
+        }
+
+        private List scanForMusicFiles(File dir) {
+            final ArrayList result = new ArrayList();
+            DirectoryScanner scanner = new DirectoryScanner(dir, true);
+            scanner.accept(new DirectoryScanner.Visitor() {
+                public void visit(File file) {
+                    String name = file.getName().toLowerCase();
+                    if (name.endsWith(".mp3") || name.endsWith(".flac")) {
+                        result.add(new MusicFile(file));
+                    }
+                }
+            });
+            return result;
         }
     }
 }

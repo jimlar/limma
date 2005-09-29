@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 
 import de.vdheide.mp3.MP3File;
+import org.apache.commons.lang.StringUtils;
 
 public class MusicFile extends Object implements Serializable {
     private File file;
@@ -21,13 +22,17 @@ public class MusicFile extends Object implements Serializable {
 
         readID3WithJavaMP3(file);
 
-        if (title == null) {
+        if (StringUtils.isBlank(title)) {
             title = file.getName();
+            int i = title.lastIndexOf('.');
+            if (i != -1) {
+                title = title.substring(0, i);
+            }
         }
-        if (album == null) {
+        if (StringUtils.isBlank(album)) {
             album = file.getParentFile().getName();
         }
-        if (artist == null) {
+        if (StringUtils.isBlank(artist)) {
             artist = file.getParentFile().getParentFile().getName();
         }
         this.longName = getArtist() + ": " + getTitle();
@@ -36,14 +41,14 @@ public class MusicFile extends Object implements Serializable {
     private void readID3WithJavaMP3(File file) {
         try {
             MP3File mp3File = new MP3File(file.getAbsolutePath());
-            artist = mp3File.getArtist().getTextContent();
-            title = mp3File.getTitle().getTextContent();
-            album = mp3File.getAlbum().getTextContent();
+            artist = StringUtils.trimToEmpty(mp3File.getArtist().getTextContent());
+            title = StringUtils.trimToEmpty(mp3File.getTitle().getTextContent());
+            album = StringUtils.trimToEmpty(mp3File.getAlbum().getTextContent());
             try {
                 year = Integer.parseInt(mp3File.getYear().getTextContent());
             } catch (NumberFormatException e) {
             }
-            genre = mp3File.getGenre().getTextContent();
+            genre = StringUtils.trimToEmpty(mp3File.getGenre().getTextContent());
             lenghtInSeconds = mp3File.getLength();
             bitRate = mp3File.getBitrate();
 

@@ -29,10 +29,10 @@ public class MusicPlugin extends JPanel implements Plugin {
     private PlayStrategy selectedPlayStrategy;
     private RandomPlayStrategy randomPlayStrategy;
     private LinearPlayStrategy linearPlayStrategy;
-    private JDesktopPane desktopPane;
+    private DialogManager dialogManager;
 
-    public MusicPlugin(JDesktopPane desktopPane) {
-        this.desktopPane = desktopPane;
+    public MusicPlugin(DialogManager dialogManager) {
+        this.dialogManager = dialogManager;
         setOpaque(false);
         setLayout(new GridBagLayout());
 
@@ -103,13 +103,11 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     private void scanFiles() {
-        ProcessDialog dialog = new ProcessDialog(desktopPane);
-        dialog.executeInDialog(new ScanFilesJob(this));
+        dialogManager.executeInDialog(new ScanFilesTask(this));
     }
 
     void reloadFileList() {
-        ProcessDialog dialog = new ProcessDialog(desktopPane);
-        dialog.executeInDialog(new LoadListJob(this));
+        dialogManager.executeInDialog(new LoadListTask(this));
     }
 
     public void keyPressed(KeyEvent e, PluginManager pluginManager) {
@@ -174,14 +172,14 @@ public class MusicPlugin extends JPanel implements Plugin {
         }
     }
 
-    private static class LoadListJob implements ProcessDialog.Job {
+    private static class LoadListTask implements Task {
         private MusicPlugin musicPlugin;
 
-        public LoadListJob(MusicPlugin musicPlugin) {
+        public LoadListTask(MusicPlugin musicPlugin) {
             this.musicPlugin = musicPlugin;
         }
 
-        public JComponent init(ProcessDialog processDialog) {
+        public JComponent createComponent() {
             return new AntialiasLabel("Loading file list...");
         }
 

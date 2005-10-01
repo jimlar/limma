@@ -4,9 +4,11 @@ import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.plugins.menu.MenuPlugin;
 import limma.swing.ImagePanel;
+import limma.swing.DialogManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,17 +21,16 @@ public class MainWindow extends JFrame implements PluginManager {
     private Map pluginsByName = new HashMap();
     private Plugin currentPlugin;
 
-    public MainWindow(GraphicsDevice graphicsDevice, JDesktopPane desktopPane) {
+    public MainWindow(GraphicsDevice graphicsDevice, DialogManager dialogManager) {
         ImageIcon background = new ImageIcon("background.jpg");
 
-        this.setContentPane(desktopPane);
-        desktopPane.setOpaque(false);
+        this.setContentPane(dialogManager.getDialogManagerComponent());
 
         mainPanel = new ImagePanel(background);
         mainPanel.setOpaque(false);
         pluginCardsManager = new CardLayout();
         mainPanel.setLayout(pluginCardsManager);
-        desktopPane.add(mainPanel, new Integer(Integer.MIN_VALUE));
+        dialogManager.setRoot(mainPanel);
         mainPanel.setSize(graphicsDevice.getDisplayMode().getWidth(), graphicsDevice.getDisplayMode().getHeight());
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
@@ -43,6 +44,7 @@ public class MainWindow extends JFrame implements PluginManager {
 
         addPlugin(new MenuPlugin(this));
         enterPlugin("menu");
+        setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB), new Point(0, 0), "invisible"));
         validate();
     }
 

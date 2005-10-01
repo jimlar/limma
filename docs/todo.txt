@@ -1,6 +1,6 @@
 General
 -------
-* Skins
+* Skins (or atleast centralized control over colors, sizes and images).
 * Database for storage
 * Info/progress popups (instead of the status label)
 * Database
@@ -37,6 +37,8 @@ Video plugin
 ------------
 * Support for multifile videos
 * IMDB info retrieval
+* Support for playing on-disk DVD's (with ogle?)
+* Support for categorizing movies (differently from the on-disk tree).
 
 
 Pictures plugin

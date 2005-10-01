@@ -1,7 +1,8 @@
 package limma.plugins.music;
 
 import limma.swing.AntialiasLabel;
-import limma.swing.ProcessDialog;
+import limma.swing.TaskDialog;
+import limma.swing.Task;
 import limma.utils.DirectoryScanner;
 import org.apache.commons.io.IOUtils;
 
@@ -13,22 +14,20 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-class ScanFilesJob implements ProcessDialog.Job {
+class ScanFilesTask implements Task {
     private MusicPlugin musicPlugin;
     private File musicDir;
     private AntialiasLabel statusLabel;
     private int numFiles;
     private int filesScanned;
-    private ProcessDialog processDialog;
 
-    public ScanFilesJob(MusicPlugin musicPlugin) {
+    public ScanFilesTask(MusicPlugin musicPlugin) {
         this.musicPlugin = musicPlugin;
         musicDir = new File("/media/music/");
         statusLabel = new AntialiasLabel("Scanning for music files in " + musicDir.getAbsolutePath());
     }
 
-    public JComponent init(ProcessDialog processDialog) {
-        this.processDialog = processDialog;
+    public JComponent createComponent() {
         return statusLabel;
     }
 
@@ -84,7 +83,6 @@ class ScanFilesJob implements ProcessDialog.Job {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 statusLabel.setText("Scanning for music files in " + musicDir.getAbsolutePath() + " " + percent + "%");
-                processDialog.pack();
             }
         });
     }

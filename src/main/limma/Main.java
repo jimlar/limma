@@ -12,7 +12,8 @@ import java.awt.*;
 public class Main {
 
     public static void main(String[] args) {
-        System.setProperty("swing.aatext", "true");
+        tweakSwing();
+
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -32,5 +33,11 @@ public class Main {
                 mainWindow.requestFocus();
             }
         });
+    }
+
+    private static void tweakSwing() {
+        System.setProperty("swing.aatext", "true");
+        UIManager.put("TabbedPane.tabsOpaque", "false");
+        UIManager.put("TabbedPane.contentOpaque", "false");
     }
 }

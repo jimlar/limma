@@ -5,67 +5,24 @@ import limma.swing.AntialiasLabel;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
 
 class CurrentTrackPanel extends JPanel {
     private AntialiasLabel artistLabel;
     private AntialiasLabel titleLabel;
     private AntialiasLabel albumLabel;
-    private AntialiasLabel yearLabel;
-    private AntialiasLabel genreLabel;
-    private AntialiasLabel playModeLabel;
-    private AntialiasLabel timeLabel;
-    private long startTimeMillis = 0;
     private MusicFile currentTrack;
-    private AntialiasLabel bitRateLabel;
 
     public CurrentTrackPanel() {
         super(new GridBagLayout());
-        TitledBorder titledBorder = BorderFactory.createTitledBorder("Current track");
+        TitledBorder titledBorder = BorderFactory.createTitledBorder("Track");
         titledBorder.setTitleFont(AntialiasLabel.DEFAULT_FONT);
         titledBorder.setTitleColor(Color.white);
         setBorder(titledBorder);
         setOpaque(false);
 
-        artistLabel = addLabel("Artist:", 0);
-        titleLabel = addLabel("Track:", 1);
+        titleLabel = addLabel("Title:", 0);
+        artistLabel = addLabel("Artist:", 1);
         albumLabel = addLabel("Album:", 2);
-        yearLabel = addLabel("Year:", 3);
-        genreLabel = addLabel("Genre:", 4);
-
-        playModeLabel = new AntialiasLabel();
-        add(playModeLabel, new GridBagConstraints(2, 0, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 10, 0, 10), 0, 0));
-        timeLabel = new AntialiasLabel();
-        add(timeLabel, new GridBagConstraints(2, 1, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 10, 0, 10), 0, 0));
-        bitRateLabel = new AntialiasLabel();
-        add(bitRateLabel, new GridBagConstraints(2, 2, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 10, 0, 10), 0, 0));
-
-        Thread playtimeUpdateThread = new Thread() {
-            public void run() {
-                while (true) {
-                    try {
-                        SwingUtilities.invokeAndWait(new Runnable() {
-                            public void run() {
-                                String text = "";
-                                if (currentTrack != null) {
-                                    String playtime = secondsToString((System.currentTimeMillis() - startTimeMillis) / 1000);
-                                    String totalTime = secondsToString(currentTrack.getLenghtInSeconds());
-                                    text = playtime + " / " + totalTime;
-                                }
-                                timeLabel.setText(text);
-                            }
-                        });
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-        playtimeUpdateThread.setPriority(Thread.MIN_PRIORITY);
-        playtimeUpdateThread.setDaemon(true);
-        playtimeUpdateThread.start();
     }
 
     private AntialiasLabel addLabel(String labelText, int row) {
@@ -79,21 +36,13 @@ class CurrentTrackPanel extends JPanel {
     public void setCurrentTrack(MusicFile file) {
         this.currentTrack = file;
         if (file == null) {
-            artistLabel.setText("");
             titleLabel.setText("");
+            artistLabel.setText("");
             albumLabel.setText("");
-            yearLabel.setText("");
-            genreLabel.setText("");
-            timeLabel.setText("");
-            bitRateLabel.setText("");
         } else {
-            startTimeMillis = System.currentTimeMillis();
+            titleLabel.setText(file.getTitle() + " (" + secondsToString(currentTrack.getLenghtInSeconds()) + ")");
             artistLabel.setText(file.getArtist());
-            titleLabel.setText(file.getTitle());
-            albumLabel.setText(file.getAlbum());
-            yearLabel.setText(file.getYear() == 0 ? "" : String.valueOf(file.getYear()));
-            genreLabel.setText(file.getGenre());
-            bitRateLabel.setText(file.getBitRate() + " kbps");
+            albumLabel.setText(file.getAlbum() + (file.getYear() == 0 ? "" : " (" + file.getYear() + ")"));
         }
     }
 
@@ -103,9 +52,5 @@ class CurrentTrackPanel extends JPanel {
             secs = "0" + secs;
         }
         return seconds / 60 + ":" + secs;
-    }
-
-    public void setPlayStrategy(PlayStrategy strategy) {
-        playModeLabel.setText(strategy.getName());
     }
 }

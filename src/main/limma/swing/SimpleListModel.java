@@ -36,4 +36,8 @@ public class SimpleListModel extends AbstractListModel {
             fireContentsChanged(this, i, i);
         }
     }
+
+    public List getObjects() {
+        return objects;
+    }
 }

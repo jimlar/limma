@@ -1,10 +1,10 @@
 package limma.plugins.music;
 
-import java.io.File;
-import java.io.Serializable;
-
 import de.vdheide.mp3.MP3File;
 import org.apache.commons.lang.StringUtils;
+
+import java.io.File;
+import java.io.Serializable;
 
 public class MusicFile extends Object implements Serializable {
     private File file;
@@ -12,9 +12,7 @@ public class MusicFile extends Object implements Serializable {
     private String title;
     private String album;
     private int year;
-    private String genre;
     private long lenghtInSeconds;
-    private int bitRate;
     private String longName;
 
     public MusicFile(File file) {
@@ -48,9 +46,7 @@ public class MusicFile extends Object implements Serializable {
                 year = Integer.parseInt(mp3File.getYear().getTextContent());
             } catch (NumberFormatException e) {
             }
-            genre = StringUtils.trimToEmpty(mp3File.getGenre().getTextContent());
             lenghtInSeconds = mp3File.getLength();
-            bitRate = mp3File.getBitrate();
 
         } catch (Exception e) {
         }
@@ -74,10 +70,6 @@ public class MusicFile extends Object implements Serializable {
 
     public int getYear() {
         return year;
-    }
-
-    public String getGenre() {
-        return genre;
     }
 
     public long getLenghtInSeconds() {
@@ -111,7 +103,4 @@ public class MusicFile extends Object implements Serializable {
         return file.hashCode();
     }
 
-    public int getBitRate() {
-        return bitRate;
-    }
 }

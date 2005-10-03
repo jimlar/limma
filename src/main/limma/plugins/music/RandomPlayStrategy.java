@@ -3,25 +3,27 @@ package limma.plugins.music;
 import limma.swing.SimpleListModel;
 
 import java.util.Random;
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
-public class RandomPlayStrategy implements PlayStrategy {
-    private SimpleListModel musicListModel;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
+
+public class RandomPlayStrategy extends AbstractPlayStrategy {
     private Random random;
 
     public RandomPlayStrategy(SimpleListModel musicListModel) {
-        this.musicListModel = musicListModel;
+        super(musicListModel);
         random = new Random();
     }
 
-    public MusicFile getNextFileToPlay(MusicFile lastFile) {
-        if (musicListModel.getSize() > 0) {
-            int i = random.nextInt(musicListModel.getSize());
-            return (MusicFile) musicListModel.getElementAt(i);
+    public MusicFile getNextFileToPlay(MusicFile lastFile, boolean lockArtist, boolean lockAlbum) {
+        List filteredMusicList = getFilteredMusicList(lastFile, lockArtist, lockAlbum);
+        if (filteredMusicList.size() > 0) {
+            int i = random.nextInt(filteredMusicList.size());
+            return (MusicFile) filteredMusicList.get(i);
         }
         return null;
-    }
-
-    public String getName() {
-        return "Random";
     }
 }

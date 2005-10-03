@@ -30,6 +30,9 @@ public class MusicPlugin extends JPanel implements Plugin {
     private RandomPlayStrategy randomPlayStrategy;
     private LinearPlayStrategy linearPlayStrategy;
     private DialogManager dialogManager;
+    private OptionsPanel optionsPanel;
+    private boolean lockAlbum;
+    private boolean lockArtist;
 
     public MusicPlugin(DialogManager dialogManager) {
         this.dialogManager = dialogManager;
@@ -37,21 +40,28 @@ public class MusicPlugin extends JPanel implements Plugin {
         setLayout(new GridBagLayout());
 
         currentTrackPanel = new CurrentTrackPanel();
-        add(currentTrackPanel, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, 0), 0, 0));
 
         musicListModel = new SimpleListModel();
         musicList = new AntialiasList(musicListModel);
         musicList.setCellRenderer(new MusicListCellRenderer());
-        JScrollPane scrollPane = new JScrollPane(musicList);
-        add(scrollPane, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        JScrollPane playlistScrollPane = new JScrollPane(musicList);
+
+
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Playlist");
         titledBorder.setTitleFont(AntialiasLabel.DEFAULT_FONT);
         titledBorder.setTitleColor(Color.white);
-        scrollPane.setBorder(titledBorder);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
+        playlistScrollPane.setBorder(titledBorder);
+        playlistScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        playlistScrollPane.setOpaque(false);
+        playlistScrollPane.getViewport().setOpaque(false);
+
+        optionsPanel = new OptionsPanel();
+        add(currentTrackPanel, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, 0), 0, 0));
+        add(optionsPanel, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 10, 0), 0, 0));
+        add(playlistScrollPane, new GridBagConstraints(0, 1, 2, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+
 
         musicPlayer = new MusicPlayer(new PlayerListener() {
             public void stopped(MusicFile musicFile) {
@@ -64,7 +74,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         randomPlayStrategy = new RandomPlayStrategy(musicListModel);
         linearPlayStrategy = new LinearPlayStrategy(musicListModel);
         selectedPlayStrategy = randomPlayStrategy;
-        currentTrackPanel.setPlayStrategy(selectedPlayStrategy);
+        optionsPanel.setRandom(true);
     }
 
     private void playNextTrack() {
@@ -72,11 +82,9 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     private void playNextTrack(MusicFile lastTrack) {
-        boolean jumpToNextTrack = false;
-        if (musicList.getSelectedValue() != null && musicList.getSelectedValue().equals(lastTrack)) {
-            jumpToNextTrack = true;
-        }
-        MusicFile nextFileToPlay = selectedPlayStrategy.getNextFileToPlay(lastTrack);
+        boolean jumpToNextTrack = musicList.getSelectedValue() != null && musicList.getSelectedValue().equals(lastTrack);
+
+        MusicFile nextFileToPlay = selectedPlayStrategy.getNextFileToPlay(lastTrack, lockArtist, lockAlbum);
         if (nextFileToPlay == null) {
             stop();
         } else {
@@ -107,7 +115,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     void reloadFileList() {
-        dialogManager.executeInDialog(new LoadListTask(this));
+        dialogManager.executeInDialog(new LoadPlayListTask(this));
     }
 
     public void keyPressed(KeyEvent e, PluginManager pluginManager) {
@@ -124,8 +132,14 @@ public class MusicPlugin extends JPanel implements Plugin {
             case KeyEvent.VK_R:
                 scanFiles();
                 break;
-            case KeyEvent.VK_M:
-                cycleStrategy();
+            case KeyEvent.VK_1:
+                toggleRandom();
+                break;
+            case KeyEvent.VK_2:
+                toggleLockArtist();
+                break;
+            case KeyEvent.VK_3:
+                toggelLockAlbum();
                 break;
             case KeyEvent.VK_N:
                 playNextTrack();
@@ -134,13 +148,32 @@ public class MusicPlugin extends JPanel implements Plugin {
         musicList.processKeyEvent(e);
     }
 
-    private void cycleStrategy() {
+    private void toggelLockAlbum() {
+        lockAlbum = !lockAlbum;
+        if (lockAlbum) {
+            lockArtist = true;
+        }
+        optionsPanel.setLockArtist(lockArtist);
+        optionsPanel.setLockAlbum(lockAlbum);
+    }
+
+    private void toggleLockArtist() {
+        lockArtist = !lockArtist;
+        if (!lockArtist) {
+            lockAlbum = false;
+        }
+        optionsPanel.setLockArtist(lockArtist);
+        optionsPanel.setLockAlbum(lockAlbum);
+    }
+
+    private void toggleRandom() {
         if (selectedPlayStrategy instanceof LinearPlayStrategy) {
             selectedPlayStrategy = randomPlayStrategy;
+            optionsPanel.setRandom(true);
         } else {
             selectedPlayStrategy = linearPlayStrategy;
+            optionsPanel.setRandom(false);
         }
-        currentTrackPanel.setPlayStrategy(selectedPlayStrategy);
     }
 
     public void stop() {
@@ -172,10 +205,10 @@ public class MusicPlugin extends JPanel implements Plugin {
         }
     }
 
-    private static class LoadListTask implements Task {
+    private static class LoadPlayListTask implements Task {
         private MusicPlugin musicPlugin;
 
-        public LoadListTask(MusicPlugin musicPlugin) {
+        public LoadPlayListTask(MusicPlugin musicPlugin) {
             this.musicPlugin = musicPlugin;
         }
 
@@ -191,7 +224,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         private List loadFiles() {
             ObjectInputStream in = null;
             try {
-                in = new ObjectInputStream(new FileInputStream(MUSIC_CACHE));
+                in = new ObjectInputStream(new FileInputStream(MusicPlugin.MUSIC_CACHE));
                 return (List) in.readObject();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -203,5 +236,4 @@ public class MusicPlugin extends JPanel implements Plugin {
             return Collections.EMPTY_LIST;
         }
     }
-
 }

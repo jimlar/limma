@@ -33,6 +33,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     private OptionsPanel optionsPanel;
     private boolean lockAlbum;
     private boolean lockArtist;
+    private boolean repeatTrack;
 
     public MusicPlugin(DialogManager dialogManager) {
         this.dialogManager = dialogManager;
@@ -58,7 +59,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         playlistScrollPane.getViewport().setOpaque(false);
 
         optionsPanel = new OptionsPanel();
-        add(currentTrackPanel, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, 0), 0, 0));
+        add(currentTrackPanel, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 10, 0), 0, 0));
         add(optionsPanel, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 10, 0), 0, 0));
         add(playlistScrollPane, new GridBagConstraints(0, 1, 2, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
@@ -82,15 +83,20 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     private void playNextTrack(MusicFile lastTrack) {
-        boolean jumpToNextTrack = musicList.getSelectedValue() != null && musicList.getSelectedValue().equals(lastTrack);
+        boolean jumpToTrack = musicList.getSelectedValue() != null && musicList.getSelectedValue().equals(lastTrack);
 
-        MusicFile nextFileToPlay = selectedPlayStrategy.getNextFileToPlay(lastTrack, lockArtist, lockAlbum);
+        MusicFile nextFileToPlay;
+        if (repeatTrack) {
+            nextFileToPlay = lastTrack;
+        } else {
+            nextFileToPlay = selectedPlayStrategy.getNextFileToPlay(lastTrack, lockArtist, lockAlbum);
+        }
         if (nextFileToPlay == null) {
             stop();
         } else {
             play(nextFileToPlay);
         }
-        if (jumpToNextTrack) {
+        if (jumpToTrack) {
             musicList.setSelectedValue(nextFileToPlay, true);
         }
     }
@@ -141,11 +147,19 @@ public class MusicPlugin extends JPanel implements Plugin {
             case KeyEvent.VK_3:
                 toggelLockAlbum();
                 break;
+            case KeyEvent.VK_4:
+                toggelRepeatTrack();
+                break;
             case KeyEvent.VK_N:
                 playNextTrack();
                 break;
         }
         musicList.processKeyEvent(e);
+    }
+
+    private void toggelRepeatTrack() {
+        repeatTrack = !repeatTrack;
+        optionsPanel.setRepeatTrack(repeatTrack);
     }
 
     private void toggelLockAlbum() {

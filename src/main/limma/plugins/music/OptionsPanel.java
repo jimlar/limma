@@ -10,6 +10,7 @@ public class OptionsPanel extends JPanel {
     private AntialiasLabel randomLabel;
     private AntialiasLabel lockArtistLabel;
     private AntialiasLabel lockAlbumLabel;
+    private AntialiasLabel repeatTrackLabel;
 
     public OptionsPanel() {
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Options");
@@ -22,6 +23,7 @@ public class OptionsPanel extends JPanel {
         randomLabel = addLabel("1: Random", 0);
         lockArtistLabel = addLabel("2: Lock artist", 1);
         lockAlbumLabel = addLabel("3: Lock album", 2);
+        repeatTrackLabel = addLabel("4: Repeat track", 3);
     }
 
     private AntialiasLabel addLabel(String labelText, int row) {
@@ -40,5 +42,9 @@ public class OptionsPanel extends JPanel {
 
     public void setLockAlbum(boolean lockAlbum) {
         lockAlbumLabel.setForeground(lockAlbum ? Color.yellow : Color.white);
+    }
+
+    public void setRepeatTrack(boolean repeatTrack) {
+        repeatTrackLabel.setForeground(repeatTrack ? Color.yellow : Color.white);
     }
 }

@@ -15,7 +15,6 @@ TV plugin
 Music plugin
 ------------
 * Playlists
-* Lock on artist/album
 * Repeat track/all?
 * "Look aside" playlists (select a few songs in a queue to be played before the normal strategy takes back control)
 * Exclude/ban track

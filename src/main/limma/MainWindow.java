@@ -28,7 +28,7 @@ public class MainWindow extends JFrame implements PluginManager {
 
         mainPanel = new ImagePanel(background);
         mainPanel.setOpaque(false);
-        pluginCardsManager = new CardLayout();
+        pluginCardsManager = new CardLayout(10, 10);
         mainPanel.setLayout(pluginCardsManager);
         dialogManager.setRoot(mainPanel);
         mainPanel.setSize(graphicsDevice.getDisplayMode().getWidth(), graphicsDevice.getDisplayMode().getHeight());
@@ -57,9 +57,7 @@ public class MainWindow extends JFrame implements PluginManager {
 
     private void addPlugin(Plugin plugin) {
         String name = plugin.getPluginName();
-        JComponent pluginComponent = plugin.getPluginComponent();
-        pluginComponent.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        mainPanel.add(pluginComponent, name);
+        mainPanel.add(plugin.getPluginComponent(), name);
         pluginsByName.put(name, plugin);
     }
 

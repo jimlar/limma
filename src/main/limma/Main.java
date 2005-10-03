@@ -1,6 +1,7 @@
 package limma;
 
 import limma.plugins.Plugin;
+import limma.plugins.video.VideoPlugin;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.MusicPlugin;
 import limma.swing.DialogManagerImpl;
@@ -19,6 +20,7 @@ public class Main {
                 GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
                 DefaultPicoContainer pico = new DefaultPicoContainer();
+                pico.registerComponentImplementation(VideoPlugin.class);
                 pico.registerComponentImplementation(MusicPlugin.class);
                 pico.registerComponentImplementation(GamePlugin.class);
                 pico.registerComponentImplementation(MainWindow.class);

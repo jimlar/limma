@@ -1,0 +1,12 @@
+
+My ideas of the key mappings
+============================
+This is largely based on the fact that I want to be
+
+
+
+0-9: Toggle/set options
+m:   Bring up the menu
+i:   Show info
+
+arrow keys: browse about

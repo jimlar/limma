@@ -2,6 +2,7 @@ package limma.plugins.music;
 
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
+import limma.plugins.persistence.PersistenceManager;
 import limma.plugins.music.player.MusicPlayer;
 import limma.plugins.music.player.PlayerListener;
 import limma.swing.*;
@@ -11,6 +12,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,8 +36,9 @@ public class MusicPlugin extends JPanel implements Plugin {
     private boolean lockAlbum;
     private boolean lockArtist;
     private boolean repeatTrack;
+    private LimmaPopupMenu menu;
 
-    public MusicPlugin(DialogManager dialogManager) {
+    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager) {
         this.dialogManager = dialogManager;
         setOpaque(false);
         setLayout(new GridBagLayout());
@@ -76,6 +79,13 @@ public class MusicPlugin extends JPanel implements Plugin {
         linearPlayStrategy = new LinearPlayStrategy(musicListModel);
         selectedPlayStrategy = randomPlayStrategy;
         optionsPanel.setRandom(true);
+
+        menu = new LimmaPopupMenu();
+        menu.add(new JMenuItem(new AbstractAction("Scan for new music files") {
+            public void actionPerformed(ActionEvent e) {
+                scanFiles();
+            }
+        }));
     }
 
     private void playNextTrack() {
@@ -125,6 +135,11 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     public void keyPressed(KeyEvent e, PluginManager pluginManager) {
+        if (menu.isVisible()) {
+            menu.processKeyEvent(e);
+            return;
+        }
+
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
                 pluginManager.exitPlugin();
@@ -135,8 +150,8 @@ public class MusicPlugin extends JPanel implements Plugin {
             case KeyEvent.VK_S:
                 stop();
                 break;
-            case KeyEvent.VK_R:
-                scanFiles();
+            case KeyEvent.VK_M:
+                menu.show(this, 100, 100);
                 break;
             case KeyEvent.VK_1:
                 toggleRandom();
@@ -248,6 +263,16 @@ public class MusicPlugin extends JPanel implements Plugin {
                 IOUtils.closeQuietly(in);
             }
             return Collections.EMPTY_LIST;
+        }
+    }
+
+    private static class LimmaPopupMenu extends JPopupMenu {
+        public LimmaPopupMenu() {
+            super("Menu");
+        }
+
+        public void processKeyEvent(KeyEvent evt) {
+            super.processKeyEvent(evt);
         }
     }
 }

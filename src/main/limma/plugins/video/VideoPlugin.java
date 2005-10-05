@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 
+
 public class VideoPlugin implements Plugin {
     private SimpleListModel videoListModel;
     private boolean hasEntered;

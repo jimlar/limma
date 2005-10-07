@@ -1,6 +1,7 @@
 package limma;
 
 import limma.plugins.Plugin;
+import limma.plugins.persistence.PersistenceManagerImpl;
 import limma.plugins.video.VideoPlugin;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.MusicPlugin;
@@ -25,6 +26,7 @@ public class Main {
                 pico.registerComponentImplementation(GamePlugin.class);
                 pico.registerComponentImplementation(MainWindow.class);
                 pico.registerComponentImplementation(DialogManagerImpl.class);
+                pico.registerComponentImplementation(PersistenceManagerImpl.class);
                 pico.registerComponentInstance(device);
 
                 MainWindow mainWindow = (MainWindow) pico.getComponentInstanceOfType(MainWindow.class);

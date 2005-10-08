@@ -7,16 +7,20 @@ import java.io.File;
 import java.io.Serializable;
 
 public class MusicFile extends Object implements Serializable {
-    private File file;
+    private long id;
+    private String path;
     private String artist;
     private String title;
     private String album;
     private int year;
-    private long lenghtInSeconds;
+    private long lengthInSeconds;
     private String longName;
 
+    public MusicFile() {
+    }
+
     public MusicFile(File file) {
-        this.file = file;
+        this.path = file.getAbsolutePath();
 
         readID3WithJavaMP3(file);
 
@@ -46,14 +50,14 @@ public class MusicFile extends Object implements Serializable {
                 year = Integer.parseInt(mp3File.getYear().getTextContent());
             } catch (NumberFormatException e) {
             }
-            lenghtInSeconds = mp3File.getLength();
+            lengthInSeconds = mp3File.getLength();
 
         } catch (Exception e) {
         }
     }
 
     public File getFile() {
-        return file;
+        return new File(path);
     }
 
     public String getArtist() {
@@ -72,16 +76,16 @@ public class MusicFile extends Object implements Serializable {
         return year;
     }
 
-    public long getLenghtInSeconds() {
-        return lenghtInSeconds;
+    public long getLengthInSeconds() {
+        return lengthInSeconds;
     }
 
     public boolean isFlac() {
-        return file.getName().toLowerCase().endsWith(".flac");
+        return path.toLowerCase().endsWith(".flac");
     }
 
     public boolean isMP3() {
-        return file.getName().toLowerCase().endsWith(".mp3");
+        return path.toLowerCase().endsWith(".mp3");
     }
 
     public String toString() {
@@ -94,13 +98,13 @@ public class MusicFile extends Object implements Serializable {
 
         final MusicFile musicFile = (MusicFile) o;
 
-        if (!file.equals(musicFile.file)) return false;
+        if (!path.equals(musicFile.path)) return false;
 
         return true;
     }
 
     public int hashCode() {
-        return file.hashCode();
+        return path.hashCode();
     }
 
 }

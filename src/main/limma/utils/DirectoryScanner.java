@@ -25,19 +25,22 @@ public class DirectoryScanner {
 
     private void accept(File file, Visitor visitor) {
         if (file.isDirectory()) {
-            File[] childrenArray = file.listFiles();
-            List children = Arrays.asList(childrenArray != null ? childrenArray : new File[0]);
-            if (sortAlphabetically) {
-                children = new ArrayList(children);
-                Collections.sort(children, new Comparator() {
-                    public int compare(Object o1, Object o2) {
-                        return ((File) o1).getName().compareToIgnoreCase(((File) o2).getName());
-                    }
-                });
-            }
-            for (Iterator i = children.iterator(); i.hasNext();) {
-                File child = (File) i.next();
-                accept(child, visitor);
+            boolean descend = visitor.visit(file);
+            if (descend) {
+                File[] childrenArray = file.listFiles();
+                List children = Arrays.asList(childrenArray != null ? childrenArray : new File[0]);
+                if (sortAlphabetically) {
+                    children = new ArrayList(children);
+                    Collections.sort(children, new Comparator() {
+                        public int compare(Object o1, Object o2) {
+                            return ((File) o1).getName().compareToIgnoreCase(((File) o2).getName());
+                        }
+                    });
+                }
+                for (Iterator i = children.iterator(); i.hasNext();) {
+                    File child = (File) i.next();
+                    accept(child, visitor);
+                }
             }
         } else {
             visitor.visit(file);
@@ -45,6 +48,6 @@ public class DirectoryScanner {
     }
 
     public static interface Visitor {
-        void visit(File file);
+        boolean visit(File file);
     }
 }

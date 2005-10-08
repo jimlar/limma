@@ -1,26 +1,30 @@
 package limma.plugins.video;
 
+import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
-import limma.swing.*;
-import limma.utils.DirectoryScanner;
+import limma.swing.AntialiasLabel;
+import limma.swing.AntialiasList;
+import limma.swing.DialogManager;
+import limma.swing.SimpleListModel;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.util.ArrayList;
 
 
 public class VideoPlugin implements Plugin {
     private SimpleListModel videoListModel;
     private boolean hasEntered;
     private DialogManager dialogManager;
+    private PersistenceManager persistenceManager;
     private AntialiasList videoList;
 
-    public VideoPlugin(DialogManager dialogManager) {
+    public VideoPlugin(DialogManager dialogManager, PersistenceManager persistenceManager) {
         this.dialogManager = dialogManager;
+        this.persistenceManager = persistenceManager;
+        persistenceManager.addPersistentClass(Video.class);
     }
 
     public String getPluginName() {
@@ -51,21 +55,7 @@ public class VideoPlugin implements Plugin {
     public void pluginEntered() {
         if (!hasEntered) {
             hasEntered = true;
-            dialogManager.executeInDialog(new Task() {
-                public JComponent createComponent() {
-                    return new AntialiasLabel("Loading video list...");
-                }
-
-                public void run() {
-                    final ArrayList videos = new ArrayList();
-                    new DirectoryScanner(new File("/media/movies")).accept(new DirectoryScanner.Visitor() {
-                        public void visit(File file) {
-                            videos.add(file);
-                        }
-                    });
-                    videoListModel.setObjects(videos);
-                }
-            });
+            reloadVideos();
         }
     }
 
@@ -74,7 +64,23 @@ public class VideoPlugin implements Plugin {
             case KeyEvent.VK_ESCAPE:
                 pluginManager.exitPlugin();
                 break;
+            case KeyEvent.VK_R:
+                scanForVideos();
+                break;
+            default:
+                videoList.processKeyEvent(e);
         }
-        videoList.processKeyEvent(e);
+    }
+
+    private void scanForVideos() {
+        dialogManager.executeInDialog(new ScanForVideosTask(this, persistenceManager));
+    }
+
+    void setVideos(java.util.List videos) {
+        videoListModel.setObjects(videos);
+    }
+
+    public void reloadVideos() {
+        dialogManager.executeInDialog(new LoadVideosTask(this, persistenceManager));
     }
 }

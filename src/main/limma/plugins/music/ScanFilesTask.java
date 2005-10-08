@@ -1,28 +1,24 @@
 package limma.plugins.music;
 
+import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
-import limma.swing.TaskDialog;
 import limma.swing.Task;
 import limma.utils.DirectoryScanner;
-import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 class ScanFilesTask implements Task {
     private MusicPlugin musicPlugin;
+    private PersistenceManager persistenceManager;
     private File musicDir;
     private AntialiasLabel statusLabel;
     private int numFiles;
     private int filesScanned;
 
-    public ScanFilesTask(MusicPlugin musicPlugin) {
+    public ScanFilesTask(MusicPlugin musicPlugin, PersistenceManager persistenceManager) {
         this.musicPlugin = musicPlugin;
+        this.persistenceManager = persistenceManager;
         musicDir = new File("/media/music/");
         statusLabel = new AntialiasLabel("Scanning for music files in " + musicDir.getAbsolutePath());
     }
@@ -32,18 +28,9 @@ class ScanFilesTask implements Task {
     }
 
     public void run() {
+        persistenceManager.deleteAll(MusicFile.class);
         numFiles = countMusicFiles();
-        List files = scanForMusicFiles();
-        ObjectOutputStream out = null;
-        try {
-            out = new ObjectOutputStream(new FileOutputStream(MusicPlugin.MUSIC_CACHE));
-            out.writeObject(files);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            IOUtils.closeQuietly(out);
-        }
+        scanForMusicFiles();
         musicPlugin.reloadFileList();
     }
 
@@ -51,28 +38,28 @@ class ScanFilesTask implements Task {
         final int[] result = new int[]{0};
         DirectoryScanner scanner = new DirectoryScanner(musicDir, true);
         scanner.accept(new DirectoryScanner.Visitor() {
-            public void visit(File file) {
+            public boolean visit(File file) {
                 if (isMusicFile(file)) {
                     result[0]++;
                 }
+                return true;
             }
         });
         return result[0];
     }
 
-    private List scanForMusicFiles() {
-        final ArrayList result = new ArrayList();
+    private void scanForMusicFiles() {
         DirectoryScanner scanner = new DirectoryScanner(musicDir, true);
         scanner.accept(new DirectoryScanner.Visitor() {
-            public void visit(File file) {
+            public boolean visit(File file) {
                 if (isMusicFile(file)) {
-                    result.add(new MusicFile(file));
+                    persistenceManager.create(new MusicFile(file));
                     filesScanned++;
                     updateProgress();
                 }
+                return true;
             }
         });
-        return result;
     }
 
     private void updateProgress() {
@@ -89,6 +76,6 @@ class ScanFilesTask implements Task {
 
     private boolean isMusicFile(File file) {
         String name = file.getName().toLowerCase();
-        return name.endsWith(".mp3") || name.endsWith(".flac");
+        return file.isFile() && (name.endsWith(".mp3") || name.endsWith(".flac"));
     }
 }

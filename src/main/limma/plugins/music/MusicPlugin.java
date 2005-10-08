@@ -1,27 +1,19 @@
 package limma.plugins.music;
 
+import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
-import limma.plugins.persistence.PersistenceManager;
 import limma.plugins.music.player.MusicPlayer;
 import limma.plugins.music.player.PlayerListener;
 import limma.swing.*;
-import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.Collections;
-import java.util.List;
+import java.awt.event.KeyEvent;
 
 public class MusicPlugin extends JPanel implements Plugin {
-    static final File MUSIC_CACHE = new File("music.cache");
     private SimpleListModel musicListModel;
     private AntialiasList musicList;
     private MusicPlayer musicPlayer;
@@ -32,6 +24,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     private RandomPlayStrategy randomPlayStrategy;
     private LinearPlayStrategy linearPlayStrategy;
     private DialogManager dialogManager;
+    private PersistenceManager persistenceManager;
     private OptionsPanel optionsPanel;
     private boolean lockAlbum;
     private boolean lockArtist;
@@ -40,6 +33,8 @@ public class MusicPlugin extends JPanel implements Plugin {
 
     public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager) {
         this.dialogManager = dialogManager;
+        this.persistenceManager = persistenceManager;
+        persistenceManager.addPersistentClass(MusicFile.class);
         setOpaque(false);
         setLayout(new GridBagLayout());
 
@@ -127,11 +122,11 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     private void scanFiles() {
-        dialogManager.executeInDialog(new ScanFilesTask(this));
+        dialogManager.executeInDialog(new ScanFilesTask(this, persistenceManager));
     }
 
     void reloadFileList() {
-        dialogManager.executeInDialog(new LoadPlayListTask(this));
+        dialogManager.executeInDialog(new LoadPlayListTask(this, persistenceManager));
     }
 
     public void keyPressed(KeyEvent e, PluginManager pluginManager) {
@@ -168,8 +163,9 @@ public class MusicPlugin extends JPanel implements Plugin {
             case KeyEvent.VK_N:
                 playNextTrack();
                 break;
+            default:
+                musicList.processKeyEvent(e);
         }
-        musicList.processKeyEvent(e);
     }
 
     private void toggelRepeatTrack() {
@@ -236,9 +232,11 @@ public class MusicPlugin extends JPanel implements Plugin {
 
     private static class LoadPlayListTask implements Task {
         private MusicPlugin musicPlugin;
+        private PersistenceManager persistenceManager;
 
-        public LoadPlayListTask(MusicPlugin musicPlugin) {
+        public LoadPlayListTask(MusicPlugin musicPlugin, PersistenceManager persistenceManager) {
             this.musicPlugin = musicPlugin;
+            this.persistenceManager = persistenceManager;
         }
 
         public JComponent createComponent() {
@@ -246,23 +244,8 @@ public class MusicPlugin extends JPanel implements Plugin {
         }
 
         public void run() {
-            musicPlugin.musicListModel.setObjects(loadFiles());
+            musicPlugin.musicListModel.setObjects(persistenceManager.loadAll(MusicFile.class));
             musicPlugin.musicList.setSelectedIndex(0);
-        }
-
-        private List loadFiles() {
-            ObjectInputStream in = null;
-            try {
-                in = new ObjectInputStream(new FileInputStream(MusicPlugin.MUSIC_CACHE));
-                return (List) in.readObject();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } finally {
-                IOUtils.closeQuietly(in);
-            }
-            return Collections.EMPTY_LIST;
         }
     }
 

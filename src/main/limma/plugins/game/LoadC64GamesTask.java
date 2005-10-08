@@ -27,11 +27,12 @@ class LoadC64GamesTask implements Task {
     public void run() {
         final ArrayList files = new ArrayList();
         new DirectoryScanner(gamesDir).accept(new DirectoryScanner.Visitor() {
-            public void visit(File file) {
+            public boolean visit(File file) {
                 String name = file.getName().toLowerCase();
-                if (name.endsWith(".zip") || name.endsWith(".p00") || name.endsWith(".prg") || name.endsWith(".x64") || name.endsWith(".d64") || name.endsWith(".t64")) {
+                if (file.isFile() && (name.endsWith(".zip") || name.endsWith(".p00") || name.endsWith(".prg") || name.endsWith(".x64") || name.endsWith(".d64") || name.endsWith(".t64"))) {
                     files.add(new GameFile(getGameName(file), file, GameFile.C64));
                 }
+                return true;
             }
         });
         Collections.sort(files, new Comparator() {

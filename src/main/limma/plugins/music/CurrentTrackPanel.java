@@ -40,7 +40,7 @@ class CurrentTrackPanel extends JPanel {
             artistLabel.setText("");
             albumLabel.setText("");
         } else {
-            titleLabel.setText(file.getTitle() + " (" + secondsToString(currentTrack.getLenghtInSeconds()) + ")");
+            titleLabel.setText(file.getTitle() + " (" + secondsToString(currentTrack.getLengthInSeconds()) + ")");
             artistLabel.setText(file.getArtist());
             albumLabel.setText(file.getAlbum() + (file.getYear() == 0 ? "" : " (" + file.getYear() + ")"));
         }

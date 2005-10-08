@@ -27,11 +27,12 @@ class LoadSnesGamesTask implements Task {
     public void run() {
         final ArrayList files = new ArrayList();
         new DirectoryScanner(gamesDir).accept(new DirectoryScanner.Visitor() {
-            public void visit(File file) {
+            public boolean visit(File file) {
                 String name = file.getName().toLowerCase();
-                if (name.endsWith(".zip") || name.endsWith(".smc") || name.endsWith(".fig")) {
+                if (file.isFile() && (name.endsWith(".zip") || name.endsWith(".smc") || name.endsWith(".fig"))) {
                     files.add(new GameFile(getGameName(file), file, GameFile.SNES));
                 }
+                return true;
             }
         });
         Collections.sort(files, new Comparator() {

@@ -1,11 +1,13 @@
 package limma;
 
 import limma.plugins.Plugin;
-import limma.plugins.persistence.PersistenceManagerImpl;
+import limma.persistence.PersistenceManagerImpl;
+import limma.persistence.PersistenceManager;
 import limma.plugins.video.VideoPlugin;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.MusicPlugin;
 import limma.swing.DialogManagerImpl;
+import limma.persistence.PersistenceManager;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
 import javax.swing.*;
@@ -30,7 +32,6 @@ public class Main {
                 pico.registerComponentInstance(device);
 
                 MainWindow mainWindow = (MainWindow) pico.getComponentInstanceOfType(MainWindow.class);
-                mainWindow.addPlugins(pico.getComponentInstancesOfType(Plugin.class));
                 mainWindow.setUndecorated(true);
                 mainWindow.setResizable(false);
                 device.setFullScreenWindow(mainWindow);

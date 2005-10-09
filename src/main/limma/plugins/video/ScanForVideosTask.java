@@ -36,6 +36,13 @@ class ScanForVideosTask implements Task {
     }
 
     private Video createVideoIfPossible(File file) {
-        return new Video(file.getAbsolutePath());
+        String name = file.getName();
+        if (name.endsWith(".avi") || name.endsWith(".mpg") || name.endsWith(".img")) {
+            return new Video(file.getAbsolutePath());
+        }
+        if (new File(file, "VIDEO_TS.IFO").isFile()) {
+            return new Video(file.getAbsolutePath());
+        }
+        return null;
     }
 }

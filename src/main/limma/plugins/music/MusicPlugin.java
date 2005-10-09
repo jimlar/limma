@@ -244,8 +244,13 @@ public class MusicPlugin extends JPanel implements Plugin {
         }
 
         public void run() {
-            musicPlugin.musicListModel.setObjects(persistenceManager.loadAll(MusicFile.class));
-            musicPlugin.musicList.setSelectedIndex(0);
+            final java.util.List musicFiles = persistenceManager.loadAll(MusicFile.class);
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    musicPlugin.musicListModel.setObjects(musicFiles);
+                    musicPlugin.musicList.setSelectedIndex(0);
+                }
+            });
         }
     }
 

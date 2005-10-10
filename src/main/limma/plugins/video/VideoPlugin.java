@@ -3,15 +3,13 @@ package limma.plugins.video;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
-import limma.swing.AntialiasLabel;
-import limma.swing.AntialiasList;
-import limma.swing.DialogManager;
-import limma.swing.SimpleListModel;
+import limma.swing.*;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 
 public class VideoPlugin implements Plugin {
@@ -20,11 +18,13 @@ public class VideoPlugin implements Plugin {
     private DialogManager dialogManager;
     private PersistenceManager persistenceManager;
     private AntialiasList videoList;
+    private VideoPlayer videoPlayer;
 
     public VideoPlugin(DialogManager dialogManager, PersistenceManager persistenceManager) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         persistenceManager.addPersistentClass(Video.class);
+        videoPlayer = new VideoPlayer();
     }
 
     public String getPluginName() {
@@ -64,12 +64,35 @@ public class VideoPlugin implements Plugin {
             case KeyEvent.VK_ESCAPE:
                 pluginManager.exitPlugin();
                 break;
+            case KeyEvent.VK_ENTER:
+                play((Video) videoList.getSelectedValue());
+                break;
             case KeyEvent.VK_R:
                 scanForVideos();
                 break;
             default:
                 videoList.processKeyEvent(e);
         }
+    }
+
+    private void play(final Video video) {
+        if (video == null) {
+            return;
+        }
+
+        dialogManager.executeInDialog(new Task() {
+            public JComponent createComponent() {
+                return new AntialiasLabel("Playing " + video.getName() + "...");
+            }
+
+            public void run() {
+                try {
+                    videoPlayer.play(video);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void scanForVideos() {

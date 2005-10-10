@@ -6,6 +6,7 @@ import java.util.*;
 public class DirectoryScanner {
     private File baseDir;
     private boolean sortAlphabetically;
+    private Set skipped = new HashSet();
 
     public DirectoryScanner(File baseDir) {
         this(baseDir, false);
@@ -23,7 +24,14 @@ public class DirectoryScanner {
         accept(baseDir, visitor);
     }
 
+    public void skip(File file) {
+        skipped.add(file);
+    }
+
     private void accept(File file, Visitor visitor) {
+        if (skipped.contains(file)) {
+            return;
+        }
         if (file.isDirectory()) {
             boolean descend = visitor.visit(file);
             if (descend) {

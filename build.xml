@@ -5,6 +5,7 @@
             <include name="*.jar"/>
         </fileset>
         <pathelement path="build/classes"/>
+        <pathelement path="src/main"/>
     </path>
 
     <target name="clean">

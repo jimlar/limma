@@ -99,8 +99,12 @@ public class VideoPlugin implements Plugin {
         dialogManager.executeInDialog(new ScanForVideosTask(this, persistenceManager));
     }
 
-    void setVideos(java.util.List videos) {
-        videoListModel.setObjects(videos);
+    void setVideos(final java.util.List videos) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                videoListModel.setObjects(videos);
+            }
+        });
     }
 
     public void reloadVideos() {

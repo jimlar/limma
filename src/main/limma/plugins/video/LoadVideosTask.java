@@ -5,6 +5,9 @@ import limma.swing.AntialiasLabel;
 import limma.swing.Task;
 
 import javax.swing.*;
+import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 class LoadVideosTask implements Task {
     private VideoPlugin videoPlugin;
@@ -20,6 +23,14 @@ class LoadVideosTask implements Task {
     }
 
     public void run() {
-        videoPlugin.setVideos(persistenceManager.loadAll(Video.class));
+        List videos = persistenceManager.loadAll(Video.class);
+        Collections.sort(videos, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                Video video1 = (Video) o1;
+                Video video2 = (Video) o2;
+                return video1.getName().compareToIgnoreCase(video2.getName());
+            }
+        });
+        videoPlugin.setVideos(videos);
     }
 }

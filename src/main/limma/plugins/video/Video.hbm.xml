@@ -2,25 +2,35 @@
 <!DOCTYPE hibernate-mapping PUBLIC
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-        
+
 <hibernate-mapping package="limma.plugins.video" default-lazy="false">
+
     <class name="Video" table="video">
+
         <id name="id" access="field">
             <generator class="native"/>
         </id>
+
         <property name="name" access="field"/>
+
+        <property name="dvd" access="field"/>
+
         <set name="files" inverse="true" access="field">
             <key column="video_id"/>
             <one-to-many class="VideoFile"/>
         </set>
+
     </class>
 
     <class name="VideoFile" table="video_file">
         <id name="id" access="field">
             <generator class="native"/>
         </id>
+
         <property name="path" access="field"/>
+
         <many-to-one name="video" access="field" cascade="all-delete-orphan" not-null="true" column="video_id"/>
+
     </class>
 </hibernate-mapping>
 

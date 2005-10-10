@@ -9,12 +9,19 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 public class VideoPlayer {
-    private static final String[] PLAYER_COMMAND = new String[]{"/usr/bin/mplayer", "-fixed-vo", "-fs", "-quiet", "-zoom", "-spuaa", "20", "-spugauss", "0.01"};
 
     public void play(Video video) throws IOException {
-        ExecUtils execUtils = new ExecUtils();
-        String[] command = new String[PLAYER_COMMAND.length + video.getFiles().size()];
-        System.arraycopy(PLAYER_COMMAND, 0, command, 0, PLAYER_COMMAND.length);
+        if (video.isDvd()) {
+            play(video, new String[]{"/usr/bin/ogle"});
+
+        } else {
+            play(video, new String[]{"/usr/bin/mplayer", "-fixed-vo", "-fs", "-quiet", "-zoom", "-spuaa", "20", "-spugauss", "0.01"});
+        }
+    }
+
+    private void play(Video video, String[] playerCommand) throws IOException {
+        String[] command = new String[playerCommand.length + video.getFiles().size()];
+        System.arraycopy(playerCommand, 0, command, 0, playerCommand.length);
 
         ArrayList sortedFiles = new ArrayList(video.getFiles());
         Collections.sort(sortedFiles, new Comparator() {
@@ -25,9 +32,10 @@ public class VideoPlayer {
             }
         });
         Iterator filesIterator = sortedFiles.iterator();
-        for (int i = PLAYER_COMMAND.length; i < command.length; i++) {
+        for (int i = playerCommand.length; i < command.length; i++) {
             command[i] = filesIterator.next().toString();
         }
+        ExecUtils execUtils = new ExecUtils();
         execUtils.executeAndWait(command);
     }
 }

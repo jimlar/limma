@@ -39,7 +39,7 @@ class ScanForVideosTask implements Task {
             public boolean visit(File file) {
 
                 if (isMovieFile(file)) {
-                    Video video = new Video(guessNameFromFile(file));
+                    Video video = new Video(guessNameFromFile(file), false);
                     persistenceManager.create(video);
                     persistenceManager.create(new VideoFile(video, file.getAbsolutePath()));
 
@@ -52,7 +52,7 @@ class ScanForVideosTask implements Task {
                     return false;
 
                 } else if (isDVD(file)) {
-                    Video video = new Video(guessNameFromFile(file));
+                    Video video = new Video(guessNameFromFile(file), true);
                     persistenceManager.create(video);
                     persistenceManager.create(new VideoFile(video, file.getAbsolutePath()));
                     return false;

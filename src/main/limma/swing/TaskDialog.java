@@ -1,10 +1,9 @@
 package limma.swing;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.event.KeyEvent;
 
-public class TaskDialog extends Dialog {
+public class TaskDialog extends LimmaDialog {
 
     public TaskDialog(DialogManager dialogManager) {
         super(dialogManager);
@@ -35,5 +34,8 @@ public class TaskDialog extends Dialog {
         } finally {
             remove(jComponent);
         }
+    }
+
+    public void keyPressed(KeyEvent e) {
     }
 }

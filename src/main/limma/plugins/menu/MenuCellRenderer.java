@@ -1,5 +1,7 @@
 package limma.plugins.menu;
 
+import limma.swing.MenuNode;
+
 import javax.swing.*;
 import java.awt.*;
 

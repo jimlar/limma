@@ -10,7 +10,6 @@ import limma.swing.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 public class MusicPlugin extends JPanel implements Plugin {
@@ -29,7 +28,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     private boolean lockAlbum;
     private boolean lockArtist;
     private boolean repeatTrack;
-    private LimmaPopupMenu menu;
+    private MenuDialog menuDialog;
 
     public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager) {
         this.dialogManager = dialogManager;
@@ -75,12 +74,12 @@ public class MusicPlugin extends JPanel implements Plugin {
         selectedPlayStrategy = randomPlayStrategy;
         optionsPanel.setRandom(true);
 
-        menu = new LimmaPopupMenu();
-        menu.add(new JMenuItem(new AbstractAction("Scan for new music files") {
-            public void actionPerformed(ActionEvent e) {
+        menuDialog = new MenuDialog(dialogManager);
+        menuDialog.add(new MenuNode("Scan for new music files") {
+            public void execute() {
                 scanFiles();
             }
-        }));
+        });
     }
 
     private void playNextTrack() {
@@ -114,7 +113,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         return "music";
     }
 
-    public JComponent getPluginComponent() {
+    public JComponent getPluginView() {
         return this;
     }
 
@@ -126,7 +125,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     private void scanFiles() {
-        dialogManager.executeInDialog(new ScanFilesTask(this, persistenceManager));
+        dialogManager.executeInDialog(new ScanMusicFilesTask(this, persistenceManager));
     }
 
     void reloadFileList() {
@@ -134,11 +133,6 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     public void keyPressed(KeyEvent e, PluginManager pluginManager) {
-        if (menu.isVisible()) {
-            menu.processKeyEvent(e);
-            return;
-        }
-
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
                 pluginManager.exitPlugin();
@@ -150,7 +144,7 @@ public class MusicPlugin extends JPanel implements Plugin {
                 stop();
                 break;
             case KeyEvent.VK_M:
-                menu.show(this, 100, 100);
+                menuDialog.open();
                 break;
             case KeyEvent.VK_1:
                 toggleRandom();
@@ -248,23 +242,13 @@ public class MusicPlugin extends JPanel implements Plugin {
         }
 
         public void run() {
-            final java.util.List musicFiles = persistenceManager.loadAll(MusicFile.class);
+            final java.util.List musicFiles = persistenceManager.query("all_musicfiles");
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     musicPlugin.musicListModel.setObjects(musicFiles);
                     musicPlugin.musicList.setSelectedIndex(0);
                 }
             });
-        }
-    }
-
-    private static class LimmaPopupMenu extends JPopupMenu {
-        public LimmaPopupMenu() {
-            super("Menu");
-        }
-
-        public void processKeyEvent(KeyEvent evt) {
-            super.processKeyEvent(evt);
         }
     }
 }

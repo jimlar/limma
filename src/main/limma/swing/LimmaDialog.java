@@ -3,12 +3,13 @@ package limma.swing;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
-public class Dialog extends JPanel {
+public abstract class LimmaDialog extends JPanel {
     private static final int PADDING = 10;
     private DialogManager dialogManager;
 
-    public Dialog(DialogManager dialogManager) {
+    public LimmaDialog(DialogManager dialogManager) {
         this.dialogManager = dialogManager;
         Border emptyBorder = BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING);
         setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.white, 1), emptyBorder));
@@ -37,11 +38,13 @@ public class Dialog extends JPanel {
         g2d.setComposite(oldComposite);
     }
 
-    protected void open() {
+    public void open() {
         dialogManager.open(this);
     }
 
-    protected void close() {
+    public void close() {
         dialogManager.close(this);
     }
+
+    public abstract void keyPressed(KeyEvent e);
 }

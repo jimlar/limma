@@ -1,6 +1,7 @@
 package limma.plugins.menu;
 
 import limma.plugins.PluginManager;
+import limma.swing.MenuNode;
 
 public class PluginNode extends MenuNode {
     private String plugin;

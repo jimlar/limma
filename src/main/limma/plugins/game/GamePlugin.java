@@ -32,7 +32,7 @@ public class GamePlugin implements Plugin {
         return "game";
     }
 
-    public JComponent getPluginComponent() {
+    public JComponent getPluginView() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
 

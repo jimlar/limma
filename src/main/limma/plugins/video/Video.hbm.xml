@@ -42,6 +42,7 @@
 
     </class>
 
+    <query name="all_videos">from Video</query>
     <query name="videofile_by_path">from VideoFile where path = :path</query>
 </hibernate-mapping>
 

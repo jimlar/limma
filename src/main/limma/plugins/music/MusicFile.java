@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Date;
 
 public class MusicFile extends Object implements Serializable {
     private long id;
@@ -15,12 +16,14 @@ public class MusicFile extends Object implements Serializable {
     private int year;
     private long lengthInSeconds;
     private String longName;
+    private Date lastModified;
 
     public MusicFile() {
     }
 
     public MusicFile(File file) {
         this.path = file.getAbsolutePath();
+        this.lastModified = new Date(file.lastModified());
 
         readID3WithJavaMP3(file);
 
@@ -107,4 +110,7 @@ public class MusicFile extends Object implements Serializable {
         return path.hashCode();
     }
 
+    public Date getLastModified() {
+        return lastModified;
+    }
 }

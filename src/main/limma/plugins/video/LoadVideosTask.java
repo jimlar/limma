@@ -23,7 +23,7 @@ class LoadVideosTask implements Task {
     }
 
     public void run() {
-        List videos = persistenceManager.loadAll(Video.class);
+        List videos = persistenceManager.query("all_videos");
         Collections.sort(videos, new Comparator() {
             public int compare(Object o1, Object o2) {
                 Video video1 = (Video) o1;

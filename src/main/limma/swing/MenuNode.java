@@ -1,4 +1,4 @@
-package limma.plugins.menu;
+package limma.swing;
 
 import java.util.ArrayList;
 import java.util.List;

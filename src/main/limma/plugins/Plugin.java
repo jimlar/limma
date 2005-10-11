@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 public interface Plugin {
     String getPluginName();
 
-    JComponent getPluginComponent();
+    JComponent getPluginView();
 
     void pluginEntered();
 

@@ -8,11 +8,11 @@ public interface PersistenceManager {
 
     void addPersistentClass(Class clazz);
 
-    List loadAll(Class clazz);
-
-    void deleteAll(Class clazz);
-
     void create(Object o);
+
+    void delete(Object o);
+
+    List query(String queryName);
 
     List query(String queryName, String parameterName, Object parameterValue);
 

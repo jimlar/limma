@@ -1,8 +1,10 @@
 package limma.swing;
 
 import javax.swing.*;
+import java.util.Stack;
 
 public class DialogManagerImpl implements DialogManager {
+    private Stack dialogStack = new Stack();
     private JLayeredPane layeredPane;
 
     public DialogManagerImpl() {
@@ -23,15 +25,24 @@ public class DialogManagerImpl implements DialogManager {
         dialog.executeInDialog(task);
     }
 
-    public void open(Dialog dialog) {
-        layeredPane.add(dialog, JLayeredPane.POPUP_LAYER);
+    public synchronized void open(LimmaDialog dialog) {
+        dialogStack.push(dialog);
+        layeredPane.add(dialog, new Integer(JLayeredPane.POPUP_LAYER.intValue() + dialogStack.size()));
         dialog.setVisible(true);
         dialog.invalidate();
         dialog.validate();
     }
 
-    public void close(Dialog dialog) {
+    public synchronized void close(LimmaDialog dialog) {
+        dialogStack.remove(dialog);
         dialog.setVisible(false);
         layeredPane.remove(dialog);
+    }
+
+    public synchronized LimmaDialog getTopDialog() {
+        if (dialogStack.isEmpty()) {
+            return null;
+        }
+        return (LimmaDialog) dialogStack.peek();
     }
 }

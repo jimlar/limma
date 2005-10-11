@@ -5,6 +5,7 @@ import limma.plugins.PluginManager;
 import limma.plugins.menu.MenuPlugin;
 import limma.swing.DialogManager;
 import limma.swing.ImagePanel;
+import limma.swing.LimmaDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,8 +19,10 @@ public class MainWindow extends JFrame implements PluginManager {
     private JPanel mainPanel;
     private Map pluginsByName = new HashMap();
     private Plugin currentPlugin;
+    private DialogManager dialogManager;
 
     public MainWindow(GraphicsDevice graphicsDevice, DialogManager dialogManager, Plugin[] plugins) {
+        this.dialogManager = dialogManager;
         ImageIcon background = new ImageIcon("background.jpg");
 
         this.setContentPane(dialogManager.getDialogManagerComponent());
@@ -34,7 +37,7 @@ public class MainWindow extends JFrame implements PluginManager {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             public boolean dispatchKeyEvent(KeyEvent e) {
                 if (e.getID() == KeyEvent.KEY_PRESSED) {
-                    currentPlugin.keyPressed(e, MainWindow.this);
+                    dispatchKey(e);
                 }
                 return true;
             }
@@ -50,9 +53,18 @@ public class MainWindow extends JFrame implements PluginManager {
         }
     }
 
+    private void dispatchKey(KeyEvent e) {
+        LimmaDialog topDialog = dialogManager.getTopDialog();
+        if (topDialog != null) {
+            topDialog.keyPressed(e);
+        } else {
+            currentPlugin.keyPressed(e, this);
+        }
+    }
+
     private void addPlugin(Plugin plugin) {
         String name = plugin.getPluginName();
-        mainPanel.add(plugin.getPluginComponent(), name);
+        mainPanel.add(plugin.getPluginView(), name);
         pluginsByName.put(name, plugin);
     }
 

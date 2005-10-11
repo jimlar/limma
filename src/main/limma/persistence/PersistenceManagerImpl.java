@@ -27,14 +27,6 @@ public class PersistenceManagerImpl implements PersistenceManager {
         configuration.addClass(clazz);
     }
 
-    public List loadAll(final Class clazz) {
-        return (List) withSession(new SessionTask() {
-            public Object execute(Session session) {
-                return session.createCriteria(clazz).list();
-            }
-        });
-    }
-
     private synchronized SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             sessionFactory = configuration.buildSessionFactory();
@@ -42,19 +34,18 @@ public class PersistenceManagerImpl implements PersistenceManager {
         return sessionFactory;
     }
 
-    public void deleteAll(final Class clazz) {
-        withSession(new SessionTask() {
-            public Object execute(Session session) {
-                session.createQuery("delete from " + clazz.getName()).executeUpdate();
-                return null;
-            }
-        });
-    }
-
     public void create(final Object o) {
         withSession(new SessionTask() {
             public Object execute(Session session) {
                 return session.save(o);
+            }
+        });
+    }
+
+    public List query(final String queryName) {
+        return (List) withSession(new SessionTask() {
+            public Object execute(Session session) {
+                return session.getNamedQuery(queryName).list();
             }
         });
     }
@@ -78,6 +69,15 @@ public class PersistenceManagerImpl implements PersistenceManager {
             throw new RuntimeException("Query returned more than one object: " + queryName);
         }
         return list.get(0);
+    }
+
+    public void delete(final Object o) {
+        withSession(new SessionTask() {
+            public Object execute(Session session) {
+                session.delete(o);
+                return null;
+            }
+        });
     }
 
     private Object withSession(SessionTask task) {

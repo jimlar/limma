@@ -10,7 +10,9 @@ public interface DialogManager {
 
     void executeInDialog(Task task);
 
-    void open(Dialog dialog);
+    void open(LimmaDialog dialog);
 
-    void close(Dialog dialog);
+    void close(LimmaDialog dialog);
+
+    LimmaDialog getTopDialog();
 }

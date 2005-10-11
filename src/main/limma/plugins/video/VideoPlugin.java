@@ -31,7 +31,7 @@ public class VideoPlugin implements Plugin {
         return "video";
     }
 
-    public JComponent getPluginComponent() {
+    public JComponent getPluginView() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
 

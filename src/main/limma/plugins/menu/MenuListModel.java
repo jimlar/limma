@@ -8,7 +8,7 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListDataEvent;
 
-import limma.plugins.menu.MenuNode;
+import limma.swing.MenuNode;
 
 public class MenuListModel implements ListModel {
     private MenuNode current;

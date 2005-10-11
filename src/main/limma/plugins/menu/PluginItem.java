@@ -1,13 +1,13 @@
 package limma.plugins.menu;
 
 import limma.plugins.PluginManager;
-import limma.swing.MenuNode;
+import limma.swing.LimmaMenuItem;
 
-public class PluginNode extends MenuNode {
+public class PluginItem extends LimmaMenuItem {
     private String plugin;
     private PluginManager pluginManager;
 
-    public PluginNode(String title, String plugin, PluginManager pluginManager) {
+    public PluginItem(String title, String plugin, PluginManager pluginManager) {
         super(title);
         this.plugin = plugin;
         this.pluginManager = pluginManager;

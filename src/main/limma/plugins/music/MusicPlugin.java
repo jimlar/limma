@@ -75,7 +75,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         optionsPanel.setRandom(true);
 
         menuDialog = new MenuDialog(dialogManager);
-        menuDialog.add(new MenuNode("Scan for new music files") {
+        menuDialog.addItem(new LimmaMenuItem("Scan for new music files") {
             public void execute() {
                 scanFiles();
             }

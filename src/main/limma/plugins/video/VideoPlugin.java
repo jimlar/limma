@@ -19,12 +19,21 @@ public class VideoPlugin implements Plugin {
     private PersistenceManager persistenceManager;
     private AntialiasList videoList;
     private VideoPlayer videoPlayer;
+    private MenuDialog popupMenu;
 
     public VideoPlugin(DialogManager dialogManager, PersistenceManager persistenceManager) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         persistenceManager.addPersistentClass(Video.class);
         videoPlayer = new VideoPlayer();
+
+        popupMenu = new MenuDialog(dialogManager);
+        popupMenu.addItem(new LimmaMenuItem("Scan for new videos") {
+            public void execute() {
+                scanForVideos();
+            }
+        });
+        popupMenu.addItem(new LimmaMenuItem("Enter IMDB number"));
     }
 
     public String getPluginName() {
@@ -67,8 +76,8 @@ public class VideoPlugin implements Plugin {
             case KeyEvent.VK_ENTER:
                 play((Video) videoList.getSelectedValue());
                 break;
-            case KeyEvent.VK_R:
-                scanForVideos();
+            case KeyEvent.VK_M:
+                popupMenu.open();
                 break;
             default:
                 videoList.processKeyEvent(e);

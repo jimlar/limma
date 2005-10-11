@@ -1,6 +1,6 @@
-package limma.plugins.menu;
+package limma.swing;
 
-import limma.swing.MenuNode;
+import limma.swing.LimmaMenuItem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,15 +15,15 @@ public class MenuCellRenderer implements ListCellRenderer {
     }
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        return new MenuButton((MenuNode) value, isSelected ? activeIcon : inactiveIcon);
+        return new MenuButton((LimmaMenuItem) value, isSelected ? activeIcon : inactiveIcon);
     }
 
     private static class MenuButton extends JComponent {
         private ImageIcon icon;
-        private MenuNode node;
+        private LimmaMenuItem item;
 
-        public MenuButton(MenuNode node, ImageIcon icon) {
-            this.node = node;
+        public MenuButton(LimmaMenuItem item, ImageIcon icon) {
+            this.item = item;
             this.icon = icon;
             setOpaque(false);
         }
@@ -39,9 +39,9 @@ public class MenuCellRenderer implements ListCellRenderer {
             icon.paintIcon(this, g, 0, 0);
             g.setFont(Font.decode("SansSerif").deriveFont(Font.BOLD).deriveFont((float) 30));
             g.setColor(Color.black);
-            g.drawString(node.getTitle(), 30 + 1, icon.getIconHeight() / 2 + 11);
+            g.drawString(item.getTitle(), 30 + 1, icon.getIconHeight() / 2 + 11);
             g.setColor(Color.white);
-            g.drawString(node.getTitle(), 30, icon.getIconHeight() / 2 + 9);
+            g.drawString(item.getTitle(), 30, icon.getIconHeight() / 2 + 9);
             super.paint(g);
         }
     }

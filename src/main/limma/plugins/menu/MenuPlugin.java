@@ -3,7 +3,7 @@ package limma.plugins.menu;
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.swing.LimmaMenu;
-import limma.swing.MenuNode;
+import limma.swing.LimmaMenuItem;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -12,24 +12,18 @@ public class MenuPlugin implements Plugin {
     private LimmaMenu limmaMenu;
 
     public MenuPlugin(PluginManager pluginManager) {
-        MenuNode root = new MenuNode("root") {
-            public void execute() {
+        limmaMenu = new LimmaMenu(new Runnable() {
+            public void run() {
                 System.exit(0);
             }
-        };
-        root.add(new MenuNode("TV"));
-        root.add(new PluginNode("Video", "video", pluginManager));
-        root.add(new PluginNode("Music", "music", pluginManager));
-        root.add(new PluginNode("Games", "game", pluginManager));
-        root.add(new MenuNode("Pictures"));
-        MenuNode settingsNode = new MenuNode("Settings");
-        root.add(settingsNode);
-        settingsNode.add(new MenuNode("Appearance"));
-        settingsNode.add(new MenuNode("Music Player Settings"));
-        settingsNode.add(new MenuNode("Video Settings"));
-        settingsNode.add(new MenuNode("News Settings"));
 
-        limmaMenu = new LimmaMenu(root);
+        });
+        limmaMenu.add(new LimmaMenuItem("TV"));
+        limmaMenu.add(new PluginItem("Video", "video", pluginManager));
+        limmaMenu.add(new PluginItem("Music", "music", pluginManager));
+        limmaMenu.add(new PluginItem("Games", "game", pluginManager));
+        limmaMenu.add(new LimmaMenuItem("Pictures"));
+        limmaMenu.select(0);
     }
 
     public String getPluginName() {

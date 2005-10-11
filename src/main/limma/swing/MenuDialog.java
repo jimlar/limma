@@ -3,25 +3,28 @@ package limma.swing;
 import java.awt.event.KeyEvent;
 
 public class MenuDialog extends LimmaDialog {
-    private MenuNode root;
     private LimmaMenu limmaMenu;
 
     public MenuDialog(DialogManager dialogManager) {
         super(dialogManager);
-        root = new MenuNode("root") {
-            public void execute() {
+        limmaMenu = new LimmaMenu(new Runnable() {
+            public void run() {
                 close();
             }
-        };
-        limmaMenu = new LimmaMenu(root);
+        });
         add(limmaMenu);
     }
 
-    public void add(final MenuNode menuNode) {
-        root.add(menuNode);
+    public void addItem(final LimmaMenuItem menuItem) {
+        limmaMenu.add(menuItem);
     }
 
     public void keyPressed(KeyEvent e) {
         limmaMenu.keyPressed(e);
+    }
+
+    public void open() {
+        super.open();
+        limmaMenu.select(0);
     }
 }

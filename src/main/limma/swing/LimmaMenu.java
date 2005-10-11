@@ -1,21 +1,18 @@
 package limma.swing;
 
-import limma.plugins.menu.MenuCellRenderer;
-import limma.plugins.menu.MenuListModel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class LimmaMenu extends JPanel {
-    private MenuListModel listModel;
+    private DefaultListModel listModel;
     private AntialiasList list;
-    private MenuNode root;
+    private Runnable exitAction;
 
-    public LimmaMenu(MenuNode root) {
-        this.root = root;
+    public LimmaMenu(Runnable exitAction) {
+        this.exitAction = exitAction;
         setOpaque(false);
-        listModel = new MenuListModel(root);
+        listModel = new DefaultListModel();
         list = new AntialiasList(listModel);
         list.setCellRenderer(new MenuCellRenderer());
 
@@ -25,24 +22,22 @@ public class LimmaMenu extends JPanel {
         add(list, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
     }
 
+    public void select(int item) {
+        list.setSelectedIndex(item);
+    }
+
+    public void add(LimmaMenuItem item) {
+        listModel.addElement(item);
+    }
+
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ENTER:
-                MenuNode selectedNode = (MenuNode) list.getSelectedValue();
-                selectedNode.execute();
-                if (!selectedNode.getChildren().isEmpty()) {
-                    listModel.setCurrent(selectedNode);
-                    list.setSelectedIndex(0);
-                }
+                LimmaMenuItem selectedItem = (LimmaMenuItem) list.getSelectedValue();
+                selectedItem.execute();
                 break;
             case KeyEvent.VK_ESCAPE:
-                MenuNode currentNode = listModel.getCurrent();
-                if (currentNode.getParent() == null) {
-                    root.execute();
-                } else {
-                    listModel.setCurrent(currentNode.getParent());
-                    list.setSelectedIndex(currentNode.getParent().getChildren().indexOf(currentNode));
-                }
+                exitAction.run();
                 break;
             default:
                 list.processKeyEvent(e);

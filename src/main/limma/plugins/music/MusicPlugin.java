@@ -90,7 +90,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     private void playNextTrack(final MusicFile lastTrack) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                boolean jumpToTrack = musicList.getSelectedValue() != null && musicList.getSelectedValue().equals(lastTrack);
+                boolean jumpToTrack = musicList.getSelectedValue() == null || musicList.getSelectedValue().equals(lastTrack);
 
                 MusicFile nextFileToPlay;
                 if (repeatTrack) {

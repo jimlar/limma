@@ -87,23 +87,27 @@ public class MusicPlugin extends JPanel implements Plugin {
         playNextTrack(playedFile);
     }
 
-    private void playNextTrack(MusicFile lastTrack) {
-        boolean jumpToTrack = musicList.getSelectedValue() != null && musicList.getSelectedValue().equals(lastTrack);
+    private void playNextTrack(final MusicFile lastTrack) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                boolean jumpToTrack = musicList.getSelectedValue() != null && musicList.getSelectedValue().equals(lastTrack);
 
-        MusicFile nextFileToPlay;
-        if (repeatTrack) {
-            nextFileToPlay = lastTrack;
-        } else {
-            nextFileToPlay = selectedPlayStrategy.getNextFileToPlay(lastTrack, lockArtist, lockAlbum);
-        }
-        if (nextFileToPlay == null) {
-            stop();
-        } else {
-            play(nextFileToPlay);
-        }
-        if (jumpToTrack) {
-            musicList.setSelectedValue(nextFileToPlay, true);
-        }
+                MusicFile nextFileToPlay;
+                if (repeatTrack) {
+                    nextFileToPlay = lastTrack;
+                } else {
+                    nextFileToPlay = selectedPlayStrategy.getNextFileToPlay(lastTrack, lockArtist, lockAlbum);
+                }
+                if (nextFileToPlay == null) {
+                    stop();
+                } else {
+                    play(nextFileToPlay);
+                }
+                if (jumpToTrack) {
+                    musicList.setSelectedValue(nextFileToPlay, true);
+                }
+            }
+        });
     }
 
     public String getPluginName() {

@@ -33,33 +33,38 @@ class ScanForVideosTask implements Task {
     }
 
     public void run() {
-        persistenceManager.deleteAll(Video.class);
+
         final DirectoryScanner directoryScanner = new DirectoryScanner(new File("/media/movies"), true);
         directoryScanner.accept(new DirectoryScanner.Visitor() {
             public boolean visit(File file) {
 
-                if (isMovieFile(file)) {
-                    Video video = new Video(guessNameFromFile(file), false);
+                VideoFile videoFile = (VideoFile) persistenceManager.querySingle("videofile_by_path", "path", file.getAbsolutePath());
+                if (videoFile != null) {
+                    return false;
+                }
+
+                boolean idDvd = isDVD(file);
+                boolean isMovieFile = isMovieFile(file);
+
+                if (isMovieFile || idDvd) {
+                    Video video = new Video(guessNameFromFile(file), idDvd);
+                    videoFile = new VideoFile(video, file.getAbsolutePath());
                     persistenceManager.create(video);
-                    persistenceManager.create(new VideoFile(video, file.getAbsolutePath()));
+                    persistenceManager.create(videoFile);
 
                     List similarFiles = findSimilarFiles(file);
                     for (Iterator i = similarFiles.iterator(); i.hasNext();) {
                         File similarFile = (File) i.next();
-                        persistenceManager.create(new VideoFile(video, similarFile.getAbsolutePath()));
+                        videoFile = (VideoFile) persistenceManager.querySingle("videofile_by_path", "path", file.getAbsolutePath());
+                        if (videoFile != null) {
+                            videoFile = new VideoFile(video, similarFile.getAbsolutePath());
+                        }
+                        persistenceManager.create(videoFile);
                         directoryScanner.skip(similarFile);
                     }
                     return false;
-
-                } else if (isDVD(file)) {
-                    Video video = new Video(guessNameFromFile(file), true);
-                    persistenceManager.create(video);
-                    persistenceManager.create(new VideoFile(video, file.getAbsolutePath()));
-                    return false;
-
-                } else {
-                    return true;
                 }
+                return true;
             }
         });
         videoPlugin.reloadVideos();

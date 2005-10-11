@@ -20,6 +20,13 @@
             <one-to-many class="VideoFile"/>
         </set>
 
+        <property name="director" access="field"/>
+        <property name="length" access="field"/>
+        <property name="year" access="field"/>
+        <property name="plot" access="field"/>
+        <property name="rating" access="field"/>
+        <property name="imdbNumber" access="field"/>
+
     </class>
 
     <class name="VideoFile" table="video_file">
@@ -27,10 +34,14 @@
             <generator class="native"/>
         </id>
 
-        <property name="path" access="field"/>
+        <natural-id mutable="false">
+            <property name="path" access="field"/>
+        </natural-id>
 
         <many-to-one name="video" access="field" cascade="all-delete-orphan" not-null="true" column="video_id"/>
 
     </class>
+
+    <query name="videofile_by_path">from VideoFile where path = :path</query>
 </hibernate-mapping>
 

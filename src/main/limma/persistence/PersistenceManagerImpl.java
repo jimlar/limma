@@ -1,5 +1,6 @@
 package limma.persistence;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.classic.Session;
@@ -56,6 +57,27 @@ public class PersistenceManagerImpl implements PersistenceManager {
                 return session.save(o);
             }
         });
+    }
+
+    public List query(final String queryName, final String parameterName, final Object parameterValue) {
+        return (List) withSession(new SessionTask() {
+            public Object execute(Session session) {
+                Query namedQuery = session.getNamedQuery(queryName);
+                namedQuery.setParameter(parameterName, parameterValue);
+                return namedQuery.list();
+            }
+        });
+    }
+
+    public Object querySingle(String queryName, String parameterName, Object parameterValue) {
+        List list = query(queryName, parameterName, parameterValue);
+        if (list.isEmpty()) {
+            return null;
+        }
+        if (list.size() > 1) {
+            throw new RuntimeException("Query returned more than one object: " + queryName);
+        }
+        return list.get(0);
     }
 
     private Object withSession(SessionTask task) {

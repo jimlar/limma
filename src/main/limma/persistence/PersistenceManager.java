@@ -13,4 +13,8 @@ public interface PersistenceManager {
     void deleteAll(Class clazz);
 
     void create(Object o);
+
+    List query(String queryName, String parameterName, Object parameterValue);
+
+    Object querySingle(String queryName, String parameterName, Object parameterValue);
 }

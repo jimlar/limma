@@ -18,11 +18,17 @@ public class MenuPlugin implements Plugin {
             }
 
         });
-        limmaMenu.add(new LimmaMenuItem("TV"));
+        limmaMenu.add(new LimmaMenuItem("TV") {
+            public void execute() {
+            }
+        });
         limmaMenu.add(new PluginItem("Video", "video", pluginManager));
         limmaMenu.add(new PluginItem("Music", "music", pluginManager));
         limmaMenu.add(new PluginItem("Games", "game", pluginManager));
-        limmaMenu.add(new LimmaMenuItem("Pictures"));
+        limmaMenu.add(new LimmaMenuItem("Pictures") {
+            public void execute() {
+            }
+        });
         limmaMenu.select(0);
     }
 

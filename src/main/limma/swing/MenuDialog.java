@@ -20,6 +20,9 @@ public class MenuDialog extends LimmaDialog {
     }
 
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            close();
+        }
         limmaMenu.keyPressed(e);
     }
 

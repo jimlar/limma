@@ -21,7 +21,7 @@ public class VideoPlugin implements Plugin {
     private VideoPlayer videoPlayer;
     private MenuDialog popupMenu;
 
-    public VideoPlugin(DialogManager dialogManager, PersistenceManager persistenceManager) {
+    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         persistenceManager.addPersistentClass(Video.class);
@@ -33,7 +33,15 @@ public class VideoPlugin implements Plugin {
                 scanForVideos();
             }
         });
-        popupMenu.addItem(new LimmaMenuItem("Enter IMDB number"));
+        popupMenu.addItem(new LimmaMenuItem("Enter IMDB number") {
+            public void execute() {
+                Video selectedVideo = (Video) videoList.getSelectedValue();
+                if (selectedVideo != null) {
+                    IMDBDialog imdbDialog = new IMDBDialog(dialogManager, selectedVideo);
+                    imdbDialog.open();
+                }
+            }
+        });
     }
 
     public String getPluginName() {

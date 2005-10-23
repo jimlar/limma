@@ -132,7 +132,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         dialogManager.executeInDialog(new LoadPlayListTask(this, persistenceManager));
     }
 
-    public void keyPressed(KeyEvent e, PluginManager pluginManager) {
+    public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
                 pluginManager.exitPlugin();
@@ -164,6 +164,7 @@ public class MusicPlugin extends JPanel implements Plugin {
             default:
                 musicList.processKeyEvent(e);
         }
+        return true;
     }
 
     private void toggelRepeatTrack() {

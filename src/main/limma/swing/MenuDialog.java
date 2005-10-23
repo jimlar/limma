@@ -19,11 +19,12 @@ public class MenuDialog extends LimmaDialog {
         limmaMenu.add(menuItem);
     }
 
-    public void keyPressed(KeyEvent e) {
+    public boolean keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             close();
         }
         limmaMenu.keyPressed(e);
+        return true;
     }
 
     public void open() {

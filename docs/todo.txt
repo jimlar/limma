@@ -1,6 +1,5 @@
 General
 -------
-
 * Use KeyboardFocusManager (http://java.sun.com/docs/books/tutorial/uiswing/misc/focus.html) more intelligently
   instead of dispatching keys self. Change "focus traversal keys". 
 
@@ -33,10 +32,9 @@ Game plugin
 
 Video plugin
 ------------
-* Support for multifile videos
-* IMDB info retrieval
-* Support for playing on-disk DVD's (with ogle?)
+* IMDB info retrieval (cover images)
 * Support for categorizing movies (differently from the on-disk tree).
+* Better scanning of new video files
 
 
 Pictures plugin

@@ -2,8 +2,6 @@ package limma;
 
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
-import limma.plugins.video.IMDBDialog;
-import limma.plugins.video.Video;
 import limma.plugins.menu.MenuPlugin;
 import limma.swing.DialogManager;
 import limma.swing.ImagePanel;
@@ -39,7 +37,7 @@ public class MainWindow extends JFrame implements PluginManager {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             public boolean dispatchKeyEvent(KeyEvent e) {
                 if (e.getID() == KeyEvent.KEY_PRESSED) {
-                    dispatchKey(e);
+                    return dispatchKey(e);
                 }
                 return false;
             }
@@ -57,12 +55,12 @@ public class MainWindow extends JFrame implements PluginManager {
         }
     }
 
-    private void dispatchKey(KeyEvent e) {
+    private boolean dispatchKey(KeyEvent e) {
         LimmaDialog topDialog = dialogManager.getTopDialog();
         if (topDialog != null) {
-            topDialog.keyPressed(e);
+            return topDialog.keyPressed(e);
         } else {
-            currentPlugin.keyPressed(e, this);
+            return currentPlugin.keyPressed(e, this);
         }
     }
 

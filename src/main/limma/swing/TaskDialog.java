@@ -36,6 +36,7 @@ public class TaskDialog extends LimmaDialog {
         }
     }
 
-    public void keyPressed(KeyEvent e) {
+    public boolean keyPressed(KeyEvent e) {
+        return true;
     }
 }

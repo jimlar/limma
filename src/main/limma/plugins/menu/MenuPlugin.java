@@ -43,7 +43,8 @@ public class MenuPlugin implements Plugin {
     public void pluginEntered() {
     }
 
-    public void keyPressed(KeyEvent e, PluginManager pluginManager) {
+    public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {
         limmaMenu.keyPressed(e);
+        return true;
     }
 }

@@ -10,5 +10,5 @@ public interface Plugin {
 
     void pluginEntered();
 
-    void keyPressed(KeyEvent e, PluginManager pluginManager);
+    boolean keyPressed(KeyEvent e, PluginManager pluginManager);
 }

@@ -76,7 +76,7 @@ public class VideoPlugin implements Plugin {
         }
     }
 
-    public void keyPressed(KeyEvent e, PluginManager pluginManager) {
+    public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
                 pluginManager.exitPlugin();
@@ -90,6 +90,7 @@ public class VideoPlugin implements Plugin {
             default:
                 videoList.processKeyEvent(e);
         }
+        return true;
     }
 
     private void play(final Video video) {

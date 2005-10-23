@@ -80,29 +80,29 @@ public class GamePlugin implements Plugin {
         }
     }
 
-    public void keyPressed(KeyEvent e, PluginManager pluginManager) {
+    public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
                 pluginManager.exitPlugin();
-                break;
+                return true;
             case KeyEvent.VK_ENTER:
                 GameFile selectedGame = (GameFile) getVisibleGameList().getSelectedValue();
                 execute(selectedGame);
-                break;
+                return true;
 
             case KeyEvent.VK_RIGHT:
                 if (tabbedPane.getSelectedIndex() < tabbedPane.getTabCount() - 1) {
                     tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
                 }
-                break;
+                return true;
             case KeyEvent.VK_LEFT:
                 if (tabbedPane.getSelectedIndex() > 0) {
                     tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() - 1);
                 }
-                break;
-
+                return true;
         }
         getVisibleGameList().processKeyEvent(e);
+        return true;
     }
 
     private AntialiasList getVisibleGameList() {

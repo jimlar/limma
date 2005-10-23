@@ -40,16 +40,17 @@ public class IMDBDialog extends LimmaDialog {
         textField.requestFocusInWindow();
     }
 
-    public void keyPressed(KeyEvent e) {
+    public boolean keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
                 close();
-                break;
+                return true;
             case KeyEvent.VK_ENTER:
                 updateFromImdb();
                 close();
-                break;
+                return true;
         }
+        return false;
     }
 
     private void updateFromImdb() {

@@ -11,7 +11,7 @@
             <generator class="native"/>
         </id>
 
-        <property name="name" access="field"/>
+        <property name="title" access="field"/>
 
         <property name="dvd" access="field"/>
 
@@ -21,7 +21,7 @@
         </set>
 
         <property name="director" access="field"/>
-        <property name="length" access="field"/>
+        <property name="runtime" access="field"/>
         <property name="year" access="field"/>
         <property name="plot" access="field"/>
         <property name="rating" access="field"/>

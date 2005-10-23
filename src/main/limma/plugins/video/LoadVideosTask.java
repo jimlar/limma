@@ -28,7 +28,7 @@ class LoadVideosTask implements Task {
             public int compare(Object o1, Object o2) {
                 Video video1 = (Video) o1;
                 Video video2 = (Video) o2;
-                return video1.getName().compareToIgnoreCase(video2.getName());
+                return video1.getTitle().compareToIgnoreCase(video2.getTitle());
             }
         });
         videoPlugin.setVideos(videos);

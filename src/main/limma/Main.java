@@ -4,6 +4,7 @@ import limma.plugins.Plugin;
 import limma.persistence.PersistenceManagerImpl;
 import limma.persistence.PersistenceManager;
 import limma.plugins.video.VideoPlugin;
+import limma.plugins.video.IMDBSeviceImpl;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.MusicPlugin;
 import limma.swing.DialogManagerImpl;
@@ -29,6 +30,7 @@ public class Main {
                 pico.registerComponentImplementation(MainWindow.class);
                 pico.registerComponentImplementation(DialogManagerImpl.class);
                 pico.registerComponentImplementation(PersistenceManagerImpl.class);
+                pico.registerComponentImplementation(IMDBSeviceImpl.class);
                 pico.registerComponentInstance(device);
 
                 MainWindow mainWindow = (MainWindow) pico.getComponentInstanceOfType(MainWindow.class);

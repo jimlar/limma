@@ -21,7 +21,7 @@ public class VideoPlugin implements Plugin {
     private VideoPlayer videoPlayer;
     private MenuDialog popupMenu;
 
-    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager) {
+    public VideoPlugin(final DialogManager dialogManager, final PersistenceManager persistenceManager, final IMDBSevice imdbSevice) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         persistenceManager.addPersistentClass(Video.class);
@@ -37,7 +37,7 @@ public class VideoPlugin implements Plugin {
             public void execute() {
                 Video selectedVideo = (Video) videoList.getSelectedValue();
                 if (selectedVideo != null) {
-                    IMDBDialog imdbDialog = new IMDBDialog(dialogManager, selectedVideo);
+                    IMDBDialog imdbDialog = new IMDBDialog(dialogManager, selectedVideo, imdbSevice, persistenceManager);
                     imdbDialog.open();
                 }
             }
@@ -99,7 +99,7 @@ public class VideoPlugin implements Plugin {
 
         dialogManager.executeInDialog(new Task() {
             public JComponent createComponent() {
-                return new AntialiasLabel("Playing " + video.getName() + "...");
+                return new AntialiasLabel("Playing " + video.getTitle() + "...");
             }
 
             public void run() {

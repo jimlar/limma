@@ -2,6 +2,8 @@ package limma;
 
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
+import limma.plugins.video.IMDBDialog;
+import limma.plugins.video.Video;
 import limma.plugins.menu.MenuPlugin;
 import limma.swing.DialogManager;
 import limma.swing.ImagePanel;
@@ -39,13 +41,15 @@ public class MainWindow extends JFrame implements PluginManager {
                 if (e.getID() == KeyEvent.KEY_PRESSED) {
                     dispatchKey(e);
                 }
-                return true;
+                return false;
             }
         });
 
         addPlugin(new MenuPlugin(this));
         enterPlugin("menu");
-//        setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB), new Point(0, 0), "invisible"));
+
+        setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB), new Point(0, 0), "invisible"));
+
         validate();
         for (int i = 0; i < plugins.length; i++) {
             Plugin plugin = plugins[i];

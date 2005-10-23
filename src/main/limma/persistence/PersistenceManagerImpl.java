@@ -2,6 +2,7 @@ package limma.persistence;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.classic.Session;
 
@@ -21,6 +22,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         configuration.setProperty("hibernate.hbm2ddl.auto", "update");
+//        configuration.setProperty("hibernate.show_sql", "true");
     }
 
     public void addPersistentClass(Class clazz) {
@@ -69,6 +71,23 @@ public class PersistenceManagerImpl implements PersistenceManager {
             throw new RuntimeException("Query returned more than one object: " + queryName);
         }
         return list.get(0);
+    }
+
+    public void save(final Object o) {
+        withSession(new SessionTask() {
+            public Object execute(Session session) {
+                Transaction transaction = null;
+                try {
+                    transaction = session.beginTransaction();
+                    session.merge(o);
+                    return null;
+                } finally {
+                    if (transaction != null) {
+                        transaction.commit();
+                    }
+                }
+            }
+        });
     }
 
     public void delete(final Object o) {

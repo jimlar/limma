@@ -2,34 +2,39 @@ package limma.plugins.video;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.io.Serializable;
 
 
 public class Video {
     private long id;
-    private String name;
+    private String title;
     private boolean dvd;
-    private Set files = new HashSet();
     private String director;
-    private String length;
+    private String runtime;
     private int year;
     private String plot;
     private String rating;
     private int imdbNumber;
+    private Set files = new HashSet();
 
     public Video() {
     }
 
-    public Video(String name, boolean isDvd) {
-        this.name = name;
+    public Video(String title, boolean isDvd) {
+        this.title = title;
         dvd = isDvd;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String toString() {
-        return name;
+        return title;
     }
 
     public boolean isDvd() {
@@ -48,12 +53,12 @@ public class Video {
         this.director = director;
     }
 
-    public String getLength() {
-        return length;
+    public String getRuntime() {
+        return runtime;
     }
 
-    public void setLength(String length) {
-        this.length = length;
+    public void setRuntime(String runtime) {
+        this.runtime = runtime;
     }
 
     public int getYear() {
@@ -86,5 +91,9 @@ public class Video {
 
     public void setImdbNumber(int imdbNumber) {
         this.imdbNumber = imdbNumber;
+    }
+
+    public long getId() {
+        return id;
     }
 }

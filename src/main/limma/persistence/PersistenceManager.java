@@ -1,6 +1,7 @@
 package limma.persistence;
 
 import limma.plugins.music.MusicFile;
+import limma.plugins.video.Video;
 
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface PersistenceManager {
     List query(String queryName, String parameterName, Object parameterValue);
 
     Object querySingle(String queryName, String parameterName, Object parameterValue);
+
+    void save(Object o);
+
 }

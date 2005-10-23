@@ -196,6 +196,18 @@
     <option name="GENERATE_IIOP_STUBS" value="false" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
+  <component name="TestDox.ConfigurationController">
+    <option name="allowCustomPackages" value="false" />
+    <option name="testNameTemplate" value="&lt;classname&gt;Test" />
+    <option name="alphabeticalSorting" value="false" />
+    <option name="createTestIfMissing" value="true" />
+    <option name="underscoreMode" value="false" />
+    <option name="showFullyQualifiedClassName" value="false" />
+    <option name="autoscrolling" value="false" />
+    <option name="autoApplyChangesToTests" value="true" />
+    <option name="deletePackageOccurrences" value="true" />
+    <custom-packaging allow="false" />
+  </component>
   <component name="libraryTable" />
   <component name="uidesigner-configuration">
     <option name="INSTRUMENT_CLASSES" value="true" />

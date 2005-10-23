@@ -1,10 +1,13 @@
 General
 -------
+
+* Use KeyboardFocusManager (http://java.sun.com/docs/books/tutorial/uiswing/misc/focus.html) more intelligently
+  instead of dispatching keys self. Change "focus traversal keys". 
+
 * Skins (or atleast centralized control over colors, sizes and images).
-* Database for storage
-* Info/progress popups (instead of the status label)
-* Database
 * Configuration
+* Mouse cursor that diappears when it stands still for a few seconds
+
 
 TV plugin
 ---------

@@ -65,7 +65,7 @@ class ScanForVideosTask extends TransactionalTask {
                 session.save(videoFile);
                 persistentFiles.add(movieFile);
 
-                List<File> similarFiles = findSimilarFiles(movieFile, moviesFiles);
+                List<File> similarFiles = findSimilarFiles(movieFile, moviesFiles, configuration.getInt("video.similarfiledistance"));
                 for (Iterator j = similarFiles.iterator(); j.hasNext();) {
                     File similarFile = (File) j.next();
                     System.out.println(" - found similar file " + similarFile);
@@ -140,13 +140,13 @@ class ScanForVideosTask extends TransactionalTask {
         }
     }
 
-    private List<File> findSimilarFiles(File file, List<File> moviesFiles) {
+    protected List<File> findSimilarFiles(File file, List<File> moviesFiles, int similarityDistance) {
         List<File> similarFiles = new ArrayList<File>(moviesFiles);
 
         for (Iterator i = similarFiles.iterator(); i.hasNext();) {
             File candidate = (File) i.next();
             int levenshteinDistance = StringUtils.getLevenshteinDistance(file.getAbsolutePath(), candidate.getAbsolutePath());
-            if (levenshteinDistance > 0 && levenshteinDistance <= configuration.getInt("video.similarfiledistance")) {
+            if (levenshteinDistance == 0 || levenshteinDistance > similarityDistance) {
                 i.remove();
             }
         }

@@ -1,7 +1,8 @@
 package limma.plugins.video;
 
-import limma.swing.AntialiasLabel;
 import limma.Configuration;
+import limma.swing.AntialiasLabel;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +25,7 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
         setBorder(BorderFactory.createEmptyBorder(width, width, width, width));
 
         cover = new JLabel();
-        add(cover, new GridBagConstraints(0, 0, 1, 4, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 5), 0, 0));
+        add(cover, new GridBagConstraints(0, 0, 1, 5, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 5), 0, 0));
 
         titleLabel = new AntialiasLabel();
         titleLabel.setForeground(Color.yellow);
@@ -43,7 +44,7 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
         JPanel directorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         directorPanel.setOpaque(false);
 
-        directorPanel.add(new AntialiasLabel("Directed by: "));
+        directorPanel.add(createLabel("Directed by: "));
         directorLabel = new AntialiasLabel();
         directorPanel.add(directorLabel);
 
@@ -51,23 +52,41 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
 
         JPanel runtimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         runtimePanel.setOpaque(false);
-        
-        runtimePanel.add(new AntialiasLabel("Runtime: "));
+
+        runtimePanel.add(createLabel("Runtime: "));
         runtimeLabel = new AntialiasLabel();
         runtimePanel.add(runtimeLabel);
 
-        runtimePanel.add(new AntialiasLabel("Rating: "));
-        ratingLabel = new AntialiasLabel();
-        runtimePanel.add(ratingLabel);
-
         add(runtimePanel, new GridBagConstraints(1, 3, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
+
+        JPanel ratingPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        ratingPanel.setOpaque(false);
+        ratingPanel.add(createLabel("Rating: "));
+        ratingLabel = new AntialiasLabel();
+        ratingPanel.add(ratingLabel);
+
+        add(ratingPanel, new GridBagConstraints(1, 4, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
+    }
+
+    private AntialiasLabel createLabel(String text) {
+        AntialiasLabel antialiasLabel = new AntialiasLabel(text);
+        antialiasLabel.setForeground(antialiasLabel.getForeground().darker());
+        return antialiasLabel;
     }
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         Video video = (Video) value;
 
         titleLabel.setText(video.getTitle());
-        directorLabel.setText(video.getDirector() + " (" + video.getYear() + ")");
+        String director = "Unknown";
+        if (StringUtils.isNotBlank(video.getDirector())) {
+            director = video.getDirector();
+        }
+        String year = "";
+        if (video.getYear() != 0) {
+            year = " (" + video.getYear() + ")";
+        }
+        directorLabel.setText(director + year);
         runtimeLabel.setText(video.getRuntime());
         ratingLabel.setText(video.getRating());
         plotLabel.setText(video.getPlot());

@@ -67,6 +67,7 @@ public class VideoPlugin implements Plugin {
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(null);
         scrollPane.getViewport().setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panel.add(scrollPane, BorderLayout.CENTER);
 
         videoList.setCellRenderer(new VideoListCellRenderer(configuration));

@@ -33,6 +33,7 @@ public class Main {
                 pico.registerComponentImplementation(PersistenceManagerImpl.class);
                 pico.registerComponentImplementation(IMDBSeviceImpl.class);
                 pico.registerComponentImplementation(CursorHider.class);
+                pico.registerComponentImplementation(ConfigurationImpl.class);
                 pico.registerComponentInstance(device);
 
                 pico.start();

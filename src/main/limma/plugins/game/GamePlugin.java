@@ -6,6 +6,7 @@ import limma.swing.AntialiasLabel;
 import limma.swing.AntialiasList;
 import limma.swing.DialogManager;
 import limma.swing.SimpleListModel;
+import limma.Configuration;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 public class GamePlugin implements Plugin {
     private DialogManager dialogManager;
+    private Configuration configuration;
     private JTabbedPane tabbedPane;
     private boolean hasBeenEntered;
 
@@ -24,8 +26,9 @@ public class GamePlugin implements Plugin {
     private SimpleListModel snesGameListModel;
     private AntialiasList snesGameList;
 
-    public GamePlugin(DialogManager dialogManager) {
+    public GamePlugin(DialogManager dialogManager, Configuration configuration) {
         this.dialogManager = dialogManager;
+        this.configuration = configuration;
     }
 
     public String getPluginName() {
@@ -75,8 +78,8 @@ public class GamePlugin implements Plugin {
     public void pluginEntered() {
         if (!hasBeenEntered) {
             hasBeenEntered = true;
-            dialogManager.executeInDialog(new LoadC64GamesTask(c64GameListModel));
-            dialogManager.executeInDialog(new LoadSnesGamesTask(snesGameListModel));
+            dialogManager.executeInDialog(new LoadC64GamesTask(c64GameListModel, configuration));
+            dialogManager.executeInDialog(new LoadSnesGamesTask(snesGameListModel, configuration));
         }
     }
 
@@ -117,11 +120,10 @@ public class GamePlugin implements Plugin {
         Runtime runtime = Runtime.getRuntime();
         try {
             if (game.getType().equals(GameFile.C64)) {
-                runtime.exec(new String[]{"/usr/games/bin/x64", game.getFile().getAbsolutePath()});
+                runtime.exec(configuration.getCommandLine("game.c64.command", game.getFile().getAbsolutePath()));
 
             } else if (game.getType().equals(GameFile.SNES)) {
-                runtime.exec(new String[]{"/usr/games/bin/zsnes", "-z", "-r", "4", "-m", "-j", game.getFile().getAbsolutePath()});
-
+                runtime.exec(configuration.getCommandLine("game.snes.command", game.getFile().getAbsolutePath()));
             }
         } catch (IOException e) {
             e.printStackTrace();

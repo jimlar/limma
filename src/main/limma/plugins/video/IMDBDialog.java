@@ -1,23 +1,23 @@
 package limma.plugins.video;
 
+import limma.Configuration;
 import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
 import limma.swing.LimmaDialog;
 import limma.swing.TransactionalTask;
-import org.hibernate.Session;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.CopyUtils;
+import org.apache.commons.io.IOUtils;
+import org.hibernate.Session;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileOutputStream;
-import java.io.File;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class IMDBDialog extends LimmaDialog {
     private DialogManager dialogManager;
@@ -25,13 +25,15 @@ public class IMDBDialog extends LimmaDialog {
     private Video video;
     private IMDBSevice imdbSevice;
     private PersistenceManager persistenceManager;
+    private Configuration configuration;
 
-    public IMDBDialog(DialogManager dialogManager, Video video, IMDBSevice imdbSevice, PersistenceManager persistenceManager) {
+    public IMDBDialog(DialogManager dialogManager, Video video, IMDBSevice imdbSevice, PersistenceManager persistenceManager, Configuration configuration) {
         super(dialogManager);
         this.dialogManager = dialogManager;
         this.video = video;
         this.imdbSevice = imdbSevice;
         this.persistenceManager = persistenceManager;
+        this.configuration = configuration;
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         panel.add(new AntialiasLabel("IMDB Number:"));
@@ -63,7 +65,7 @@ public class IMDBDialog extends LimmaDialog {
     }
 
     private void updateFromImdb() {
-        dialogManager.executeInDialog(new UpdateTask(persistenceManager, imdbSevice, video, getImdbNumber()));
+        dialogManager.executeInDialog(new UpdateTask(persistenceManager, imdbSevice, configuration, video, getImdbNumber()));
     }
 
     private int getImdbNumber() {
@@ -73,12 +75,14 @@ public class IMDBDialog extends LimmaDialog {
     private static class UpdateTask extends TransactionalTask {
         private AntialiasLabel status = new AntialiasLabel("Fetching information from IMDB...");
         private IMDBSevice imdbSevice;
+        private Configuration configuration;
         private Video video;
         private int imdbNumber;
 
-        public UpdateTask(PersistenceManager persistenceManager, IMDBSevice imdbSevice, Video video, int imdbNumber) {
+        public UpdateTask(PersistenceManager persistenceManager, IMDBSevice imdbSevice, Configuration configuration, Video video, int imdbNumber) {
             super(persistenceManager);
             this.imdbSevice = imdbSevice;
+            this.configuration = configuration;
             this.video = video;
             this.imdbNumber = imdbNumber;
         }
@@ -105,7 +109,7 @@ public class IMDBDialog extends LimmaDialog {
                     }
                 });
 
-                File posterFile = video.getPosterFile();
+                File posterFile = new File(configuration.getFile("video.posterdir"), String.valueOf(video.getImdbNumber()));
 
                 InputStream in = null;
                 FileOutputStream out = null;

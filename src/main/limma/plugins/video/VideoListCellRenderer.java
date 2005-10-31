@@ -1,9 +1,11 @@
 package limma.plugins.video;
 
 import limma.swing.AntialiasLabel;
+import limma.Configuration;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 class VideoListCellRenderer extends JPanel implements ListCellRenderer {
     private static final Color SELECTED_BACKGROUND = Color.blue.darker().darker();
@@ -15,9 +17,11 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
     private AntialiasLabel ratingLabel;
     private JLabel cover;
     private AntialiasLabel imdbNumberLabel;
+    private Configuration configuration;
 
-    public VideoListCellRenderer() {
+    public VideoListCellRenderer(Configuration configuration) {
         super(new GridBagLayout());
+        this.configuration = configuration;
         int width = 5;
         setBorder(BorderFactory.createEmptyBorder(width, width, width, width));
 
@@ -74,7 +78,8 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
         plotLabel.setText(video.getPlot());
         imdbNumberLabel.setText(String.valueOf(video.getImdbNumber()));
 
-        cover.setIcon(new ImageIcon(video.getPosterFile().getAbsolutePath()));
+        File posterFile = new File(configuration.getFile("video.posterdir"), String.valueOf(video.getImdbNumber()));
+        cover.setIcon(new ImageIcon(posterFile.getAbsolutePath()));
 
         setComponentOrientation(list.getComponentOrientation());
         setForeground(Color.white);

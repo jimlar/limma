@@ -4,6 +4,7 @@ import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.TransactionalTask;
 import limma.utils.DirectoryScanner;
+import limma.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
 
@@ -23,10 +24,12 @@ class ScanForVideosTask extends TransactionalTask {
                                                                                         "mkv",
                                                                                         "nrg"});
     private VideoPlugin videoPlugin;
+    private Configuration configuration;
 
-    public ScanForVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager) {
+    public ScanForVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager, Configuration configuration) {
         super(persistenceManager);
         this.videoPlugin = videoPlugin;
+        this.configuration = configuration;
     }
 
     public JComponent createComponent() {
@@ -77,7 +80,7 @@ class ScanForVideosTask extends TransactionalTask {
     }
 
     private void scanForDiskFiles(final List<File> moviesFiles, final List<File> dvdFiles) {
-        final DirectoryScanner directoryScanner = new DirectoryScanner(new File("/media/movies"), true);
+        final DirectoryScanner directoryScanner = new DirectoryScanner(configuration.getFile("video.moviedir"), true);
         directoryScanner.accept(new DirectoryScanner.Visitor() {
             public boolean visit(File file) {
                 if (isMovieFile(file)) {
@@ -143,7 +146,7 @@ class ScanForVideosTask extends TransactionalTask {
         for (Iterator i = similarFiles.iterator(); i.hasNext();) {
             File candidate = (File) i.next();
             int levenshteinDistance = StringUtils.getLevenshteinDistance(file.getAbsolutePath(), candidate.getAbsolutePath());
-            if (levenshteinDistance != 1 && levenshteinDistance != 2) {
+            if (levenshteinDistance > 0 && levenshteinDistance <= configuration.getInt("video.similarfiledistance")) {
                 i.remove();
             }
         }

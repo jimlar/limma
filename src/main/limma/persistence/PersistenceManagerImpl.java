@@ -11,12 +11,13 @@ public class PersistenceManagerImpl implements PersistenceManager {
     private Configuration configuration;
     private SessionFactory sessionFactory;
 
-    public PersistenceManagerImpl() {
+    public PersistenceManagerImpl(limma.Configuration limmaConfiguration) {
         configuration = new Configuration();
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://skrubb/limma");
-        configuration.setProperty("hibernate.connection.username", "limma");
-        configuration.setProperty("hibernate.connection.password", "password");
+        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://" + limmaConfiguration.getString("persistence.host")
+                                                              + "/" + limmaConfiguration.getString("persistence.database"));
+        configuration.setProperty("hibernate.connection.username", limmaConfiguration.getString("persistence.username"));
+        configuration.setProperty("hibernate.connection.password", limmaConfiguration.getString("persistence.password"));
         configuration.setProperty("hibernate.connection.pool_size", "10");
 
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");

@@ -96,8 +96,4 @@ public class Video {
     public long getId() {
         return id;
     }
-
-    public File getPosterFile() {
-        return new File(System.getProperty("user.home"), ".limma" + File.separator + "posters" + File.separator + imdbNumber);
-    }
 }

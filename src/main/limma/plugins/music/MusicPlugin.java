@@ -6,6 +6,7 @@ import limma.plugins.PluginManager;
 import limma.plugins.music.player.MusicPlayer;
 import limma.plugins.music.player.PlayerListener;
 import limma.swing.*;
+import limma.Configuration;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -24,15 +25,17 @@ public class MusicPlugin extends JPanel implements Plugin {
     private LinearPlayStrategy linearPlayStrategy;
     private DialogManager dialogManager;
     private PersistenceManager persistenceManager;
+    private Configuration configuration;
     private OptionsPanel optionsPanel;
     private boolean lockAlbum;
     private boolean lockArtist;
     private boolean repeatTrack;
     private MenuDialog menuDialog;
 
-    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager) {
+    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, Configuration configuration) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
+        this.configuration = configuration;
         persistenceManager.addPersistentClass(MusicFile.class);
         setOpaque(false);
         setLayout(new GridBagLayout());
@@ -125,7 +128,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     private void scanFiles() {
-        dialogManager.executeInDialog(new ScanMusicFilesTask(this, persistenceManager));
+        dialogManager.executeInDialog(new ScanMusicFilesTask(this, persistenceManager, configuration));
     }
 
     void reloadFileList() {

@@ -1,10 +1,11 @@
 package limma.plugins.video;
 
+import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
 import limma.swing.LimmaDialog;
-import limma.swing.Task;
-import limma.persistence.PersistenceManager;
+import limma.swing.TransactionalTask;
+import org.hibernate.Session;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -54,12 +55,12 @@ public class IMDBDialog extends LimmaDialog {
     }
 
     private void updateFromImdb() {
-        dialogManager.executeInDialog(new Task() {
+        dialogManager.executeInDialog(new TransactionalTask(persistenceManager) {
             public JComponent createComponent() {
                 return new AntialiasLabel("Fetching information from IMDB...");
             }
 
-            public void run() {
+            public void runInTransaction(Session session) {
                 try {
                     final IMDBInfo info = imdbSevice.getInfo(getImdbNumber());
                     video.setImdbNumber(info.getImdbNumber());
@@ -69,7 +70,7 @@ public class IMDBDialog extends LimmaDialog {
                     video.setPlot(info.getPlot());
                     video.setRating(info.getRating());
                     video.setYear(info.getYear());
-                    persistenceManager.save(video);
+                    session.merge(video);
 
                 } catch (IOException e) {
                     e.printStackTrace();

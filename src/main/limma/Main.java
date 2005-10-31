@@ -8,6 +8,7 @@ import limma.plugins.video.IMDBSeviceImpl;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.MusicPlugin;
 import limma.swing.DialogManagerImpl;
+import limma.swing.CursorHider;
 import limma.persistence.PersistenceManager;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
@@ -31,7 +32,10 @@ public class Main {
                 pico.registerComponentImplementation(DialogManagerImpl.class);
                 pico.registerComponentImplementation(PersistenceManagerImpl.class);
                 pico.registerComponentImplementation(IMDBSeviceImpl.class);
+                pico.registerComponentImplementation(CursorHider.class);
                 pico.registerComponentInstance(device);
+
+                pico.start();
 
                 MainWindow mainWindow = (MainWindow) pico.getComponentInstanceOfType(MainWindow.class);
                 mainWindow.setUndecorated(true);

@@ -2,9 +2,8 @@ package limma.persistence;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import java.util.List;
 
@@ -36,14 +35,6 @@ public class PersistenceManagerImpl implements PersistenceManager {
         return sessionFactory;
     }
 
-    public void create(final Object o) {
-        withSession(new SessionTask() {
-            public Object execute(Session session) {
-                return session.save(o);
-            }
-        });
-    }
-
     public List query(final String queryName) {
         return (List) withSession(new SessionTask() {
             public Object execute(Session session) {
@@ -73,30 +64,8 @@ public class PersistenceManagerImpl implements PersistenceManager {
         return list.get(0);
     }
 
-    public void save(final Object o) {
-        withSession(new SessionTask() {
-            public Object execute(Session session) {
-                Transaction transaction = null;
-                try {
-                    transaction = session.beginTransaction();
-                    session.merge(o);
-                    return null;
-                } finally {
-                    if (transaction != null) {
-                        transaction.commit();
-                    }
-                }
-            }
-        });
-    }
-
-    public void delete(final Object o) {
-        withSession(new SessionTask() {
-            public Object execute(Session session) {
-                session.delete(o);
-                return null;
-            }
-        });
+    public Session openSession() {
+        return getSessionFactory().openSession();
     }
 
     private Object withSession(SessionTask task) {

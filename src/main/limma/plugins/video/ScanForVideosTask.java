@@ -2,9 +2,10 @@ package limma.plugins.video;
 
 import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
-import limma.swing.Task;
+import limma.swing.TransactionalTask;
 import limma.utils.DirectoryScanner;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Session;
 
 import javax.swing.*;
 import java.io.File;
@@ -13,73 +14,131 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-class ScanForVideosTask implements Task {
+class ScanForVideosTask extends TransactionalTask {
     private static final List SINGLE_FILE_VIDEO_EXTENSIONS = Arrays.asList(new String[]{"avi",
                                                                                         "mpg",
                                                                                         "mpeg",
                                                                                         "img",
+                                                                                        "iso",
                                                                                         "mkv",
                                                                                         "nrg"});
     private VideoPlugin videoPlugin;
-    private PersistenceManager persistenceManager;
 
     public ScanForVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager) {
+        super(persistenceManager);
         this.videoPlugin = videoPlugin;
-        this.persistenceManager = persistenceManager;
     }
 
     public JComponent createComponent() {
         return new AntialiasLabel("Searching for videos...");
     }
 
-    public void run() {
+    public void runInTransaction(Session session) {
+        List<File> moviesFiles = new ArrayList<File>();
+        List<File> dvdFiles = new ArrayList<File>();
 
-        final DirectoryScanner directoryScanner = new DirectoryScanner(new File("/media/movies"), true);
-        directoryScanner.accept(new DirectoryScanner.Visitor() {
-            public boolean visit(File file) {
+        scanForDiskFiles(moviesFiles, dvdFiles);
 
-                VideoFile videoFile = (VideoFile) persistenceManager.querySingle("videofile_by_path", "path", file.getAbsolutePath());
-                if (videoFile != null) {
-                    return false;
-                }
+        deleteVideosNoLongerOnDisk(session);
 
-                boolean idDvd = isDVD(file);
-                boolean isMovieFile = isMovieFile(file);
+        List<File> persistentFiles = getPersistentFiles(session);
 
-                if (isMovieFile || idDvd) {
-                    Video video = new Video(guessNameFromFile(file), idDvd);
-                    videoFile = new VideoFile(video, file.getAbsolutePath());
-                    persistenceManager.create(video);
-                    persistenceManager.create(videoFile);
+        updateDvdVideos(dvdFiles, persistentFiles, session);
 
-                    List similarFiles = findSimilarFiles(file);
-                    for (Iterator i = similarFiles.iterator(); i.hasNext();) {
-                        File similarFile = (File) i.next();
-                        videoFile = (VideoFile) persistenceManager.querySingle("videofile_by_path", "path", file.getAbsolutePath());
-                        if (videoFile != null) {
-                            videoFile = new VideoFile(video, similarFile.getAbsolutePath());
-                        }
-                        persistenceManager.create(videoFile);
-                        directoryScanner.skip(similarFile);
-                    }
-                    return false;
-                }
-                return true;
-            }
-        });
+        updateFileVideos(moviesFiles, persistentFiles, session);
+
         videoPlugin.reloadVideos();
     }
 
-    private List findSimilarFiles(File file) {
-        final List similarFiles = new ArrayList();
-        new DirectoryScanner(file.getParentFile()).accept(new DirectoryScanner.Visitor() {
+    private void updateFileVideos(List<File> moviesFiles, List<File> persistentFiles, Session session) {
+        for (Iterator<File> i = moviesFiles.iterator(); i.hasNext();) {
+            File movieFile = i.next();
+            if (!persistentFiles.contains(movieFile)) {
+                System.out.println("Adding movie " + movieFile);
+
+                Video video = new Video(guessNameFromFile(movieFile), false);
+                video = (Video) session.get(Video.class, session.save(video));
+                VideoFile videoFile = new VideoFile(video, movieFile.getAbsolutePath());
+                session.save(videoFile);
+                persistentFiles.add(movieFile);
+
+                List<File> similarFiles = findSimilarFiles(movieFile, moviesFiles);
+                for (Iterator j = similarFiles.iterator(); j.hasNext();) {
+                    File similarFile = (File) j.next();
+                    System.out.println(" - found similar file " + similarFile);
+                    if (!persistentFiles.contains(similarFile)) {
+                        videoFile = new VideoFile(video, similarFile.getAbsolutePath());
+                    }
+                    session.save(videoFile);
+                    persistentFiles.add(similarFile);
+                }
+            }
+        }
+    }
+
+    private void scanForDiskFiles(final List<File> moviesFiles, final List<File> dvdFiles) {
+        final DirectoryScanner directoryScanner = new DirectoryScanner(new File("/media/movies"), true);
+        directoryScanner.accept(new DirectoryScanner.Visitor() {
             public boolean visit(File file) {
                 if (isMovieFile(file)) {
-                    similarFiles.add(file);
+                    moviesFiles.add(file);
+                    return false;
+                }
+                if (isDVD(file)) {
+                    dvdFiles.add(file);
+                    return false;
                 }
                 return true;
             }
         });
+    }
+
+    private List<File> getPersistentFiles(Session session) {
+        List videoFiles = session.getNamedQuery("all_video_files").list();
+        ArrayList<File> persistentFiles = new ArrayList<File>();
+        for (Iterator i = videoFiles.iterator(); i.hasNext();) {
+            VideoFile videoFile = (VideoFile) i.next();
+            persistentFiles.add(videoFile.getFile());
+        }
+        return persistentFiles;
+    }
+
+    private void updateDvdVideos(List<File> dvdFiles, List<File> persistentFiles, Session session) {
+        for (Iterator<File> i = dvdFiles.iterator(); i.hasNext();) {
+            File dvdFile = i.next();
+
+            if (!persistentFiles.contains(dvdFile)) {
+                System.out.println("Adding DVD " + dvdFile);
+
+                Video video = new Video(guessNameFromFile(dvdFile), true);
+                video = (Video) session.get(Video.class, session.save(video));
+                VideoFile videoFile = new VideoFile(video, dvdFile.getAbsolutePath());
+                session.save(videoFile);
+            }
+        }
+    }
+
+    private void deleteVideosNoLongerOnDisk(Session session) {
+        List videoFiles = session.getNamedQuery("all_video_files").list();
+        for (Iterator i = videoFiles.iterator(); i.hasNext();) {
+            VideoFile videoFile = (VideoFile) i.next();
+            Video video = videoFile.getVideo();
+
+            if (!videoFile.getFile().exists()) {
+
+                System.out.println("Deleting video file " + videoFile.getFile());
+                session.delete(videoFile);
+                video.getFiles().remove(videoFile);
+                if (video.getFiles().isEmpty()) {
+                    System.out.println(" - Video now empty, deletig video " + video.getTitle());
+                    session.delete(video);
+                }
+            }
+        }
+    }
+
+    private List<File> findSimilarFiles(File file, List<File> moviesFiles) {
+        List<File> similarFiles = new ArrayList<File>(moviesFiles);
 
         for (Iterator i = similarFiles.iterator(); i.hasNext();) {
             File candidate = (File) i.next();

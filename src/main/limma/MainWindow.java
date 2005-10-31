@@ -46,8 +46,6 @@ public class MainWindow extends JFrame implements PluginManager {
         addPlugin(new MenuPlugin(this));
         enterPlugin("menu");
 
-        setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB), new Point(0, 0), "invisible"));
-
         validate();
         for (int i = 0; i < plugins.length; i++) {
             Plugin plugin = plugins[i];

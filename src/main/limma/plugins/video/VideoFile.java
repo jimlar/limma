@@ -1,5 +1,6 @@
 package limma.plugins.video;
 
+import java.io.File;
 
 
 public class VideoFile {
@@ -25,5 +26,9 @@ public class VideoFile {
 
     public String toString() {
         return path;
+    }
+
+    public File getFile() {
+        return new File(getPath());
     }
 }

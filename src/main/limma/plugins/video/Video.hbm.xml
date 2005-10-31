@@ -38,11 +38,12 @@
             <property name="path" access="field"/>
         </natural-id>
 
-        <many-to-one name="video" access="field" cascade="all-delete-orphan" not-null="true" column="video_id"/>
+        <many-to-one name="video" access="field" cascade="all-delete-orphan" column="video_id"/>
 
     </class>
 
     <query name="all_videos">from Video</query>
+    <query name="all_video_files">from VideoFile</query>
     <query name="videofile_by_path">from VideoFile where path = :path</query>
 </hibernate-mapping>
 

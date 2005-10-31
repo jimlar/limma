@@ -35,8 +35,8 @@ public class VideoPlayer {
 
         String[] filenames = new String[video.getFiles().size()];
         for (ListIterator i = sortedFiles.listIterator(); i.hasNext();) {
-            File file = (File) i.next();
-            filenames[i.previousIndex()] = file.getAbsolutePath();
+            VideoFile file = (VideoFile) i.next();
+            filenames[i.previousIndex()] = file.getPath();
         }
 
         ExecUtils execUtils = new ExecUtils();

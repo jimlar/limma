@@ -33,7 +33,7 @@ public class VideoPlugin implements Plugin {
                 scanForVideos();
             }
         });
-        popupMenu.addItem(new LimmaMenuItem("Enter IMDB number") {
+        popupMenu.addItem(new LimmaMenuItem("Update from IMDB") {
             public void execute() {
                 Video selectedVideo = (Video) videoList.getSelectedValue();
                 if (selectedVideo != null) {
@@ -66,6 +66,8 @@ public class VideoPlugin implements Plugin {
         scrollPane.getViewport().setBorder(null);
         panel.add(scrollPane, BorderLayout.CENTER);
 
+        videoList.setCellRenderer(new VideoListCellRenderer());
+        
         return panel;
     }
 
@@ -128,4 +130,5 @@ public class VideoPlugin implements Plugin {
     public void reloadVideos() {
         dialogManager.executeInDialog(new LoadVideosTask(this, persistenceManager));
     }
+
 }

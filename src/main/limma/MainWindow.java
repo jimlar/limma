@@ -37,7 +37,11 @@ public class MainWindow extends JFrame implements PluginManager {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             public boolean dispatchKeyEvent(KeyEvent e) {
                 if (e.getID() == KeyEvent.KEY_PRESSED) {
-                    return dispatchKey(e);
+                    boolean b = dispatchKey(e);
+                    if (b) {
+                        e.consume();
+                    }
+                    return b;
                 }
                 return false;
             }

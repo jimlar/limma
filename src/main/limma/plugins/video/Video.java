@@ -1,8 +1,8 @@
 package limma.plugins.video;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import java.io.Serializable;
 
 
 public class Video {
@@ -95,5 +95,9 @@ public class Video {
 
     public long getId() {
         return id;
+    }
+
+    public File getPosterFile() {
+        return new File(System.getProperty("user.home"), ".limma" + File.separator + "posters" + File.separator + imdbNumber);
     }
 }

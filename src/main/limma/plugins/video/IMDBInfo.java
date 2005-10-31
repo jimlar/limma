@@ -8,6 +8,7 @@ public class IMDBInfo {
     private String plot;
     private String rating;
     private int year;
+    private String cover;
 
     public int getImdbNumber() {
         return imdbNumber;
@@ -63,5 +64,13 @@ public class IMDBInfo {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public String getCover() {
+        return cover;
     }
 }

@@ -16,6 +16,7 @@ public class IMDBSeviceImpl implements IMDBSevice {
     private Pattern plotSummaryPattern;
     private Pattern runtimePattern;
     private Pattern ratingPattern;
+    private Pattern coverPattern;
 
     public IMDBSeviceImpl() {
         titleAndYearPattern = Pattern.compile(".*?<title>(.+) \\((\\d+).*\\)</title>.*");
@@ -24,6 +25,7 @@ public class IMDBSeviceImpl implements IMDBSevice {
         plotSummaryPattern = Pattern.compile(".*?>Plot Summary:</b> (.*?)<a href=\".*");
         runtimePattern = Pattern.compile(".*?>Runtime:</b>(.*? min).*");
         ratingPattern = Pattern.compile(".*?>User Rating:</b>.*?<b>(.*?)/10</b>.*");
+        coverPattern = Pattern.compile(".*?<img border=\"0\" alt=\"cover\" src=\"(.*?)\" height=\"(.*?)\" width=\"(.*?)\"><.*");
     }
 
     public IMDBInfo getInfo(int imdbNumber) throws IOException {
@@ -59,6 +61,11 @@ public class IMDBSeviceImpl implements IMDBSevice {
         matcher = ratingPattern.matcher(html);
         if (matcher.matches()) {
             imdbInfo.setRating(StringUtils.trimToEmpty(matcher.group(1)));
+        }
+
+        matcher = coverPattern.matcher(html);
+        if (matcher.matches()) {
+            imdbInfo.setCover(StringUtils.trimToEmpty(matcher.group(1)));
         }
 
         return imdbInfo;

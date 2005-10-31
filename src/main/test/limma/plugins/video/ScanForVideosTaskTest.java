@@ -21,7 +21,7 @@ public class ScanForVideosTaskTest extends TestCase {
     }
 
     public void testFindSimilarFiles() throws Exception {
-        List<File> files = task.findSimilarFiles(new File("/test/test-cd1.avi"), moviesFiles, 2);
+        List<File> files = task.findSimilarFiles(new File("/test/test-cd1.avi"), moviesFiles, 1);
         assertEquals(1, files.size());
         assertEquals(new File("/test/test-cd2.avi"), files.get(0));
 

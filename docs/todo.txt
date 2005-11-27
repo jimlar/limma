@@ -24,7 +24,8 @@ Music plugin
 * Better fallback names (remove .mp3 and .flac and guess some nice case)
 * Better Bitrate figures: show VBR rates correctly and show flac differently.
 * Played songs can get lost (unstoppable if you press "next" too fast)
-
+* Support for 48000 Hz output rate (autodetect?)
+* Common output buffers etc to get smoother song changing
 
 Game plugin
 -----------
@@ -32,10 +33,11 @@ Game plugin
 
 Video plugin
 ------------
-* IMDB info retrieval (cover images)
+* Detect IMDB number from .nfo files
 * Support for categorizing movies (differently from the on-disk tree).
 * Better scanning of new video files
-
+* Detect large .iso .img etc as dvds
+* Stop music (or audio usage) when starting movie
 
 Pictures plugin
 ---------------

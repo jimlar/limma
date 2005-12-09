@@ -8,7 +8,6 @@ import java.util.Set;
 public class Video {
     private long id;
     private String title;
-    private boolean dvd;
     private String director;
     private String runtime;
     private int year;
@@ -22,7 +21,6 @@ public class Video {
 
     public Video(String title, boolean isDvd) {
         this.title = title;
-        dvd = isDvd;
     }
 
     public String getTitle() {
@@ -35,10 +33,6 @@ public class Video {
 
     public String toString() {
         return title;
-    }
-
-    public boolean isDvd() {
-        return dvd;
     }
 
     public Set getFiles() {

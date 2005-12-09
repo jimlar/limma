@@ -13,8 +13,6 @@
 
         <property name="title" access="field"/>
 
-        <property name="dvd" access="field"/>
-
         <set name="files" inverse="true" access="field">
             <key column="video_id"/>
             <one-to-many class="VideoFile"/>

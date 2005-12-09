@@ -9,26 +9,18 @@ import org.hibernate.Session;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 class ScanForVideosTask extends TransactionalTask {
-    private static final List SINGLE_FILE_VIDEO_EXTENSIONS = Arrays.asList(new String[]{"avi",
-                                                                                        "mpg",
-                                                                                        "mpeg",
-                                                                                        "img",
-                                                                                        "iso",
-                                                                                        "mkv",
-                                                                                        "nrg"});
     private VideoPlugin videoPlugin;
     private VideoConfig videoConfig;
+    private Collection videoFileExtensions;
 
     public ScanForVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager, VideoConfig videoConfig) {
         super(persistenceManager);
         this.videoPlugin = videoPlugin;
         this.videoConfig = videoConfig;
+        this.videoFileExtensions = videoConfig.getVideoFileExtensions();
     }
 
     public JComponent createComponent() {
@@ -37,15 +29,15 @@ class ScanForVideosTask extends TransactionalTask {
 
     public void runInTransaction(Session session) {
         List<File> moviesFiles = new ArrayList<File>();
-        List<File> dvdFiles = new ArrayList<File>();
+        List<File> dvdDirectories = new ArrayList<File>();
 
-        scanForDiskFiles(moviesFiles, dvdFiles);
+        scanForDiskFiles(moviesFiles, dvdDirectories);
 
         deleteVideosNoLongerOnDisk(session);
 
         List<File> persistentFiles = getPersistentFiles(session);
 
-        updateDvdVideos(dvdFiles, persistentFiles, session);
+        updateDvdDirectories(dvdDirectories, persistentFiles, session);
 
         updateFileVideos(moviesFiles, persistentFiles, session);
 
@@ -78,16 +70,16 @@ class ScanForVideosTask extends TransactionalTask {
         }
     }
 
-    private void scanForDiskFiles(final List<File> moviesFiles, final List<File> dvdFiles) {
+    private void scanForDiskFiles(final List<File> moviesFiles, final List<File> dvdDirectories) {
         final DirectoryScanner directoryScanner = new DirectoryScanner(videoConfig.getMovieDir(), true);
         directoryScanner.accept(new DirectoryScanner.Visitor() {
             public boolean visit(File file) {
-                if (isMovieFile(file)) {
-                    moviesFiles.add(file);
+                if (isDVDDirectory(file)) {
+                    dvdDirectories.add(file);
                     return false;
                 }
-                if (isDVD(file)) {
-                    dvdFiles.add(file);
+                if (isMovieFile(file)) {
+                    moviesFiles.add(file);
                     return false;
                 }
                 return true;
@@ -105,12 +97,12 @@ class ScanForVideosTask extends TransactionalTask {
         return persistentFiles;
     }
 
-    private void updateDvdVideos(List<File> dvdFiles, List<File> persistentFiles, Session session) {
+    private void updateDvdDirectories(List<File> dvdFiles, List<File> persistentFiles, Session session) {
         for (Iterator<File> i = dvdFiles.iterator(); i.hasNext();) {
             File dvdFile = i.next();
 
             if (!persistentFiles.contains(dvdFile)) {
-                System.out.println("Adding DVD " + dvdFile);
+                System.out.println("Adding DVD directory: " + dvdFile);
 
                 Video video = new Video(guessNameFromFile(dvdFile), true);
                 video = (Video) session.get(Video.class, session.save(video));
@@ -159,10 +151,10 @@ class ScanForVideosTask extends TransactionalTask {
             return false;
         }
         String extension = name.substring(i + 1).toLowerCase();
-        return SINGLE_FILE_VIDEO_EXTENSIONS.contains(extension);
+        return videoFileExtensions.contains(extension);
     }
 
-    private boolean isDVD(File file) {
+    private boolean isDVDDirectory(File file) {
         return new File(file, "VIDEO_TS.IFO").isFile();
     }
 

@@ -4,7 +4,6 @@ General
   instead of dispatching keys self. Change "focus traversal keys". 
 
 * Skins (or atleast centralized control over colors, sizes and images).
-* Configuration
 * Mouse cursor that diappears when it stands still for a few seconds
 
 
@@ -35,8 +34,6 @@ Video plugin
 ------------
 * Detect IMDB number from .nfo files
 * Support for categorizing movies (differently from the on-disk tree).
-* Better scanning of new video files
-* Detect large .iso .img etc as dvds
 * Stop music (or audio usage) when starting movie
 
 Pictures plugin

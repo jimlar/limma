@@ -1,9 +1,9 @@
 package limma.persistence;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.Session;
 
 import java.util.List;
 
@@ -11,13 +11,15 @@ public class PersistenceManagerImpl implements PersistenceManager {
     private Configuration configuration;
     private SessionFactory sessionFactory;
 
-    public PersistenceManagerImpl(limma.Configuration limmaConfiguration) {
+    public PersistenceManagerImpl(PersistenceConfig persistenceConfig) {
         configuration = new Configuration();
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://" + limmaConfiguration.getString("persistence.host")
-                                                              + "/" + limmaConfiguration.getString("persistence.database"));
-        configuration.setProperty("hibernate.connection.username", limmaConfiguration.getString("persistence.username"));
-        configuration.setProperty("hibernate.connection.password", limmaConfiguration.getString("persistence.password"));
+
+
+        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://" + persistenceConfig.getHost()
+                                                              + "/" + persistenceConfig.getDatabase());
+        configuration.setProperty("hibernate.connection.username", persistenceConfig.getUsername());
+        configuration.setProperty("hibernate.connection.password", persistenceConfig.getPassword());
         configuration.setProperty("hibernate.connection.pool_size", "10");
 
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");

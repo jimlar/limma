@@ -4,7 +4,6 @@ import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.TransactionalTask;
 import limma.utils.DirectoryScanner;
-import limma.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
 
@@ -24,12 +23,12 @@ class ScanForVideosTask extends TransactionalTask {
                                                                                         "mkv",
                                                                                         "nrg"});
     private VideoPlugin videoPlugin;
-    private Configuration configuration;
+    private VideoConfig videoConfig;
 
-    public ScanForVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager, Configuration configuration) {
+    public ScanForVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager, VideoConfig videoConfig) {
         super(persistenceManager);
         this.videoPlugin = videoPlugin;
-        this.configuration = configuration;
+        this.videoConfig = videoConfig;
     }
 
     public JComponent createComponent() {
@@ -65,7 +64,7 @@ class ScanForVideosTask extends TransactionalTask {
                 session.save(videoFile);
                 persistentFiles.add(movieFile);
 
-                List<File> similarFiles = findSimilarFiles(movieFile, moviesFiles, configuration.getInt("video.similarfiledistance"));
+                List<File> similarFiles = findSimilarFiles(movieFile, moviesFiles, videoConfig.getSimilarFileDistance());
                 for (Iterator j = similarFiles.iterator(); j.hasNext();) {
                     File similarFile = (File) j.next();
                     System.out.println(" - found similar file " + similarFile);
@@ -80,7 +79,7 @@ class ScanForVideosTask extends TransactionalTask {
     }
 
     private void scanForDiskFiles(final List<File> moviesFiles, final List<File> dvdFiles) {
-        final DirectoryScanner directoryScanner = new DirectoryScanner(configuration.getFile("video.moviedir"), true);
+        final DirectoryScanner directoryScanner = new DirectoryScanner(videoConfig.getMovieDir(), true);
         directoryScanner.accept(new DirectoryScanner.Visitor() {
             public boolean visit(File file) {
                 if (isMovieFile(file)) {

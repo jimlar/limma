@@ -4,7 +4,6 @@ import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.swing.*;
-import limma.Configuration;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -18,17 +17,17 @@ public class VideoPlugin implements Plugin {
     private boolean hasEntered;
     private DialogManager dialogManager;
     private PersistenceManager persistenceManager;
-    private Configuration configuration;
+    private VideoConfig videoConfig;
     private AntialiasList videoList;
     private VideoPlayer videoPlayer;
     private MenuDialog popupMenu;
 
-    public VideoPlugin(final DialogManager dialogManager, final PersistenceManager persistenceManager, final IMDBSevice imdbSevice, final Configuration configuration) {
+    public VideoPlugin(final DialogManager dialogManager, final PersistenceManager persistenceManager, final IMDBSevice imdbSevice, final VideoConfig videoConfig) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
-        this.configuration = configuration;
+        this.videoConfig = videoConfig;
         persistenceManager.addPersistentClass(Video.class);
-        videoPlayer = new VideoPlayer(configuration);
+        videoPlayer = new VideoPlayer(videoConfig);
 
         popupMenu = new MenuDialog(dialogManager);
         popupMenu.addItem(new LimmaMenuItem("Scan for new videos") {
@@ -40,7 +39,7 @@ public class VideoPlugin implements Plugin {
             public void execute() {
                 Video selectedVideo = (Video) videoList.getSelectedValue();
                 if (selectedVideo != null) {
-                    IMDBDialog imdbDialog = new IMDBDialog(dialogManager, selectedVideo, imdbSevice, persistenceManager, configuration);
+                    IMDBDialog imdbDialog = new IMDBDialog(dialogManager, selectedVideo, imdbSevice, persistenceManager, videoConfig);
                     imdbDialog.open();
                 }
             }
@@ -70,7 +69,7 @@ public class VideoPlugin implements Plugin {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        videoList.setCellRenderer(new VideoListCellRenderer(configuration));
+        videoList.setCellRenderer(new VideoListCellRenderer(videoConfig));
 
         return panel;
     }
@@ -120,7 +119,7 @@ public class VideoPlugin implements Plugin {
     }
 
     private void scanForVideos() {
-        dialogManager.executeInDialog(new ScanForVideosTask(this, persistenceManager, configuration));
+        dialogManager.executeInDialog(new ScanForVideosTask(this, persistenceManager, videoConfig));
     }
 
     void setVideos(final java.util.List videos) {

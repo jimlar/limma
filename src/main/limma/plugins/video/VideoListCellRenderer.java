@@ -1,6 +1,5 @@
 package limma.plugins.video;
 
-import limma.Configuration;
 import limma.swing.AntialiasLabel;
 import org.apache.commons.lang.StringUtils;
 
@@ -16,11 +15,11 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
     private AntialiasLabel runtimeLabel;
     private AntialiasLabel ratingLabel;
     private JLabel cover;
-    private Configuration configuration;
+    private VideoConfig videoConfig;
 
-    public VideoListCellRenderer(Configuration configuration) {
+    public VideoListCellRenderer(VideoConfig videoConfig) {
         super(new GridBagLayout());
-        this.configuration = configuration;
+        this.videoConfig = videoConfig;
         int width = 5;
         setBorder(BorderFactory.createEmptyBorder(width, width, width, width));
 
@@ -91,7 +90,7 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
         ratingLabel.setText(video.getRating());
         plotLabel.setText(video.getPlot());
 
-        File posterFile = new File(configuration.getFile("video.posterdir"), String.valueOf(video.getImdbNumber()));
+        File posterFile = new File(videoConfig.getPosterDir(), String.valueOf(video.getImdbNumber()));
         cover.setIcon(new ImageIcon(posterFile.getAbsolutePath()));
 
         setComponentOrientation(list.getComponentOrientation());

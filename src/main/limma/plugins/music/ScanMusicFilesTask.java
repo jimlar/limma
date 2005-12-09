@@ -4,7 +4,6 @@ import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.TransactionalTask;
 import limma.utils.DirectoryScanner;
-import limma.Configuration;
 import org.hibernate.Session;
 
 import javax.swing.*;
@@ -19,10 +18,10 @@ class ScanMusicFilesTask extends TransactionalTask {
     private File musicDir;
     private AntialiasLabel statusLabel;
 
-    public ScanMusicFilesTask(MusicPlugin musicPlugin, PersistenceManager persistenceManager, Configuration configuration) {
+    public ScanMusicFilesTask(MusicPlugin musicPlugin, PersistenceManager persistenceManager, MusicConfig musicConfig) {
         super(persistenceManager);
         this.musicPlugin = musicPlugin;
-        musicDir = configuration.getFile("music.musicdir");
+        musicDir = musicConfig.getMusicDir();
         statusLabel = new AntialiasLabel("Scanning for music files in " + musicDir.getAbsolutePath());
     }
 

@@ -1,10 +1,9 @@
 package limma.plugins.game;
 
-import limma.swing.Task;
-import limma.swing.SimpleListModel;
 import limma.swing.AntialiasLabel;
+import limma.swing.SimpleListModel;
+import limma.swing.Task;
 import limma.utils.DirectoryScanner;
-import limma.Configuration;
 
 import javax.swing.*;
 import java.io.File;
@@ -16,9 +15,9 @@ class LoadSnesGamesTask implements Task {
     private final File gamesDir;
     private SimpleListModel listModel;
 
-    public LoadSnesGamesTask(SimpleListModel listModel, Configuration configuration) {
+    public LoadSnesGamesTask(SimpleListModel listModel, GameConfig gameConfig) {
         this.listModel = listModel;
-        this.gamesDir = configuration.getFile("game.snes.gamesdir");
+        this.gamesDir = gameConfig.getSnesGamesDir();
     }
 
     public JComponent createComponent() {

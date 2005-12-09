@@ -8,25 +8,30 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class ConfigurationImpl implements Configuration {
+public abstract class AbstractConfiguration {
+    private static final File CONFIG_FILE = new File("config", "limma.properties");
     private Properties properties;
+    private String prefix;
 
-    public ConfigurationImpl() throws IOException {
+    public AbstractConfiguration(String prefix) {
+        this.prefix = prefix;
         properties = new Properties();
         FileInputStream in = null;
         try {
-            in = new FileInputStream(new File(System.getProperty("user.home") + File.separator + ".limmarc"));
+            in = new FileInputStream(CONFIG_FILE);
             properties.load(in);
+        } catch (IOException e) {
+            throw new RuntimeException("Cant load config file: " + CONFIG_FILE, e);
         } finally {
             IOUtils.closeQuietly(in);
         }
     }
 
-    public File getFile(String property) {
+    protected File getFile(String property) {
         return new File(getString(property));
     }
 
-    public int getInt(String property) {
+    protected int getInt(String property) {
         try {
             return Integer.parseInt(getString(property));
         } catch (NumberFormatException e) {
@@ -34,7 +39,8 @@ public class ConfigurationImpl implements Configuration {
         }
     }
 
-    public String getString(String property) {
+    protected String getString(String property) {
+        property = prefix + "." + property;
         String value = properties.getProperty(property);
         if (value == null) {
             throw new IllegalArgumentException("Configuration property missing: " + property);

@@ -1,29 +1,30 @@
 package limma.plugins.video;
 
-import limma.utils.ExecUtils;
-import limma.Configuration;
+import limma.utils.ExternalCommand;
 
 import java.io.IOException;
-import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ListIterator;
 
 public class VideoPlayer {
-    private Configuration configuration;
+    private VideoConfig videoConfig;
 
-    public VideoPlayer(Configuration configuration) {
-        this.configuration = configuration;
+    public VideoPlayer(VideoConfig videoConfig) {
+        this.videoConfig = videoConfig;
     }
 
     public void play(Video video) throws IOException {
         if (video.isDvd()) {
-            play(video, "video.command.dvd");
+            play(video, videoConfig.getDvdPlayerCommand());
 
         } else {
-            play(video, "video.command.default");
+            play(video, videoConfig.getDefaultPlayerCommand());
         }
     }
 
-    private void play(Video video, String commandProperty) throws IOException {
+    private void play(Video video, ExternalCommand playerCommand) throws IOException {
         ArrayList sortedFiles = new ArrayList(video.getFiles());
         Collections.sort(sortedFiles, new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -39,7 +40,6 @@ public class VideoPlayer {
             filenames[i.previousIndex()] = file.getPath();
         }
 
-        ExecUtils execUtils = new ExecUtils();
-        execUtils.executeAndWait(configuration.getCommandLine(commandProperty, filenames));
+        playerCommand.execute(filenames);
     }
 }

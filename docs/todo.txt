@@ -35,6 +35,8 @@ Video plugin
 * Detect IMDB number from .nfo files
 * Support for categorizing movies (differently from the on-disk tree).
 * Stop music (or audio usage) when starting movie
+* Fix list layout bugs
+
 
 Pictures plugin
 ---------------

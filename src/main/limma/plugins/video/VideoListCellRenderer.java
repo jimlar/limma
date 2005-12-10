@@ -88,10 +88,14 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
         directorLabel.setText(director + year);
         runtimeLabel.setText(video.getRuntime());
         ratingLabel.setText(video.getRating());
-        plotLabel.setText(video.getPlot());
 
         File posterFile = new File(videoConfig.getPosterDir(), String.valueOf(video.getImdbNumber()));
-        cover.setIcon(new ImageIcon(posterFile.getAbsolutePath()));
+        ImageIcon poster = new ImageIcon(posterFile.getAbsolutePath());
+        cover.setIcon(poster);
+
+        plotLabel.setText(video.getPlot());
+        plotLabel.setSize(list.getWidth() - poster.getIconWidth() - 15, 100000);
+
 
         setComponentOrientation(list.getComponentOrientation());
         setForeground(Color.white);

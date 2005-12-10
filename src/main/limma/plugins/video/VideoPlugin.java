@@ -70,6 +70,7 @@ public class VideoPlugin implements Plugin {
         panel.add(scrollPane, BorderLayout.CENTER);
 
         videoList.setCellRenderer(new VideoListCellRenderer(videoConfig));
+        
 
         return panel;
     }

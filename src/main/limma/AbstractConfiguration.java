@@ -47,16 +47,4 @@ public abstract class AbstractConfiguration {
         }
         return value;
     }
-
-    public String[] getCommandLine(String property, String append) {
-        return getCommandLine(property, new String[]{append});
-    }
-
-    public String[] getCommandLine(String commandProperty, String[] append) {
-        String[] command = StringUtils.split(getString(commandProperty), ' ');
-        String[] result = new String[command.length + append.length];
-        System.arraycopy(command, 0, result, 0, command.length);
-        System.arraycopy(append, 0, result, command.length, append.length);
-        return result;
-    }
 }

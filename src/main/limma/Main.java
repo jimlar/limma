@@ -1,19 +1,18 @@
 package limma;
 
-import limma.plugins.Plugin;
+import limma.persistence.PersistenceConfigImpl;
 import limma.persistence.PersistenceManagerImpl;
-import limma.persistence.PersistenceManager;
-import limma.plugins.video.VideoPlugin;
+import limma.plugins.game.GameConfigImpl;
+import limma.plugins.game.GamePlugin;
+import limma.plugins.music.MusicConfigImpl;
+import limma.plugins.music.MusicPlugin;
+import limma.plugins.music.player.JavaSoundMusicPlayer;
+import limma.plugins.music.player.ExternalMusicPlayer;
 import limma.plugins.video.IMDBSeviceImpl;
 import limma.plugins.video.VideoConfigImpl;
-import limma.plugins.game.GamePlugin;
-import limma.plugins.game.GameConfigImpl;
-import limma.plugins.music.MusicPlugin;
-import limma.plugins.music.MusicConfigImpl;
-import limma.swing.DialogManagerImpl;
+import limma.plugins.video.VideoPlugin;
 import limma.swing.CursorHider;
-import limma.persistence.PersistenceManager;
-import limma.persistence.PersistenceConfigImpl;
+import limma.swing.DialogManagerImpl;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
 import javax.swing.*;
@@ -33,6 +32,7 @@ public class Main {
                 pico.registerComponentImplementation(VideoConfigImpl.class);
                 pico.registerComponentImplementation(MusicPlugin.class);
                 pico.registerComponentImplementation(MusicConfigImpl.class);
+                pico.registerComponentImplementation(ExternalMusicPlayer.class);
                 pico.registerComponentImplementation(GamePlugin.class);
                 pico.registerComponentImplementation(GameConfigImpl.class);
                 pico.registerComponentImplementation(MainWindow.class);

@@ -31,10 +31,11 @@ public class MusicPlugin extends JPanel implements Plugin {
     private boolean repeatTrack;
     private MenuDialog menuDialog;
 
-    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig) {
+    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         this.musicConfig = musicConfig;
+        this.musicPlayer = musicPlayer;
         persistenceManager.addPersistentClass(MusicFile.class);
         setOpaque(false);
         setLayout(new GridBagLayout());
@@ -63,7 +64,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         add(playlistScrollPane, new GridBagConstraints(0, 1, 2, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
 
-        musicPlayer = new MusicPlayer(new PlayerListener() {
+        musicPlayer.addListener(new PlayerListener() {
             public void stopped(MusicFile musicFile) {
             }
 

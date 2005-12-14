@@ -12,13 +12,20 @@ public class ExternalCommand {
     }
 
     public void execute(String[] appendToCommand) throws IOException {
-        ExecUtils execUtils = new ExecUtils();
+        String[] result = getCommandLine(appendToCommand);
+        new ExecUtils().executeAndWait(result);
+    }
 
+    public String[] getCommandLine(String appendToCommand) {
+        return getCommandLine(new String[] { appendToCommand });
+    }
+
+    public String[] getCommandLine(String[] appendToCommand) {
         String[] command = StringUtils.split(commandLine, ' ');
         String[] result = new String[command.length + appendToCommand.length];
         System.arraycopy(command, 0, result, 0, command.length);
         System.arraycopy(appendToCommand, 0, result, command.length, appendToCommand.length);
-        execUtils.executeAndWait(result);
+        return result;
     }
 
     public void execute(String appendToCommand) throws IOException {

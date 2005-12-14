@@ -203,7 +203,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     public void stop() {
-        musicPlayer.stop();
+        musicPlayer.stopPlaying();
         currentTrackPanel.setCurrentTrack(null);
         MusicFile lastPlayed = playedFile;
         playedFile = null;
@@ -212,7 +212,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     public void play(MusicFile file) {
-        musicPlayer.stop();
+        musicPlayer.stopPlaying();
         musicPlayer.play(file);
         currentTrackPanel.setCurrentTrack(file);
         MusicFile lastPlayed = playedFile;

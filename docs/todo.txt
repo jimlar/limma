@@ -30,12 +30,17 @@ Game plugin
 -----------
 
 
+DVD Plugin
+----------
+Play dvd discs directly
+
 Video plugin
 ------------
 * Detect IMDB number from .nfo files
 * Support for categorizing movies (differently from the on-disk tree).
 * Stop music (or audio usage) when starting movie
 * Fix list layout bugs
+* Add support to select / config / view which player command should be used
 
 
 Pictures plugin

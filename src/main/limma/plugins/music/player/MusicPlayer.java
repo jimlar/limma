@@ -23,11 +23,14 @@ public class MusicPlayer {
     }
 
     public void play(MusicFile musicFile) {
-        if (musicFile.isMP3()) {
-            job = new MP3PlayerJob(musicFile, this);
-        } else {
-            job = new FlacPlayerJob(musicFile, this);
-        }
+
+        job = new JavaSoundJob(musicFile, this);
+
+//        if (musicFile.isMP3()) {
+//            job = new MP3PlayerJob(musicFile, this);
+//        } else {
+//            job = new FlacPlayerJob(musicFile, this);
+//        }
         executor.execute(job);
     }
 

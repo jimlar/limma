@@ -25,6 +25,8 @@ Music plugin
 * Played songs can get lost (unstoppable if you press "next" too fast)
 * Support for 48000 Hz output rate (autodetect?)
 * Common output buffers etc to get smoother song changing
+* Use tritonus to convert samplerates / decode mp3 etc?
+
 
 Game plugin
 -----------

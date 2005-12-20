@@ -1,10 +1,10 @@
 General
 -------
 * Use KeyboardFocusManager (http://java.sun.com/docs/books/tutorial/uiswing/misc/focus.html) more intelligently
-  instead of dispatching keys self. Change "focus traversal keys". 
-
+  instead of dispatching keys self. Change "focus traversal keys".
 * Skins (or atleast centralized control over colors, sizes and images).
 * Mouse cursor that diappears when it stands still for a few seconds
+* IPod style menu for interface (with current plugin active in the background)
 
 
 TV plugin
@@ -22,7 +22,6 @@ Music plugin
 * FF and REW
 * Better fallback names (remove .mp3 and .flac and guess some nice case)
 * Better Bitrate figures: show VBR rates correctly and show flac differently.
-* Played songs can get lost (unstoppable if you press "next" too fast)
 * Support for 48000 Hz output rate (autodetect?)
 * Common output buffers etc to get smoother song changing
 * Use tritonus to convert samplerates / decode mp3 etc?
@@ -36,6 +35,7 @@ DVD Plugin
 ----------
 Play dvd discs directly
 
+
 Video plugin
 ------------
 * Detect IMDB number from .nfo files
@@ -43,8 +43,10 @@ Video plugin
 * Stop music (or audio usage) when starting movie
 * Fix list layout bugs
 * Add support to select / config / view which player command should be used
+* On screen menu for mplayer?
+* Show not watched movies
 
 
 Pictures plugin
 ---------------
-
+* Import from camera

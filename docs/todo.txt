@@ -64,6 +64,7 @@ Video plugin
 * Add support to select / config / view which player command should be used
 * On screen menu for mplayer?
 * Show not watched movies
+* Support for cue/bin files?
 
 
 Pictures plugin

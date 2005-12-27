@@ -1,4 +1,7 @@
-package limma.swing;
+package limma.swing.navigationlist;
+
+import limma.swing.navigationlist.NavigationNode;
+import limma.swing.navigationlist.DefaultNavigationNode;
 
 import javax.swing.*;
 

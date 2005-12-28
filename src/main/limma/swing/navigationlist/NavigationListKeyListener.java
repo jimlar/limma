@@ -1,12 +1,15 @@
 package limma.swing.navigationlist;
 
+import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 class NavigationListKeyListener extends KeyAdapter {
+    private NavigationList list;
     private final NavigationModel model;
 
-    public NavigationListKeyListener(NavigationModel model) {
+    public NavigationListKeyListener(NavigationList list, NavigationModel model) {
+        this.list = list;
         this.model = model;
     }
 
@@ -16,12 +19,14 @@ class NavigationListKeyListener extends KeyAdapter {
             NavigationNode child = (NavigationNode) currentNode.getChildAt(currentNode.getSelectedChildIndex());
             if (child.getChildCount() > 0) {
                 model.setCurrentNode(child);
+                list.scrollToSelected();
                 e.consume();
             }
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             NavigationNode parent = currentNode.getParent();
             if (parent != null) {
                 model.setCurrentNode(parent);
+                list.scrollToSelected();
                 e.consume();
             }
         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

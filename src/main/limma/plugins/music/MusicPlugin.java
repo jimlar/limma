@@ -6,11 +6,14 @@ import limma.plugins.PluginManager;
 import limma.plugins.music.player.MusicPlayer;
 import limma.plugins.music.player.PlayerListener;
 import limma.swing.*;
+import limma.swing.navigationlist.DefaultNavigationNode;
+import limma.swing.navigationlist.NavigationModel;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Iterator;
 
 public class MusicPlugin extends JPanel implements Plugin {
     private SimpleListModel musicListModel;
@@ -30,6 +33,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     private boolean lockArtist;
     private boolean repeatTrack;
     private MenuDialog menuDialog;
+    private DefaultNavigationNode musicNode;
 
     public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer) {
         this.dialogManager = dialogManager;
@@ -132,7 +136,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     void reloadFileList() {
-        dialogManager.executeInDialog(new LoadPlayListTask(this, persistenceManager));
+        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode));
     }
 
     public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {
@@ -168,6 +172,12 @@ public class MusicPlugin extends JPanel implements Plugin {
                 musicList.processKeyEvent(e);
         }
         return true;
+    }
+
+    public void initMenu(NavigationModel navigationModel) {
+        musicNode = new DefaultNavigationNode("Music");
+        navigationModel.add(musicNode);
+        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode));
     }
 
     private void toggelRepeatTrack() {
@@ -232,27 +242,68 @@ public class MusicPlugin extends JPanel implements Plugin {
         }
     }
 
-    private static class LoadPlayListTask implements Task {
-        private MusicPlugin musicPlugin;
+    private static class LoadMusicTask implements Task {
         private PersistenceManager persistenceManager;
+        private DefaultNavigationNode musicNode;
 
-        public LoadPlayListTask(MusicPlugin musicPlugin, PersistenceManager persistenceManager) {
-            this.musicPlugin = musicPlugin;
+        public LoadMusicTask(PersistenceManager persistenceManager, DefaultNavigationNode musicNode) {
             this.persistenceManager = persistenceManager;
+            this.musicNode = musicNode;
         }
 
         public JComponent createComponent() {
-            return new AntialiasLabel("Loading file list...");
+            return new AntialiasLabel("Loading music database...");
         }
 
         public void run() {
-            final java.util.List musicFiles = persistenceManager.query("all_musicfiles");
+            final DefaultNavigationNode artistsNode = new DefaultNavigationNode("Artists");
+            final DefaultNavigationNode albumsNode = new DefaultNavigationNode("Albums");
+            final DefaultNavigationNode songsNode = new DefaultNavigationNode("Songs");
+
+            java.util.List musicFiles = persistenceManager.query("all_musicfiles");
+
+            for (Iterator i = musicFiles.iterator(); i.hasNext();) {
+                MusicFile file = (MusicFile) i.next();
+                songsNode.add(new DefaultNavigationNode(file.getArtist() + ": " + file.getTitle()));
+
+                addToArtistsNode(artistsNode, file);
+                addToAlbumsNode(albumsNode, file);
+            }
+
+
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    musicPlugin.musicListModel.setObjects(musicFiles);
-                    musicPlugin.musicList.setSelectedIndex(0);
+                    musicNode.removeAllChildren();
+                    musicNode.add(artistsNode);
+                    musicNode.add(albumsNode);
+                    musicNode.add(songsNode);
                 }
             });
+        }
+
+        private void addToArtistsNode(DefaultNavigationNode artistsNode, MusicFile file) {
+            DefaultNavigationNode artistNode = (DefaultNavigationNode) artistsNode.getFirstChildWithTitle(file.getArtist());
+            if (artistNode == null) {
+                artistNode = new DefaultNavigationNode(file.getArtist());
+                artistsNode.add(artistNode);
+            }
+
+            DefaultNavigationNode albumNode = (DefaultNavigationNode) artistNode.getFirstChildWithTitle(file.getAlbum());
+            if (albumNode == null) {
+                albumNode = new DefaultNavigationNode(file.getAlbum());
+                artistNode.add(albumNode);
+            }
+            albumNode.add(new DefaultNavigationNode(file.getTitle()));
+        }
+
+        private void addToAlbumsNode(DefaultNavigationNode albumsNode, MusicFile file) {
+            String albumName = file.getArtist() + ": " + file.getAlbum();
+            DefaultNavigationNode albumNode = (DefaultNavigationNode) albumsNode.getFirstChildWithTitle(albumName);
+            if (albumNode == null) {
+                albumNode = new DefaultNavigationNode(albumName);
+                albumsNode.add(albumNode);
+            }
+            albumNode.add(new DefaultNavigationNode(file.getTitle()));
         }
     }
 }

@@ -6,6 +6,8 @@ import limma.swing.AntialiasLabel;
 import limma.swing.AntialiasList;
 import limma.swing.DialogManager;
 import limma.swing.SimpleListModel;
+import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.DefaultNavigationNode;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -105,6 +107,10 @@ public class GamePlugin implements Plugin {
         }
         getVisibleGameList().processKeyEvent(e);
         return true;
+    }
+
+    public void initMenu(NavigationModel navigationModel) {
+        navigationModel.add(new DefaultNavigationNode("Games"));
     }
 
     private AntialiasList getVisibleGameList() {

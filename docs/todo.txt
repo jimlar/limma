@@ -51,7 +51,7 @@ Game plugin
 
 
 DVD Plugin
-----------
+----------e
 Play dvd discs directly
 
 

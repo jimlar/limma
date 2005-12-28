@@ -11,7 +11,7 @@ class NavigationListCellRenderer extends JLabel implements ListCellRenderer, Ser
 
     public NavigationListCellRenderer() {
         setOpaque(false);
-        setFont(Font.decode("Verdana").deriveFont((float) 20));
+        setFont(Font.decode("Verdana").deriveFont((float) 40));
         setBackground(Color.white);
     }
 

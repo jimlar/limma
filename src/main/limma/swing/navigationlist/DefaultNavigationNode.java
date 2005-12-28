@@ -1,8 +1,7 @@
 package limma.swing.navigationlist;
 
-import limma.swing.navigationlist.NavigationNode;
-
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class DefaultNavigationNode implements NavigationNode {
@@ -32,6 +31,16 @@ public class DefaultNavigationNode implements NavigationNode {
         return children.get(index);
     }
 
+    public NavigationNode getFirstChildWithTitle(String title) {
+        for (Iterator<NavigationNode> i = children.iterator(); i.hasNext();) {
+            NavigationNode node = i.next();
+            if (title.equals(node.getTitle())) {
+                return node;
+            }
+        }
+        return null;
+    }
+
     public NavigationNode getParent() {
         return parent;
     }
@@ -46,5 +55,9 @@ public class DefaultNavigationNode implements NavigationNode {
 
     public void setSelectedChildIndex(int selectedChildIndex) {
         this.selectedChildIndex = selectedChildIndex;
+    }
+
+    public void removeAllChildren() {
+        children.clear();
     }
 }

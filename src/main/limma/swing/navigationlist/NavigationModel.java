@@ -9,7 +9,7 @@ public class NavigationModel extends AbstractListModel {
     private DefaultNavigationNode root = new DefaultNavigationNode("root");
     private NavigationNode currentNode = root;
 
-    public void add(DefaultNavigationNode node) {
+    public void add(NavigationNode node) {
         root.add(node);
     }
 

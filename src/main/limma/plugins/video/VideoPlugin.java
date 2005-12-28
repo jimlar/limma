@@ -4,6 +4,8 @@ import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.swing.*;
+import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.DefaultNavigationNode;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -97,6 +99,10 @@ public class VideoPlugin implements Plugin {
                 videoList.processKeyEvent(e);
         }
         return true;
+    }
+
+    public void initMenu(NavigationModel navigationModel) {
+        navigationModel.add(new DefaultNavigationNode("Movies"));
     }
 
     private void play(final Video video) {

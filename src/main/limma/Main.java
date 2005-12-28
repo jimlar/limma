@@ -35,7 +35,8 @@ public class Main {
                 pico.registerComponentImplementation(ExternalMusicPlayer.class);
                 pico.registerComponentImplementation(GamePlugin.class);
                 pico.registerComponentImplementation(GameConfigImpl.class);
-                pico.registerComponentImplementation(MainWindow.class);
+                //pico.registerComponentImplementation(MainWindow.class);
+                pico.registerComponentImplementation(MainWindow2.class);
                 pico.registerComponentImplementation(DialogManagerImpl.class);
                 pico.registerComponentImplementation(PersistenceManagerImpl.class);
                 pico.registerComponentImplementation(PersistenceConfigImpl.class);
@@ -45,7 +46,7 @@ public class Main {
 
                 pico.start();
 
-                MainWindow mainWindow = (MainWindow) pico.getComponentInstanceOfType(MainWindow.class);
+                MainWindow2 mainWindow = (MainWindow2) pico.getComponentInstanceOfType(MainWindow2.class);
                 mainWindow.setUndecorated(true);
                 mainWindow.setResizable(false);
                 device.setFullScreenWindow(mainWindow);

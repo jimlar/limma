@@ -4,6 +4,7 @@ import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.swing.LimmaMenu;
 import limma.swing.LimmaMenuItem;
+import limma.swing.navigationlist.NavigationModel;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -46,5 +47,8 @@ public class MenuPlugin implements Plugin {
     public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {
         limmaMenu.keyPressed(e);
         return true;
+    }
+
+    public void initMenu(NavigationModel navigationModel) {
     }
 }

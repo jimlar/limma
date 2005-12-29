@@ -29,6 +29,10 @@ class NavigationListKeyListener extends KeyAdapter {
                 list.scrollToSelected();
                 e.consume();
             }
+        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            NavigationNode child = (NavigationNode) currentNode.getChildAt(currentNode.getSelectedChildIndex());
+            child.performAction();
+            
         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             System.exit(0);
         }

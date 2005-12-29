@@ -13,7 +13,18 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * - Create a new player panel
+ * - "Shuffle" is a global setting
+ * - Move playlist to player
+ * - Merge popup menu with normal menu
+ * - Remove a lot of old crap
+ * - Centralize keyboard and call methods on player interface instead
+ */
 
 public class MusicPlugin extends JPanel implements Plugin {
     private SimpleListModel musicListModel;
@@ -136,7 +147,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     void reloadFileList() {
-        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode));
+        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode, musicPlayer));
     }
 
     public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {
@@ -177,7 +188,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     public void initMenu(NavigationModel navigationModel) {
         musicNode = new DefaultNavigationNode("Music");
         navigationModel.add(musicNode);
-        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode));
+        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode, musicPlayer));
     }
 
     private void toggelRepeatTrack() {
@@ -239,71 +250,6 @@ public class MusicPlugin extends JPanel implements Plugin {
                 listCellRendererComponent.setForeground(Color.yellow);
             }
             return listCellRendererComponent;
-        }
-    }
-
-    private static class LoadMusicTask implements Task {
-        private PersistenceManager persistenceManager;
-        private DefaultNavigationNode musicNode;
-
-        public LoadMusicTask(PersistenceManager persistenceManager, DefaultNavigationNode musicNode) {
-            this.persistenceManager = persistenceManager;
-            this.musicNode = musicNode;
-        }
-
-        public JComponent createComponent() {
-            return new AntialiasLabel("Loading music database...");
-        }
-
-        public void run() {
-            final DefaultNavigationNode artistsNode = new DefaultNavigationNode("Artists");
-            final DefaultNavigationNode albumsNode = new DefaultNavigationNode("Albums");
-            final DefaultNavigationNode songsNode = new DefaultNavigationNode("Songs");
-
-            java.util.List musicFiles = persistenceManager.query("all_musicfiles");
-
-            for (Iterator i = musicFiles.iterator(); i.hasNext();) {
-                MusicFile file = (MusicFile) i.next();
-                songsNode.add(new DefaultNavigationNode(file.getArtist() + ": " + file.getTitle()));
-
-                addToArtistsNode(artistsNode, file);
-                addToAlbumsNode(albumsNode, file);
-            }
-
-
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    musicNode.removeAllChildren();
-                    musicNode.add(artistsNode);
-                    musicNode.add(albumsNode);
-                    musicNode.add(songsNode);
-                }
-            });
-        }
-
-        private void addToArtistsNode(DefaultNavigationNode artistsNode, MusicFile file) {
-            DefaultNavigationNode artistNode = (DefaultNavigationNode) artistsNode.getFirstChildWithTitle(file.getArtist());
-            if (artistNode == null) {
-                artistNode = new DefaultNavigationNode(file.getArtist());
-                artistsNode.add(artistNode);
-            }
-
-            DefaultNavigationNode albumNode = (DefaultNavigationNode) artistNode.getFirstChildWithTitle(file.getAlbum());
-            if (albumNode == null) {
-                albumNode = new DefaultNavigationNode(file.getAlbum());
-                artistNode.add(albumNode);
-            }
-            albumNode.add(new DefaultNavigationNode(file.getTitle()));
-        }
-
-        private void addToAlbumsNode(DefaultNavigationNode albumsNode, MusicFile file) {
-            String albumName = file.getArtist() + ": " + file.getAlbum();
-            DefaultNavigationNode albumNode = (DefaultNavigationNode) albumsNode.getFirstChildWithTitle(albumName);
-            if (albumNode == null) {
-                albumNode = new DefaultNavigationNode(albumName);
-                albumsNode.add(albumNode);
-            }
-            albumNode.add(new DefaultNavigationNode(file.getTitle()));
         }
     }
 }

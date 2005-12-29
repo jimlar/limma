@@ -64,6 +64,10 @@ public class ExternalMusicPlayer implements MusicPlayer {
         }
     }
 
+    public void play(List<MusicFile> musicFile) {
+        play(musicFile.get(0));
+    }
+
     public void stopPlaying() {
         if (process != null) {
             process.destroy();

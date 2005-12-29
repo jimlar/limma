@@ -29,6 +29,9 @@ public class JavaSoundMusicPlayer extends Thread implements MusicPlayer {
         listeners.add(playerListener);
     }
 
+    public void play(List<MusicFile> musicFiles) {
+    }
+
     public void play(final MusicFile musicFile) {
         stopPlaying();
         try {

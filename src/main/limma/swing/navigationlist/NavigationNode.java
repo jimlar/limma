@@ -14,4 +14,6 @@ public interface NavigationNode {
     void setSelectedChildIndex(int selectedChildIndex);
 
     String getTitle();
+
+    void performAction();
 }

@@ -6,11 +6,10 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-class CurrentTrackPanel extends JPanel {
+public class CurrentTrackPanel extends JPanel {
     private AntialiasLabel artistLabel;
     private AntialiasLabel titleLabel;
     private AntialiasLabel albumLabel;
-    private MusicFile currentTrack;
 
     public CurrentTrackPanel() {
         super(new GridBagLayout());
@@ -34,13 +33,12 @@ class CurrentTrackPanel extends JPanel {
     }
 
     public void setCurrentTrack(MusicFile file) {
-        this.currentTrack = file;
         if (file == null) {
             titleLabel.setText("");
             artistLabel.setText("");
             albumLabel.setText("");
         } else {
-            titleLabel.setText(file.getTitle() + " (" + secondsToString(currentTrack.getLengthInSeconds()) + ")");
+            titleLabel.setText(file.getTitle() + " (" + secondsToString(file.getLengthInSeconds()) + ")");
             artistLabel.setText(file.getArtist());
             albumLabel.setText(file.getAlbum() + (file.getYear() == 0 ? "" : " (" + file.getYear() + ")"));
         }

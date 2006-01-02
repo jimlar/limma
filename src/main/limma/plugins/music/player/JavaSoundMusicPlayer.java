@@ -1,19 +1,16 @@
 package limma.plugins.music.player;
 
 import limma.plugins.music.MusicFile;
-
-import javax.sound.sampled.*;
-import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
-
 import org.apache.commons.io.IOUtils;
 
+import javax.sound.sampled.*;
+import javax.swing.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 public class JavaSoundMusicPlayer extends Thread implements MusicPlayer {
-    private List<PlayerListener> listeners = new ArrayList<PlayerListener>();
     private BlockingQueue queue = new LinkedBlockingQueue(1);
     private AudioInputStream audioInputStream;
     private AudioFormat inputAudioFormat;
@@ -25,14 +22,30 @@ public class JavaSoundMusicPlayer extends Thread implements MusicPlayer {
         start();
     }
 
-    public void addListener(PlayerListener playerListener) {
-        listeners.add(playerListener);
+    public JComponent getPlayerPane() {
+        return null;
+    }
+
+    public void next() {
+    }
+
+    public void previous() {
+    }
+
+    public void ff() {
+    }
+
+    public void rew() {
+    }
+
+    public void play() {
+    }
+
+    public void pause() {
     }
 
     public void play(List<MusicFile> musicFiles) {
-    }
-
-    public void play(final MusicFile musicFile) {
+        MusicFile musicFile = musicFiles.get(0);
         stopPlaying();
         try {
             queue.put(musicFile);
@@ -64,11 +77,9 @@ public class JavaSoundMusicPlayer extends Thread implements MusicPlayer {
 
                 if (!stopping) {
                     line.drain();
-                    signalCompleted(musicFile);
                     System.out.println("Completed " + musicFile);
                 } else {
                     System.out.println("Stopped");
-                    signalStopped(musicFile);
                 }
 
             } catch (UnsupportedAudioFileException e) {
@@ -85,20 +96,6 @@ public class JavaSoundMusicPlayer extends Thread implements MusicPlayer {
                 }
                 IOUtils.closeQuietly(audioInputStream);
             }
-        }
-    }
-
-    private void signalStopped(MusicFile musicFile) {
-        for (Iterator<PlayerListener> i = listeners.iterator(); i.hasNext();) {
-            PlayerListener listener = i.next();
-            listener.stopped(musicFile);
-        }
-    }
-
-    private void signalCompleted(MusicFile musicFile) {
-        for (Iterator<PlayerListener> i = listeners.iterator(); i.hasNext();) {
-            PlayerListener listener = i.next();
-            listener.completed(musicFile);
         }
     }
 

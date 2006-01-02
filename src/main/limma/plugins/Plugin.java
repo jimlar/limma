@@ -1,6 +1,7 @@
 package limma.plugins;
 
 import limma.swing.navigationlist.NavigationModel;
+import limma.PlayerManager;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -14,5 +15,5 @@ public interface Plugin {
 
     boolean keyPressed(KeyEvent e, PluginManager pluginManager);
 
-    void initMenu(NavigationModel navigationModel);
+    void init(NavigationModel navigationModel, PlayerManager playerManager);
 }

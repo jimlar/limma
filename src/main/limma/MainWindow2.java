@@ -12,11 +12,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class MainWindow2 extends JFrame implements PluginManager {
+public class MainWindow2 extends JFrame implements PluginManager, PlayerManager {
     private CardLayout pluginCardsManager;
     private JPanel mainPanel;
     private DialogManager dialogManager;
-    private NavigationModel navigationModel;
+
+    private Player currentPlayer;
+    private JComponent currentPlayerPane;
+    private NavigationList navigationList;
+    private boolean menuOpen = false;
 
     public MainWindow2(GraphicsDevice graphicsDevice, DialogManager dialogManager, Plugin[] plugins) {
         this.dialogManager = dialogManager;
@@ -44,8 +48,8 @@ public class MainWindow2 extends JFrame implements PluginManager {
             }
         });
 
-        navigationModel = new NavigationModel();
-        NavigationList navigationList = new NavigationList(navigationModel);
+        NavigationModel navigationModel = new NavigationModel();
+        navigationList = new NavigationList(navigationModel);
         JScrollPane scrollPane = new JScrollPane(navigationList);
         scrollPane.setOpaque(false);
         scrollPane.setAutoscrolls(true);
@@ -54,28 +58,64 @@ public class MainWindow2 extends JFrame implements PluginManager {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         mainPanel.add(scrollPane, "menu");
+        mainPanel.add(new JLabel("Limma"), "player");
 
         validate();
         for (int i = 0; i < plugins.length; i++) {
             Plugin plugin = plugins[i];
-            initPlugin(plugin);
+            plugin.init(navigationModel, this);
         }
 
-        pluginCardsManager.show(mainPanel, "menu");
+        openMenu();
+    }
+
+    public void switchTo(Player player) {
+        if (currentPlayerPane != null) {
+            mainPanel.remove(currentPlayerPane);
+        }
+        this.currentPlayer = player;
+        currentPlayerPane = currentPlayer.getPlayerPane();
+        if (currentPlayerPane != null) {
+            mainPanel.add(currentPlayerPane, "player");
+        }
     }
 
     private boolean dispatchKey(KeyEvent e) {
         LimmaDialog topDialog = dialogManager.getTopDialog();
         if (topDialog != null) {
             return topDialog.keyPressed(e);
+        } else {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ESCAPE:
+                    closeMenu();
+                    return true;
+                case KeyEvent.VK_S:
+                    currentPlayer.stop();
+                    return true;
+                case KeyEvent.VK_M:
+                    openMenu();
+                    return true;
+                case KeyEvent.VK_N:
+                    currentPlayer.next();
+                    return true;
+            }
         }
-        return false;
+        navigationList.processKeyEvent(e);
+        return true;
     }
 
-    private void initPlugin(Plugin plugin) {
-        String name = plugin.getPluginName();
-        mainPanel.add(plugin.getPluginView(), name);
-        plugin.initMenu(navigationModel);
+    private boolean isMenuOpen() {
+        return menuOpen;
+    }
+
+    private void openMenu() {
+        menuOpen = true;
+        pluginCardsManager.show(mainPanel, "menu");
+    }
+
+    private void closeMenu() {
+        menuOpen = false;
+        pluginCardsManager.show(mainPanel, "player");
     }
 
     /**

@@ -8,6 +8,7 @@ import limma.swing.DialogManager;
 import limma.swing.SimpleListModel;
 import limma.swing.navigationlist.NavigationModel;
 import limma.swing.navigationlist.DefaultNavigationNode;
+import limma.PlayerManager;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -109,7 +110,7 @@ public class GamePlugin implements Plugin {
         return true;
     }
 
-    public void initMenu(NavigationModel navigationModel) {
+    public void init(NavigationModel navigationModel, PlayerManager playerManager) {
         navigationModel.add(new DefaultNavigationNode("Games"));
     }
 

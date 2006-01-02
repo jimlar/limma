@@ -6,6 +6,7 @@ import limma.plugins.PluginManager;
 import limma.swing.*;
 import limma.swing.navigationlist.NavigationModel;
 import limma.swing.navigationlist.DefaultNavigationNode;
+import limma.PlayerManager;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -101,7 +102,7 @@ public class VideoPlugin implements Plugin {
         return true;
     }
 
-    public void initMenu(NavigationModel navigationModel) {
+    public void init(NavigationModel navigationModel, PlayerManager playerManager) {
         navigationModel.add(new DefaultNavigationNode("Movies"));
     }
 

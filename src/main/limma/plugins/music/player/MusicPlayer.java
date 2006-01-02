@@ -1,16 +1,12 @@
 package limma.plugins.music.player;
 
 import limma.plugins.music.MusicFile;
+import limma.Player;
 
 import java.util.List;
 
-public interface MusicPlayer {
-    void addListener(PlayerListener playerListener);
-
-    void play(MusicFile musicFile);
+public interface MusicPlayer extends Player {
 
     void play(List<MusicFile> musicFiles);
-
-    void stopPlaying();
 
 }

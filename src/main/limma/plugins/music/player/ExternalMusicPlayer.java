@@ -1,13 +1,13 @@
 package limma.plugins.music.player;
 
+import limma.plugins.music.CurrentTrackPanel;
 import limma.plugins.music.MusicConfig;
 import limma.plugins.music.MusicFile;
 import limma.utils.ExternalCommand;
 import limma.utils.StreamForwarder;
 
+import javax.swing.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ExternalMusicPlayer implements MusicPlayer {
@@ -15,25 +15,27 @@ public class ExternalMusicPlayer implements MusicPlayer {
     private Process process;
     private StreamForwarder errorForwarder;
     private StreamForwarder outForwarder;
-    private List<PlayerListener> listeners = new ArrayList<PlayerListener>();
-    private MusicFile musicFile;
+    private CurrentTrackPanel currentTrackPanel;
 
     public ExternalMusicPlayer(MusicConfig musicConfig) {
         this.musicConfig = musicConfig;
+        currentTrackPanel = new CurrentTrackPanel();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                stopPlaying();
+                ExternalMusicPlayer.this.stop();
             }
         });
     }
 
-    public void addListener(PlayerListener playerListener) {
-        listeners.add(playerListener);
-    }
+    public void play(List<MusicFile> musicFiles) {
+        final MusicFile musicFile = musicFiles.get(0);
+        stop();
 
-    public void play(final MusicFile musicFile) {
-        this.musicFile = musicFile;
-        stopPlaying();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                currentTrackPanel.setCurrentTrack(musicFile);
+            }
+        });
 
         ExternalCommand playerCommand = musicConfig.getExternalPlayerCommand();
         try {
@@ -47,11 +49,7 @@ public class ExternalMusicPlayer implements MusicPlayer {
                         int exitCode = process.waitFor();
                         if (exitCode == 0) {
                             process = null;
-                            for (Iterator<PlayerListener> i = listeners.iterator(); i.hasNext();) {
-                                PlayerListener listener = i.next();
-                                listener.completed(musicFile);
-                            }
-                            stopPlaying();
+                            ExternalMusicPlayer.this.stop();
                         }
                     } catch (InterruptedException e) {
                     }
@@ -60,24 +58,16 @@ public class ExternalMusicPlayer implements MusicPlayer {
 
         } catch (IOException e) {
             e.printStackTrace();
-            stopPlaying();
+            stop();
         }
     }
 
-    public void play(List<MusicFile> musicFile) {
-        play(musicFile.get(0));
-    }
-
-    public void stopPlaying() {
+    public void stop() {
         if (process != null) {
             process.destroy();
             try {
                 process.waitFor();
             } catch (InterruptedException e) {
-            }
-            for (Iterator<PlayerListener> i = listeners.iterator(); i.hasNext();) {
-                PlayerListener listener = i.next();
-                listener.stopped(musicFile);
             }
         }
 
@@ -88,5 +78,27 @@ public class ExternalMusicPlayer implements MusicPlayer {
         if (outForwarder != null) {
             outForwarder.stop();
         }
+    }
+
+    public JComponent getPlayerPane() {
+        return currentTrackPanel;
+    }
+
+    public void next() {
+    }
+
+    public void previous() {
+    }
+
+    public void ff() {
+    }
+
+    public void rew() {
+    }
+
+    public void play() {
+    }
+
+    public void pause() {
     }
 }

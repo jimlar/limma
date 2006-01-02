@@ -1,21 +1,16 @@
 package limma.plugins.music;
 
+import limma.PlayerManager;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.plugins.music.player.MusicPlayer;
-import limma.plugins.music.player.PlayerListener;
-import limma.swing.*;
+import limma.swing.DialogManager;
 import limma.swing.navigationlist.DefaultNavigationNode;
 import limma.swing.navigationlist.NavigationModel;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * - Create a new player panel
@@ -27,23 +22,11 @@ import java.util.List;
  */
 
 public class MusicPlugin extends JPanel implements Plugin {
-    private SimpleListModel musicListModel;
-    private AntialiasList musicList;
     private MusicPlayer musicPlayer;
-    private boolean hasBeenEntered;
-    private CurrentTrackPanel currentTrackPanel;
-    private MusicFile playedFile;
-    private PlayStrategy selectedPlayStrategy;
-    private RandomPlayStrategy randomPlayStrategy;
-    private LinearPlayStrategy linearPlayStrategy;
+    private PlayerManager playerManager;
     private DialogManager dialogManager;
     private PersistenceManager persistenceManager;
     private MusicConfig musicConfig;
-    private OptionsPanel optionsPanel;
-    private boolean lockAlbum;
-    private boolean lockArtist;
-    private boolean repeatTrack;
-    private MenuDialog menuDialog;
     private DefaultNavigationNode musicNode;
 
     public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer) {
@@ -51,80 +34,24 @@ public class MusicPlugin extends JPanel implements Plugin {
         this.persistenceManager = persistenceManager;
         this.musicConfig = musicConfig;
         this.musicPlayer = musicPlayer;
+
         persistenceManager.addPersistentClass(MusicFile.class);
-        setOpaque(false);
-        setLayout(new GridBagLayout());
-
-        currentTrackPanel = new CurrentTrackPanel();
-
-        musicListModel = new SimpleListModel();
-        musicList = new AntialiasList(musicListModel);
-        musicList.setCellRenderer(new MusicListCellRenderer());
-        JScrollPane playlistScrollPane = new JScrollPane(musicList);
-
-
-        TitledBorder titledBorder = BorderFactory.createTitledBorder("Playlist");
-        titledBorder.setTitleFont(AntialiasLabel.DEFAULT_FONT);
-        titledBorder.setTitleColor(Color.white);
-
-        playlistScrollPane.setBorder(titledBorder);
-        playlistScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        playlistScrollPane.setOpaque(false);
-        playlistScrollPane.getViewport().setOpaque(false);
-
-        optionsPanel = new OptionsPanel();
-        add(currentTrackPanel, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 10, 0), 0, 0));
-        add(optionsPanel, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 10, 0), 0, 0));
-        add(playlistScrollPane, new GridBagConstraints(0, 1, 2, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-
-
-        musicPlayer.addListener(new PlayerListener() {
-            public void stopped(MusicFile musicFile) {
-            }
-
-            public void completed(MusicFile musicFile) {
-                playNextTrack(musicFile);
-            }
-        });
-        randomPlayStrategy = new RandomPlayStrategy(musicListModel);
-        linearPlayStrategy = new LinearPlayStrategy(musicListModel);
-        selectedPlayStrategy = randomPlayStrategy;
-        optionsPanel.setRandom(true);
-
-        menuDialog = new MenuDialog(dialogManager);
-        menuDialog.addItem(new LimmaMenuItem("Scan for new music files") {
-            public void execute() {
-                scanFiles();
-            }
-        });
     }
 
-    private void playNextTrack() {
-        playNextTrack(playedFile);
-    }
+    public void init(NavigationModel navigationModel, PlayerManager playerManager) {
+        this.playerManager = playerManager;
+        musicNode = new DefaultNavigationNode("Music");
+        navigationModel.add(musicNode);
 
-    private void playNextTrack(final MusicFile lastTrack) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                boolean jumpToTrack = lastTrack == null || (musicList.getSelectedValue() != null && musicList.getSelectedValue().equals(lastTrack));
-
-                MusicFile nextFileToPlay;
-                if (repeatTrack) {
-                    nextFileToPlay = lastTrack;
-                } else {
-                    nextFileToPlay = selectedPlayStrategy.getNextFileToPlay(lastTrack, lockArtist, lockAlbum);
-                }
-                if (nextFileToPlay == null) {
-                    stop();
-                } else {
-                    play(nextFileToPlay);
-                }
-                if (jumpToTrack) {
-                    musicList.setSelectedValue(nextFileToPlay, true);
-                }
+        DefaultNavigationNode settingsNode = new DefaultNavigationNode("Settings");
+        settingsNode.add(new DefaultNavigationNode("Scan for new music files") {
+            public void performAction() {
+                dialogManager.executeInDialog(new ScanMusicFilesTask(MusicPlugin.this, persistenceManager, musicConfig));
             }
         });
+        musicNode.add(settingsNode);
+
+        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode, musicPlayer, this.playerManager));
     }
 
     public String getPluginName() {
@@ -132,124 +59,17 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     public JComponent getPluginView() {
-        return this;
+        return new JLabel("Deprecated");
     }
 
     public void pluginEntered() {
-        if (!hasBeenEntered) {
-            reloadFileList();
-            hasBeenEntered = true;
-        }
-    }
-
-    private void scanFiles() {
-        dialogManager.executeInDialog(new ScanMusicFilesTask(this, persistenceManager, musicConfig));
     }
 
     void reloadFileList() {
-        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode, musicPlayer));
+        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode, musicPlayer, playerManager));
     }
 
     public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_ESCAPE:
-                pluginManager.exitPlugin();
-                break;
-            case KeyEvent.VK_ENTER:
-                play((MusicFile) musicList.getSelectedValue());
-                break;
-            case KeyEvent.VK_S:
-                stop();
-                break;
-            case KeyEvent.VK_M:
-                menuDialog.open();
-                break;
-            case KeyEvent.VK_1:
-                toggleRandom();
-                break;
-            case KeyEvent.VK_2:
-                toggleLockArtist();
-                break;
-            case KeyEvent.VK_3:
-                toggelLockAlbum();
-                break;
-            case KeyEvent.VK_4:
-                toggelRepeatTrack();
-                break;
-            case KeyEvent.VK_N:
-                playNextTrack();
-                break;
-            default:
-                musicList.processKeyEvent(e);
-        }
-        return true;
-    }
-
-    public void initMenu(NavigationModel navigationModel) {
-        musicNode = new DefaultNavigationNode("Music");
-        navigationModel.add(musicNode);
-        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode, musicPlayer));
-    }
-
-    private void toggelRepeatTrack() {
-        repeatTrack = !repeatTrack;
-        optionsPanel.setRepeatTrack(repeatTrack);
-    }
-
-    private void toggelLockAlbum() {
-        lockAlbum = !lockAlbum;
-        if (lockAlbum) {
-            lockArtist = true;
-        }
-        optionsPanel.setLockArtist(lockArtist);
-        optionsPanel.setLockAlbum(lockAlbum);
-    }
-
-    private void toggleLockArtist() {
-        lockArtist = !lockArtist;
-        if (!lockArtist) {
-            lockAlbum = false;
-        }
-        optionsPanel.setLockArtist(lockArtist);
-        optionsPanel.setLockAlbum(lockAlbum);
-    }
-
-    private void toggleRandom() {
-        if (selectedPlayStrategy instanceof LinearPlayStrategy) {
-            selectedPlayStrategy = randomPlayStrategy;
-            optionsPanel.setRandom(true);
-        } else {
-            selectedPlayStrategy = linearPlayStrategy;
-            optionsPanel.setRandom(false);
-        }
-    }
-
-    public void stop() {
-        musicPlayer.stopPlaying();
-        currentTrackPanel.setCurrentTrack(null);
-        MusicFile lastPlayed = playedFile;
-        playedFile = null;
-        musicListModel.fireChanged(lastPlayed);
-        musicListModel.fireChanged(playedFile);
-    }
-
-    public void play(MusicFile file) {
-        musicPlayer.stopPlaying();
-        musicPlayer.play(file);
-        currentTrackPanel.setCurrentTrack(file);
-        MusicFile lastPlayed = playedFile;
-        playedFile = file;
-        musicListModel.fireChanged(lastPlayed);
-        musicListModel.fireChanged(playedFile);
-    }
-
-    private class MusicListCellRenderer extends AntialiasCellRenderer {
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            Component listCellRendererComponent = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (value.equals(playedFile)) {
-                listCellRendererComponent.setForeground(Color.yellow);
-            }
-            return listCellRendererComponent;
-        }
+        return false;
     }
 }

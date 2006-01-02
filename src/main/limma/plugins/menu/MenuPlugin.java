@@ -5,6 +5,7 @@ import limma.plugins.PluginManager;
 import limma.swing.LimmaMenu;
 import limma.swing.LimmaMenuItem;
 import limma.swing.navigationlist.NavigationModel;
+import limma.PlayerManager;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -49,6 +50,6 @@ public class MenuPlugin implements Plugin {
         return true;
     }
 
-    public void initMenu(NavigationModel navigationModel) {
+    public void init(NavigationModel navigationModel, PlayerManager playerManager) {
     }
 }

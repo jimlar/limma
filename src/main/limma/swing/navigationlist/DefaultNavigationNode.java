@@ -26,6 +26,11 @@ public class DefaultNavigationNode implements NavigationNode {
         node.setParent(this);
     }
 
+    public void add(int index, NavigationNode node) {
+        children.add(index, node);
+        node.setParent(this);
+    }
+
     public int getChildCount() {
         return children.size();
     }

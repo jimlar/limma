@@ -15,8 +15,8 @@ public class MusicConfigImpl extends AbstractConfiguration implements MusicConfi
         return getFile("musicdir");
     }
 
-    public ExternalCommand getExternalPlayerCommand() {
-        return new ExternalCommand(getString("externalplayer"));
+    public ExternalCommand getMPlayerCommand() {
+        return new ExternalCommand(getString("mplayer"));
 
     }
 }

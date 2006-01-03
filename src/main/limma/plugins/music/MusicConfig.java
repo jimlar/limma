@@ -8,5 +8,5 @@ public interface MusicConfig {
 
     File getMusicDir();
 
-    ExternalCommand getExternalPlayerCommand();
+    ExternalCommand getMPlayerCommand();
 }

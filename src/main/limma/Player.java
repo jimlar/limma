@@ -14,8 +14,6 @@ public interface Player {
 
     void rew();
 
-    void play();
-
     void pause();
 
     void stop();

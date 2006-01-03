@@ -38,9 +38,6 @@ public class JavaSoundMusicPlayer extends Thread implements MusicPlayer {
     public void rew() {
     }
 
-    public void play() {
-    }
-
     public void pause() {
     }
 

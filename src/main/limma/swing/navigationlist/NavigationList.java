@@ -2,42 +2,27 @@ package limma.swing.navigationlist;
 
 import javax.swing.*;
 import javax.swing.text.Position;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class NavigationList extends JComponent {
-    private MyJList list;
+public class NavigationList extends JList {
 
     public NavigationList(final NavigationModel model) {
-        setLayout(new BorderLayout());
-        list = new MyJList(model);
-        list.addKeyListener(new NavigationListKeyListener(this, model));
-        list.setSelectionModel(new ListSelectionModelAdapter(model));
-        list.setCellRenderer(new NavigationListCellRenderer());
-        add(list, BorderLayout.CENTER);
+        super(model);
+        addKeyListener(new NavigationListKeyListener(this, model));
+        setSelectionModel(new ListSelectionModelAdapter(model));
+        setCellRenderer(new NavigationListCellRenderer());
         setOpaque(false);
-        list.setOpaque(false);
     }
 
     public void scrollToSelected() {
-        list.scrollRectToVisible(list.getCellBounds(list.getSelectedIndex(), list.getSelectedIndex()));
+        scrollRectToVisible(getCellBounds(getSelectedIndex(), getSelectedIndex()));
+    }
+
+    public int getNextMatch(String prefix, int startIndex, Position.Bias bias) {
+        return -1;
     }
 
     public void processKeyEvent(KeyEvent e) {
-        list.processKeyEvent(e);
-    }
-
-    private class MyJList extends JList {
-        public MyJList(NavigationModel model) {
-            super(model);
-        }
-
-        public int getNextMatch(String prefix, int startIndex, Position.Bias bias) {
-            return -1;
-        }
-
-        public void processKeyEvent(KeyEvent e) {
-            super.processKeyEvent(e);
-        };
+        super.processKeyEvent(e);
     }
 }

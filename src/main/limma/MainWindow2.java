@@ -84,11 +84,19 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
         LimmaDialog topDialog = dialogManager.getTopDialog();
         if (topDialog != null) {
             return topDialog.keyPressed(e);
-        } else {
+
+        } else if (isMenuOpen()) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE:
                     closeMenu();
                     return true;
+                default:
+                    navigationList.processKeyEvent(e);
+                    return true;
+            }
+
+        } else {
+            switch (e.getKeyCode()) {
                 case KeyEvent.VK_S:
                     currentPlayer.stop();
                     return true;
@@ -98,10 +106,21 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
                 case KeyEvent.VK_N:
                     currentPlayer.next();
                     return true;
+                case KeyEvent.VK_P:
+                    currentPlayer.previous();
+                    return true;
+                case KeyEvent.VK_F:
+                    currentPlayer.ff();
+                    return true;
+                case KeyEvent.VK_R:
+                    currentPlayer.rew();
+                    return true;
+                case KeyEvent.VK_SPACE:
+                    currentPlayer.pause();
+                    return true;
             }
         }
-        navigationList.processKeyEvent(e);
-        return true;
+        return false;
     }
 
     private boolean isMenuOpen() {

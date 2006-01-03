@@ -119,10 +119,11 @@ public class ExternalMusicPlayer implements MusicPlayer {
                         }
                     }
                 }
-                kill();
 
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally{
+                kill();
             }
         }
 

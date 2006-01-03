@@ -1,6 +1,8 @@
 package limma.plugins.music.player;
 
 import limma.plugins.music.MusicFile;
+import limma.plugins.music.TrackContainerNode;
+import limma.plugins.music.TrackNode;
 import org.apache.commons.io.IOUtils;
 
 import javax.sound.sampled.*;
@@ -41,14 +43,20 @@ public class JavaSoundMusicPlayer extends Thread implements MusicPlayer {
     public void pause() {
     }
 
-    public void play(List<MusicFile> musicFiles) {
-        MusicFile musicFile = musicFiles.get(0);
-        stopPlaying();
-        try {
-            queue.put(musicFile);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//    public void play(List<MusicFile> musicFiles) {
+//        MusicFile musicFile = musicFiles.get(0);
+//        stopPlaying();
+//        try {
+//            queue.put(musicFile);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public void play(TrackContainerNode trackContainerNode) {
+    }
+
+    public void play(TrackNode trackNode) {
     }
 
     public void stopPlaying() {

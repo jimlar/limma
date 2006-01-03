@@ -10,6 +10,9 @@ public class CurrentTrackPanel extends JPanel {
     private AntialiasLabel artistLabel;
     private AntialiasLabel titleLabel;
     private AntialiasLabel albumLabel;
+    private AntialiasLabel timeLabel;
+    private int playedTime = 0;
+    private int trackLength = 0;
 
     public CurrentTrackPanel() {
         super(new GridBagLayout());
@@ -22,6 +25,7 @@ public class CurrentTrackPanel extends JPanel {
         titleLabel = addLabel("Title:", 0);
         artistLabel = addLabel("Artist:", 1);
         albumLabel = addLabel("Album:", 2);
+        timeLabel = addLabel("Time:", 3);
     }
 
     private AntialiasLabel addLabel(String labelText, int row) {
@@ -33,12 +37,13 @@ public class CurrentTrackPanel extends JPanel {
     }
 
     public void setCurrentTrack(MusicFile file) {
+        timeLabel.setText("");
         if (file == null) {
             titleLabel.setText("");
             artistLabel.setText("");
             albumLabel.setText("");
         } else {
-            titleLabel.setText(file.getTitle() + " (" + secondsToString(file.getLengthInSeconds()) + ")");
+            titleLabel.setText(file.getTitle());
             artistLabel.setText(file.getArtist());
             albumLabel.setText(file.getAlbum() + (file.getYear() == 0 ? "" : " (" + file.getYear() + ")"));
         }
@@ -50,5 +55,19 @@ public class CurrentTrackPanel extends JPanel {
             secs = "0" + secs;
         }
         return seconds / 60 + ":" + secs;
+    }
+
+    public void setPlayedSeconds(int seconds) {
+        this.playedTime = seconds;
+        updateTime();
+    }
+
+    public void setTrackLengthSeconds(int seconds) {
+        this.trackLength = seconds;
+        updateTime();
+    }
+
+    private void updateTime() {
+        timeLabel.setText(secondsToString(playedTime) + "/" + secondsToString(trackLength));
     }
 }

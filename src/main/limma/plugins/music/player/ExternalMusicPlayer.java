@@ -1,8 +1,6 @@
 package limma.plugins.music.player;
 
-import limma.plugins.music.CurrentTrackPanel;
-import limma.plugins.music.MusicConfig;
-import limma.plugins.music.MusicFile;
+import limma.plugins.music.*;
 import limma.utils.ExternalCommand;
 
 import javax.swing.*;
@@ -15,6 +13,8 @@ public class ExternalMusicPlayer implements MusicPlayer {
     private MusicConfig musicConfig;
     private CurrentTrackPanel currentTrackPanel;
     private PlayerThread playerThread;
+
+    private List<MusicFile> playList;
 
     public ExternalMusicPlayer(MusicConfig musicConfig) {
         this.musicConfig = musicConfig;
@@ -29,18 +29,28 @@ public class ExternalMusicPlayer implements MusicPlayer {
         });
     }
 
-    public void play(List<MusicFile> musicFiles) {
-        final MusicFile musicFile = musicFiles.get(0);
+    private void startPlaying(final MusicFile musicFile) {
         stop();
+        if (musicFile != null) {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    currentTrackPanel.setCurrentTrack(musicFile);
+                }
+            });
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                currentTrackPanel.setCurrentTrack(musicFile);
-            }
-        });
+            playerThread = new PlayerThread(musicConfig, musicFile, this);
+            playerThread.start();
+        }
+    }
 
-        playerThread = new PlayerThread(musicConfig, musicFile);
-        playerThread.start();
+    public void play(TrackContainerNode trackContainerNode) {
+        setPlayList(trackContainerNode.getAllMusicFiles());
+        startPlaying(getNextFile());
+    }
+
+    public void play(TrackNode trackNode) {
+        setPlayList(trackNode.getTrackContainer().getAllMusicFiles());
+        startPlaying(trackNode.getMusicFile());
     }
 
     public void stop() {
@@ -52,9 +62,34 @@ public class ExternalMusicPlayer implements MusicPlayer {
     }
 
     public void next() {
+        startPlaying(getNextFile());
     }
 
     public void previous() {
+        startPlaying(getPreviousFile());
+    }
+
+    private MusicFile getNextFile() {
+        int index = getIndexOfCurrentFile();
+        if (index == -1 && !playList.isEmpty()) {
+            return playList.get(0);
+        }
+        if (index < playList.size() - 1) {
+            return playList.get(index + 1);
+        }
+        return null;
+    }
+
+    private int getIndexOfCurrentFile() {
+        int index = -1;
+        if (playerThread != null) {
+            index = playList.indexOf(playerThread.getMusicFile());
+        }
+        return index;
+    }
+
+    private MusicFile getPreviousFile() {
+        return null;
     }
 
     public void ff() {
@@ -79,14 +114,39 @@ public class ExternalMusicPlayer implements MusicPlayer {
         }
     }
 
+    private void setPlayedSeconds(final int seconds) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                currentTrackPanel.setPlayedSeconds(seconds);
+            }
+        });
+    }
+
+    private void setTrackLengthSeconds(final int seconds) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                currentTrackPanel.setTrackLengthSeconds(seconds);
+            }
+        });
+    }
+
+    private synchronized void filePlayed(MusicFile musicFile) {
+    }
+
+    public void setPlayList(List<MusicFile> playList) {
+        this.playList = playList;
+    }
+
     private static class PlayerThread extends Thread {
         private MusicConfig musicConfig;
         private MusicFile musicFile;
+        private ExternalMusicPlayer player;
         private Process process;
 
-        public PlayerThread(MusicConfig musicConfig, MusicFile musicFile) {
+        public PlayerThread(MusicConfig musicConfig, MusicFile musicFile, ExternalMusicPlayer player) {
             this.musicConfig = musicConfig;
             this.musicFile = musicFile;
+            this.player = player;
         }
 
         public void run() {
@@ -98,11 +158,11 @@ public class ExternalMusicPlayer implements MusicPlayer {
 
                 String line;
                 int playedSeconds = 0;
-                setPlayedSeconds(playedSeconds);
+                player.setPlayedSeconds(playedSeconds);
                 BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith("ANS_LENGTH=")) {
-                        setTrackLengthSeconds(Integer.parseInt(line.substring("ANS_LENGTH=".length())));
+                        player.setTrackLengthSeconds(Integer.parseInt(line.substring("ANS_LENGTH=".length())));
                     }
                     Pattern p = Pattern.compile(".: *(\\d*):?(\\d*).(\\d).*");
                     Matcher m = p.matcher(line);
@@ -115,24 +175,17 @@ public class ExternalMusicPlayer implements MusicPlayer {
                         }
                         if (playedSeconds != newPlayedSeconds) {
                             playedSeconds = newPlayedSeconds;
-                            setPlayedSeconds(playedSeconds);
+                            player.setPlayedSeconds(playedSeconds);
                         }
                     }
                 }
 
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally{
+            } finally {
                 kill();
+                player.filePlayed(musicFile);
             }
-        }
-
-        private void setPlayedSeconds(int seconds) {
-            System.out.println("seconds = " + seconds);
-        }
-
-        private void setTrackLengthSeconds(int seconds) {
-            System.out.println("trackLength = " + seconds);
         }
 
         public void input(String command) throws IOException {
@@ -149,6 +202,10 @@ public class ExternalMusicPlayer implements MusicPlayer {
                 process.destroy();
                 process = null;
             }
+        }
+
+        public MusicFile getMusicFile() {
+            return musicFile;
         }
     }
 }

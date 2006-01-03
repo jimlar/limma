@@ -9,9 +9,6 @@ import limma.PlayerManager;
 
 import javax.swing.*;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Collections;
-import java.util.ArrayList;
 
 class LoadMusicTask implements Task {
     private PersistenceManager persistenceManager;
@@ -78,44 +75,5 @@ class LoadMusicTask implements Task {
             albumsNode.add(albumNode);
         }
         albumNode.add(new TrackNode(file.getTitle(), file, musicPlayer, playerManager));
-    }
-
-
-    private static class TrackNode extends TrackContainerNode {
-        private MusicFile musicFile;
-
-        public TrackNode(String title, MusicFile musicFile, MusicPlayer musicPlayer, PlayerManager playerManager) {
-            super(title, musicPlayer, playerManager);
-            this.musicFile = musicFile;
-        }
-
-        protected List<MusicFile> collectTracks() {
-            return Collections.singletonList(musicFile);
-        }
-    }
-
-    private static class TrackContainerNode extends DefaultNavigationNode {
-        private MusicPlayer musicPlayer;
-        private PlayerManager playerManager;
-
-        public TrackContainerNode(String title, MusicPlayer musicPlayer, PlayerManager playerManager) {
-            super(title);
-            this.musicPlayer = musicPlayer;
-            this.playerManager = playerManager;
-        }
-
-        public void performAction() {
-            playerManager.switchTo(musicPlayer);
-            musicPlayer.play(collectTracks());
-        }
-
-        protected java.util.List<MusicFile> collectTracks() {
-            ArrayList<MusicFile> result = new ArrayList<MusicFile>();
-            for (int i = 0; i < getChildCount(); i++) {
-                TrackContainerNode child = (TrackContainerNode) getChildAt(i);
-                result.addAll(child.collectTracks());
-            }
-            return result;
-        }
     }
 }

@@ -49,7 +49,12 @@ public class Main {
                 MainWindow2 mainWindow = (MainWindow2) pico.getComponentInstanceOfType(MainWindow2.class);
                 mainWindow.setUndecorated(true);
                 mainWindow.setResizable(false);
-                device.setFullScreenWindow(mainWindow);
+                
+//                device.setFullScreenWindow(mainWindow);
+//                mainWindow.setSize(device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight());
+
+                mainWindow.setSize(800, 600);
+                mainWindow.setVisible(true);
                 mainWindow.requestFocus();
             }
         });

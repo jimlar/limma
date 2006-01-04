@@ -3,8 +3,9 @@ package limma.plugins.music;
 import limma.swing.AntialiasLabel;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.io.File;
+import java.io.FilenameFilter;
 
 public class CurrentTrackPanel extends JPanel {
     private AntialiasLabel artistLabel;
@@ -14,30 +15,35 @@ public class CurrentTrackPanel extends JPanel {
     private int playedTime = 0;
     private int trackLength = 0;
 
+    private AntialiasLabel tracksLabel;
+    private AntialiasLabel coverLabel;
+
     public CurrentTrackPanel() {
         super(new GridBagLayout());
-        TitledBorder titledBorder = BorderFactory.createTitledBorder("Track");
-        titledBorder.setTitleFont(AntialiasLabel.DEFAULT_FONT);
-        titledBorder.setTitleColor(Color.white);
-        setBorder(titledBorder);
         setOpaque(false);
 
-        titleLabel = addLabel("Title:", 0);
-        artistLabel = addLabel("Artist:", 1);
-        albumLabel = addLabel("Album:", 2);
-        timeLabel = addLabel("Time:", 3);
+        tracksLabel = addLabel(0, 0, 2, 1, 1);
+        coverLabel = addLabel(0, 1, 1, 3, 0);
+        coverLabel.setPreferredSize(new Dimension(200, 200));
+
+        titleLabel = addLabel(1, 1, 1, 1, 1);
+        artistLabel = addLabel(1, 2, 1, 1, 1);
+        albumLabel = addLabel(1, 3, 1, 1, 1);
+
+        timeLabel = addLabel(0, 4, 2, 1, 1);
     }
 
-    private AntialiasLabel addLabel(String labelText, int row) {
-        add(new AntialiasLabel(labelText), new GridBagConstraints(0, row, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 0, 0));
-
+    private AntialiasLabel addLabel(int column, int row, int gridwidth, int gridheight, int weightx) {
         AntialiasLabel value = new AntialiasLabel();
-        add(value, new GridBagConstraints(1, row, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 0, 0));
+        value.setFont(Font.decode("Verdana").deriveFont((float) 40));
+        value.setForeground(Color.black);
+        add(value, new GridBagConstraints(column, row, gridwidth, gridheight, weightx, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 0, 0));
         return value;
     }
 
-    public void setCurrentTrack(MusicFile file) {
-        timeLabel.setText("");
+    public void setCurrentTrack(MusicFile file, int trackNumber, int totalTracks) {
+        timeLabel.setText("0:00/0:00");
+        tracksLabel.setText(trackNumber + " of " + totalTracks);
         if (file == null) {
             titleLabel.setText("");
             artistLabel.setText("");
@@ -47,6 +53,20 @@ public class CurrentTrackPanel extends JPanel {
             artistLabel.setText(file.getArtist());
             albumLabel.setText(file.getAlbum() + (file.getYear() == 0 ? "" : " (" + file.getYear() + ")"));
         }
+        coverLabel.setIcon(findCoverImage(file));
+    }
+
+    private Icon findCoverImage(MusicFile file) {
+        File dir = file.getFile().getParentFile();
+        File[] jpegFiles = dir.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".jpg");
+            }
+        });
+        if (jpegFiles != null && jpegFiles.length > 0) {
+            return new ImageIcon(jpegFiles[0].getAbsolutePath());
+        }
+        return null;
     }
 
     private String secondsToString(long seconds) {

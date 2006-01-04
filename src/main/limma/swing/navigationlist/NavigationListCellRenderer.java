@@ -13,6 +13,7 @@ class NavigationListCellRenderer extends JLabel implements ListCellRenderer, Ser
         setOpaque(false);
         setFont(Font.decode("Verdana").deriveFont((float) 40));
         setBackground(Color.white);
+        setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
     }
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -44,7 +45,7 @@ class NavigationListCellRenderer extends JLabel implements ListCellRenderer, Ser
     private void drawRigthString(Graphics2D graphics, String str) {
         Rectangle2D stringBounds = getFont().getStringBounds(str, graphics.getFontRenderContext());
         FontMetrics fontMetrics = getFontMetrics(getFont());
-        graphics.drawString(str, (int) (graphics.getClipBounds().width - stringBounds.getWidth()), (int) fontMetrics.getHeight() - fontMetrics.getDescent());
+        graphics.drawString(str, (int) (graphics.getClipBounds().width - stringBounds.getWidth()) - 10, (int) fontMetrics.getHeight() - fontMetrics.getDescent());
     }
 
     private void paintGradient(Graphics2D graphics) {

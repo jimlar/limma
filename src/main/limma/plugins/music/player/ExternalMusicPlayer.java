@@ -5,6 +5,7 @@ import limma.utils.ExternalCommand;
 
 import javax.swing.*;
 import java.io.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +15,7 @@ public class ExternalMusicPlayer implements MusicPlayer {
     private CurrentTrackPanel currentTrackPanel;
     private PlayerThread playerThread;
 
-    private List<MusicFile> playList;
+    private List<MusicFile> playList = Collections.emptyList();
 
     public ExternalMusicPlayer(MusicConfig musicConfig) {
         this.musicConfig = musicConfig;
@@ -34,8 +35,9 @@ public class ExternalMusicPlayer implements MusicPlayer {
         if (musicFile != null) {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    currentTrackPanel.setCurrentTrack(musicFile);
+                    currentTrackPanel.setCurrentTrack(musicFile, getPlayingTrackNumber(), playList.size());
                 }
+
             });
 
             playerThread = new PlayerThread(musicConfig, musicFile, this);
@@ -54,7 +56,9 @@ public class ExternalMusicPlayer implements MusicPlayer {
     }
 
     public void stop() {
-        mplayerCommand("quit");
+        if (playerThread != null) {
+            playerThread.quit();
+        }
     }
 
     public JComponent getPlayerPane() {
@@ -62,15 +66,21 @@ public class ExternalMusicPlayer implements MusicPlayer {
     }
 
     public void next() {
-        startPlaying(getNextFile());
+        MusicFile nextFile = getNextFile();
+        if (nextFile != null) {
+            startPlaying(nextFile);
+        }
     }
 
     public void previous() {
-        startPlaying(getPreviousFile());
+        MusicFile previousFile = getPreviousFile();
+        if (previousFile != null) {
+            startPlaying(previousFile);
+        }
     }
 
     private MusicFile getNextFile() {
-        int index = getIndexOfCurrentFile();
+        int index = getIndexOfPlayingFile();
         if (index == -1 && !playList.isEmpty()) {
             return playList.get(0);
         }
@@ -80,15 +90,27 @@ public class ExternalMusicPlayer implements MusicPlayer {
         return null;
     }
 
-    private int getIndexOfCurrentFile() {
-        int index = -1;
+    private MusicFile getPlayingFile() {
         if (playerThread != null) {
-            index = playList.indexOf(playerThread.getMusicFile());
+            return playerThread.getMusicFile();
         }
-        return index;
+        return null;
+    }
+
+    private int getIndexOfPlayingFile() {
+        return playList.indexOf(getPlayingFile());
+    }
+
+
+    private int getPlayingTrackNumber() {
+        return getIndexOfPlayingFile() + 1;
     }
 
     private MusicFile getPreviousFile() {
+        int index = getIndexOfPlayingFile();
+        if (index > 0 && playList.size() > index - 1) {
+            return playList.get(index - 1);
+        }
         return null;
     }
 
@@ -130,10 +152,11 @@ public class ExternalMusicPlayer implements MusicPlayer {
         });
     }
 
-    private synchronized void filePlayed(MusicFile musicFile) {
+    private void playFinished() {
+        next();
     }
 
-    public void setPlayList(List<MusicFile> playList) {
+    private void setPlayList(List<MusicFile> playList) {
         this.playList = playList;
     }
 
@@ -142,6 +165,7 @@ public class ExternalMusicPlayer implements MusicPlayer {
         private MusicFile musicFile;
         private ExternalMusicPlayer player;
         private Process process;
+        private boolean stopped = false;
 
         public PlayerThread(MusicConfig musicConfig, MusicFile musicFile, ExternalMusicPlayer player) {
             this.musicConfig = musicConfig;
@@ -184,11 +208,13 @@ public class ExternalMusicPlayer implements MusicPlayer {
                 e.printStackTrace();
             } finally {
                 kill();
-                player.filePlayed(musicFile);
+                if (!stopped) {
+                    player.playFinished();
+                }
             }
         }
 
-        public void input(String command) throws IOException {
+        public synchronized void input(String command) throws IOException {
             if (process != null) {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
                 bw.write(command);
@@ -206,6 +232,17 @@ public class ExternalMusicPlayer implements MusicPlayer {
 
         public MusicFile getMusicFile() {
             return musicFile;
+        }
+
+        public void quit() {
+            stopped = true;
+            try {
+                input("quit");
+                join(1000);
+            } catch (IOException e) {
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

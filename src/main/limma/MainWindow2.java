@@ -3,8 +3,8 @@ package limma;
 import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.swing.DialogManager;
-import limma.swing.ImagePanel;
 import limma.swing.LimmaDialog;
+import limma.swing.navigationlist.DefaultNavigationNode;
 import limma.swing.navigationlist.NavigationList;
 import limma.swing.navigationlist.NavigationModel;
 
@@ -21,19 +21,24 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
     private JComponent currentPlayerPane;
     private NavigationList navigationList;
     private boolean menuOpen = false;
+    private JPanel cardPanel;
 
-    public MainWindow2(GraphicsDevice graphicsDevice, DialogManager dialogManager, Plugin[] plugins) {
+    public MainWindow2(DialogManager dialogManager, Plugin[] plugins) {
         this.dialogManager = dialogManager;
-        ImageIcon background = new ImageIcon("background.jpg");
 
         this.setContentPane(dialogManager.getDialogManagerComponent());
 
-        mainPanel = new ImagePanel(background);
+//        ImageIcon background = new ImageIcon("background.jpg");
+//        mainPanel = new ImagePanel(background);
+
+        mainPanel = new JPanel();
+        mainPanel.setBackground(Color.white);
         mainPanel.setOpaque(false);
-        pluginCardsManager = new CardLayout(10, 10);
-        mainPanel.setLayout(pluginCardsManager);
-        dialogManager.setRoot(mainPanel);
-        mainPanel.setSize(graphicsDevice.getDisplayMode().getWidth(), graphicsDevice.getDisplayMode().getHeight());
+        mainPanel.setLayout(new BorderLayout());
+
+        pluginCardsManager = new CardLayout(0, 0);
+        cardPanel = new JPanel(pluginCardsManager);
+        cardPanel.setOpaque(false);
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             public boolean dispatchKeyEvent(KeyEvent e) {
@@ -57,8 +62,12 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
         scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        mainPanel.add(scrollPane, "menu");
-        mainPanel.add(new JLabel("Limma"), "player");
+        cardPanel.add(scrollPane, "menu");
+        cardPanel.add(new JLabel("Limma"), "player");
+
+        mainPanel.add(new HeaderPanel(), BorderLayout.NORTH);
+        mainPanel.add(cardPanel, BorderLayout.CENTER);
+        dialogManager.setRoot(mainPanel);
 
         validate();
         for (int i = 0; i < plugins.length; i++) {
@@ -66,17 +75,27 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
             plugin.init(navigationModel, this);
         }
 
+        navigationModel.add(new DefaultNavigationNode("Exit") {
+            public void performAction() {
+                System.exit(0);
+            }
+        });
         openMenu();
+    }
+
+    public void setSize(int width, int height) {
+        super.setSize(width, height);
+        mainPanel.setSize(width, height);
     }
 
     public void switchTo(Player player) {
         if (currentPlayerPane != null) {
-            mainPanel.remove(currentPlayerPane);
+            cardPanel.remove(currentPlayerPane);
         }
         this.currentPlayer = player;
         currentPlayerPane = currentPlayer.getPlayerPane();
         if (currentPlayerPane != null) {
-            mainPanel.add(currentPlayerPane, "player");
+            cardPanel.add(currentPlayerPane, "player");
         }
     }
 
@@ -85,23 +104,17 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
         if (topDialog != null) {
             return topDialog.keyPressed(e);
 
-        } else if (isMenuOpen()) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_ESCAPE:
-                    closeMenu();
-                    return true;
-                default:
-                    navigationList.processKeyEvent(e);
-                    return true;
-            }
-
         } else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_S:
                     currentPlayer.stop();
                     return true;
                 case KeyEvent.VK_M:
-                    openMenu();
+                    if (isMenuOpen()) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
                     return true;
                 case KeyEvent.VK_N:
                     currentPlayer.next();
@@ -120,6 +133,31 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
                     return true;
             }
         }
+        if (isMenuOpen()) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ESCAPE:
+                    closeMenu();
+                    return true;
+                default:
+                    navigationList.processKeyEvent(e);
+                    return true;
+            }
+        } else {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_DOWN:
+                    currentPlayer.next();
+                    return true;
+                case KeyEvent.VK_UP:
+                    currentPlayer.previous();
+                    return true;
+                case KeyEvent.VK_RIGHT:
+                    currentPlayer.ff();
+                    return true;
+                case KeyEvent.VK_LEFT:
+                    currentPlayer.rew();
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -129,12 +167,12 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
 
     private void openMenu() {
         menuOpen = true;
-        pluginCardsManager.show(mainPanel, "menu");
+        pluginCardsManager.show(cardPanel, "menu");
     }
 
     private void closeMenu() {
         menuOpen = false;
-        pluginCardsManager.show(mainPanel, "player");
+        pluginCardsManager.show(cardPanel, "player");
     }
 
     /**

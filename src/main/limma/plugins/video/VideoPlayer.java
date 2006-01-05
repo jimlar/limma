@@ -1,7 +1,10 @@
 package limma.plugins.video;
 
 import limma.utils.ExternalCommand;
+import limma.Player;
+import limma.PlayerManager;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
@@ -9,15 +12,55 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.ListIterator;
 
-public class VideoPlayer {
+public class VideoPlayer implements Player {
     private VideoConfig videoConfig;
+    private PlayerManager playerManager;
 
-    public VideoPlayer(VideoConfig videoConfig) {
+    public VideoPlayer(VideoConfig videoConfig, PlayerManager playerManager) {
         this.videoConfig = videoConfig;
+        this.playerManager = playerManager;
+    }
+
+    public JComponent getPlayerPane() {
+        return new JLabel();
+    }
+
+    public void next() {
+    }
+
+    public void previous() {
+    }
+
+    public void ff() {
+    }
+
+    public void rew() {
+    }
+
+    public void pause() {
+    }
+
+    public void stop() {
     }
 
     public void play(Video video) throws IOException {
-        play(video, getPlayer(video));
+        playerManager.switchTo(this);
+        ArrayList sortedFiles = new ArrayList(video.getFiles());
+        Collections.sort(sortedFiles, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                VideoFile file1 = (VideoFile) o1;
+                VideoFile file2 = (VideoFile) o2;
+                return file1.getPath().compareToIgnoreCase(file2.getPath());
+            }
+        });
+
+        String[] filenames = new String[video.getFiles().size()];
+        for (ListIterator i = sortedFiles.listIterator(); i.hasNext();) {
+            VideoFile file = (VideoFile) i.next();
+            filenames[i.previousIndex()] = file.getPath();
+        }
+
+        getPlayer(video).execute(filenames);
     }
 
     private ExternalCommand getPlayer(Video video) {
@@ -47,24 +90,5 @@ public class VideoPlayer {
         }
 
         return false;
-    }
-
-    private void play(Video video, ExternalCommand playerCommand) throws IOException {
-        ArrayList sortedFiles = new ArrayList(video.getFiles());
-        Collections.sort(sortedFiles, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                VideoFile file1 = (VideoFile) o1;
-                VideoFile file2 = (VideoFile) o2;
-                return file1.getPath().compareToIgnoreCase(file2.getPath());
-            }
-        });
-
-        String[] filenames = new String[video.getFiles().size()];
-        for (ListIterator i = sortedFiles.listIterator(); i.hasNext();) {
-            VideoFile file = (VideoFile) i.next();
-            filenames[i.previousIndex()] = file.getPath();
-        }
-
-        playerCommand.execute(filenames);
     }
 }

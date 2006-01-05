@@ -21,7 +21,7 @@ import java.awt.event.KeyEvent;
  * - Centralize keyboard and call methods on player interface instead
  */
 
-public class MusicPlugin extends JPanel implements Plugin {
+public class MusicPlugin implements Plugin {
     private MusicPlayer musicPlayer;
     private PlayerManager playerManager;
     private DialogManager dialogManager;
@@ -51,7 +51,7 @@ public class MusicPlugin extends JPanel implements Plugin {
         });
         musicNode.add(settingsNode);
 
-        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode, musicPlayer, this.playerManager));
+        dialogManager.executeInDialog(new InitializeMusicMenuTask(persistenceManager, musicNode, musicPlayer, this.playerManager));
     }
 
     public String getPluginName() {
@@ -66,7 +66,7 @@ public class MusicPlugin extends JPanel implements Plugin {
     }
 
     void reloadFileList() {
-        dialogManager.executeInDialog(new LoadMusicTask(persistenceManager, musicNode, musicPlayer, playerManager));
+        dialogManager.executeInDialog(new InitializeMusicMenuTask(persistenceManager, musicNode, musicPlayer, playerManager));
     }
 
     public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {

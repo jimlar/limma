@@ -2,29 +2,10 @@ General
 -------
 * Use KeyboardFocusManager (http://java.sun.com/docs/books/tutorial/uiswing/misc/focus.html) more intelligently
   instead of dispatching keys self. Change "focus traversal keys".
-
 * Skins (or atleast centralized control over colors, sizes and images).
-
 * Mouse cursor that diappears when it stands still for a few seconds
-
-* IPod style menu for interface (with current plugin active in the background)
-  Meaning something like this:
-    |-Music
-    |    |-Artists
-    |    |-Albums
-    |    |-Songs
-    |
-    |-Movies
-    |    |-Bond
-    |    |-New
-    |    |-Barn
-    |
-    |-Games
-         |-C64
-         |-SNES
-
-  The plugins actually add parts of a menu and when you start playing music or movie or a game,
-  the menuitem (added by plugin) starts a player which stops the current player. So we have MenuItems and Players.
+* Sorting in menu
+* Titlebar that shows the title of the currently active menu node when menu is showing
 
 TV plugin
 ---------
@@ -38,12 +19,12 @@ Music plugin
 * "Look aside" playlists (select a few songs in a queue to be played before the normal strategy takes back control)
 * Exclude/ban track
 * Album art viewer
-* FF and REW
 * Better fallback names (remove .mp3 and .flac and guess some nice case)
 * Better Bitrate figures: show VBR rates correctly and show flac differently.
 * Support for 48000 Hz output rate (autodetect?)
 * Common output buffers etc to get smoother song changing
 * Use tritonus to convert samplerates / decode mp3 etc?
+* BUG: Various artists albums get split up under albums node.
 
 
 Game plugin
@@ -51,7 +32,7 @@ Game plugin
 
 
 DVD Plugin
-----------e
+----------
 Play dvd discs directly
 
 

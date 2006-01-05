@@ -6,10 +6,10 @@ import limma.plugins.game.GameConfigImpl;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.MusicConfigImpl;
 import limma.plugins.music.MusicPlugin;
-import limma.plugins.music.player.JavaSoundMusicPlayer;
 import limma.plugins.music.player.ExternalMusicPlayer;
 import limma.plugins.video.IMDBSeviceImpl;
 import limma.plugins.video.VideoConfigImpl;
+import limma.plugins.video.VideoPlayer;
 import limma.plugins.video.VideoPlugin;
 import limma.swing.CursorHider;
 import limma.swing.DialogManagerImpl;
@@ -28,8 +28,11 @@ public class Main {
                 GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
                 DefaultPicoContainer pico = new DefaultPicoContainer();
+                pico.registerComponentImplementation(PlayerManager.class);
+
                 pico.registerComponentImplementation(VideoPlugin.class);
                 pico.registerComponentImplementation(VideoConfigImpl.class);
+                pico.registerComponentImplementation(VideoPlayer.class);
                 pico.registerComponentImplementation(MusicPlugin.class);
                 pico.registerComponentImplementation(MusicConfigImpl.class);
                 pico.registerComponentImplementation(ExternalMusicPlayer.class);
@@ -49,7 +52,7 @@ public class Main {
                 MainWindow2 mainWindow = (MainWindow2) pico.getComponentInstanceOfType(MainWindow2.class);
                 mainWindow.setUndecorated(true);
                 mainWindow.setResizable(false);
-                
+
 //                device.setFullScreenWindow(mainWindow);
 //                mainWindow.setSize(device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight());
 

@@ -37,7 +37,7 @@ class NavigationListCellRenderer extends JLabel implements ListCellRenderer, Ser
         }
         if (node.getChildCount() > 0) {
             graphics.setPaint(getForeground());
-            drawRigthString(graphics, "...");
+            drawRigthString(graphics, "+");
         }
         super.paintComponent(g);
     }

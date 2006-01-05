@@ -2,20 +2,25 @@ package limma.plugins.video;
 
 import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
+import limma.swing.DialogManager;
 import limma.swing.Task;
+import limma.swing.navigationlist.DefaultNavigationNode;
 
 import javax.swing.*;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Collections;
-import java.util.Comparator;
 
 class LoadVideosTask implements Task {
-    private VideoPlugin videoPlugin;
     private PersistenceManager persistenceManager;
+    private DefaultNavigationNode moviesNode;
+    private VideoPlayer videoPlayer;
+    private DialogManager dialogManager;
 
-    public LoadVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager) {
-        this.videoPlugin = videoPlugin;
+    public LoadVideosTask(PersistenceManager persistenceManager, DefaultNavigationNode moviesNode, VideoPlayer videoPlayer, DialogManager dialogManager) {
         this.persistenceManager = persistenceManager;
+        this.moviesNode = moviesNode;
+        this.videoPlayer = videoPlayer;
+        this.dialogManager = dialogManager;
     }
 
     public JComponent createComponent() {
@@ -24,13 +29,11 @@ class LoadVideosTask implements Task {
 
     public void run() {
         List videos = persistenceManager.query("all_videos");
-        Collections.sort(videos, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                Video video1 = (Video) o1;
-                Video video2 = (Video) o2;
-                return video1.getTitle().compareToIgnoreCase(video2.getTitle());
-            }
-        });
-        videoPlugin.setVideos(videos);
+
+        for (Iterator i = videos.iterator(); i.hasNext();) {
+            Video video = (Video) i.next();
+            moviesNode.add(new MovieNavigationNode(video, videoPlayer, dialogManager));
+        }
+        moviesNode.sortByTitle();
     }
 }

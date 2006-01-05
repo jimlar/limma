@@ -12,19 +12,33 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class MainWindow2 extends JFrame implements PluginManager, PlayerManager {
+public class MainWindow2 extends JFrame implements PluginManager {
     private CardLayout pluginCardsManager;
     private JPanel mainPanel;
     private DialogManager dialogManager;
 
-    private Player currentPlayer;
+    private PlayerManager playerManager;
     private JComponent currentPlayerPane;
+
     private NavigationList navigationList;
     private boolean menuOpen = false;
     private JPanel cardPanel;
 
-    public MainWindow2(DialogManager dialogManager, Plugin[] plugins) {
+    public MainWindow2(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager) {
         this.dialogManager = dialogManager;
+
+        this.playerManager = playerManager;
+        playerManager.addListener(new PlayerManagerListener() {
+            public void playerSwitched(Player player) {
+                if (currentPlayerPane != null) {
+                    cardPanel.remove(currentPlayerPane);
+                }
+                currentPlayerPane = player.getPlayerPane();
+                if (currentPlayerPane != null) {
+                    cardPanel.add(currentPlayerPane, "player");
+                }
+            }
+        });
 
         this.setContentPane(dialogManager.getDialogManagerComponent());
 
@@ -72,7 +86,7 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
         validate();
         for (int i = 0; i < plugins.length; i++) {
             Plugin plugin = plugins[i];
-            plugin.init(navigationModel, this);
+            plugin.init(navigationModel, playerManager);
         }
 
         navigationModel.add(new DefaultNavigationNode("Exit") {
@@ -88,17 +102,6 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
         mainPanel.setSize(width, height);
     }
 
-    public void switchTo(Player player) {
-        if (currentPlayerPane != null) {
-            cardPanel.remove(currentPlayerPane);
-        }
-        this.currentPlayer = player;
-        currentPlayerPane = currentPlayer.getPlayerPane();
-        if (currentPlayerPane != null) {
-            cardPanel.add(currentPlayerPane, "player");
-        }
-    }
-
     private boolean dispatchKey(KeyEvent e) {
         LimmaDialog topDialog = dialogManager.getTopDialog();
         if (topDialog != null) {
@@ -107,7 +110,7 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
         } else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_S:
-                    currentPlayer.stop();
+                    getCurrentPlayer().stop();
                     return true;
                 case KeyEvent.VK_M:
                     if (isMenuOpen()) {
@@ -117,19 +120,19 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
                     }
                     return true;
                 case KeyEvent.VK_N:
-                    currentPlayer.next();
+                    getCurrentPlayer().next();
                     return true;
                 case KeyEvent.VK_P:
-                    currentPlayer.previous();
+                    getCurrentPlayer().previous();
                     return true;
                 case KeyEvent.VK_F:
-                    currentPlayer.ff();
+                    getCurrentPlayer().ff();
                     return true;
                 case KeyEvent.VK_R:
-                    currentPlayer.rew();
+                    getCurrentPlayer().rew();
                     return true;
                 case KeyEvent.VK_SPACE:
-                    currentPlayer.pause();
+                    getCurrentPlayer().pause();
                     return true;
             }
         }
@@ -145,20 +148,24 @@ public class MainWindow2 extends JFrame implements PluginManager, PlayerManager 
         } else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_DOWN:
-                    currentPlayer.next();
+                    getCurrentPlayer().next();
                     return true;
                 case KeyEvent.VK_UP:
-                    currentPlayer.previous();
+                    getCurrentPlayer().previous();
                     return true;
                 case KeyEvent.VK_RIGHT:
-                    currentPlayer.ff();
+                    getCurrentPlayer().ff();
                     return true;
                 case KeyEvent.VK_LEFT:
-                    currentPlayer.rew();
+                    getCurrentPlayer().rew();
                     return true;
             }
         }
         return false;
+    }
+
+    private Player getCurrentPlayer() {
+        return playerManager.getPlayer();
     }
 
     private boolean isMenuOpen() {

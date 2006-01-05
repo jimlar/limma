@@ -3,6 +3,7 @@ package limma.plugins.music;
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
 import limma.swing.navigationlist.DefaultNavigationNode;
+import limma.swing.navigationlist.NavigationNode;
 import limma.persistence.PersistenceManager;
 import limma.plugins.music.player.MusicPlayer;
 import limma.PlayerManager;
@@ -10,13 +11,13 @@ import limma.PlayerManager;
 import javax.swing.*;
 import java.util.Iterator;
 
-class LoadMusicTask implements Task {
+class InitializeMusicMenuTask implements Task {
     private PersistenceManager persistenceManager;
     private DefaultNavigationNode musicNode;
     private MusicPlayer musicPlayer;
     private PlayerManager playerManager;
 
-    public LoadMusicTask(PersistenceManager persistenceManager, DefaultNavigationNode musicNode, MusicPlayer musicPlayer, PlayerManager playerManager) {
+    public InitializeMusicMenuTask(PersistenceManager persistenceManager, DefaultNavigationNode musicNode, MusicPlayer musicPlayer, PlayerManager playerManager) {
         this.persistenceManager = persistenceManager;
         this.musicNode = musicNode;
         this.musicPlayer = musicPlayer;
@@ -42,6 +43,12 @@ class LoadMusicTask implements Task {
             addToAlbumsNode(albumsNode, file);
         }
 
+        for (int i = 0; i < artistsNode.getChildCount(); i++) {
+            DefaultNavigationNode artistNode = (DefaultNavigationNode) artistsNode.getChildAt(i);
+            artistNode.sortByTitle();
+        }
+        artistsNode.sortByTitle();
+        albumsNode.sortByTitle();
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {

@@ -1,8 +1,6 @@
 package limma.swing.navigationlist;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class DefaultNavigationNode implements NavigationNode {
     private String title;
@@ -29,6 +27,15 @@ public class DefaultNavigationNode implements NavigationNode {
     public void add(int index, NavigationNode node) {
         children.add(index, node);
         node.setParent(this);
+    }
+
+
+    public void sortByTitle() {
+        Collections.sort(children, new Comparator<NavigationNode>() {
+            public int compare(NavigationNode o1, NavigationNode o2) {
+                return o1.getTitle().compareToIgnoreCase(o2.getTitle());
+            }
+        });
     }
 
     public int getChildCount() {

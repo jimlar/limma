@@ -24,13 +24,15 @@ public class VideoPlugin implements Plugin {
     private AntialiasList videoList;
     private VideoPlayer videoPlayer;
     private MenuDialog popupMenu;
+    private DefaultNavigationNode moviesNode;
 
-    public VideoPlugin(final DialogManager dialogManager, final PersistenceManager persistenceManager, final IMDBSevice imdbSevice, final VideoConfig videoConfig) {
+    public VideoPlugin(final DialogManager dialogManager, final PersistenceManager persistenceManager, final IMDBSevice imdbSevice, final VideoConfig videoConfig, VideoPlayer videoPlayer) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         this.videoConfig = videoConfig;
         persistenceManager.addPersistentClass(Video.class);
-        videoPlayer = new VideoPlayer(videoConfig);
+        moviesNode = new DefaultNavigationNode("Movies");
+        this.videoPlayer = videoPlayer;
 
         popupMenu = new MenuDialog(dialogManager);
         popupMenu.addItem(new LimmaMenuItem("Scan for new videos") {
@@ -103,7 +105,8 @@ public class VideoPlugin implements Plugin {
     }
 
     public void init(NavigationModel navigationModel, PlayerManager playerManager) {
-        navigationModel.add(new DefaultNavigationNode("Movies"));
+        navigationModel.add(moviesNode);
+        dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, moviesNode, videoPlayer, dialogManager));
     }
 
     private void play(final Video video) {
@@ -139,7 +142,7 @@ public class VideoPlugin implements Plugin {
     }
 
     public void reloadVideos() {
-        dialogManager.executeInDialog(new LoadVideosTask(this, persistenceManager));
+        dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, moviesNode, videoPlayer, dialogManager));
     }
 
 }

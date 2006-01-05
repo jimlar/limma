@@ -15,5 +15,5 @@ public interface Plugin {
 
     boolean keyPressed(KeyEvent e, PluginManager pluginManager);
 
-    void init(NavigationModel navigationModel, PlayerManager playerManager);
+    void init();
 }

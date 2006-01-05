@@ -6,13 +6,12 @@ import limma.plugins.PluginManager;
 import limma.swing.*;
 import limma.swing.navigationlist.NavigationModel;
 import limma.swing.navigationlist.DefaultNavigationNode;
-import limma.PlayerManager;
+import limma.swing.navigationlist.NavigationList;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 
 public class VideoPlugin implements Plugin {
@@ -21,15 +20,17 @@ public class VideoPlugin implements Plugin {
     private DialogManager dialogManager;
     private PersistenceManager persistenceManager;
     private VideoConfig videoConfig;
+    private NavigationModel navigationModel;
     private AntialiasList videoList;
     private VideoPlayer videoPlayer;
     private MenuDialog popupMenu;
     private DefaultNavigationNode moviesNode;
 
-    public VideoPlugin(final DialogManager dialogManager, final PersistenceManager persistenceManager, final IMDBSevice imdbSevice, final VideoConfig videoConfig, VideoPlayer videoPlayer) {
+    public VideoPlugin(final DialogManager dialogManager, final PersistenceManager persistenceManager, final IMDBSevice imdbSevice, final VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, NavigationList navigationList) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         this.videoConfig = videoConfig;
+        this.navigationModel = navigationModel;
         persistenceManager.addPersistentClass(Video.class);
         moviesNode = new DefaultNavigationNode("Movies");
         this.videoPlayer = videoPlayer;
@@ -49,6 +50,12 @@ public class VideoPlugin implements Plugin {
                 }
             }
         });
+        navigationList.addCellRenderer(new VideoListCellRenderer(videoConfig));
+    }
+
+    public void init() {
+        navigationModel.add(moviesNode);
+        dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, moviesNode, videoPlayer, dialogManager));
     }
 
     public String getPluginName() {
@@ -75,74 +82,23 @@ public class VideoPlugin implements Plugin {
         panel.add(scrollPane, BorderLayout.CENTER);
 
         videoList.setCellRenderer(new VideoListCellRenderer(videoConfig));
-        
+
 
         return panel;
     }
 
     public void pluginEntered() {
-        if (!hasEntered) {
-            hasEntered = true;
-            reloadVideos();
-        }
     }
 
     public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_ESCAPE:
-                pluginManager.exitPlugin();
-                break;
-            case KeyEvent.VK_ENTER:
-                play((Video) videoList.getSelectedValue());
-                break;
-            case KeyEvent.VK_M:
-                popupMenu.open();
-                break;
-            default:
-                videoList.processKeyEvent(e);
-        }
-        return true;
-    }
-
-    public void init(NavigationModel navigationModel, PlayerManager playerManager) {
-        navigationModel.add(moviesNode);
-        dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, moviesNode, videoPlayer, dialogManager));
-    }
-
-    private void play(final Video video) {
-        if (video == null) {
-            return;
-        }
-
-        dialogManager.executeInDialog(new Task() {
-            public JComponent createComponent() {
-                return new AntialiasLabel("Playing " + video.getTitle() + "...");
-            }
-
-            public void run() {
-                try {
-                    videoPlayer.play(video);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        return false;
     }
 
     private void scanForVideos() {
         dialogManager.executeInDialog(new ScanForVideosTask(this, persistenceManager, videoConfig));
     }
 
-    void setVideos(final java.util.List videos) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                videoListModel.setObjects(videos);
-            }
-        });
-    }
-
     public void reloadVideos() {
         dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, moviesNode, videoPlayer, dialogManager));
     }
-
 }

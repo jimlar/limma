@@ -24,7 +24,7 @@ public class MainWindow2 extends JFrame implements PluginManager {
     private boolean menuOpen = false;
     private JPanel cardPanel;
 
-    public MainWindow2(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager) {
+    public MainWindow2(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, NavigationList navigationList) {
         this.dialogManager = dialogManager;
 
         this.playerManager = playerManager;
@@ -47,7 +47,8 @@ public class MainWindow2 extends JFrame implements PluginManager {
 
         mainPanel = new JPanel();
         mainPanel.setBackground(Color.white);
-        mainPanel.setOpaque(false);
+        mainPanel.setOpaque(true);
+        
         mainPanel.setLayout(new BorderLayout());
 
         pluginCardsManager = new CardLayout(0, 0);
@@ -67,9 +68,8 @@ public class MainWindow2 extends JFrame implements PluginManager {
             }
         });
 
-        NavigationModel navigationModel = new NavigationModel();
-        navigationList = new NavigationList(navigationModel);
-        JScrollPane scrollPane = new JScrollPane(navigationList);
+        this.navigationList = navigationList;
+        JScrollPane scrollPane = new JScrollPane(this.navigationList);
         scrollPane.setOpaque(false);
         scrollPane.setAutoscrolls(true);
         scrollPane.getViewport().setOpaque(false);
@@ -86,7 +86,7 @@ public class MainWindow2 extends JFrame implements PluginManager {
         validate();
         for (int i = 0; i < plugins.length; i++) {
             Plugin plugin = plugins[i];
-            plugin.init(navigationModel, playerManager);
+            plugin.init();
         }
 
         navigationModel.add(new DefaultNavigationNode("Exit") {

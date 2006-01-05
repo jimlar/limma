@@ -8,7 +8,6 @@ import limma.swing.DialogManager;
 import limma.swing.SimpleListModel;
 import limma.swing.navigationlist.NavigationModel;
 import limma.swing.navigationlist.DefaultNavigationNode;
-import limma.PlayerManager;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -19,6 +18,7 @@ import java.io.IOException;
 public class GamePlugin implements Plugin {
     private DialogManager dialogManager;
     private GameConfig gameConfig;
+    private NavigationModel navigationModel;
     private JTabbedPane tabbedPane;
     private boolean hasBeenEntered;
 
@@ -28,9 +28,10 @@ public class GamePlugin implements Plugin {
     private SimpleListModel snesGameListModel;
     private AntialiasList snesGameList;
 
-    public GamePlugin(DialogManager dialogManager, GameConfig gameConfig) {
+    public GamePlugin(DialogManager dialogManager, GameConfig gameConfig, NavigationModel navigationModel) {
         this.dialogManager = dialogManager;
         this.gameConfig = gameConfig;
+        this.navigationModel = navigationModel;
     }
 
     public String getPluginName() {
@@ -110,7 +111,7 @@ public class GamePlugin implements Plugin {
         return true;
     }
 
-    public void init(NavigationModel navigationModel, PlayerManager playerManager) {
+    public void init() {
         navigationModel.add(new DefaultNavigationNode("Games"));
     }
 

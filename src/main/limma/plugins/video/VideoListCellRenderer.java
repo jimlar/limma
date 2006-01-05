@@ -1,14 +1,14 @@
 package limma.plugins.video;
 
 import limma.swing.AntialiasLabel;
+import limma.swing.navigationlist.NavigationListCellRenderer;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-class VideoListCellRenderer extends JPanel implements ListCellRenderer {
-    private static final Color SELECTED_BACKGROUND = Color.blue.darker().darker();
+class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer {
     private AntialiasLabel titleLabel;
     private AntialiasLabel directorLabel;
     private JTextArea plotLabel;
@@ -16,10 +16,13 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
     private AntialiasLabel ratingLabel;
     private JLabel cover;
     private VideoConfig videoConfig;
+    private boolean selected;
 
     public VideoListCellRenderer(VideoConfig videoConfig) {
         super(new GridBagLayout());
         this.videoConfig = videoConfig;
+
+        setOpaque(false);
         int width = 5;
         setBorder(BorderFactory.createEmptyBorder(width, width, width, width));
 
@@ -67,6 +70,10 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
         add(ratingPanel, new GridBagConstraints(1, 4, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
     }
 
+    public boolean supportsRendering(Object value) {
+        return value instanceof MovieNavigationNode;
+    }
+
     private AntialiasLabel createLabel(String text) {
         AntialiasLabel antialiasLabel = new AntialiasLabel(text);
         antialiasLabel.setForeground(antialiasLabel.getForeground().darker());
@@ -74,7 +81,8 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
     }
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        Video video = (Video) value;
+        this.selected = isSelected;
+        Video video = ((MovieNavigationNode) value).getVideo();
 
         titleLabel.setText(video.getTitle());
         String director = "Unknown";
@@ -96,11 +104,33 @@ class VideoListCellRenderer extends JPanel implements ListCellRenderer {
         plotLabel.setText(video.getPlot());
         plotLabel.setSize(list.getWidth() - poster.getIconWidth() - 15, 100000);
 
-
         setComponentOrientation(list.getComponentOrientation());
         setForeground(Color.white);
-        setBackground(isSelected ? SELECTED_BACKGROUND : list.getBackground());
-        setOpaque(isSelected);
+        setOpaque(false);
         return this;
     }
+
+    protected void paintComponent(Graphics g) {
+        Graphics2D graphics = (Graphics2D) g;
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        if (selected) {
+            System.out.println("selected");
+            paintGradient(graphics);
+            graphics.setColor(new Color(0x127ec7));
+            graphics.drawLine(0, 0, graphics.getClipBounds().width, 0);
+            graphics.setColor(new Color(0x428ac5));
+            graphics.drawLine(0, graphics.getClipBounds().height - 1, graphics.getClipBounds().width, graphics.getClipBounds().height - 1);
+        }
+        super.paintComponent(g);
+    }
+
+    private void paintGradient(Graphics2D graphics) {
+        Color topColor = new Color(0x209bd6);
+        Color bottomColor = new Color(0x0177bf);
+        int height = graphics.getClipBounds().height;
+        int yPos = 0;
+        graphics.setPaint(new GradientPaint(0, yPos, topColor, 0, yPos + height, bottomColor));
+        graphics.fillRect(0, yPos, graphics.getClipBounds().width, height);
+    }
+
 }

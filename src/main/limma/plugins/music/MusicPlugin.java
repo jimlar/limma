@@ -23,23 +23,25 @@ import java.awt.event.KeyEvent;
 
 public class MusicPlugin implements Plugin {
     private MusicPlayer musicPlayer;
+    private NavigationModel navigationModel;
     private PlayerManager playerManager;
     private DialogManager dialogManager;
     private PersistenceManager persistenceManager;
     private MusicConfig musicConfig;
     private DefaultNavigationNode musicNode;
 
-    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer) {
+    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer, NavigationModel navigationModel, PlayerManager playerManager) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         this.musicConfig = musicConfig;
         this.musicPlayer = musicPlayer;
+        this.navigationModel = navigationModel;
+        this.playerManager = playerManager;
 
         persistenceManager.addPersistentClass(MusicFile.class);
     }
 
-    public void init(NavigationModel navigationModel, PlayerManager playerManager) {
-        this.playerManager = playerManager;
+    public void init() {
         musicNode = new DefaultNavigationNode("Music");
         navigationModel.add(musicNode);
 

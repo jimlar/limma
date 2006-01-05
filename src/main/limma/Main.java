@@ -13,6 +13,8 @@ import limma.plugins.video.VideoPlayer;
 import limma.plugins.video.VideoPlugin;
 import limma.swing.CursorHider;
 import limma.swing.DialogManagerImpl;
+import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.NavigationList;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
 import javax.swing.*;
@@ -29,6 +31,8 @@ public class Main {
 
                 DefaultPicoContainer pico = new DefaultPicoContainer();
                 pico.registerComponentImplementation(PlayerManager.class);
+                pico.registerComponentImplementation(NavigationModel.class);
+                pico.registerComponentImplementation(NavigationList.class);
 
                 pico.registerComponentImplementation(VideoPlugin.class);
                 pico.registerComponentImplementation(VideoConfigImpl.class);

@@ -10,7 +10,7 @@ public class PlayerManager {
 
     public void switchTo(Player player) {
         if (this.player != null) {
-            player.stop();
+            this.player.stop();
         }
         this.player = player;
         firePlayerSwitched();

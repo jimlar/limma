@@ -165,7 +165,7 @@ public class ExternalMusicPlayer implements MusicPlayer {
         private MusicFile musicFile;
         private ExternalMusicPlayer player;
         private Process process;
-        private boolean stopped = false;
+        private boolean forceStopped = false;
 
         public PlayerThread(MusicConfig musicConfig, MusicFile musicFile, ExternalMusicPlayer player) {
             this.musicConfig = musicConfig;
@@ -208,7 +208,7 @@ public class ExternalMusicPlayer implements MusicPlayer {
                 e.printStackTrace();
             } finally {
                 kill();
-                if (!stopped) {
+                if (!forceStopped) {
                     player.playFinished();
                 }
             }
@@ -235,10 +235,11 @@ public class ExternalMusicPlayer implements MusicPlayer {
         }
 
         public void quit() {
-            stopped = true;
+            forceStopped = true;
             try {
                 input("quit");
                 join(1000);
+                kill();
             } catch (IOException e) {
             } catch (InterruptedException e) {
                 e.printStackTrace();

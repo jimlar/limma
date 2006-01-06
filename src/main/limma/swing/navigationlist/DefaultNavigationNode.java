@@ -21,6 +21,7 @@ public class DefaultNavigationNode implements NavigationNode {
 
     public void add(NavigationNode node) {
         children.add(node);
+        assert node.getParent() == null : "Cannot add a node that already is added elsewhere!";
         node.setParent(this);
     }
 

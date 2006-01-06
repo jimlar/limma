@@ -114,7 +114,6 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
         Graphics2D graphics = (Graphics2D) g;
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (selected) {
-            System.out.println("selected");
             paintGradient(graphics);
             graphics.setColor(new Color(0x127ec7));
             graphics.drawLine(0, 0, graphics.getClipBounds().width, 0);

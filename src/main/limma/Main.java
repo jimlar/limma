@@ -16,6 +16,8 @@ import limma.swing.DialogManagerImpl;
 import limma.swing.navigationlist.NavigationModel;
 import limma.swing.navigationlist.NavigationList;
 import org.picocontainer.defaults.DefaultPicoContainer;
+import org.picocontainer.defaults.CachingComponentAdapter;
+import org.picocontainer.defaults.ConstructorInjectionComponentAdapter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,6 +32,7 @@ public class Main {
                 GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
                 DefaultPicoContainer pico = new DefaultPicoContainer();
+//                pico.registerComponent(new CachingComponentAdapter(new ConstructorInjectionComponentAdapter(PlayerManager.class, PlayerManager.class)));
                 pico.registerComponentImplementation(PlayerManager.class);
                 pico.registerComponentImplementation(NavigationModel.class);
                 pico.registerComponentImplementation(NavigationList.class);

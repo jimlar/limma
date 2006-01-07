@@ -3,9 +3,9 @@ package limma.plugins.video;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.navigationlist.DefaultNavigationNode;
 import limma.swing.navigationlist.NavigationList;
 import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.NavigationNode;
 
 
 public class VideoPlugin implements Plugin {
@@ -15,8 +15,8 @@ public class VideoPlugin implements Plugin {
     private VideoConfig videoConfig;
     private NavigationModel navigationModel;
     private VideoPlayer videoPlayer;
-    private DefaultNavigationNode moviesNode;
-    private DefaultNavigationNode titlesNode;
+    private NavigationNode moviesNode;
+    private NavigationNode titlesNode;
 
     public VideoPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, NavigationList navigationList) {
         this.dialogManager = dialogManager;
@@ -28,14 +28,14 @@ public class VideoPlugin implements Plugin {
 
         persistenceManager.addPersistentClass(Video.class);
 
-        moviesNode = new DefaultNavigationNode("Movies");
-        titlesNode = new DefaultNavigationNode("Titles");
+        moviesNode = new NavigationNode("Movies");
+        titlesNode = new NavigationNode("Titles");
         moviesNode.add(titlesNode);
 
-        DefaultNavigationNode settingsNode = new DefaultNavigationNode("Settings");
+        NavigationNode settingsNode = new NavigationNode("Settings");
         moviesNode.add(settingsNode);
 
-        settingsNode.add(new DefaultNavigationNode("Scan for new videos") {
+        settingsNode.add(new NavigationNode("Scan for new videos") {
             public void performAction() {
                 scanForVideos();
             }

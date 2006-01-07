@@ -16,7 +16,7 @@ class DefaultNavigationListCellRenderer extends JLabel implements NavigationList
     }
 
     public boolean supportsRendering(Object value) {
-        return true;
+        return value instanceof NavigationNode;
     }
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {

@@ -22,7 +22,7 @@ public class NavigationList extends JList {
                         return renderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                     }
                 }
-                return null;
+                throw new IllegalArgumentException("Rendering of " + value + " is not supported (is it a subclass of NavigationNode?)");
             }
         });
         setOpaque(false);

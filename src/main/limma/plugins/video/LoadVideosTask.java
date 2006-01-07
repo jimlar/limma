@@ -4,7 +4,7 @@ import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
 import limma.swing.Task;
-import limma.swing.navigationlist.DefaultNavigationNode;
+import limma.swing.navigationlist.NavigationNode;
 
 import javax.swing.*;
 import java.util.Iterator;
@@ -12,13 +12,13 @@ import java.util.List;
 
 class LoadVideosTask implements Task {
     private PersistenceManager persistenceManager;
-    private DefaultNavigationNode titlesNode;
+    private NavigationNode titlesNode;
     private VideoPlayer videoPlayer;
     private DialogManager dialogManager;
     private IMDBSevice imdbSevice;
     private VideoConfig videoConfig;
 
-    public LoadVideosTask(PersistenceManager persistenceManager, DefaultNavigationNode titlesNode, VideoPlayer videoPlayer, DialogManager dialogManager, IMDBSevice imdbSevice, VideoConfig videoConfig) {
+    public LoadVideosTask(PersistenceManager persistenceManager, NavigationNode titlesNode, VideoPlayer videoPlayer, DialogManager dialogManager, IMDBSevice imdbSevice, VideoConfig videoConfig) {
         this.persistenceManager = persistenceManager;
         this.titlesNode = titlesNode;
         this.videoPlayer = videoPlayer;
@@ -40,7 +40,7 @@ class LoadVideosTask implements Task {
             MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, dialogManager);
             titlesNode.add(movieNode);
 
-            movieNode.add(new DefaultNavigationNode("Update from IMDB") {
+            movieNode.add(new NavigationNode("Update from IMDB") {
                 public void performAction() {
                     IMDBDialog imdbDialog = new IMDBDialog(dialogManager, video, imdbSevice, persistenceManager, videoConfig);
                     imdbDialog.open();

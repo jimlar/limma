@@ -1,12 +1,11 @@
 package limma.swing.navigationlist;
 
 import limma.swing.navigationlist.NavigationNode;
-import limma.swing.navigationlist.DefaultNavigationNode;
 
 import javax.swing.*;
 
 public class NavigationModel extends AbstractListModel {
-    private DefaultNavigationNode root = new DefaultNavigationNode("root");
+    private NavigationNode root = new NavigationNode("root");
     private NavigationNode currentNode = root;
 
     public void add(NavigationNode node) {

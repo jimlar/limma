@@ -1,6 +1,6 @@
 package limma.plugins.video;
 
-import limma.swing.navigationlist.DefaultNavigationNode;
+import limma.swing.navigationlist.NavigationNode;
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
@@ -8,7 +8,7 @@ import limma.swing.DialogManager;
 import javax.swing.*;
 import java.io.IOException;
 
-public class MovieNavigationNode extends DefaultNavigationNode {
+public class MovieNavigationNode extends NavigationNode {
     private Video video;
     private VideoPlayer player;
     private DialogManager dialogManager;

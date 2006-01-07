@@ -2,22 +2,20 @@ package limma.plugins.game;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
-import limma.swing.navigationlist.DefaultNavigationNode;
+import limma.swing.navigationlist.NavigationNode;
 import limma.utils.DirectoryScanner;
 
 import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 
 class LoadC64GamesTask implements Task {
     private final File gamesDir;
-    private DefaultNavigationNode c64Node;
+    private NavigationNode c64Node;
     private GameConfig gameConfig;
 
-    public LoadC64GamesTask(GameConfig gameConfig, DefaultNavigationNode c64Node) {
+    public LoadC64GamesTask(GameConfig gameConfig, NavigationNode c64Node) {
         this.c64Node = c64Node;
         this.gameConfig = gameConfig;
         this.gamesDir = gameConfig.getC64GamesDir();

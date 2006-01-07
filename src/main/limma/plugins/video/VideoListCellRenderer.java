@@ -30,12 +30,13 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
         add(cover, new GridBagConstraints(0, 0, 1, 5, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 5), 0, 0));
 
         titleLabel = new AntialiasLabel();
-        titleLabel.setForeground(Color.yellow);
+        titleLabel.setForeground(Color.black);
+        titleLabel.setFont(Font.decode("Verdana").deriveFont((float) 30));
         add(titleLabel, new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
         plotLabel = new JTextArea();
         plotLabel.setFont(AntialiasLabel.DEFAULT_FONT);
-        plotLabel.setForeground(Color.white);
+        plotLabel.setForeground(Color.black);
         plotLabel.setOpaque(false);
         plotLabel.setEditable(false);
         plotLabel.setLineWrap(true);
@@ -48,6 +49,7 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
 
         directorPanel.add(createLabel("Directed by: "));
         directorLabel = new AntialiasLabel();
+        directorLabel.setForeground(Color.black);
         directorPanel.add(directorLabel);
 
         add(directorPanel, new GridBagConstraints(1, 2, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
@@ -57,6 +59,7 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
 
         runtimePanel.add(createLabel("Runtime: "));
         runtimeLabel = new AntialiasLabel();
+        runtimeLabel.setForeground(Color.black);
         runtimePanel.add(runtimeLabel);
 
         add(runtimePanel, new GridBagConstraints(1, 3, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
@@ -65,6 +68,7 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
         ratingPanel.setOpaque(false);
         ratingPanel.add(createLabel("Rating: "));
         ratingLabel = new AntialiasLabel();
+        ratingLabel.setForeground(Color.black);
         ratingPanel.add(ratingLabel);
 
         add(ratingPanel, new GridBagConstraints(1, 4, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
@@ -76,7 +80,7 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
 
     private AntialiasLabel createLabel(String text) {
         AntialiasLabel antialiasLabel = new AntialiasLabel(text);
-        antialiasLabel.setForeground(antialiasLabel.getForeground().darker());
+        antialiasLabel.setForeground(Color.darkGray);
         return antialiasLabel;
     }
 

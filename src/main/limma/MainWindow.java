@@ -4,9 +4,9 @@ import limma.plugins.Plugin;
 import limma.plugins.PluginManager;
 import limma.swing.DialogManager;
 import limma.swing.LimmaDialog;
-import limma.swing.navigationlist.DefaultNavigationNode;
 import limma.swing.navigationlist.NavigationList;
 import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.NavigationNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,7 +89,7 @@ public class MainWindow extends JFrame implements PluginManager {
             plugin.init();
         }
 
-        navigationModel.add(new DefaultNavigationNode("Exit") {
+        navigationModel.add(new NavigationNode("Exit") {
             public void performAction() {
                 System.exit(0);
             }

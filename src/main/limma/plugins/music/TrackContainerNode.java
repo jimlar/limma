@@ -1,12 +1,12 @@
 package limma.plugins.music;
 
-import limma.swing.navigationlist.DefaultNavigationNode;
+import limma.swing.navigationlist.NavigationNode;
 import limma.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrackContainerNode extends DefaultNavigationNode {
+public class TrackContainerNode extends NavigationNode {
     private MusicPlayer musicPlayer;
     private PlayerManager playerManager;
 

@@ -2,8 +2,8 @@ package limma.plugins.game;
 
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.navigationlist.DefaultNavigationNode;
 import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.NavigationNode;
 
 public class GamePlugin implements Plugin {
     private DialogManager dialogManager;
@@ -17,12 +17,12 @@ public class GamePlugin implements Plugin {
     }
 
     public void init() {
-        DefaultNavigationNode gamesNode = new DefaultNavigationNode("Games");
+        NavigationNode gamesNode = new NavigationNode("Games");
         navigationModel.add(gamesNode);
 
-        DefaultNavigationNode c64Node = new DefaultNavigationNode("Commodore 64");
+        NavigationNode c64Node = new NavigationNode("Commodore 64");
         gamesNode.add(c64Node);
-        DefaultNavigationNode snesNode = new DefaultNavigationNode("Super Nintendo");
+        NavigationNode snesNode = new NavigationNode("Super Nintendo");
         gamesNode.add(snesNode);
 
         dialogManager.executeInDialog(new LoadC64GamesTask(gameConfig, c64Node));

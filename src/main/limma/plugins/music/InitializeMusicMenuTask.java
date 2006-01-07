@@ -2,7 +2,7 @@ package limma.plugins.music;
 
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
-import limma.swing.navigationlist.DefaultNavigationNode;
+import limma.swing.navigationlist.NavigationNode;
 import limma.persistence.PersistenceManager;
 import limma.PlayerManager;
 
@@ -11,11 +11,11 @@ import java.util.Iterator;
 
 class InitializeMusicMenuTask implements Task {
     private PersistenceManager persistenceManager;
-    private DefaultNavigationNode musicNode;
+    private NavigationNode musicNode;
     private MusicPlayer musicPlayer;
     private PlayerManager playerManager;
 
-    public InitializeMusicMenuTask(PersistenceManager persistenceManager, DefaultNavigationNode musicNode, MusicPlayer musicPlayer, PlayerManager playerManager) {
+    public InitializeMusicMenuTask(PersistenceManager persistenceManager, NavigationNode musicNode, MusicPlayer musicPlayer, PlayerManager playerManager) {
         this.persistenceManager = persistenceManager;
         this.musicNode = musicNode;
         this.musicPlayer = musicPlayer;
@@ -42,7 +42,7 @@ class InitializeMusicMenuTask implements Task {
         }
 
         for (int i = 0; i < artistsNode.getChildCount(); i++) {
-            DefaultNavigationNode artistNode = (DefaultNavigationNode) artistsNode.getChildAt(i);
+            NavigationNode artistNode = (NavigationNode) artistsNode.getChildAt(i);
             artistNode.sortByTitle();
         }
         artistsNode.sortByTitle();
@@ -57,7 +57,7 @@ class InitializeMusicMenuTask implements Task {
         });
     }
 
-    private void addToArtistsNode(DefaultNavigationNode artistsNode, MusicFile file) {
+    private void addToArtistsNode(NavigationNode artistsNode, MusicFile file) {
         TrackContainerNode artistNode = (TrackContainerNode) artistsNode.getFirstChildWithTitle(file.getArtist());
         if (artistNode == null) {
             artistNode = new TrackContainerNode(file.getArtist(), musicPlayer, playerManager);
@@ -72,7 +72,7 @@ class InitializeMusicMenuTask implements Task {
         albumNode.add(new TrackNode(file.getTitle(), file, musicPlayer, playerManager));
     }
 
-    private void addToAlbumsNode(DefaultNavigationNode albumsNode, MusicFile file) {
+    private void addToAlbumsNode(NavigationNode albumsNode, MusicFile file) {
         String albumName = file.getArtist() + ": " + file.getAlbum();
         TrackContainerNode albumNode = (TrackContainerNode) albumsNode.getFirstChildWithTitle(albumName);
         if (albumNode == null) {

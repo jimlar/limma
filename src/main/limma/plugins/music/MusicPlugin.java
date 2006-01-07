@@ -4,8 +4,8 @@ import limma.PlayerManager;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.navigationlist.DefaultNavigationNode;
 import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.NavigationNode;
 
 public class MusicPlugin implements Plugin {
     private MusicPlayer musicPlayer;
@@ -14,7 +14,7 @@ public class MusicPlugin implements Plugin {
     private DialogManager dialogManager;
     private PersistenceManager persistenceManager;
     private MusicConfig musicConfig;
-    private DefaultNavigationNode musicNode;
+    private NavigationNode musicNode;
 
     public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer, NavigationModel navigationModel, PlayerManager playerManager) {
         this.dialogManager = dialogManager;
@@ -28,11 +28,11 @@ public class MusicPlugin implements Plugin {
     }
 
     public void init() {
-        musicNode = new DefaultNavigationNode("Music");
+        musicNode = new NavigationNode("Music");
         navigationModel.add(musicNode);
 
-        DefaultNavigationNode settingsNode = new DefaultNavigationNode("Settings");
-        settingsNode.add(new DefaultNavigationNode("Scan for new music files") {
+        NavigationNode settingsNode = new NavigationNode("Settings");
+        settingsNode.add(new NavigationNode("Scan for new music files") {
             public void performAction() {
                 dialogManager.executeInDialog(new ScanMusicFilesTask(MusicPlugin.this, persistenceManager, musicConfig));
             }

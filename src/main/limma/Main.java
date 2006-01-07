@@ -27,28 +27,28 @@ public class Main {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-
                 DefaultPicoContainer pico = new DefaultPicoContainer();
                 pico.registerComponentImplementation(PlayerManager.class);
                 pico.registerComponentImplementation(NavigationModel.class);
                 pico.registerComponentImplementation(NavigationList.class);
+                pico.registerComponentImplementation(PersistenceManagerImpl.class);
+                pico.registerComponentImplementation(PersistenceConfigImpl.class);
+                pico.registerComponentImplementation(DialogManagerImpl.class);
+                pico.registerComponentImplementation(CursorHider.class);
 
                 pico.registerComponentImplementation(VideoPlugin.class);
                 pico.registerComponentImplementation(VideoConfigImpl.class);
                 pico.registerComponentImplementation(VideoPlayer.class);
+                pico.registerComponentImplementation(IMDBSeviceImpl.class);
+
                 pico.registerComponentImplementation(MusicPlugin.class);
                 pico.registerComponentImplementation(MusicConfigImpl.class);
                 pico.registerComponentImplementation(ExternalMusicPlayer.class);
+
                 pico.registerComponentImplementation(GamePlugin.class);
                 pico.registerComponentImplementation(GameConfigImpl.class);
+
                 pico.registerComponentImplementation(MainWindow.class);
-                pico.registerComponentImplementation(DialogManagerImpl.class);
-                pico.registerComponentImplementation(PersistenceManagerImpl.class);
-                pico.registerComponentImplementation(PersistenceConfigImpl.class);
-                pico.registerComponentImplementation(IMDBSeviceImpl.class);
-                pico.registerComponentImplementation(CursorHider.class);
-                pico.registerComponentInstance(device);
 
                 pico.start();
 
@@ -56,6 +56,7 @@ public class Main {
                 mainWindow.setUndecorated(true);
                 mainWindow.setResizable(false);
 
+                GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
                 device.setFullScreenWindow(mainWindow);
                 mainWindow.setSize(device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight());
 

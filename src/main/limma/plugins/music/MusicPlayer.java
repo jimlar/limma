@@ -1,4 +1,4 @@
-package limma.plugins.music.player;
+package limma.plugins.music;
 
 import limma.Player;
 import limma.plugins.music.TrackContainerNode;

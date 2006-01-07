@@ -3,9 +3,7 @@ package limma.plugins.music;
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
 import limma.swing.navigationlist.DefaultNavigationNode;
-import limma.swing.navigationlist.NavigationNode;
 import limma.persistence.PersistenceManager;
-import limma.plugins.music.player.MusicPlayer;
 import limma.PlayerManager;
 
 import javax.swing.*;

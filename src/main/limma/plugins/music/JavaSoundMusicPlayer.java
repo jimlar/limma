@@ -1,4 +1,4 @@
-package limma.plugins.music.player;
+package limma.plugins.music;
 
 import limma.plugins.music.MusicFile;
 import limma.plugins.music.TrackContainerNode;
@@ -8,7 +8,6 @@ import org.apache.commons.io.IOUtils;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 

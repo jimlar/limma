@@ -6,7 +6,7 @@ import limma.plugins.game.GameConfigImpl;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.MusicConfigImpl;
 import limma.plugins.music.MusicPlugin;
-import limma.plugins.music.player.ExternalMusicPlayer;
+import limma.plugins.music.ExternalMusicPlayer;
 import limma.plugins.video.IMDBSeviceImpl;
 import limma.plugins.video.VideoConfigImpl;
 import limma.plugins.video.VideoPlayer;
@@ -16,8 +16,6 @@ import limma.swing.DialogManagerImpl;
 import limma.swing.navigationlist.NavigationModel;
 import limma.swing.navigationlist.NavigationList;
 import org.picocontainer.defaults.DefaultPicoContainer;
-import org.picocontainer.defaults.CachingComponentAdapter;
-import org.picocontainer.defaults.ConstructorInjectionComponentAdapter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +30,6 @@ public class Main {
                 GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
                 DefaultPicoContainer pico = new DefaultPicoContainer();
-//                pico.registerComponent(new CachingComponentAdapter(new ConstructorInjectionComponentAdapter(PlayerManager.class, PlayerManager.class)));
                 pico.registerComponentImplementation(PlayerManager.class);
                 pico.registerComponentImplementation(NavigationModel.class);
                 pico.registerComponentImplementation(NavigationList.class);
@@ -45,8 +42,7 @@ public class Main {
                 pico.registerComponentImplementation(ExternalMusicPlayer.class);
                 pico.registerComponentImplementation(GamePlugin.class);
                 pico.registerComponentImplementation(GameConfigImpl.class);
-                //pico.registerComponentImplementation(MainWindow.class);
-                pico.registerComponentImplementation(MainWindow2.class);
+                pico.registerComponentImplementation(MainWindow.class);
                 pico.registerComponentImplementation(DialogManagerImpl.class);
                 pico.registerComponentImplementation(PersistenceManagerImpl.class);
                 pico.registerComponentImplementation(PersistenceConfigImpl.class);
@@ -56,15 +52,16 @@ public class Main {
 
                 pico.start();
 
-                MainWindow2 mainWindow = (MainWindow2) pico.getComponentInstanceOfType(MainWindow2.class);
+                MainWindow mainWindow = (MainWindow) pico.getComponentInstanceOfType(MainWindow.class);
                 mainWindow.setUndecorated(true);
                 mainWindow.setResizable(false);
 
-//                device.setFullScreenWindow(mainWindow);
-//                mainWindow.setSize(device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight());
+                device.setFullScreenWindow(mainWindow);
+                mainWindow.setSize(device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight());
 
-                mainWindow.setSize(800, 600);
-                mainWindow.setVisible(true);
+//                mainWindow.setSize(800, 600);
+//                mainWindow.setVisible(true);
+
                 mainWindow.requestFocus();
             }
         });

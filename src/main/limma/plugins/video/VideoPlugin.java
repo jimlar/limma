@@ -2,14 +2,10 @@ package limma.plugins.video;
 
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
-import limma.plugins.PluginManager;
 import limma.swing.DialogManager;
 import limma.swing.navigationlist.DefaultNavigationNode;
 import limma.swing.navigationlist.NavigationList;
 import limma.swing.navigationlist.NavigationModel;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 
 public class VideoPlugin implements Plugin {
@@ -51,21 +47,6 @@ public class VideoPlugin implements Plugin {
     public void init() {
         navigationModel.add(moviesNode);
         reloadVideos();
-    }
-
-    public String getPluginName() {
-        return "video";
-    }
-
-    public JComponent getPluginView() {
-        return new JPanel();
-    }
-
-    public void pluginEntered() {
-    }
-
-    public boolean keyPressed(KeyEvent e, PluginManager pluginManager) {
-        return false;
     }
 
     private void scanForVideos() {

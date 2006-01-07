@@ -1,6 +1,5 @@
-package limma.plugins.music.player;
+package limma.plugins.music;
 
-import limma.plugins.music.*;
 import limma.utils.ExternalCommand;
 
 import javax.swing.*;

@@ -6,6 +6,8 @@ General
 * Mouse cursor that diappears when it stands still for a few seconds
 * Sorting in menu
 * Titlebar that shows the title of the currently active menu node when menu is showing
+* Clock in titlebar?
+
 
 TV plugin
 ---------
@@ -18,17 +20,24 @@ Music plugin
 * Playlists
 * "Look aside" playlists (select a few songs in a queue to be played before the normal strategy takes back control)
 * Exclude/ban track
-* Album art viewer
+* Album art viewer/downloader
 * Better fallback names (remove .mp3 and .flac and guess some nice case)
 * Better Bitrate figures: show VBR rates correctly and show flac differently.
 * Support for 48000 Hz output rate (autodetect?)
 * Common output buffers etc to get smoother song changing
 * Use tritonus to convert samplerates / decode mp3 etc?
 * BUG: Various artists albums get split up under albums node.
+* Shuffle option
+* Repeat option
+* Genre menu item.
+* Indicate currently playing song in menu
+* Close menu when starting to play
+* Editing of ID3 data
 
 
 Game plugin
 -----------
+* More split up menu to find games, to long lists now (c64)
 
 
 DVD Plugin
@@ -40,12 +49,15 @@ Video plugin
 ------------
 * Detect IMDB number from .nfo files
 * Support for categorizing movies (differently from the on-disk tree).
-* Stop music (or audio usage) when starting movie
-* Fix list layout bugs
 * Add support to select / config / view which player command should be used
 * On screen menu for mplayer?
 * Show not watched movies
 * Support for cue/bin files?
+* File mangement (move file to different video, split out file to a new video, create new video, etc...)
+* Start playback from a selected file in the video (for tv series etc...)
+* Player panel
+* Close menu when starting selecting menu item.
+* Manual editing of movie data
 
 
 Pictures plugin

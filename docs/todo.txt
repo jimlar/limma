@@ -47,7 +47,6 @@ Play dvd discs directly
 
 Video plugin
 ------------
-* Detect IMDB number from .nfo files (or all files smaller than 100K)
 * Support for categorizing movies (differently from the on-disk tree).
 * Add support to select / config / view which player command should be used
 * On screen menu for mplayer?

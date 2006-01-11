@@ -4,19 +4,9 @@ import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
 import limma.swing.LimmaDialog;
-import limma.swing.TransactionalTask;
-import org.apache.commons.io.CopyUtils;
-import org.apache.commons.io.IOUtils;
-import org.hibernate.Session;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class IMDBDialog extends LimmaDialog {
     private DialogManager dialogManager;
@@ -46,7 +36,12 @@ public class IMDBDialog extends LimmaDialog {
 
     public void open() {
         super.open();
-        textField.setText(video.getImdbNumber() != 0 ? String.valueOf(video.getImdbNumber()) : "");
+        textField.setText("");
+        if (video.hasImdbNumber()) {
+            textField.setText(String.valueOf(video.getImdbNumber()));
+        } else {
+            dialogManager.executeInDialog(new DetectImdbNumberTask(video, textField));
+        }
         textField.requestFocusInWindow();
     }
 
@@ -56,83 +51,15 @@ public class IMDBDialog extends LimmaDialog {
                 close();
                 return true;
             case KeyEvent.VK_ENTER:
-                updateFromImdb();
+                dialogManager.executeInDialog(new UpdateFromImdbTask(persistenceManager, imdbSevice, videoConfig, video, getEnteredImdbNumber()));
                 close();
                 return true;
         }
         return false;
     }
 
-    private void updateFromImdb() {
-        dialogManager.executeInDialog(new UpdateTask(persistenceManager, imdbSevice, videoConfig, video, getImdbNumber()));
-    }
-
-    private int getImdbNumber() {
+    private int getEnteredImdbNumber() {
         return Integer.parseInt(textField.getText());
     }
 
-    private static class UpdateTask extends TransactionalTask {
-        private AntialiasLabel status = new AntialiasLabel("Fetching information from IMDB...");
-        private IMDBSevice imdbSevice;
-        private VideoConfig videoConfig;
-        private Video video;
-        private int imdbNumber;
-
-        public UpdateTask(PersistenceManager persistenceManager, IMDBSevice imdbSevice, VideoConfig videoConfig, Video video, int imdbNumber) {
-            super(persistenceManager);
-            this.imdbSevice = imdbSevice;
-            this.videoConfig = videoConfig;
-            this.video = video;
-            this.imdbNumber = imdbNumber;
-        }
-
-        public JComponent createComponent() {
-            return status;
-        }
-
-        public void runInTransaction(Session session) {
-            try {
-                final IMDBInfo info = imdbSevice.getInfo(imdbNumber);
-                video.setImdbNumber(info.getImdbNumber());
-                video.setTitle(info.getTitle());
-                video.setDirector(info.getDirector());
-                video.setRuntime(info.getRuntime());
-                video.setPlot(info.getPlot());
-                video.setRating(info.getRating());
-                video.setYear(info.getYear());
-                session.merge(video);
-
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        status.setText("Downloading cover image...");
-                    }
-                });
-
-                File posterFile = new File(videoConfig.getPosterDir(), String.valueOf(video.getImdbNumber()));
-
-                InputStream in = null;
-                FileOutputStream out = null;
-                HttpURLConnection urlConnection = null;
-                try {
-                    posterFile.getParentFile().mkdirs();
-                    urlConnection = (HttpURLConnection) new URL(info.getCover()).openConnection();
-                    urlConnection.setUseCaches(false);
-                    urlConnection.setDefaultUseCaches(false);
-                    in = urlConnection.getInputStream();
-                    out = new FileOutputStream(posterFile);
-                    CopyUtils.copy(in, out);
-                } finally {
-                    IOUtils.closeQuietly(in);
-                    IOUtils.closeQuietly(out);
-                    if (urlConnection != null) {
-                        urlConnection.disconnect();
-                    }
-                }
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }

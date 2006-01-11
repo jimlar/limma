@@ -90,4 +90,8 @@ public class Video {
     public long getId() {
         return id;
     }
+
+    public boolean hasImdbNumber() {
+        return getImdbNumber() != 0;
+    }
 }

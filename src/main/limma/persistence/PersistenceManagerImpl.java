@@ -20,7 +20,11 @@ public class PersistenceManagerImpl implements PersistenceManager {
                                                               + "/" + persistenceConfig.getDatabase());
         configuration.setProperty("hibernate.connection.username", persistenceConfig.getUsername());
         configuration.setProperty("hibernate.connection.password", persistenceConfig.getPassword());
-        configuration.setProperty("hibernate.connection.pool_size", "10");
+
+        configuration.setProperty("hibernate.c3p0.min_size", "5");
+        configuration.setProperty("hibernate.c3p0.max_size", "20");
+        configuration.setProperty("hibernate.c3p0.timeout", "1800");
+        configuration.setProperty("hibernate.c3p0.max_statements", "50");
 
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         configuration.setProperty("hibernate.hbm2ddl.auto", "update");

@@ -1,7 +1,6 @@
 package limma;
 
 import limma.plugins.Plugin;
-import limma.plugins.PluginManager;
 import limma.swing.DialogManager;
 import limma.swing.LimmaDialog;
 import limma.swing.navigationlist.NavigationList;
@@ -12,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class MainWindow extends JFrame implements PluginManager {
+public class MainWindow extends JFrame {
     private CardLayout pluginCardsManager;
     private JPanel mainPanel;
     private DialogManager dialogManager;
@@ -180,17 +179,5 @@ public class MainWindow extends JFrame implements PluginManager {
     private void closeMenu() {
         menuOpen = false;
         pluginCardsManager.show(cardPanel, "player");
-    }
-
-    /**
-     * Will be removed
-     */
-    public void enterPlugin(String name) {
-    }
-
-    /**
-     * Will be removed
-     */
-    public void exitPlugin() {
     }
 }

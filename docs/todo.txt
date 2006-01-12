@@ -17,6 +17,8 @@ TV plugin
 
 Music plugin
 ------------
+* BUG: Various artists albums get split up under albums node.
+* BUG: Scan for new music gives duplicate menu items.
 * Playlists
 * "Look aside" playlists (select a few songs in a queue to be played before the normal strategy takes back control)
 * Exclude/ban track
@@ -26,7 +28,6 @@ Music plugin
 * Support for 48000 Hz output rate (autodetect?)
 * Common output buffers etc to get smoother song changing
 * Use tritonus to convert samplerates / decode mp3 etc?
-* BUG: Various artists albums get split up under albums node.
 * Shuffle option
 * Repeat option
 * Genre menu item.
@@ -42,7 +43,7 @@ Game plugin
 
 DVD Plugin
 ----------
-Play dvd discs directly
+* Play dvd discs directly
 
 
 Video plugin

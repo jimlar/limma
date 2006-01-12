@@ -12,8 +12,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 class DetectImdbNumberTask implements Task {
-    private static final String[] IMDB_PREFIXES = {"http://www.imdb.com/title/tt",
-                                                   "http://us.imdb.com/Title?"};
+    private static final String[] IMDB_PREFIXES = {"imdb.com/title/tt",
+                                                   "imdb.com/Title?"};
     private static final long MAX_FILE_SIZE_TO_SEARCH = 100 * 1024;
     private Video video;
     private JTextField imdbNumberTextField;

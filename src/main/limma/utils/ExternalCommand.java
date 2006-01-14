@@ -11,6 +11,10 @@ public class ExternalCommand {
         this.commandLine = commandLine;
     }
 
+    public void execute() throws IOException {
+        execute(new String[0]);
+    }
+
     public void execute(String[] appendToCommand) throws IOException {
         String[] result = getCommandLine(appendToCommand);
         new ExecUtils().executeAndWait(result);

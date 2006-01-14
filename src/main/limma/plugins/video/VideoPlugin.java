@@ -3,9 +3,16 @@ package limma.plugins.video;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
+import limma.swing.Task;
+import limma.swing.AntialiasLabel;
 import limma.swing.navigationlist.NavigationList;
 import limma.swing.navigationlist.NavigationModel;
 import limma.swing.navigationlist.NavigationNode;
+import limma.PlayerManager;
+import limma.Player;
+
+import javax.swing.*;
+import java.io.IOException;
 
 
 public class VideoPlugin implements Plugin {
@@ -19,7 +26,7 @@ public class VideoPlugin implements Plugin {
     private NavigationNode titlesNode;
     private NavigationNode categoriesNode;
 
-    public VideoPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, NavigationList navigationList) {
+    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, final VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, NavigationList navigationList, PlayerManager playerManager) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         this.imdbSevice = imdbSevice;
@@ -34,6 +41,7 @@ public class VideoPlugin implements Plugin {
         categoriesNode = new NavigationNode("Categories");
         moviesNode.add(titlesNode);
         moviesNode.add(categoriesNode);
+        moviesNode.add(new PlayDVDDiscNode(dialogManager, videoConfig, playerManager));
 
         NavigationNode settingsNode = new NavigationNode("Settings");
         moviesNode.add(settingsNode);
@@ -59,5 +67,57 @@ public class VideoPlugin implements Plugin {
 
     public void reloadVideos() {
         dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, titlesNode, categoriesNode, videoPlayer, dialogManager, imdbSevice, videoConfig));
+    }
+
+    private static class PlayDVDDiscNode extends NavigationNode {
+        private final DialogManager dialogManager;
+        private final VideoConfig videoConfig;
+        private PlayerManager playerManager;
+
+        public PlayDVDDiscNode(DialogManager dialogManager, VideoConfig videoConfig, PlayerManager playerManager) {
+            super("Play DVD Disc");
+            this.dialogManager = dialogManager;
+            this.videoConfig = videoConfig;
+            this.playerManager = playerManager;
+        }
+
+        public void performAction() {
+            dialogManager.executeInDialog(new Task() {
+                public JComponent createComponent() {
+                    return new AntialiasLabel("Playing DVD Disc...");
+                }
+
+                public void run() {
+                    playerManager.switchTo(new Player() {
+                        public JComponent getPlayerPane() {
+                            return new JLabel("Playing DVD Disc");
+                        }
+
+                        public void next() {
+                        }
+
+                        public void previous() {
+                        }
+
+                        public void ff() {
+                        }
+
+                        public void rew() {
+                        }
+
+                        public void pause() {
+                        }
+
+                        public void stop() {
+                        }
+                    });
+                    try {
+                        videoConfig.getPlayDvdDiscCommand().execute();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 }

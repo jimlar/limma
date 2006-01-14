@@ -21,4 +21,6 @@ public interface VideoConfig {
     ExternalCommand getDefaultPlayerCommand();
 
     Collection getVideoFileExtensions();
+
+    ExternalCommand getPlayDvdDiscCommand();
 }

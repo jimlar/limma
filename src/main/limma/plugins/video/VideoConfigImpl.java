@@ -51,4 +51,8 @@ public class VideoConfigImpl extends AbstractConfiguration implements VideoConfi
         }
         return result;
     }
+
+    public ExternalCommand getPlayDvdDiscCommand() {
+        return new ExternalCommand(getString("command.dvddisc"));
+    }
 }

@@ -13,14 +13,16 @@ import java.util.List;
 class LoadVideosTask implements Task {
     private PersistenceManager persistenceManager;
     private NavigationNode titlesNode;
+    private NavigationNode categoriesNode;
     private VideoPlayer videoPlayer;
     private DialogManager dialogManager;
     private IMDBSevice imdbSevice;
     private VideoConfig videoConfig;
 
-    public LoadVideosTask(PersistenceManager persistenceManager, NavigationNode titlesNode, VideoPlayer videoPlayer, DialogManager dialogManager, IMDBSevice imdbSevice, VideoConfig videoConfig) {
+    public LoadVideosTask(PersistenceManager persistenceManager, NavigationNode titlesNode, NavigationNode categoriesNode, VideoPlayer videoPlayer, DialogManager dialogManager, IMDBSevice imdbSevice, VideoConfig videoConfig) {
         this.persistenceManager = persistenceManager;
         this.titlesNode = titlesNode;
+        this.categoriesNode = categoriesNode;
         this.videoPlayer = videoPlayer;
         this.dialogManager = dialogManager;
         this.imdbSevice = imdbSevice;
@@ -28,7 +30,7 @@ class LoadVideosTask implements Task {
     }
 
     public JComponent createComponent() {
-        return new AntialiasLabel("Loading video list...");
+        return new AntialiasLabel("Loading movies...");
     }
 
     public void run() {
@@ -48,5 +50,9 @@ class LoadVideosTask implements Task {
             });
         }
         titlesNode.sortByTitle();
+
+        categoriesNode.removeAllChildren();
+        categoriesNode.add(new NavigationNode("Uncategorized"));
+        categoriesNode.sortByTitle();
     }
 }

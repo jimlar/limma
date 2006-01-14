@@ -15,11 +15,13 @@ public class Video {
     private String rating;
     private int imdbNumber;
     private Set files = new HashSet();
+    private Set categories = new HashSet();
+
 
     public Video() {
     }
 
-    public Video(String title, boolean isDvd) {
+    public Video(String title) {
         this.title = title;
     }
 
@@ -93,5 +95,9 @@ public class Video {
 
     public boolean hasImdbNumber() {
         return getImdbNumber() != 0;
+    }
+
+    public Set getCategories() {
+        return categories;
     }
 }

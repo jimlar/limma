@@ -17,6 +17,7 @@ public class VideoPlugin implements Plugin {
     private VideoPlayer videoPlayer;
     private NavigationNode moviesNode;
     private NavigationNode titlesNode;
+    private NavigationNode categoriesNode;
 
     public VideoPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, NavigationList navigationList) {
         this.dialogManager = dialogManager;
@@ -29,12 +30,15 @@ public class VideoPlugin implements Plugin {
         persistenceManager.addPersistentClass(Video.class);
 
         moviesNode = new NavigationNode("Movies");
-        titlesNode = new NavigationNode("Titles");
+        titlesNode = new NavigationNode("All Movies");
+        categoriesNode = new NavigationNode("Categories");
         moviesNode.add(titlesNode);
+        moviesNode.add(categoriesNode);
 
         NavigationNode settingsNode = new NavigationNode("Settings");
         moviesNode.add(settingsNode);
 
+        settingsNode.add(new NavigationNode("Manage Categories"));
         settingsNode.add(new NavigationNode("Scan for new videos") {
             public void performAction() {
                 scanForVideos();
@@ -54,6 +58,6 @@ public class VideoPlugin implements Plugin {
     }
 
     public void reloadVideos() {
-        dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, titlesNode, videoPlayer, dialogManager, imdbSevice, videoConfig));
+        dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, titlesNode, categoriesNode, videoPlayer, dialogManager, imdbSevice, videoConfig));
     }
 }

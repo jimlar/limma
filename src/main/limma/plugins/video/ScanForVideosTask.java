@@ -50,7 +50,7 @@ class ScanForVideosTask extends TransactionalTask {
             if (!persistentFiles.contains(movieFile)) {
                 System.out.println("Adding movie " + movieFile);
 
-                Video video = new Video(guessNameFromFile(movieFile), false);
+                Video video = new Video(guessNameFromFile(movieFile));
                 video = (Video) session.get(Video.class, session.save(video));
                 VideoFile videoFile = new VideoFile(video, movieFile.getAbsolutePath());
                 session.save(videoFile);
@@ -104,7 +104,7 @@ class ScanForVideosTask extends TransactionalTask {
             if (!persistentFiles.contains(dvdFile)) {
                 System.out.println("Adding DVD directory: " + dvdFile);
 
-                Video video = new Video(guessNameFromFile(dvdFile), true);
+                Video video = new Video(guessNameFromFile(dvdFile));
                 video = (Video) session.get(Video.class, session.save(video));
                 VideoFile videoFile = new VideoFile(video, dvdFile.getAbsolutePath());
                 session.save(videoFile);

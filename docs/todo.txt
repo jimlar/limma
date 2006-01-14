@@ -41,12 +41,7 @@ Game plugin
 * More split up menu to find games, to long lists now (c64)
 
 
-DVD Plugin
-----------
-* Play dvd discs directly
-
-
-Video plugin
+Movie plugin
 ------------
 * Support for categorizing movies (differently from the on-disk tree).
 * Add support to select / config / view which player command should be used

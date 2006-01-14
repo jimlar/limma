@@ -31,8 +31,8 @@ public class VideoPlugin implements Plugin {
         persistenceManager.addPersistentClass(Video.class);
 
         moviesNode = new NavigationNode("Movies");
-        titlesNode = new NavigationNode("Browse All Movies");
-        categoriesNode = new NavigationNode("Browse Categories");
+        titlesNode = new NavigationNode("All Movies");
+        categoriesNode = new NavigationNode("Categories");
         moviesNode.add(titlesNode);
         moviesNode.add(categoriesNode);
         moviesNode.add(new PlayDVDDiscNode(dialogManager, videoConfig, playerManager));

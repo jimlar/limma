@@ -48,37 +48,43 @@ class UpdateFromImdbTask extends TransactionalTask {
             video.setYear(info.getYear());
             session.merge(video);
 
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    status.setText("Downloading cover image...");
-                }
-            });
-
-            File posterFile = new File(videoConfig.getPosterDir(), String.valueOf(video.getImdbNumber()));
-
-            InputStream in = null;
-            FileOutputStream out = null;
-            HttpURLConnection urlConnection = null;
-            try {
-                posterFile.getParentFile().mkdirs();
-                System.out.println("Fetching movie cover from: " + info.getCover());
-                urlConnection = (HttpURLConnection) new URL(info.getCover()).openConnection();
-                urlConnection.setUseCaches(false);
-                urlConnection.setDefaultUseCaches(false);
-                in = urlConnection.getInputStream();
-                out = new FileOutputStream(posterFile);
-                CopyUtils.copy(in, out);
-            } finally {
-                IOUtils.closeQuietly(in);
-                IOUtils.closeQuietly(out);
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
-
+            donwloadCoverIfNeeded(info);
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void donwloadCoverIfNeeded(IMDBInfo info) throws IOException {
+        if (info.getCover() == null) {
+            return;
+        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                status.setText("Downloading cover image...");
+            }
+        });
+
+        File posterFile = new File(videoConfig.getPosterDir(), String.valueOf(video.getImdbNumber()));
+
+        InputStream in = null;
+        FileOutputStream out = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            posterFile.getParentFile().mkdirs();
+            System.out.println("Fetching movie cover from: " + info.getCover());
+            urlConnection = (HttpURLConnection) new URL(info.getCover()).openConnection();
+            urlConnection.setUseCaches(false);
+            urlConnection.setDefaultUseCaches(false);
+            in = urlConnection.getInputStream();
+            out = new FileOutputStream(posterFile);
+            CopyUtils.copy(in, out);
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
     }
 }

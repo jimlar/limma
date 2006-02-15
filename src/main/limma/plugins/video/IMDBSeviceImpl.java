@@ -47,7 +47,9 @@ public class IMDBSeviceImpl implements IMDBSevice {
         }
 
         HtmlElement runtimeLabel = getElementContainingText("Runtime:", contentCell);
-        imdbInfo.setRuntime(runtimeLabel.getNextSibling().asText().trim());
+        if (runtimeLabel != null && runtimeLabel.getNextSibling() != null) {
+            imdbInfo.setRuntime(runtimeLabel.getNextSibling().asText().trim());
+        }
 
 
         HtmlElement ratingLabel = getElementContainingText("User Rating:", contentCell);

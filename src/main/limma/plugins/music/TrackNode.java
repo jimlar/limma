@@ -1,9 +1,9 @@
 package limma.plugins.music;
 
 import limma.PlayerManager;
-import limma.swing.navigationlist.NavigationNode;
+import limma.swing.navigationlist.MenuNode;
 
-public class TrackNode extends NavigationNode {
+public class TrackNode extends MenuNode {
     private MusicFile musicFile;
     private MusicPlayer musicPlayer;
     private PlayerManager playerManager;

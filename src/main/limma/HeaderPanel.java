@@ -6,10 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HeaderPanel extends JPanel {
+    private UIProperties uiProperties;
 
-    public HeaderPanel() {
-        AntialiasLabel title = new AntialiasLabel("Limma");
-        title.setFont(Font.decode("Verdana").deriveFont((float) 40));
+    public HeaderPanel(UIProperties uiProperties) {
+        this.uiProperties = uiProperties;
+        AntialiasLabel title = new AntialiasLabel("Limma", uiProperties);
+        title.setFont(uiProperties.getLargeFont());
         title.setForeground(Color.black);
         add(title);
         setOpaque(false);
@@ -17,7 +19,10 @@ public class HeaderPanel extends JPanel {
 
     protected void paintComponent(Graphics g) {
         Graphics2D graphics = (Graphics2D) g;
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Composite oldComposite = graphics.getComposite();
+        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, uiProperties.getHeaderTransparency()));
+
+
         paintGradient(graphics);
 
         drawLine(graphics, 0, new Color(0xbabfc3));
@@ -25,6 +30,7 @@ public class HeaderPanel extends JPanel {
         drawLine(graphics, getHeight() - 1, new Color(0x99aab1));
 
         super.paintComponent(g);
+        graphics.setComposite(oldComposite);
     }
 
     private void drawLine(Graphics2D graphics, int y, Color color) {

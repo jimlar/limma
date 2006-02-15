@@ -33,6 +33,7 @@ public class IMDBSeviceImpl implements IMDBSevice {
         imdbInfo.setImdbNumber(imdbNumber);
 
         String html = getHtml(imdbNumber);
+        System.out.println("html = " + html);
         Matcher matcher = titleAndYearPattern.matcher(html);
         if (matcher.matches()) {
             imdbInfo.setTitle(matcher.group(1));

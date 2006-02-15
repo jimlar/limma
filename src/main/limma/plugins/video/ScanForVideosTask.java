@@ -4,6 +4,7 @@ import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.TransactionalTask;
 import limma.utils.DirectoryScanner;
+import limma.UIProperties;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
 
@@ -14,17 +15,19 @@ import java.util.*;
 class ScanForVideosTask extends TransactionalTask {
     private VideoPlugin videoPlugin;
     private VideoConfig videoConfig;
+    private UIProperties uiProperties;
     private Collection videoFileExtensions;
 
-    public ScanForVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager, VideoConfig videoConfig) {
+    public ScanForVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager, VideoConfig videoConfig, UIProperties uiProperties) {
         super(persistenceManager);
         this.videoPlugin = videoPlugin;
         this.videoConfig = videoConfig;
+        this.uiProperties = uiProperties;
         this.videoFileExtensions = videoConfig.getVideoFileExtensions();
     }
 
     public JComponent createComponent() {
-        return new AntialiasLabel("Searching for videos...");
+        return new AntialiasLabel("Searching for videos...", uiProperties);
     }
 
     public void runInTransaction(Session session) {

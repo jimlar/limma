@@ -1,35 +1,35 @@
 package limma.plugins.video;
 
-import limma.swing.TransactionalTask;
-import limma.swing.AntialiasLabel;
+import limma.UIProperties;
 import limma.persistence.PersistenceManager;
-
-import javax.swing.*;
-
-import org.hibernate.Session;
+import limma.swing.AntialiasLabel;
+import limma.swing.TransactionalTask;
 import org.apache.commons.io.CopyUtils;
 import org.apache.commons.io.IOUtils;
+import org.hibernate.Session;
 
+import javax.swing.*;
 import java.io.File;
-import java.io.InputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 class UpdateFromImdbTask extends TransactionalTask {
-    private AntialiasLabel status = new AntialiasLabel("Fetching information from IMDB...");
+    private AntialiasLabel status;
     private IMDBSevice imdbSevice;
     private VideoConfig videoConfig;
     private Video video;
     private int imdbNumber;
 
-    public UpdateFromImdbTask(PersistenceManager persistenceManager, IMDBSevice imdbSevice, VideoConfig videoConfig, Video video, int imdbNumber) {
+    public UpdateFromImdbTask(PersistenceManager persistenceManager, IMDBSevice imdbSevice, VideoConfig videoConfig, Video video, int imdbNumber, UIProperties uiProperties) {
         super(persistenceManager);
         this.imdbSevice = imdbSevice;
         this.videoConfig = videoConfig;
         this.video = video;
         this.imdbNumber = imdbNumber;
+        this.status = new AntialiasLabel("Fetching information from IMDB...", uiProperties);
     }
 
     public JComponent createComponent() {
@@ -61,6 +61,7 @@ class UpdateFromImdbTask extends TransactionalTask {
             HttpURLConnection urlConnection = null;
             try {
                 posterFile.getParentFile().mkdirs();
+                System.out.println("Fetching movie cover from: " + info.getCover());
                 urlConnection = (HttpURLConnection) new URL(info.getCover()).openConnection();
                 urlConnection.setUseCaches(false);
                 urlConnection.setDefaultUseCaches(false);

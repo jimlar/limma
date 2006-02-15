@@ -2,6 +2,7 @@ package limma.plugins.video;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.navigationlist.NavigationListCellRenderer;
+import limma.UIProperties;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
@@ -17,9 +18,11 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
     private JLabel cover;
     private VideoConfig videoConfig;
     private boolean selected;
+    private UIProperties uiProperties;
 
-    public VideoListCellRenderer(VideoConfig videoConfig) {
+    public VideoListCellRenderer(VideoConfig videoConfig, UIProperties uiProperties) {
         super(new GridBagLayout());
+        this.uiProperties = uiProperties;
         this.videoConfig = videoConfig;
 
         setOpaque(false);
@@ -29,13 +32,13 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
         cover = new JLabel();
         add(cover, new GridBagConstraints(0, 0, 1, 5, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 5), 0, 0));
 
-        titleLabel = new AntialiasLabel();
+        titleLabel = new AntialiasLabel(uiProperties);
         titleLabel.setForeground(Color.black);
-        titleLabel.setFont(Font.decode("Verdana").deriveFont((float) 30));
+        titleLabel.setFont(uiProperties.getMediumFont());
         add(titleLabel, new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
         plotLabel = new JTextArea();
-        plotLabel.setFont(AntialiasLabel.DEFAULT_FONT);
+        plotLabel.setFont(uiProperties.getSmallFont());
         plotLabel.setForeground(Color.black);
         plotLabel.setOpaque(false);
         plotLabel.setEditable(false);
@@ -48,7 +51,7 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
         directorPanel.setOpaque(false);
 
         directorPanel.add(createLabel("Directed by: "));
-        directorLabel = new AntialiasLabel();
+        directorLabel = new AntialiasLabel(uiProperties);
         directorLabel.setForeground(Color.black);
         directorPanel.add(directorLabel);
 
@@ -58,7 +61,7 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
         runtimePanel.setOpaque(false);
 
         runtimePanel.add(createLabel("Runtime: "));
-        runtimeLabel = new AntialiasLabel();
+        runtimeLabel = new AntialiasLabel(uiProperties);
         runtimeLabel.setForeground(Color.black);
         runtimePanel.add(runtimeLabel);
 
@@ -67,7 +70,7 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
         JPanel ratingPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         ratingPanel.setOpaque(false);
         ratingPanel.add(createLabel("Rating: "));
-        ratingLabel = new AntialiasLabel();
+        ratingLabel = new AntialiasLabel(uiProperties);
         ratingLabel.setForeground(Color.black);
         ratingPanel.add(ratingLabel);
 
@@ -75,18 +78,18 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
     }
 
     public boolean supportsRendering(Object value) {
-        return value instanceof MovieNavigationNode;
+        return value instanceof MovieMenuNode;
     }
 
     private AntialiasLabel createLabel(String text) {
-        AntialiasLabel antialiasLabel = new AntialiasLabel(text);
-        antialiasLabel.setForeground(Color.darkGray);
+        AntialiasLabel antialiasLabel = new AntialiasLabel(text, uiProperties);
+        antialiasLabel.setForeground(Color.white);
         return antialiasLabel;
     }
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         this.selected = isSelected;
-        Video video = ((MovieNavigationNode) value).getVideo();
+        Video video = ((MovieMenuNode) value).getVideo();
 
         titleLabel.setText(video.getTitle());
         String director = "Unknown";
@@ -116,7 +119,9 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
 
     protected void paintComponent(Graphics g) {
         Graphics2D graphics = (Graphics2D) g;
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Composite oldComposite = graphics.getComposite();
+        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, uiProperties.getMenuTransparency()));
+
         if (selected) {
             paintGradient(graphics);
             graphics.setColor(new Color(0x127ec7));
@@ -125,6 +130,8 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
             graphics.drawLine(0, graphics.getClipBounds().height - 1, graphics.getClipBounds().width, graphics.getClipBounds().height - 1);
         }
         super.paintComponent(g);
+        graphics.setComposite(oldComposite);
+
     }
 
     private void paintGradient(Graphics2D graphics) {

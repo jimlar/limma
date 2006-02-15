@@ -3,9 +3,10 @@ package limma;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
 import limma.swing.LimmaDialog;
+import limma.swing.ImagePanel;
 import limma.swing.navigationlist.NavigationList;
 import limma.swing.navigationlist.NavigationModel;
-import limma.swing.navigationlist.NavigationNode;
+import limma.swing.navigationlist.MenuNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +24,7 @@ public class MainWindow extends JFrame {
     private boolean menuOpen = false;
     private JPanel cardPanel;
 
-    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, NavigationList navigationList) {
+    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, NavigationList navigationList, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
 
         this.playerManager = playerManager;
@@ -39,14 +40,15 @@ public class MainWindow extends JFrame {
             }
         });
 
-        this.setContentPane(dialogManager.getDialogManagerComponent());
+        setLayout(new BorderLayout());
+        this.add(dialogManager.getDialogManagerComponent(), BorderLayout.CENTER);
 
-//        ImageIcon background = new ImageIcon("background.jpg");
-//        mainPanel = new ImagePanel(background);
+        ImageIcon background = new ImageIcon(uiProperties.getBackDropImage());
+        mainPanel = new ImagePanel(background);
 
-        mainPanel = new JPanel();
-        mainPanel.setBackground(Color.white);
-        mainPanel.setOpaque(true);
+//        mainPanel = new JPanel();
+//        mainPanel.setBackground(Color.white);
+//        mainPanel.setOpaque(true);
         
         mainPanel.setLayout(new BorderLayout());
 
@@ -76,19 +78,24 @@ public class MainWindow extends JFrame {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         cardPanel.add(scrollPane, "menu");
-        cardPanel.add(new JLabel("Limma"), "player");
 
-        mainPanel.add(new HeaderPanel(), BorderLayout.NORTH);
+        JLabel defaultPlayer = new JLabel();
+        defaultPlayer.setOpaque(false);
+        cardPanel.add(defaultPlayer, "player");
+
+        mainPanel.add(new HeaderPanel(uiProperties), BorderLayout.NORTH);
         mainPanel.add(cardPanel, BorderLayout.CENTER);
+
         dialogManager.setRoot(mainPanel);
 
         validate();
+
         for (int i = 0; i < plugins.length; i++) {
             Plugin plugin = plugins[i];
             plugin.init();
         }
 
-        navigationModel.add(new NavigationNode("Exit") {
+        navigationModel.add(new MenuNode("Exit") {
             public void performAction() {
                 System.exit(0);
             }

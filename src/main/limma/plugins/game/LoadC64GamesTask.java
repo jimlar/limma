@@ -2,8 +2,9 @@ package limma.plugins.game;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
-import limma.swing.navigationlist.NavigationNode;
+import limma.swing.navigationlist.MenuNode;
 import limma.utils.DirectoryScanner;
+import limma.UIProperties;
 
 import javax.swing.*;
 import java.io.File;
@@ -12,17 +13,19 @@ import java.util.Iterator;
 
 class LoadC64GamesTask implements Task {
     private final File gamesDir;
-    private NavigationNode c64Node;
+    private MenuNode c64Node;
     private GameConfig gameConfig;
+    private UIProperties uiProperties;
 
-    public LoadC64GamesTask(GameConfig gameConfig, NavigationNode c64Node) {
+    public LoadC64GamesTask(GameConfig gameConfig, MenuNode c64Node, UIProperties uiProperties) {
         this.c64Node = c64Node;
         this.gameConfig = gameConfig;
+        this.uiProperties = uiProperties;
         this.gamesDir = gameConfig.getC64GamesDir();
     }
 
     public JComponent createComponent() {
-        return new AntialiasLabel("Loading C64 games from " + gamesDir.getAbsolutePath());
+        return new AntialiasLabel("Loading C64 games from " + gamesDir.getAbsolutePath(), uiProperties);
     }
 
     public void run() {
@@ -39,7 +42,7 @@ class LoadC64GamesTask implements Task {
 
         for (Iterator i = files.iterator(); i.hasNext();) {
             GameFile gameFile = (GameFile) i.next();
-            c64Node.add(new GameNavigationNode(gameFile, gameConfig));
+            c64Node.add(new GameMenuNode(gameFile, gameConfig));
         }
         c64Node.sortByTitle();
     }

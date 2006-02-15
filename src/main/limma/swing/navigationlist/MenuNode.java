@@ -2,13 +2,13 @@ package limma.swing.navigationlist;
 
 import java.util.*;
 
-public class NavigationNode {
+public class MenuNode {
     private String title;
-    private NavigationNode parent;
-    private List<NavigationNode> children = new ArrayList<NavigationNode>();
+    private MenuNode parent;
+    private List<MenuNode> children = new ArrayList<MenuNode>();
     private int selectedChildIndex;
 
-    public NavigationNode(String title) {
+    public MenuNode(String title) {
         this.title = title;
     }
 
@@ -19,21 +19,21 @@ public class NavigationNode {
     public void performAction() {
     }
 
-    public void add(NavigationNode node) {
+    public void add(MenuNode node) {
         children.add(node);
         assert node.getParent() == null : "Cannot add a node that already is added elsewhere!";
         node.setParent(this);
     }
 
-    public void add(int index, NavigationNode node) {
+    public void add(int index, MenuNode node) {
         children.add(index, node);
         node.setParent(this);
     }
 
 
     public void sortByTitle() {
-        Collections.sort(children, new Comparator<NavigationNode>() {
-            public int compare(NavigationNode o1, NavigationNode o2) {
+        Collections.sort(children, new Comparator<MenuNode>() {
+            public int compare(MenuNode o1, MenuNode o2) {
                 return o1.getTitle().compareToIgnoreCase(o2.getTitle());
             }
         });
@@ -43,13 +43,13 @@ public class NavigationNode {
         return children.size();
     }
 
-    public NavigationNode getChildAt(int index) {
+    public MenuNode getChildAt(int index) {
         return children.get(index);
     }
 
-    public NavigationNode getFirstChildWithTitle(String title) {
-        for (Iterator<NavigationNode> i = children.iterator(); i.hasNext();) {
-            NavigationNode node = i.next();
+    public MenuNode getFirstChildWithTitle(String title) {
+        for (Iterator<MenuNode> i = children.iterator(); i.hasNext();) {
+            MenuNode node = i.next();
             if (title.equals(node.getTitle())) {
                 return node;
             }
@@ -57,11 +57,11 @@ public class NavigationNode {
         return null;
     }
 
-    public NavigationNode getParent() {
+    public MenuNode getParent() {
         return parent;
     }
 
-    public void setParent(NavigationNode parent) {
+    public void setParent(MenuNode parent) {
         this.parent = parent;
     }
 

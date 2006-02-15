@@ -7,6 +7,7 @@ General
 * Sorting in menu
 * Titlebar that shows the title of the currently active menu node when menu is showing
 * Clock in titlebar?
+* Commons progress dialog support for loading database data etc...
 
 
 TV plugin
@@ -53,6 +54,8 @@ Movie plugin
 * Player panel
 * Close menu when starting selecting menu item.
 * Manual editing of movie data
+* Support for more than one movies root dir
+* Better (more robust) IMDB scanning, they also changed the style of their poster images.
 
 
 Pictures plugin

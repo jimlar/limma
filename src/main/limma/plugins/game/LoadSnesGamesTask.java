@@ -2,8 +2,9 @@ package limma.plugins.game;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
-import limma.swing.navigationlist.NavigationNode;
+import limma.swing.navigationlist.MenuNode;
 import limma.utils.DirectoryScanner;
+import limma.UIProperties;
 
 import javax.swing.*;
 import java.io.File;
@@ -12,17 +13,19 @@ import java.util.Iterator;
 
 class LoadSnesGamesTask implements Task {
     private final File gamesDir;
-    private NavigationNode snesNode;
+    private MenuNode snesNode;
     private GameConfig gameConfig;
+    private UIProperties uiProperties;
 
-    public LoadSnesGamesTask(GameConfig gameConfig, NavigationNode snesNode) {
+    public LoadSnesGamesTask(GameConfig gameConfig, MenuNode snesNode, UIProperties uiProperties) {
         this.snesNode = snesNode;
         this.gameConfig = gameConfig;
+        this.uiProperties = uiProperties;
         this.gamesDir = gameConfig.getSnesGamesDir();
     }
 
     public JComponent createComponent() {
-        return new AntialiasLabel("Loading SNES games from " + gamesDir.getAbsolutePath());
+        return new AntialiasLabel("Loading SNES games from " + gamesDir.getAbsolutePath(), uiProperties);
     }
 
     public void run() {
@@ -40,7 +43,7 @@ class LoadSnesGamesTask implements Task {
         snesNode.removeAllChildren();
         for (Iterator i = files.iterator(); i.hasNext();) {
             GameFile gameFile = (GameFile) i.next();
-            snesNode.add(new GameNavigationNode(gameFile, gameConfig));
+            snesNode.add(new GameMenuNode(gameFile, gameConfig));
         }
         snesNode.sortByTitle();
     }

@@ -8,10 +8,11 @@ public class ImagePanel extends JPanel {
 
     public ImagePanel(ImageIcon image) {
         this.background = image;
+        setOpaque(false);
     }
 
-    public void paint(Graphics g) {
+    protected void paintComponent(Graphics g) {
         g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), null);
-        super.paint(g);
+        super.paintComponent(g);
     }
 }

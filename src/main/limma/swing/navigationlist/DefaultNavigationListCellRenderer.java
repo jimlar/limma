@@ -1,27 +1,30 @@
 package limma.swing.navigationlist;
 
+import limma.UIProperties;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 class DefaultNavigationListCellRenderer extends JLabel implements NavigationListCellRenderer {
     private boolean selected;
-    private NavigationNode node;
+    private MenuNode node;
+    private UIProperties uiProperties;
 
-    public DefaultNavigationListCellRenderer() {
+    public DefaultNavigationListCellRenderer(UIProperties uiProperties) {
+        this.uiProperties = uiProperties;
         setOpaque(false);
-        setFont(Font.decode("Verdana").deriveFont((float) 40));
-        setBackground(Color.white);
+        setFont(uiProperties.getLargeFont());
         setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
     }
 
     public boolean supportsRendering(Object value) {
-        return value instanceof NavigationNode;
+        return value instanceof MenuNode;
     }
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         this.selected = isSelected;
-        node = (NavigationNode) value;
+        node = (MenuNode) value;
         setComponentOrientation(list.getComponentOrientation());
         setForeground(isSelected ? Color.white : Color.black);
         setText(node.getTitle());
@@ -30,7 +33,8 @@ class DefaultNavigationListCellRenderer extends JLabel implements NavigationList
 
     protected void paintComponent(Graphics g) {
         Graphics2D graphics = (Graphics2D) g;
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Composite oldComposite = graphics.getComposite();
+        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, uiProperties.getMenuTransparency()));
         if (selected) {
             paintGradient(graphics);
             graphics.setColor(new Color(0x127ec7));
@@ -43,6 +47,7 @@ class DefaultNavigationListCellRenderer extends JLabel implements NavigationList
             drawRigthString(graphics, "+");
         }
         super.paintComponent(g);
+        graphics.setComposite(oldComposite);
     }
 
     private void drawRigthString(Graphics2D graphics, String str) {

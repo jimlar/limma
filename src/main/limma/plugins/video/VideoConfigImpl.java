@@ -42,17 +42,25 @@ public class VideoConfigImpl extends AbstractConfiguration implements VideoConfi
         return new ExternalCommand(getString("command.default"));
     }
 
-    public Collection getVideoFileExtensions() {
-        ArrayList result = new ArrayList();
+    public Collection<String> getVideoFileExtensions() {
+        ArrayList<String> result = new ArrayList<String>();
         String[] extensions = StringUtils.split(getString("moviefileextensions"), ',');
         for (int i = 0; i < extensions.length; i++) {
-            String extension = extensions[i];
-            result.add(extension.toLowerCase().trim());
+            result.add(extensions[i].toLowerCase().trim());
         }
         return result;
     }
 
     public ExternalCommand getPlayDvdDiscCommand() {
         return new ExternalCommand(getString("command.dvddisc"));
+    }
+
+    public Collection<String> getTags() {
+        ArrayList<String> result = new ArrayList<String>();
+        String[] tags = StringUtils.split(getString("tags"), ',');
+        for (int i = 0; i < tags.length; i++) {
+            result.add(tags[i].trim());
+        }
+        return result;
     }
 }

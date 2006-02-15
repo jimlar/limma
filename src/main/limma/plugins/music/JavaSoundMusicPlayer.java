@@ -1,8 +1,5 @@
 package limma.plugins.music;
 
-import limma.plugins.music.MusicFile;
-import limma.plugins.music.TrackContainerNode;
-import limma.plugins.music.TrackNode;
 import org.apache.commons.io.IOUtils;
 
 import javax.sound.sampled.*;
@@ -11,26 +8,35 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class JavaSoundMusicPlayer extends Thread implements MusicPlayer {
-    private BlockingQueue queue = new LinkedBlockingQueue(1);
-    private AudioInputStream audioInputStream;
-    private AudioFormat inputAudioFormat;
-    private SourceDataLine line;
-    private boolean stopping = false;
+import limma.UIProperties;
 
-    public JavaSoundMusicPlayer() {
-        setDaemon(true);
-        start();
+public class JavaSoundMusicPlayer extends AbstractMusicPlayer {
+    private PlayerThread playerThread;
+
+    public JavaSoundMusicPlayer(UIProperties uiProperties) {
+        super(uiProperties);
+        playerThread = new PlayerThread(this);
     }
 
-    public JComponent getPlayerPane() {
-        return null;
+    protected void startPlaying(final MusicFile musicFile) {
+        stop();
+        if (musicFile != null) {
+            playerThread.queue.add(musicFile);
+            SwingUtilities.invokeLater(new Runnable() {
+
+                public void run() {
+                    getCurrentTrackPanel().setCurrentTrack(musicFile, getPlayingTrackNumber(), getPlayList().size());
+                }
+            });
+        }
     }
 
-    public void next() {
+    protected MusicFile getPlayingFile() {
+        return playerThread.getCurrentFile();
     }
 
-    public void previous() {
+    public void stop() {
+        playerThread.stopping = true;
     }
 
     public void ff() {
@@ -42,93 +48,90 @@ public class JavaSoundMusicPlayer extends Thread implements MusicPlayer {
     public void pause() {
     }
 
-//    public void play(List<MusicFile> musicFiles) {
-//        MusicFile musicFile = musicFiles.get(0);
-//        stopPlaying();
-//        try {
-//            queue.put(musicFile);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private static class PlayerThread extends Thread {
+        private boolean stopping = false;
 
-    public void play(TrackContainerNode trackContainerNode) {
-    }
+        private BlockingQueue<MusicFile> queue = new LinkedBlockingQueue<MusicFile>(1);
+        private AudioInputStream audioInputStream;
+        private AudioFormat inputAudioFormat;
+        private SourceDataLine line;
+        private MusicFile currentFile;
+        private JavaSoundMusicPlayer player;
 
-    public void play(TrackNode trackNode) {
-    }
+        public PlayerThread(JavaSoundMusicPlayer player) {
+            this.player = player;
+            setDaemon(true);
+            start();
+        }
 
-    public void stopPlaying() {
-        stopping = true;
-    }
+        public void run() {
+            while (true) {
+                currentFile = null;
+                try {
+                    currentFile = (MusicFile) queue.take();
+                    stopping = false;
+                    openAudioInput(currentFile);
 
+                    openAudioOutputLine();
 
-    public void run() {
-        while (true) {
-            MusicFile musicFile = null;
-            try {
-                musicFile = (MusicFile) queue.take();
-                stopping = false;
-                openAudioInput(musicFile);
+                    byte[] buffer = new byte[4 * 1024];
+                    int bytesRead;
+                    while (!stopping && (bytesRead = audioInputStream.read(buffer, 0, 1024)) != -1) {
+                        line.write(buffer, 0, bytesRead);
+                    }
 
-                openAudioOutputLine();
+                    if (!stopping) {
+                        line.drain();
+                        System.out.println("Completed " + currentFile);
+                        player.next();
+                    } else {
+                        System.out.println("Stopped");
+                    }
 
-                byte[] buffer = new byte[4 * 1024];
-                int bytesRead;
-                while (!stopping && (bytesRead = audioInputStream.read(buffer, 0, 1024)) != -1) {
-                    line.write(buffer, 0, bytesRead);
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (line != null) {
+                        line.close();
+                    }
+                    IOUtils.closeQuietly(audioInputStream);
+                    currentFile = null;
                 }
-
-                if (!stopping) {
-                    line.drain();
-                    System.out.println("Completed " + musicFile);
-                } else {
-                    System.out.println("Stopped");
-                }
-
-            } catch (UnsupportedAudioFileException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                if (line != null) {
-                    line.close();
-                }
-                IOUtils.closeQuietly(audioInputStream);
             }
         }
-    }
 
-    private void openAudioOutputLine() throws LineUnavailableException {
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, inputAudioFormat, AudioSystem.NOT_SPECIFIED);
-        line = (SourceDataLine) AudioSystem.getLine(info);
-        line.open(inputAudioFormat, AudioSystem.NOT_SPECIFIED);
-        System.out.println("line.getBufferSize() = " + line.getBufferSize());
-        line.start();
-    }
+        private void openAudioOutputLine() throws LineUnavailableException {
+            DataLine.Info info = new DataLine.Info(SourceDataLine.class, inputAudioFormat, AudioSystem.NOT_SPECIFIED);
+            line = (SourceDataLine) AudioSystem.getLine(info);
+            line.open(inputAudioFormat, AudioSystem.NOT_SPECIFIED);
+            line.start();
+        }
 
-    private void openAudioInput(MusicFile musicFile) throws IOException, UnsupportedAudioFileException {
-        audioInputStream = AudioSystem.getAudioInputStream(musicFile.getFile());
-        inputAudioFormat = audioInputStream.getFormat();
+        private void openAudioInput(MusicFile musicFile) throws IOException, UnsupportedAudioFileException {
+            audioInputStream = AudioSystem.getAudioInputStream(musicFile.getFile());
+            inputAudioFormat = audioInputStream.getFormat();
 
-        /* Wrap input in PCM conversion filter */
-        AudioFormat pcmConversionFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
-                                                          inputAudioFormat.getSampleRate(),
-                                                          16,
-                                                          inputAudioFormat.getChannels(),
-                                                          inputAudioFormat.getChannels() * (16 / 8),
-                                                          inputAudioFormat.getSampleRate(),
-                                                          false);
+            /* Wrap input in PCM conversion filter */
+            AudioFormat pcmConversionFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+                                                              inputAudioFormat.getSampleRate(),
+                                                              16,
+                                                              inputAudioFormat.getChannels(),
+                                                              inputAudioFormat.getChannels() * (16 / 8),
+                                                              inputAudioFormat.getSampleRate(),
+                                                              false);
 
-        System.out.println("Converting from: " + inputAudioFormat);
-        System.out.println("             to: " + pcmConversionFormat);
+            System.out.println("Converting from: " + inputAudioFormat);
+            System.out.println("             to: " + pcmConversionFormat);
 
-        audioInputStream = AudioSystem.getAudioInputStream(pcmConversionFormat, audioInputStream);
-        inputAudioFormat = audioInputStream.getFormat();
+            audioInputStream = AudioSystem.getAudioInputStream(pcmConversionFormat, audioInputStream);
+            inputAudioFormat = audioInputStream.getFormat();
+/*
 
         AudioFormat resampleFormat = new AudioFormat(pcmConversionFormat.getEncoding(),
                                                      48000,
@@ -143,6 +146,11 @@ public class JavaSoundMusicPlayer extends Thread implements MusicPlayer {
 
         audioInputStream = AudioSystem.getAudioInputStream(resampleFormat, audioInputStream);
         inputAudioFormat = audioInputStream.getFormat();
-    }
+*/
+        }
 
+        public MusicFile getCurrentFile() {
+            return currentFile;
+        }
+    }
 }

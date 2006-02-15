@@ -1,6 +1,5 @@
 package limma.plugins.video;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +14,7 @@ public class Video {
     private String rating;
     private int imdbNumber;
     private Set files = new HashSet();
-    private Set categories = new HashSet();
+    private Set tags = new HashSet();
 
 
     public Video() {
@@ -97,7 +96,7 @@ public class Video {
         return getImdbNumber() != 0;
     }
 
-    public Set getCategories() {
-        return categories;
+    public Set getTags() {
+        return tags;
     }
 }

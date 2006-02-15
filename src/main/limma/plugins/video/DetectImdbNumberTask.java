@@ -2,6 +2,7 @@ package limma.plugins.video;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
+import limma.UIProperties;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -17,14 +18,16 @@ class DetectImdbNumberTask implements Task {
     private static final long MAX_FILE_SIZE_TO_SEARCH = 100 * 1024;
     private Video video;
     private JTextField imdbNumberTextField;
+    private UIProperties uiProperties;
 
-    public DetectImdbNumberTask(Video video, JTextField imdbNumberTextField) {
+    public DetectImdbNumberTask(Video video, JTextField imdbNumberTextField, UIProperties uiProperties) {
         this.video = video;
         this.imdbNumberTextField = imdbNumberTextField;
+        this.uiProperties = uiProperties;
     }
 
     public JComponent createComponent() {
-        return new AntialiasLabel("Detecting IMDB number...");
+        return new AntialiasLabel("Detecting IMDB number...", uiProperties);
     }
 
     public void run() {

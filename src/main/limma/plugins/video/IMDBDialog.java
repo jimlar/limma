@@ -4,6 +4,7 @@ import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
 import limma.swing.LimmaDialog;
+import limma.UIProperties;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -15,21 +16,24 @@ public class IMDBDialog extends LimmaDialog {
     private IMDBSevice imdbSevice;
     private PersistenceManager persistenceManager;
     private VideoConfig videoConfig;
+    private UIProperties uiProperties;
 
-    public IMDBDialog(DialogManager dialogManager, Video video, IMDBSevice imdbSevice, PersistenceManager persistenceManager, VideoConfig videoConfig) {
+    public IMDBDialog(DialogManager dialogManager, Video video, IMDBSevice imdbSevice, PersistenceManager persistenceManager, VideoConfig videoConfig, UIProperties uiProperties) {
         super(dialogManager);
         this.dialogManager = dialogManager;
         this.video = video;
         this.imdbSevice = imdbSevice;
         this.persistenceManager = persistenceManager;
         this.videoConfig = videoConfig;
+        this.uiProperties = uiProperties;
+
         JPanel panel = new JPanel();
         panel.setOpaque(false);
-        panel.add(new AntialiasLabel("IMDB Number:"));
+        panel.add(new AntialiasLabel("IMDB Number:", uiProperties));
         textField = new JTextField();
         textField.setOpaque(true);
         textField.setColumns(10);
-        textField.setFont(AntialiasLabel.DEFAULT_FONT);
+        textField.setFont(uiProperties.getSmallFont());
         panel.add(textField);
         add(panel);
     }
@@ -40,7 +44,7 @@ public class IMDBDialog extends LimmaDialog {
         if (video.hasImdbNumber()) {
             textField.setText(String.valueOf(video.getImdbNumber()));
         } else {
-            dialogManager.executeInDialog(new DetectImdbNumberTask(video, textField));
+            dialogManager.executeInDialog(new DetectImdbNumberTask(video, textField, uiProperties));
         }
         textField.requestFocusInWindow();
     }
@@ -51,7 +55,7 @@ public class IMDBDialog extends LimmaDialog {
                 close();
                 return true;
             case KeyEvent.VK_ENTER:
-                dialogManager.executeInDialog(new UpdateFromImdbTask(persistenceManager, imdbSevice, videoConfig, video, getEnteredImdbNumber()));
+                dialogManager.executeInDialog(new UpdateFromImdbTask(persistenceManager, imdbSevice, videoConfig, video, getEnteredImdbNumber(), uiProperties));
                 close();
                 return true;
         }

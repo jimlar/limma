@@ -1,6 +1,7 @@
 package limma.plugins.music;
 
 import limma.swing.AntialiasLabel;
+import limma.UIProperties;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,9 +18,11 @@ public class CurrentTrackPanel extends JPanel {
 
     private AntialiasLabel tracksLabel;
     private AntialiasLabel coverLabel;
+    private UIProperties uiProperties;
 
-    public CurrentTrackPanel() {
+    public CurrentTrackPanel(UIProperties uiProperties) {
         super(new GridBagLayout());
+        this.uiProperties = uiProperties;
         setOpaque(false);
 
         tracksLabel = addLabel(0, 0, 2, 1, 1);
@@ -34,8 +37,8 @@ public class CurrentTrackPanel extends JPanel {
     }
 
     private AntialiasLabel addLabel(int column, int row, int gridwidth, int gridheight, int weightx) {
-        AntialiasLabel value = new AntialiasLabel();
-        value.setFont(Font.decode("Verdana").deriveFont((float) 40));
+        AntialiasLabel value = new AntialiasLabel(uiProperties);
+        value.setFont(uiProperties.getLargeFont());
         value.setForeground(Color.black);
         add(value, new GridBagConstraints(column, row, gridwidth, gridheight, weightx, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 0, 0));
         return value;

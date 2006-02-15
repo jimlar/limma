@@ -1,5 +1,7 @@
 package limma.swing.navigationlist;
 
+import limma.UIProperties;
+
 import javax.swing.*;
 import javax.swing.text.Position;
 import java.awt.event.KeyEvent;
@@ -10,7 +12,7 @@ import java.util.List;
 public class NavigationList extends JList {
     private List<NavigationListCellRenderer> renderers = new ArrayList<NavigationListCellRenderer>();
 
-    public NavigationList(final NavigationModel model) {
+    public NavigationList(final NavigationModel model, UIProperties uiProperties) {
         super(model);
         addKeyListener(new NavigationListKeyListener(this, model));
         setSelectionModel(new ListSelectionModelAdapter(model));
@@ -26,7 +28,7 @@ public class NavigationList extends JList {
             }
         });
         setOpaque(false);
-        addCellRenderer(new DefaultNavigationListCellRenderer());
+        addCellRenderer(new DefaultNavigationListCellRenderer(uiProperties));
     }
 
     public void scrollToSelected() {

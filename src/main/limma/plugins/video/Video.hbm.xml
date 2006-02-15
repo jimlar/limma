@@ -25,9 +25,9 @@
         <property name="rating" access="field"/>
         <property name="imdbNumber" access="field"/>
 
-        <set access="field" name="categories" table="video_categories">
+        <set access="field" name="tags" table="video_tags">
             <key column="video_id"/>
-            <many-to-many class="VideoCategory" column="category_id"/>
+            <element column="tag_name" type="string"/>
         </set>
 
     </class>
@@ -42,20 +42,6 @@
         </natural-id>
 
         <many-to-one name="video" access="field" cascade="all-delete-orphan" column="video_id"/>
-
-    </class>
-
-    <class name="VideoCategory" table="video_category">
-        <id name="id" access="field">
-            <generator class="native"/>
-        </id>
-
-        <property name="name" access="field"/>
-
-        <set access="field" name="videos" table="video_categories" inverse="true">
-            <key column="category_id"/>
-            <many-to-many class="Video" column="video_id" />
-        </set>
     </class>
 
     <query name="all_videos">from Video</query>

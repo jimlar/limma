@@ -20,7 +20,9 @@ public interface VideoConfig {
 
     ExternalCommand getDefaultPlayerCommand();
 
-    Collection getVideoFileExtensions();
+    Collection<String> getVideoFileExtensions();
 
     ExternalCommand getPlayDvdDiscCommand();
+
+    Collection<String> getTags();
 }

@@ -12,7 +12,7 @@ public class ScanForVideosTaskTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        task = new ScanForVideosTask(null, null, null);
+        task = new ScanForVideosTask(null, null, null, null);
         moviesFiles = new ArrayList<File>();
         moviesFiles.add(new File("/test/test-cd1.avi"));
         moviesFiles.add(new File("/test/test-cd2.avi"));

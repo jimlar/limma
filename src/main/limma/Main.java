@@ -4,17 +4,17 @@ import limma.persistence.PersistenceConfigImpl;
 import limma.persistence.PersistenceManagerImpl;
 import limma.plugins.game.GameConfigImpl;
 import limma.plugins.game.GamePlugin;
+import limma.plugins.music.ExternalMusicPlayer;
 import limma.plugins.music.MusicConfigImpl;
 import limma.plugins.music.MusicPlugin;
-import limma.plugins.music.ExternalMusicPlayer;
 import limma.plugins.video.IMDBSeviceImpl;
 import limma.plugins.video.VideoConfigImpl;
 import limma.plugins.video.VideoPlayer;
 import limma.plugins.video.VideoPlugin;
 import limma.swing.CursorHider;
 import limma.swing.DialogManagerImpl;
-import limma.swing.navigationlist.NavigationModel;
 import limma.swing.navigationlist.NavigationList;
+import limma.swing.navigationlist.NavigationModel;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
 import javax.swing.*;
@@ -28,6 +28,7 @@ public class Main {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 DefaultPicoContainer pico = new DefaultPicoContainer();
+                pico.registerComponentImplementation(UIPropertiesImpl.class);
                 pico.registerComponentImplementation(PlayerManager.class);
                 pico.registerComponentImplementation(NavigationModel.class);
                 pico.registerComponentImplementation(NavigationList.class);

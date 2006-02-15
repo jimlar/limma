@@ -1,23 +1,26 @@
 package limma.plugins.video;
 
-import limma.swing.navigationlist.NavigationNode;
+import limma.swing.navigationlist.MenuNode;
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
+import limma.UIProperties;
 
 import javax.swing.*;
 import java.io.IOException;
 
-public class MovieNavigationNode extends NavigationNode {
+public class MovieMenuNode extends MenuNode {
     private Video video;
     private VideoPlayer player;
     private DialogManager dialogManager;
+    private UIProperties uiProperties;
 
-    public MovieNavigationNode(Video video, VideoPlayer player, DialogManager dialogManager) {
+    public MovieMenuNode(Video video, VideoPlayer player, DialogManager dialogManager, UIProperties uiProperties) {
         super(video.getTitle());
         this.video = video;
         this.player = player;
         this.dialogManager = dialogManager;
+        this.uiProperties = uiProperties;
     }
 
     public Video getVideo() {
@@ -27,7 +30,7 @@ public class MovieNavigationNode extends NavigationNode {
     public void performAction() {
         dialogManager.executeInDialog(new Task() {
             public JComponent createComponent() {
-                return new AntialiasLabel("Playing " + video.getTitle() + "...");
+                return new AntialiasLabel("Playing " + video.getTitle() + "...", uiProperties);
             }
 
             public void run() {

@@ -1,7 +1,7 @@
 package limma.plugins.video;
 
 import limma.swing.AntialiasLabel;
-import limma.swing.navigationlist.NavigationListCellRenderer;
+import limma.swing.navigationlist.MenuCellRenderer;
 import limma.UIProperties;
 import org.apache.commons.lang.StringUtils;
 
@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer {
+class VideoMenuCellRenderer extends JPanel implements MenuCellRenderer {
     private AntialiasLabel titleLabel;
     private AntialiasLabel directorLabel;
     private JTextArea plotLabel;
@@ -20,7 +20,7 @@ class VideoListCellRenderer extends JPanel implements NavigationListCellRenderer
     private boolean selected;
     private UIProperties uiProperties;
 
-    public VideoListCellRenderer(VideoConfig videoConfig, UIProperties uiProperties) {
+    public VideoMenuCellRenderer(VideoConfig videoConfig, UIProperties uiProperties) {
         super(new GridBagLayout());
         this.uiProperties = uiProperties;
         this.videoConfig = videoConfig;

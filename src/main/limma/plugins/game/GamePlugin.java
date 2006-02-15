@@ -2,26 +2,26 @@ package limma.plugins.game;
 
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.MenuModel;
 import limma.swing.navigationlist.MenuNode;
 import limma.UIProperties;
 
 public class GamePlugin implements Plugin {
     private DialogManager dialogManager;
     private GameConfig gameConfig;
-    private NavigationModel navigationModel;
+    private MenuModel menuModel;
     private UIProperties uiProperties;
 
-    public GamePlugin(DialogManager dialogManager, GameConfig gameConfig, NavigationModel navigationModel, UIProperties uiProperties) {
+    public GamePlugin(DialogManager dialogManager, GameConfig gameConfig, MenuModel menuModel, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
         this.gameConfig = gameConfig;
-        this.navigationModel = navigationModel;
+        this.menuModel = menuModel;
         this.uiProperties = uiProperties;
     }
 
     public void init() {
         MenuNode gamesNode = new MenuNode("Games");
-        navigationModel.add(gamesNode);
+        menuModel.add(gamesNode);
 
         MenuNode c64Node = new MenuNode("Commodore 64");
         gamesNode.add(c64Node);

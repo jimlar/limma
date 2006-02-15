@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-class ListSelectionModelAdapter implements ListSelectionModel {
-    private NavigationModel model;
+class MenuSelectionModelAdapter implements ListSelectionModel {
+    private MenuModel model;
     private List<ListSelectionListener> listeners = new ArrayList<ListSelectionListener>();
 
-    public ListSelectionModelAdapter(NavigationModel model) {
+    public MenuSelectionModelAdapter(MenuModel model) {
         this.model = model;
     }
 

@@ -4,8 +4,7 @@ import limma.plugins.Plugin;
 import limma.swing.DialogManager;
 import limma.swing.LimmaDialog;
 import limma.swing.ImagePanel;
-import limma.swing.navigationlist.NavigationList;
-import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.MenuModel;
 import limma.swing.navigationlist.MenuNode;
 
 import javax.swing.*;
@@ -20,11 +19,11 @@ public class MainWindow extends JFrame {
     private PlayerManager playerManager;
     private JComponent currentPlayerPane;
 
-    private NavigationList navigationList;
+    private limma.swing.navigationlist.LimmaMenu limmaMenu;
     private boolean menuOpen = false;
     private JPanel cardPanel;
 
-    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, NavigationList navigationList, UIProperties uiProperties) {
+    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, MenuModel menuModel, limma.swing.navigationlist.LimmaMenu limmaMenu, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
 
         this.playerManager = playerManager;
@@ -69,8 +68,8 @@ public class MainWindow extends JFrame {
             }
         });
 
-        this.navigationList = navigationList;
-        JScrollPane scrollPane = new JScrollPane(this.navigationList);
+        this.limmaMenu = limmaMenu;
+        JScrollPane scrollPane = new JScrollPane(this.limmaMenu);
         scrollPane.setOpaque(false);
         scrollPane.setAutoscrolls(true);
         scrollPane.getViewport().setOpaque(false);
@@ -95,7 +94,7 @@ public class MainWindow extends JFrame {
             plugin.init();
         }
 
-        navigationModel.add(new MenuNode("Exit") {
+        menuModel.add(new MenuNode("Exit") {
             public void performAction() {
                 System.exit(0);
             }
@@ -148,7 +147,7 @@ public class MainWindow extends JFrame {
                     closeMenu();
                     return true;
                 default:
-                    navigationList.processKeyEvent(e);
+                    limmaMenu.processKeyEvent(e);
                     return true;
             }
         } else {

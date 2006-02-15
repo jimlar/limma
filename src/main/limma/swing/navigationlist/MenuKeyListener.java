@@ -3,11 +3,11 @@ package limma.swing.navigationlist;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-class NavigationListKeyListener extends KeyAdapter {
-    private NavigationList list;
-    private final NavigationModel model;
+class MenuKeyListener extends KeyAdapter {
+    private LimmaMenu list;
+    private final MenuModel model;
 
-    public NavigationListKeyListener(NavigationList list, NavigationModel model) {
+    public MenuKeyListener(LimmaMenu list, MenuModel model) {
         this.list = list;
         this.model = model;
     }

@@ -5,12 +5,12 @@ import limma.UIProperties;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.MenuModel;
 import limma.swing.navigationlist.MenuNode;
 
 public class MusicPlugin implements Plugin {
     private MusicPlayer musicPlayer;
-    private NavigationModel navigationModel;
+    private MenuModel menuModel;
     private PlayerManager playerManager;
     private UIProperties uiProperties;
     private DialogManager dialogManager;
@@ -18,12 +18,12 @@ public class MusicPlugin implements Plugin {
     private MusicConfig musicConfig;
     private MenuNode musicNode;
 
-    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer, NavigationModel navigationModel, PlayerManager playerManager, UIProperties uiProperties) {
+    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer, MenuModel menuModel, PlayerManager playerManager, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         this.musicConfig = musicConfig;
         this.musicPlayer = musicPlayer;
-        this.navigationModel = navigationModel;
+        this.menuModel = menuModel;
         this.playerManager = playerManager;
         this.uiProperties = uiProperties;
 
@@ -32,7 +32,7 @@ public class MusicPlugin implements Plugin {
 
     public void init() {
         musicNode = new MenuNode("Music");
-        navigationModel.add(musicNode);
+        menuModel.add(musicNode);
 
         MenuNode settingsNode = new MenuNode("Settings");
         settingsNode.add(new MenuNode("Scan for new music files") {

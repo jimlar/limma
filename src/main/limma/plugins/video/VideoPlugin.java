@@ -6,8 +6,7 @@ import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
 import limma.swing.navigationlist.MenuNode;
-import limma.swing.navigationlist.NavigationList;
-import limma.swing.navigationlist.NavigationModel;
+import limma.swing.navigationlist.MenuModel;
 
 
 public class VideoPlugin implements Plugin {
@@ -15,19 +14,19 @@ public class VideoPlugin implements Plugin {
     private PersistenceManager persistenceManager;
     private IMDBSevice imdbSevice;
     private VideoConfig videoConfig;
-    private NavigationModel navigationModel;
+    private MenuModel menuModel;
     private VideoPlayer videoPlayer;
     private MenuNode moviesNode;
     private MenuNode titlesNode;
     private MenuNode tagsNode;
     private UIProperties uiProperties;
 
-    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, final VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, NavigationList navigationList, PlayerManager playerManager, UIProperties uiProperties) {
+    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, final VideoConfig videoConfig, VideoPlayer videoPlayer, MenuModel menuModel, limma.swing.navigationlist.LimmaMenu limmaMenu, PlayerManager playerManager, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         this.imdbSevice = imdbSevice;
         this.videoConfig = videoConfig;
-        this.navigationModel = navigationModel;
+        this.menuModel = menuModel;
         this.videoPlayer = videoPlayer;
         this.uiProperties = uiProperties;
 
@@ -49,11 +48,11 @@ public class VideoPlugin implements Plugin {
             }
         });
 
-        navigationList.addCellRenderer(new VideoListCellRenderer(videoConfig, uiProperties));
+        limmaMenu.addCellRenderer(new VideoMenuCellRenderer(videoConfig, uiProperties));
     }
 
     public void init() {
-        navigationModel.add(moviesNode);
+        menuModel.add(moviesNode);
         reloadVideos();
     }
 

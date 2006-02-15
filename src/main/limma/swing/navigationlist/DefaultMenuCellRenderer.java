@@ -6,12 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-class DefaultNavigationListCellRenderer extends JLabel implements NavigationListCellRenderer {
+class DefaultMenuCellRenderer extends JLabel implements MenuCellRenderer {
     private boolean selected;
     private MenuNode node;
     private UIProperties uiProperties;
 
-    public DefaultNavigationListCellRenderer(UIProperties uiProperties) {
+    public DefaultMenuCellRenderer(UIProperties uiProperties) {
         this.uiProperties = uiProperties;
         setOpaque(false);
         setFont(uiProperties.getLargeFont());

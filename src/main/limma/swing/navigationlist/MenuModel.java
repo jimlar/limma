@@ -4,7 +4,7 @@ import limma.swing.navigationlist.MenuNode;
 
 import javax.swing.*;
 
-public class NavigationModel extends AbstractListModel {
+public class MenuModel extends AbstractListModel {
     private MenuNode root = new MenuNode("root");
     private MenuNode currentNode = root;
 

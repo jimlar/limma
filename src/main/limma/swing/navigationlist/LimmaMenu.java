@@ -9,17 +9,17 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class NavigationList extends JList {
-    private List<NavigationListCellRenderer> renderers = new ArrayList<NavigationListCellRenderer>();
+public class LimmaMenu extends JList {
+    private List<MenuCellRenderer> renderers = new ArrayList<MenuCellRenderer>();
 
-    public NavigationList(final NavigationModel model, UIProperties uiProperties) {
+    public LimmaMenu(final MenuModel model, UIProperties uiProperties) {
         super(model);
-        addKeyListener(new NavigationListKeyListener(this, model));
-        setSelectionModel(new ListSelectionModelAdapter(model));
+        addKeyListener(new MenuKeyListener(this, model));
+        setSelectionModel(new MenuSelectionModelAdapter(model));
         setCellRenderer(new ListCellRenderer() {
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                for (Iterator<NavigationListCellRenderer> i = renderers.iterator(); i.hasNext();) {
-                    NavigationListCellRenderer renderer = i.next();
+                for (Iterator<MenuCellRenderer> i = renderers.iterator(); i.hasNext();) {
+                    MenuCellRenderer renderer = i.next();
                     if (renderer.supportsRendering(value)) {
                         return renderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                     }
@@ -28,7 +28,7 @@ public class NavigationList extends JList {
             }
         });
         setOpaque(false);
-        addCellRenderer(new DefaultNavigationListCellRenderer(uiProperties));
+        addCellRenderer(new DefaultMenuCellRenderer(uiProperties));
     }
 
     public void scrollToSelected() {
@@ -43,7 +43,7 @@ public class NavigationList extends JList {
         super.processKeyEvent(e);
     }
 
-    public void addCellRenderer(NavigationListCellRenderer renderer) {
+    public void addCellRenderer(MenuCellRenderer renderer) {
         renderers.add(0, renderer);
     }
 }

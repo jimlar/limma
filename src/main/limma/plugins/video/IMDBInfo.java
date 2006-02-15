@@ -1,5 +1,8 @@
 package limma.plugins.video;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+
 public class IMDBInfo {
     private int imdbNumber;
     private String director;
@@ -72,5 +75,9 @@ public class IMDBInfo {
 
     public String getCover() {
         return cover;
+    }
+
+    public String toString() {
+        return new ReflectionToStringBuilder(this).toString();
     }
 }

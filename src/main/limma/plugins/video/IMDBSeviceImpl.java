@@ -1,96 +1,100 @@
 package limma.plugins.video;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.*;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class IMDBSeviceImpl implements IMDBSevice {
     private Pattern titleAndYearPattern;
-    private Pattern directorPattern;
-    private Pattern plotOutlinePattern;
-    private Pattern plotSummaryPattern;
-    private Pattern runtimePattern;
-    private Pattern ratingPattern;
-    private Pattern coverPattern;
+    private WebClient webClient;
 
     public IMDBSeviceImpl() {
-        titleAndYearPattern = Pattern.compile(".*?<title>(.+) \\((\\d+).*\\)</title>.*");
-        directorPattern = Pattern.compile(".*?\">Directed by</b><br> <a href=.*?/\">(.+?)</a>.*");
-        plotOutlinePattern = Pattern.compile(".*?>Plot Outline:</b> (.*?)<a href=\".*");
-        plotSummaryPattern = Pattern.compile(".*?>Plot Summary:</b> (.*?)<a href=\".*");
-        runtimePattern = Pattern.compile(".*?>Runtime:</b>(.*? min).*");
-        ratingPattern = Pattern.compile(".*?>User Rating:</b>.*?<b>(.*?)/10</b>.*");
-        coverPattern = Pattern.compile(".*?<img border=\"0\" alt=\"cover\" src=\"(.*?)\" height=\"(.*?)\" width=\"(.*?)\"><.*");
+        this(new WebClient());
+    }
+
+    public IMDBSeviceImpl(WebClient webClient) {
+        this.webClient = webClient;
+        titleAndYearPattern = Pattern.compile(".*?(.+) \\((\\d+).*\\).*");
     }
 
     public IMDBInfo getInfo(int imdbNumber) throws IOException {
         IMDBInfo imdbInfo = new IMDBInfo();
         imdbInfo.setImdbNumber(imdbNumber);
 
-        String html = getHtml(imdbNumber);
-        System.out.println("html = " + html);
-        Matcher matcher = titleAndYearPattern.matcher(html);
+        HtmlPage page = getPage(imdbNumber);
+
+        Matcher matcher = titleAndYearPattern.matcher(page.getTitleText());
         if (matcher.matches()) {
             imdbInfo.setTitle(matcher.group(1));
             imdbInfo.setYear(Integer.parseInt(matcher.group(2)));
         }
-        matcher = directorPattern.matcher(html);
-        if (matcher.matches()) {
-            imdbInfo.setDirector(matcher.group(1));
+
+        HtmlElement titleElement = page.getDocumentElement().getOneHtmlElementByAttribute("strong", "class", "title");
+        HtmlElement contentCell = titleElement.getEnclosingElement("td");
+
+        HtmlElement directedByLabel = getElementContainingText("Directed by", contentCell);
+        imdbInfo.setDirector(getSiblingText(directedByLabel, HtmlAnchor.class));
+
+        HtmlElement plotOutlineLabel = getElementContainingText("Plot ", contentCell);
+        if (plotOutlineLabel != null && plotOutlineLabel.getNextSibling() != null) {
+            imdbInfo.setPlot(plotOutlineLabel.getNextSibling().asText().trim());
         }
 
-        matcher = plotOutlinePattern.matcher(html);
-        if (matcher.matches()) {
-            imdbInfo.setPlot(StringUtils.trimToEmpty(matcher.group(1)));
-        } else {
-            matcher = plotSummaryPattern.matcher(html);
-            if (matcher.matches()) {
-                imdbInfo.setPlot(StringUtils.trimToEmpty(matcher.group(1)));
-            }
-        }
+        HtmlElement runtimeLabel = getElementContainingText("Runtime:", contentCell);
+        imdbInfo.setRuntime(runtimeLabel.getNextSibling().asText().trim());
 
-        matcher = runtimePattern.matcher(html);
-        if (matcher.matches()) {
-            imdbInfo.setRuntime(StringUtils.trimToEmpty(matcher.group(1)));
-        }
 
-        matcher = ratingPattern.matcher(html);
-        if (matcher.matches()) {
-            imdbInfo.setRating(StringUtils.trimToEmpty(matcher.group(1)));
-        }
+        HtmlElement ratingLabel = getElementContainingText("User Rating:", contentCell);
+        String ratingText = getSiblingText(ratingLabel, UnknownHtmlElement.class);
+        imdbInfo.setRating(ratingText);
 
-        matcher = coverPattern.matcher(html);
-        if (matcher.matches()) {
-            imdbInfo.setCover(StringUtils.trimToEmpty(matcher.group(1)));
+        List anchors = contentCell.getHtmlElementsByAttribute("a", "name", "poster");
+        if (!anchors.isEmpty()) {
+            HtmlAnchor posterLink = (HtmlAnchor) anchors.get(0);
+            HtmlImage poster = (HtmlImage) posterLink.getHtmlElementsByTagName("img").get(0);
+            imdbInfo.setCover(poster.getSrcAttribute());
         }
-
         return imdbInfo;
     }
 
-    private String getHtml(int imdbNumber) throws IOException {
-        URL url = new URL("http://www.imdb.com/title/tt" + imdbNumber + "/");
-        HttpURLConnection urlConnection = null;
-        try {
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setUseCaches(false);
-            urlConnection.setDefaultUseCaches(false);
-            String encoding = urlConnection.getContentEncoding();
-            String html;
-            if (encoding != null) {
-                html = IOUtils.toString(urlConnection.getInputStream(), encoding);
-            } else {
-                html = IOUtils.toString(urlConnection.getInputStream());
-            }
-            return html.replace('\n', ' ').replace('\r', ' ');
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
+    private HtmlElement getElementContainingText(String text, HtmlElement element) {
+        if (element == null) {
+            return null;
+        }
+        for (Iterator i = element.getChildElementsIterator(); i.hasNext();) {
+            HtmlElement child = (HtmlElement) i.next();
+            if (child.asText().indexOf(text) != -1) {
+                return getElementContainingText(text, child);
             }
         }
+        if (element.asText().indexOf(text) != -1) {
+            return element;
+        }
+        return null;
+    }
+
+    private String getSiblingText(DomNode start, Class elementClass) {
+        if (start == null) {
+            return null;
+        }
+        DomNode sibling = start.getNextSibling();
+        if (sibling == null) {
+            return null;
+        }
+        if (elementClass.isInstance(sibling)) {
+            return sibling.asText().trim();
+        }
+
+        return getSiblingText(sibling, elementClass);
+    }
+
+    private HtmlPage getPage(int imdbNumber) throws IOException {
+        return (HtmlPage) webClient.getPage(new URL("http://www.imdb.com/title/tt" + imdbNumber + "/"));
     }
 }

@@ -40,7 +40,27 @@
   </component>
   <component name="DependencyValidationManager" />
   <component name="EntryPointsManager">
-    <entry_points />
+    <entry_points>
+      <entry_point TYPE="method" FQNAME="limma.MainWindow.MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, MenuModel menuModel, LimmaMenu limmaMenu, UIProperties uiProperties)" />
+      <entry_point TYPE="method" FQNAME="limma.persistence.PersistenceConfigImpl.PersistenceConfigImpl()" />
+      <entry_point TYPE="method" FQNAME="limma.persistence.PersistenceManagerImpl.PersistenceManagerImpl(PersistenceConfig persistenceConfig)" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.game.GamePlugin.GamePlugin(DialogManager dialogManager, GameConfig gameConfig, MenuModel menuModel, UIProperties uiProperties)" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.game.GameConfigImpl.GameConfigImpl()" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.music.ExternalMusicPlayer.ExternalMusicPlayer(MusicConfig musicConfig, UIProperties uiProperties)" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.music.JavaSoundMusicPlayer.JavaSoundMusicPlayer(UIProperties uiProperties)" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.music.MusicConfigImpl.MusicConfigImpl()" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.music.MusicPlugin.MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer, MenuModel menuModel, PlayerManager playerManager, UIProperties uiProperties)" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.music.MusicFile.MusicFile()" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.video.IMDBSeviceImpl.IMDBSeviceImpl()" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.video.Video.Video()" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.video.VideoConfigImpl.VideoConfigImpl()" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.video.VideoPlayer.VideoPlayer(VideoConfig videoConfig, PlayerManager playerManager)" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.video.VideoPlugin.VideoPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, VideoConfig videoConfig, VideoPlayer videoPlayer, MenuModel menuModel, LimmaMenu limmaMenu, ...)" />
+      <entry_point TYPE="method" FQNAME="limma.swing.DialogManagerImpl.DialogManagerImpl()" />
+      <entry_point TYPE="method" FQNAME="limma.swing.CursorHider.CursorHider(JFrame frame)" />
+      <entry_point TYPE="method" FQNAME="limma.swing.menu.LimmaMenu.LimmaMenu(MenuModel model, UIProperties uiProperties)" />
+      <entry_point TYPE="method" FQNAME="limma.plugins.video.VideoFile.VideoFile()" />
+    </entry_points>
   </component>
   <component name="ExportToHTMLSettings">
     <option name="PRINT_LINE_NUMBERS" value="false" />

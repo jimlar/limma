@@ -9,7 +9,7 @@ import java.awt.*;
 public class HeaderPanel extends JPanel {
     private UIProperties uiProperties;
 
-    public HeaderPanel(UIProperties uiProperties, MenuModel menuModel, LimmaMenu menu) {
+    public HeaderPanel(UIProperties uiProperties, LimmaMenu menu) {
         this.uiProperties = uiProperties;
         final AntialiasLabel title = new AntialiasLabel("Limma", uiProperties);
         title.setFont(uiProperties.getLargeFont());
@@ -27,7 +27,7 @@ public class HeaderPanel extends JPanel {
             }
         });
 
-        menuModel.addMenuListener(new MenuModelListener() {
+        menu.getMenuModel().addMenuListener(new MenuModelListener() {
             public void currentNodeChanged(MenuModel menuModel, MenuNode node) {
                 updateTitle(menuModel, title);
             }

@@ -93,7 +93,7 @@ public class MainWindow extends JFrame {
         defaultPlayer.setOpaque(false);
         cardPanel.add(defaultPlayer, "player");
 
-        mainPanel.add(new HeaderPanel(uiProperties, menuModel, limmaMenu), BorderLayout.NORTH);
+        mainPanel.add(new HeaderPanel(uiProperties, limmaMenu), BorderLayout.NORTH);
         mainPanel.add(cardPanel, BorderLayout.CENTER);
 
         dialogManager.setRoot(mainPanel);

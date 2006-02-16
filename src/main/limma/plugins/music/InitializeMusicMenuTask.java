@@ -2,7 +2,7 @@ package limma.plugins.music;
 
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
-import limma.swing.navigationlist.MenuNode;
+import limma.swing.menu.MenuNode;
 import limma.persistence.PersistenceManager;
 import limma.PlayerManager;
 import limma.UIProperties;

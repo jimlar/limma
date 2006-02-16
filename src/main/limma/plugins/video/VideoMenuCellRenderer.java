@@ -1,7 +1,7 @@
 package limma.plugins.video;
 
 import limma.swing.AntialiasLabel;
-import limma.swing.navigationlist.MenuCellRenderer;
+import limma.swing.menu.MenuCellRenderer;
 import limma.UIProperties;
 import org.apache.commons.lang.StringUtils;
 

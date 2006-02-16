@@ -2,10 +2,12 @@ package limma;
 
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.LimmaDialog;
 import limma.swing.ImagePanel;
-import limma.swing.navigationlist.MenuModel;
-import limma.swing.navigationlist.MenuNode;
+import limma.swing.LimmaDialog;
+import limma.swing.menu.LimmaMenu;
+import limma.swing.menu.MenuListener;
+import limma.swing.menu.MenuModel;
+import limma.swing.menu.MenuNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,14 +21,14 @@ public class MainWindow extends JFrame {
     private PlayerManager playerManager;
     private JComponent currentPlayerPane;
 
-    private limma.swing.navigationlist.LimmaMenu limmaMenu;
-    private boolean menuOpen = false;
+    private limma.swing.menu.LimmaMenu limmaMenu;
     private JPanel cardPanel;
 
-    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, MenuModel menuModel, limma.swing.navigationlist.LimmaMenu limmaMenu, UIProperties uiProperties) {
+    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, MenuModel menuModel, limma.swing.menu.LimmaMenu limmaMenu, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
-
         this.playerManager = playerManager;
+        this.limmaMenu = limmaMenu;
+
         playerManager.addListener(new PlayerManagerListener() {
             public void playerSwitched(Player player) {
                 if (currentPlayerPane != null) {
@@ -39,6 +41,16 @@ public class MainWindow extends JFrame {
             }
         });
 
+        limmaMenu.addMenuListener(new MenuListener() {
+            public void menuOpened(LimmaMenu menu) {
+                pluginCardsManager.show(cardPanel, "menu");
+            }
+
+            public void menuClosed(LimmaMenu menu) {
+                pluginCardsManager.show(cardPanel, "player");
+            }
+        });
+
         setLayout(new BorderLayout());
         this.add(dialogManager.getDialogManagerComponent(), BorderLayout.CENTER);
 
@@ -48,7 +60,7 @@ public class MainWindow extends JFrame {
 //        mainPanel = new JPanel();
 //        mainPanel.setBackground(Color.white);
 //        mainPanel.setOpaque(true);
-        
+
         mainPanel.setLayout(new BorderLayout());
 
         pluginCardsManager = new CardLayout(0, 0);
@@ -68,7 +80,6 @@ public class MainWindow extends JFrame {
             }
         });
 
-        this.limmaMenu = limmaMenu;
         JScrollPane scrollPane = new JScrollPane(this.limmaMenu);
         scrollPane.setOpaque(false);
         scrollPane.setAutoscrolls(true);
@@ -82,7 +93,7 @@ public class MainWindow extends JFrame {
         defaultPlayer.setOpaque(false);
         cardPanel.add(defaultPlayer, "player");
 
-        mainPanel.add(new HeaderPanel(uiProperties), BorderLayout.NORTH);
+        mainPanel.add(new HeaderPanel(uiProperties, menuModel, limmaMenu), BorderLayout.NORTH);
         mainPanel.add(cardPanel, BorderLayout.CENTER);
 
         dialogManager.setRoot(mainPanel);
@@ -99,7 +110,7 @@ public class MainWindow extends JFrame {
                 System.exit(0);
             }
         });
-        openMenu();
+        limmaMenu.open();
     }
 
     public void setSize(int width, int height) {
@@ -118,10 +129,10 @@ public class MainWindow extends JFrame {
                     getCurrentPlayer().stop();
                     return true;
                 case KeyEvent.VK_M:
-                    if (isMenuOpen()) {
-                        closeMenu();
+                    if (limmaMenu.isOpen()) {
+                        limmaMenu.close();
                     } else {
-                        openMenu();
+                        limmaMenu.open();
                     }
                     return true;
                 case KeyEvent.VK_N:
@@ -141,10 +152,10 @@ public class MainWindow extends JFrame {
                     return true;
             }
         }
-        if (isMenuOpen()) {
+        if (limmaMenu.isOpen()) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE:
-                    closeMenu();
+                    limmaMenu.close();
                     return true;
                 default:
                     limmaMenu.processKeyEvent(e);
@@ -171,19 +182,5 @@ public class MainWindow extends JFrame {
 
     private Player getCurrentPlayer() {
         return playerManager.getPlayer();
-    }
-
-    private boolean isMenuOpen() {
-        return menuOpen;
-    }
-
-    private void openMenu() {
-        menuOpen = true;
-        pluginCardsManager.show(cardPanel, "menu");
-    }
-
-    private void closeMenu() {
-        menuOpen = false;
-        pluginCardsManager.show(cardPanel, "player");
     }
 }

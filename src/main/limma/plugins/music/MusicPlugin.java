@@ -5,8 +5,8 @@ import limma.UIProperties;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.navigationlist.MenuModel;
-import limma.swing.navigationlist.MenuNode;
+import limma.swing.menu.MenuModel;
+import limma.swing.menu.MenuNode;
 
 public class MusicPlugin implements Plugin {
     private MusicPlayer musicPlayer;

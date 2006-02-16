@@ -5,8 +5,8 @@ import limma.UIProperties;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.navigationlist.MenuNode;
-import limma.swing.navigationlist.MenuModel;
+import limma.swing.menu.MenuNode;
+import limma.swing.menu.MenuModel;
 
 
 public class VideoPlugin implements Plugin {
@@ -21,7 +21,7 @@ public class VideoPlugin implements Plugin {
     private MenuNode tagsNode;
     private UIProperties uiProperties;
 
-    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, final VideoConfig videoConfig, VideoPlayer videoPlayer, MenuModel menuModel, limma.swing.navigationlist.LimmaMenu limmaMenu, PlayerManager playerManager, UIProperties uiProperties) {
+    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, final VideoConfig videoConfig, VideoPlayer videoPlayer, MenuModel menuModel, limma.swing.menu.LimmaMenu limmaMenu, PlayerManager playerManager, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         this.imdbSevice = imdbSevice;

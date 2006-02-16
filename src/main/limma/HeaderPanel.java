@@ -1,6 +1,7 @@
 package limma;
 
 import limma.swing.AntialiasLabel;
+import limma.swing.menu.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,13 +9,38 @@ import java.awt.*;
 public class HeaderPanel extends JPanel {
     private UIProperties uiProperties;
 
-    public HeaderPanel(UIProperties uiProperties) {
+    public HeaderPanel(UIProperties uiProperties, MenuModel menuModel, LimmaMenu menu) {
         this.uiProperties = uiProperties;
-        AntialiasLabel title = new AntialiasLabel("Limma", uiProperties);
+        final AntialiasLabel title = new AntialiasLabel("Limma", uiProperties);
         title.setFont(uiProperties.getLargeFont());
         title.setForeground(Color.black);
         add(title);
         setOpaque(false);
+
+        menu.addMenuListener(new MenuListener() {
+            public void menuOpened(LimmaMenu menu) {
+                updateTitle(menu.getMenuModel(), title);
+            }
+
+            public void menuClosed(LimmaMenu menu) {
+                title.setText("Limma");
+            }
+        });
+
+        menuModel.addMenuListener(new MenuModelListener() {
+            public void currentNodeChanged(MenuModel menuModel, MenuNode node) {
+                updateTitle(menuModel, title);
+            }
+        });
+    }
+
+    private void updateTitle(MenuModel menuModel, AntialiasLabel title) {
+        String text = "Limma";
+        MenuNode node = menuModel.getCurrentNode();
+        if (!menuModel.getRoot().equals(node)) {
+            text = node.getTitle();
+        }
+        title.setText(text);
     }
 
     protected void paintComponent(Graphics g) {

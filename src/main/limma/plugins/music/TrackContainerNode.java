@@ -1,6 +1,6 @@
 package limma.plugins.music;
 
-import limma.swing.navigationlist.MenuNode;
+import limma.swing.menu.MenuNode;
 import limma.PlayerManager;
 
 import java.util.ArrayList;

@@ -1,12 +1,23 @@
-
-My ideas of the key mappings
-============================
-This is largely based on the fact that I want to be
-
+Limma key mappings
+=================
+This is largely based on the fact that I want to be able to use Limma with a remote control generating key presses.
 
 
-0-9: Toggle/set options
-m:   Bring up the menu
-i:   Show info
+Action          Key
+---------------------
+Stop:           s
+Menu:           m
+Next            n
+Previous        p
+SkipForward     f
+SkipReverse     r
+Pause           SPACE
+Exit            ESCAPE
+Down            DOWN
+Up              UP
+Left            LEFT
+Right           RIGHT
+GoDownMenu      RIGHT
+GoUpMenu        LEFT
+SelectMenuItem  ENTER
 
-arrow keys: browse about

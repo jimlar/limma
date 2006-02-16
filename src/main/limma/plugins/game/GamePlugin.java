@@ -2,8 +2,8 @@ package limma.plugins.game;
 
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.navigationlist.MenuModel;
-import limma.swing.navigationlist.MenuNode;
+import limma.swing.menu.MenuModel;
+import limma.swing.menu.MenuNode;
 import limma.UIProperties;
 
 public class GamePlugin implements Plugin {

@@ -1,4 +1,4 @@
-package limma.swing.navigationlist;
+package limma.swing.menu;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;

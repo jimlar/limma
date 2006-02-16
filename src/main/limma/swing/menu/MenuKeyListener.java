@@ -1,4 +1,4 @@
-package limma.swing.navigationlist;
+package limma.swing.menu;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

@@ -1,6 +1,6 @@
 package limma.plugins.game;
 
-import limma.swing.navigationlist.MenuNode;
+import limma.swing.menu.MenuNode;
 
 import java.io.IOException;
 

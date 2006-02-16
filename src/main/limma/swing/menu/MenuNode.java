@@ -1,4 +1,4 @@
-package limma.swing.navigationlist;
+package limma.swing.menu;
 
 import java.util.*;
 
@@ -21,7 +21,9 @@ public class MenuNode {
 
     public void add(MenuNode node) {
         children.add(node);
-        assert node.getParent() == null : "Cannot add a node that already is added elsewhere!";
+        if (node.getParent() != null) {
+            throw new IllegalArgumentException("Cannot add a node that already is added elsewhere!");
+        }
         node.setParent(this);
     }
 

@@ -2,7 +2,7 @@ package limma.plugins.game;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
-import limma.swing.navigationlist.MenuNode;
+import limma.swing.menu.MenuNode;
 import limma.utils.DirectoryScanner;
 import limma.UIProperties;
 

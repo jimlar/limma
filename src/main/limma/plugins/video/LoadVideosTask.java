@@ -5,7 +5,7 @@ import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
 import limma.swing.Task;
 import limma.swing.TransactionalTask;
-import limma.swing.navigationlist.MenuNode;
+import limma.swing.menu.MenuNode;
 import limma.UIProperties;
 
 import javax.swing.*;

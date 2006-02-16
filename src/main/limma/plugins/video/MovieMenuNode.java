@@ -1,6 +1,6 @@
 package limma.plugins.video;
 
-import limma.swing.navigationlist.MenuNode;
+import limma.swing.menu.MenuNode;
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;

@@ -52,7 +52,7 @@ public class IMDBSeviceImpl implements IMDBSevice {
         }
 
 
-        HtmlElement ratingLabel = getElementContainingText("User Rating:", contentCell);
+        HtmlElement ratingLabel = getElementContainingText("User Rating:", contentCell); 
         String ratingText = getSiblingText(ratingLabel, UnknownHtmlElement.class);
         imdbInfo.setRating(ratingText);
 

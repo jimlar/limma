@@ -1,16 +1,18 @@
-package limma.swing.navigationlist;
+package limma.swing.menu;
 
 import limma.UIProperties;
 
 import javax.swing.*;
 import javax.swing.text.Position;
-import java.awt.event.KeyEvent;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.*;
 import java.util.List;
 
 public class LimmaMenu extends JList {
     private List<MenuCellRenderer> renderers = new ArrayList<MenuCellRenderer>();
+    private Set<MenuListener> listeners = new HashSet<MenuListener>();
+    private boolean open = true;
 
     public LimmaMenu(final MenuModel model, UIProperties uiProperties) {
         super(model);
@@ -45,5 +47,33 @@ public class LimmaMenu extends JList {
 
     public void addCellRenderer(MenuCellRenderer renderer) {
         renderers.add(0, renderer);
+    }
+
+    public void addMenuListener(MenuListener listener) {
+        listeners.add(listener);
+    }
+
+    public void close() {
+        open = false;
+        for (Iterator<MenuListener> i = listeners.iterator(); i.hasNext();) {
+            MenuListener listener = i.next();
+            listener.menuClosed(this);
+        }
+    }
+
+    public void open() {
+        open = true;
+        for (Iterator<MenuListener> i = listeners.iterator(); i.hasNext();) {
+            MenuListener listener = i.next();
+            listener.menuOpened(this);
+        }
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public MenuModel getMenuModel() {
+        return (MenuModel) getModel();
     }
 }

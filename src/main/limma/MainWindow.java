@@ -7,7 +7,7 @@ import limma.swing.LimmaDialog;
 import limma.swing.menu.LimmaMenu;
 import limma.swing.menu.MenuListener;
 import limma.swing.menu.MenuModel;
-import limma.swing.menu.MenuNode;
+import limma.swing.menu.SimpleMenuNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -105,7 +105,7 @@ public class MainWindow extends JFrame {
             plugin.init();
         }
 
-        menuModel.add(new MenuNode("Exit") {
+        menuModel.add(new SimpleMenuNode("Exit") {
             public void performAction() {
                 System.exit(0);
             }

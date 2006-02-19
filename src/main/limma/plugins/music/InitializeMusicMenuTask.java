@@ -2,6 +2,7 @@ package limma.plugins.music;
 
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
+import limma.swing.menu.SimpleMenuNode;
 import limma.swing.menu.MenuNode;
 import limma.persistence.PersistenceManager;
 import limma.PlayerManager;
@@ -12,12 +13,12 @@ import java.util.Iterator;
 
 class InitializeMusicMenuTask implements Task {
     private PersistenceManager persistenceManager;
-    private MenuNode musicNode;
+    private SimpleMenuNode musicNode;
     private MusicPlayer musicPlayer;
     private PlayerManager playerManager;
     private UIProperties uiProperties;
 
-    public InitializeMusicMenuTask(PersistenceManager persistenceManager, MenuNode musicNode, MusicPlayer musicPlayer, PlayerManager playerManager, UIProperties uiProperties) {
+    public InitializeMusicMenuTask(PersistenceManager persistenceManager, SimpleMenuNode musicNode, MusicPlayer musicPlayer, PlayerManager playerManager, UIProperties uiProperties) {
         this.persistenceManager = persistenceManager;
         this.musicNode = musicNode;
         this.musicPlayer = musicPlayer;
@@ -44,23 +45,24 @@ class InitializeMusicMenuTask implements Task {
             addToAlbumsNode(albumsNode, file);
         }
 
-        for (int i = 0; i < artistsNode.getChildCount(); i++) {
-            MenuNode artistNode = (MenuNode) artistsNode.getChildAt(i);
+        for (Iterator<MenuNode> i = artistsNode.getChildren().iterator(); i.hasNext();) {
+            SimpleMenuNode artistNode = (SimpleMenuNode) i.next();
             artistNode.sortByTitle();
         }
+        
         artistsNode.sortByTitle();
         albumsNode.sortByTitle();
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                musicNode.add(0, songsNode);
-                musicNode.add(0, albumsNode);
-                musicNode.add(0, artistsNode);
+                musicNode.add(artistsNode);
+                musicNode.add(albumsNode);
+                musicNode.add(songsNode);
             }
         });
     }
 
-    private void addToArtistsNode(MenuNode artistsNode, MusicFile file) {
+    private void addToArtistsNode(SimpleMenuNode artistsNode, MusicFile file) {
         TrackContainerNode artistNode = (TrackContainerNode) artistsNode.getFirstChildWithTitle(file.getArtist());
         if (artistNode == null) {
             artistNode = new TrackContainerNode(file.getArtist(), musicPlayer, playerManager);
@@ -75,7 +77,7 @@ class InitializeMusicMenuTask implements Task {
         albumNode.add(new TrackNode(file.getTitle(), file, musicPlayer, playerManager));
     }
 
-    private void addToAlbumsNode(MenuNode albumsNode, MusicFile file) {
+    private void addToAlbumsNode(SimpleMenuNode albumsNode, MusicFile file) {
         String albumName = file.getArtist() + ": " + file.getAlbum();
         TrackContainerNode albumNode = (TrackContainerNode) albumsNode.getFirstChildWithTitle(albumName);
         if (albumNode == null) {

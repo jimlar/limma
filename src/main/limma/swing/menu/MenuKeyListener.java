@@ -15,8 +15,8 @@ class MenuKeyListener extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         MenuNode currentNode = model.getCurrentNode();
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            MenuNode child = (MenuNode) currentNode.getChildAt(currentNode.getSelectedChildIndex());
-            if (child.getChildCount() > 0) {
+            MenuNode child = currentNode.getSelectedChild();
+            if (!child.getChildren().isEmpty()) {
                 model.setCurrentNode(child);
                 list.scrollToSelected();
                 e.consume();
@@ -29,7 +29,7 @@ class MenuKeyListener extends KeyAdapter {
                 e.consume();
             }
         } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            MenuNode child = (MenuNode) currentNode.getChildAt(currentNode.getSelectedChildIndex());
+            MenuNode child = currentNode.getSelectedChild();
             child.performAction();
         }
     }

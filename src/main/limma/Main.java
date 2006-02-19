@@ -7,7 +7,7 @@ import limma.plugins.game.GamePlugin;
 import limma.plugins.music.ExternalMusicPlayer;
 import limma.plugins.music.MusicConfigImpl;
 import limma.plugins.music.MusicPlugin;
-import limma.plugins.video.IMDBSeviceImpl;
+import limma.plugins.video.IMDBServiceImpl;
 import limma.plugins.video.VideoConfigImpl;
 import limma.plugins.video.VideoPlayer;
 import limma.plugins.video.VideoPlugin;
@@ -39,7 +39,7 @@ public class Main {
                 pico.registerComponentImplementation(VideoPlugin.class);
                 pico.registerComponentImplementation(VideoConfigImpl.class);
                 pico.registerComponentImplementation(VideoPlayer.class);
-                pico.registerComponentImplementation(IMDBSeviceImpl.class);
+                pico.registerComponentImplementation(IMDBServiceImpl.class);
 
                 pico.registerComponentImplementation(MusicPlugin.class);
                 pico.registerComponentImplementation(MusicConfigImpl.class);

@@ -1,6 +1,6 @@
 package limma.plugins.video;
 
-import limma.swing.menu.MenuNode;
+import limma.swing.menu.SimpleMenuNode;
 import limma.swing.DialogManager;
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
@@ -11,7 +11,7 @@ import limma.UIProperties;
 import javax.swing.*;
 import java.io.IOException;
 
-class PlayDVDDiscNode extends MenuNode {
+class PlayDVDDiscNode extends SimpleMenuNode {
     private final DialogManager dialogManager;
     private final VideoConfig videoConfig;
     private PlayerManager playerManager;

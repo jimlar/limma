@@ -24,5 +24,4 @@ public interface VideoConfig {
 
     ExternalCommand getPlayDvdDiscCommand();
 
-    Collection<String> getTags();
 }

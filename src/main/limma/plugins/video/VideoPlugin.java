@@ -5,26 +5,25 @@ import limma.UIProperties;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.menu.MenuNode;
+import limma.swing.menu.SimpleMenuNode;
 import limma.swing.menu.MenuModel;
 
 
 public class VideoPlugin implements Plugin {
     private DialogManager dialogManager;
     private PersistenceManager persistenceManager;
-    private IMDBSevice imdbSevice;
+    private IMDBService imdbService;
     private VideoConfig videoConfig;
     private MenuModel menuModel;
     private VideoPlayer videoPlayer;
-    private MenuNode moviesNode;
-    private MenuNode titlesNode;
-    private MenuNode tagsNode;
+    private MoviesMenuNode moviesNode;
     private UIProperties uiProperties;
+    private MovieStorage movieStorage;
 
-    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, final VideoConfig videoConfig, VideoPlayer videoPlayer, MenuModel menuModel, limma.swing.menu.LimmaMenu limmaMenu, PlayerManager playerManager, UIProperties uiProperties) {
+    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager, IMDBService imdbService, final VideoConfig videoConfig, VideoPlayer videoPlayer, MenuModel menuModel, limma.swing.menu.LimmaMenu limmaMenu, PlayerManager playerManager, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
-        this.imdbSevice = imdbSevice;
+        this.imdbService = imdbService;
         this.videoConfig = videoConfig;
         this.menuModel = menuModel;
         this.videoPlayer = videoPlayer;
@@ -32,17 +31,15 @@ public class VideoPlugin implements Plugin {
 
         persistenceManager.addPersistentClass(Video.class);
 
-        moviesNode = new MenuNode("Movies");
-        titlesNode = new MenuNode("All");
-        tagsNode = new MenuNode("Tags");
-        moviesNode.add(titlesNode);
-        moviesNode.add(tagsNode);
-        moviesNode.add(new PlayDVDDiscNode(dialogManager, videoConfig, playerManager, uiProperties));
+        movieStorage = new MovieStorage(persistenceManager);
+        MovieNodeFactory movieNodeFactory = new MovieNodeFactory(movieStorage, videoPlayer, dialogManager, uiProperties, imdbService, persistenceManager, videoConfig);
+        moviesNode = new MoviesMenuNode(movieStorage, movieNodeFactory);
+        moviesNode.addTrailingNode(new PlayDVDDiscNode(dialogManager, videoConfig, playerManager, uiProperties));
 
-        MenuNode settingsNode = new MenuNode("Settings");
-        moviesNode.add(settingsNode);
+        SimpleMenuNode settingsNode = new SimpleMenuNode("Settings");
+        moviesNode.addTrailingNode(settingsNode);
 
-        settingsNode.add(new MenuNode("Scan for new videos") {
+        settingsNode.add(new SimpleMenuNode("Scan for new videos") {
             public void performAction() {
                 scanForVideos();
             }
@@ -61,6 +58,8 @@ public class VideoPlugin implements Plugin {
     }
 
     public void reloadVideos() {
-        dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, titlesNode, tagsNode, videoPlayer, dialogManager, imdbSevice, videoConfig, uiProperties));
+        SimpleMenuNode titlesNode = null;
+        SimpleMenuNode tagsNode = null;
+        dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, movieStorage, titlesNode, tagsNode, videoPlayer, dialogManager, imdbService, videoConfig, uiProperties));
     }
 }

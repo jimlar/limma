@@ -1,12 +1,14 @@
 package limma.plugins.music;
 
+import limma.swing.menu.SimpleMenuNode;
 import limma.swing.menu.MenuNode;
 import limma.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
-public class TrackContainerNode extends MenuNode {
+public class TrackContainerNode extends SimpleMenuNode {
     private MusicPlayer musicPlayer;
     private PlayerManager playerManager;
 
@@ -23,8 +25,9 @@ public class TrackContainerNode extends MenuNode {
 
     public List<MusicFile> getAllMusicFiles() {
         ArrayList<MusicFile> musicFiles = new ArrayList<MusicFile>();
-        for (int i = 0; i < getChildCount(); i++) {
-            Object child =  getChildAt(i);
+
+        for (Iterator<MenuNode> i  = getChildren().iterator(); i.hasNext();) {
+            MenuNode child = i.next();
             if (child instanceof TrackNode) {
                 TrackNode trackNode = (TrackNode) child;
                 musicFiles.add(trackNode.getMusicFile());

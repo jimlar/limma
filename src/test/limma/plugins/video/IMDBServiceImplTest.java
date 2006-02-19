@@ -7,10 +7,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class IMDBSeviceImplTest extends TestCase {
+public class IMDBServiceImplTest extends TestCase {
 
     public void testGetInfoFor2001ASpaceOdyssey() throws Exception {
-        IMDBSeviceImpl imdbSevice = createImdbServiceWithMockWebClient("imdb-2001.html");
+        IMDBServiceImpl imdbSevice = createImdbServiceWithMockWebClient("imdb-2001.html");
 
         IMDBInfo info = imdbSevice.getInfo(62622);
         assertEquals(62622, info.getImdbNumber());
@@ -24,7 +24,7 @@ public class IMDBSeviceImplTest extends TestCase {
     }
 
     public void testGetInfoForMovieWithBarelyAnyInfo() throws Exception {
-        IMDBSeviceImpl imdbSevice = createImdbServiceWithMockWebClient("imdb-little-info.html");
+        IMDBServiceImpl imdbSevice = createImdbServiceWithMockWebClient("imdb-little-info.html");
 
         IMDBInfo info = imdbSevice.getInfo(497874);
         assertEquals(497874, info.getImdbNumber());
@@ -37,8 +37,8 @@ public class IMDBSeviceImplTest extends TestCase {
         assertNull(info.getCover());
     }
 
-    private IMDBSeviceImpl createImdbServiceWithMockWebClient(final String mockPage) {
-        IMDBSeviceImpl imdbSevice = new IMDBSeviceImpl(new WebClient() {
+    private IMDBServiceImpl createImdbServiceWithMockWebClient(final String mockPage) {
+        IMDBServiceImpl imdbSevice = new IMDBServiceImpl(new WebClient() {
             public Page getPage(final URL url) throws IOException, FailingHttpStatusCodeException {
                 return getPage(getCurrentWindow(), new WebRequestSettings(new File("testdata", mockPage).toURL()));
             }

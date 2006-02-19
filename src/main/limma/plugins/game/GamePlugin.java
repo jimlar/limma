@@ -3,7 +3,7 @@ package limma.plugins.game;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
 import limma.swing.menu.MenuModel;
-import limma.swing.menu.MenuNode;
+import limma.swing.menu.SimpleMenuNode;
 import limma.UIProperties;
 
 public class GamePlugin implements Plugin {
@@ -20,12 +20,12 @@ public class GamePlugin implements Plugin {
     }
 
     public void init() {
-        MenuNode gamesNode = new MenuNode("Games");
+        SimpleMenuNode gamesNode = new SimpleMenuNode("Games");
         menuModel.add(gamesNode);
 
-        MenuNode c64Node = new MenuNode("Commodore 64");
+        SimpleMenuNode c64Node = new SimpleMenuNode("Commodore 64");
         gamesNode.add(c64Node);
-        MenuNode snesNode = new MenuNode("Super Nintendo");
+        SimpleMenuNode snesNode = new SimpleMenuNode("Super Nintendo");
         gamesNode.add(snesNode);
 
         dialogManager.executeInDialog(new LoadC64GamesTask(gameConfig, c64Node, uiProperties));

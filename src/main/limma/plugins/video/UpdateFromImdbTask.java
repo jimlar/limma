@@ -18,14 +18,14 @@ import java.net.URL;
 
 class UpdateFromImdbTask extends TransactionalTask {
     private AntialiasLabel status;
-    private IMDBSevice imdbSevice;
+    private IMDBService imdbService;
     private VideoConfig videoConfig;
     private Video video;
     private int imdbNumber;
 
-    public UpdateFromImdbTask(PersistenceManager persistenceManager, IMDBSevice imdbSevice, VideoConfig videoConfig, Video video, int imdbNumber, UIProperties uiProperties) {
+    public UpdateFromImdbTask(PersistenceManager persistenceManager, IMDBService imdbService, VideoConfig videoConfig, Video video, int imdbNumber, UIProperties uiProperties) {
         super(persistenceManager);
-        this.imdbSevice = imdbSevice;
+        this.imdbService = imdbService;
         this.videoConfig = videoConfig;
         this.video = video;
         this.imdbNumber = imdbNumber;
@@ -38,7 +38,7 @@ class UpdateFromImdbTask extends TransactionalTask {
 
     public void runInTransaction(Session session) {
         try {
-            final IMDBInfo info = imdbSevice.getInfo(imdbNumber);
+            final IMDBInfo info = imdbService.getInfo(imdbNumber);
             video.setImdbNumber(info.getImdbNumber());
             video.setTitle(info.getTitle());
             video.setDirector(info.getDirector());

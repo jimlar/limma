@@ -1,10 +1,10 @@
 package limma.plugins.game;
 
-import limma.swing.menu.MenuNode;
+import limma.swing.menu.SimpleMenuNode;
 
 import java.io.IOException;
 
-public class GameMenuNode extends MenuNode {
+public class GameMenuNode extends SimpleMenuNode {
     private GameFile game;
     private GameConfig gameConfig;
 

@@ -13,16 +13,16 @@ public class IMDBDialog extends LimmaDialog {
     private DialogManager dialogManager;
     private JTextField textField;
     private Video video;
-    private IMDBSevice imdbSevice;
+    private IMDBService imdbService;
     private PersistenceManager persistenceManager;
     private VideoConfig videoConfig;
     private UIProperties uiProperties;
 
-    public IMDBDialog(DialogManager dialogManager, Video video, IMDBSevice imdbSevice, PersistenceManager persistenceManager, VideoConfig videoConfig, UIProperties uiProperties) {
+    public IMDBDialog(DialogManager dialogManager, Video video, IMDBService imdbService, PersistenceManager persistenceManager, VideoConfig videoConfig, UIProperties uiProperties) {
         super(dialogManager);
         this.dialogManager = dialogManager;
         this.video = video;
-        this.imdbSevice = imdbSevice;
+        this.imdbService = imdbService;
         this.persistenceManager = persistenceManager;
         this.videoConfig = videoConfig;
         this.uiProperties = uiProperties;
@@ -55,7 +55,7 @@ public class IMDBDialog extends LimmaDialog {
                 close();
                 return true;
             case KeyEvent.VK_ENTER:
-                dialogManager.executeInDialog(new UpdateFromImdbTask(persistenceManager, imdbSevice, videoConfig, video, getEnteredImdbNumber(), uiProperties));
+                dialogManager.executeInDialog(new UpdateFromImdbTask(persistenceManager, imdbService, videoConfig, video, getEnteredImdbNumber(), uiProperties));
                 close();
                 return true;
         }

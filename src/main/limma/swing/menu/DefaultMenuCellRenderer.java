@@ -42,7 +42,7 @@ class DefaultMenuCellRenderer extends JLabel implements MenuCellRenderer {
             graphics.setColor(new Color(0x428ac5));
             graphics.drawLine(0, graphics.getClipBounds().height - 1, graphics.getClipBounds().width, graphics.getClipBounds().height - 1);
         }
-        if (node.getChildCount() > 0) {
+        if (!node.getChildren().isEmpty()) {
             graphics.setPaint(getForeground());
             drawRigthString(graphics, "+");
         }

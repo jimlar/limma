@@ -2,7 +2,7 @@ package limma.plugins.game;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
-import limma.swing.menu.MenuNode;
+import limma.swing.menu.SimpleMenuNode;
 import limma.utils.DirectoryScanner;
 import limma.UIProperties;
 
@@ -13,11 +13,11 @@ import java.util.Iterator;
 
 class LoadC64GamesTask implements Task {
     private final File gamesDir;
-    private MenuNode c64Node;
+    private SimpleMenuNode c64Node;
     private GameConfig gameConfig;
     private UIProperties uiProperties;
 
-    public LoadC64GamesTask(GameConfig gameConfig, MenuNode c64Node, UIProperties uiProperties) {
+    public LoadC64GamesTask(GameConfig gameConfig, SimpleMenuNode c64Node, UIProperties uiProperties) {
         this.c64Node = c64Node;
         this.gameConfig = gameConfig;
         this.uiProperties = uiProperties;

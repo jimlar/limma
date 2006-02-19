@@ -1,70 +1,19 @@
 package limma.swing.menu;
 
-import java.util.*;
+import java.util.List;
 
-public class MenuNode {
-    private String title;
-    private MenuNode parent;
-    private List<MenuNode> children = new ArrayList<MenuNode>();
+public abstract class MenuNode {
     private int selectedChildIndex;
+    private MenuNode parent;
 
-    public MenuNode(String title) {
-        this.title = title;
-    }
+    public abstract String getTitle();
 
-    public String getTitle() {
-        return title;
-    }
+    public abstract void performAction();
 
-    public void performAction() {
-    }
-
-    public void add(MenuNode node) {
-        children.add(node);
-        if (node.getParent() != null) {
-            throw new IllegalArgumentException("Cannot add a node that already is added elsewhere!");
-        }
-        node.setParent(this);
-    }
-
-    public void add(int index, MenuNode node) {
-        children.add(index, node);
-        node.setParent(this);
-    }
-
-
-    public void sortByTitle() {
-        Collections.sort(children, new Comparator<MenuNode>() {
-            public int compare(MenuNode o1, MenuNode o2) {
-                return o1.getTitle().compareToIgnoreCase(o2.getTitle());
-            }
-        });
-    }
-
-    public int getChildCount() {
-        return children.size();
-    }
-
-    public MenuNode getChildAt(int index) {
-        return children.get(index);
-    }
-
-    public MenuNode getFirstChildWithTitle(String title) {
-        for (Iterator<MenuNode> i = children.iterator(); i.hasNext();) {
-            MenuNode node = i.next();
-            if (title.equals(node.getTitle())) {
-                return node;
-            }
-        }
-        return null;
-    }
+    public abstract List<MenuNode> getChildren();
 
     public MenuNode getParent() {
         return parent;
-    }
-
-    public void setParent(MenuNode parent) {
-        this.parent = parent;
     }
 
     public int getSelectedChildIndex() {
@@ -75,7 +24,11 @@ public class MenuNode {
         this.selectedChildIndex = selectedChildIndex;
     }
 
-    public void removeAllChildren() {
-        children.clear();
+    public void setParent(MenuNode parent) {
+        this.parent = parent;
+    }
+
+    public MenuNode getSelectedChild() {
+        return getChildren().get(selectedChildIndex);
     }
 }

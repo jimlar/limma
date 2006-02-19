@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IMDBSeviceImpl implements IMDBSevice {
+public class IMDBServiceImpl implements IMDBService {
     private Pattern titleAndYearPattern;
     private WebClient webClient;
 
-    public IMDBSeviceImpl() {
+    public IMDBServiceImpl() {
         this(new WebClient());
     }
 
-    public IMDBSeviceImpl(WebClient webClient) {
+    public IMDBServiceImpl(WebClient webClient) {
         this.webClient = webClient;
         titleAndYearPattern = Pattern.compile(".*?(.+) \\((\\d+).*\\).*");
     }

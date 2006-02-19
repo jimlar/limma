@@ -2,7 +2,7 @@ package limma.plugins.game;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
-import limma.swing.menu.MenuNode;
+import limma.swing.menu.SimpleMenuNode;
 import limma.utils.DirectoryScanner;
 import limma.UIProperties;
 
@@ -13,11 +13,11 @@ import java.util.Iterator;
 
 class LoadSnesGamesTask implements Task {
     private final File gamesDir;
-    private MenuNode snesNode;
+    private SimpleMenuNode snesNode;
     private GameConfig gameConfig;
     private UIProperties uiProperties;
 
-    public LoadSnesGamesTask(GameConfig gameConfig, MenuNode snesNode, UIProperties uiProperties) {
+    public LoadSnesGamesTask(GameConfig gameConfig, SimpleMenuNode snesNode, UIProperties uiProperties) {
         this.snesNode = snesNode;
         this.gameConfig = gameConfig;
         this.uiProperties = uiProperties;

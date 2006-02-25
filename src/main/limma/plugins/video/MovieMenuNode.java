@@ -1,10 +1,10 @@
 package limma.plugins.video;
 
-import limma.swing.menu.SimpleMenuNode;
 import limma.swing.menu.MenuNode;
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
+import limma.swing.TaskInfo;
 import limma.UIProperties;
 
 import javax.swing.*;
@@ -49,7 +49,7 @@ public class MovieMenuNode extends MenuNode {
 
     public void performAction() {
         dialogManager.executeInDialog(new Task() {
-            public JComponent createComponent() {
+            public JComponent prepareToRun(TaskInfo taskInfo) {
                 return new AntialiasLabel("Playing " + video.getTitle() + "...", uiProperties);
             }
 

@@ -4,6 +4,7 @@ import limma.UIProperties;
 import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.TransactionalTask;
+import limma.swing.TaskInfo;
 import org.apache.commons.io.CopyUtils;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
@@ -32,7 +33,7 @@ class UpdateFromImdbTask extends TransactionalTask {
         this.status = new AntialiasLabel("Fetching information from IMDB...", uiProperties);
     }
 
-    public JComponent createComponent() {
+    public JComponent prepareToRun(TaskInfo taskInfo) {
         return status;
     }
 

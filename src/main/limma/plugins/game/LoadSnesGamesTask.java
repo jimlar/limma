@@ -2,6 +2,7 @@ package limma.plugins.game;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
+import limma.swing.TaskInfo;
 import limma.swing.menu.SimpleMenuNode;
 import limma.utils.DirectoryScanner;
 import limma.UIProperties;
@@ -24,7 +25,7 @@ class LoadSnesGamesTask implements Task {
         this.gamesDir = gameConfig.getSnesGamesDir();
     }
 
-    public JComponent createComponent() {
+    public JComponent prepareToRun(TaskInfo taskInfo) {
         return new AntialiasLabel("Loading SNES games from " + gamesDir.getAbsolutePath(), uiProperties);
     }
 

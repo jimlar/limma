@@ -1,15 +1,19 @@
 package limma.swing;
 
+import limma.UIProperties;
+
 import javax.swing.*;
 import java.util.Stack;
 
 public class DialogManagerImpl implements DialogManager {
     private Stack dialogStack = new Stack();
     private JLayeredPane layeredPane;
+    private TaskDialog dialog;
 
-    public DialogManagerImpl() {
+    public DialogManagerImpl(UIProperties uiProperties) {
         layeredPane = new JLayeredPane();
         layeredPane.setOpaque(false);
+        dialog = new TaskDialog(this, uiProperties);
     }
 
     public JComponent getDialogManagerComponent() {
@@ -21,11 +25,13 @@ public class DialogManagerImpl implements DialogManager {
     }
 
     public void executeInDialog(Task task) {
-        TaskDialog dialog = new TaskDialog(this);
         dialog.executeInDialog(task);
     }
 
     public synchronized void open(LimmaDialog dialog) {
+        if (dialogStack.contains(dialog)) {
+            return;
+        }
         dialogStack.push(dialog);
         layeredPane.add(dialog, new Integer(JLayeredPane.POPUP_LAYER.intValue() + dialogStack.size()));
         dialog.setVisible(true);
@@ -34,6 +40,9 @@ public class DialogManagerImpl implements DialogManager {
     }
 
     public synchronized void close(LimmaDialog dialog) {
+        if (!dialogStack.contains(dialog)) {
+            return;
+        }
         dialogStack.remove(dialog);
         dialog.setVisible(false);
         layeredPane.remove(dialog);

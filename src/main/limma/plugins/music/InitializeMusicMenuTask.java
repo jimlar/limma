@@ -2,6 +2,7 @@ package limma.plugins.music;
 
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
+import limma.swing.TaskInfo;
 import limma.swing.menu.SimpleMenuNode;
 import limma.swing.menu.MenuNode;
 import limma.persistence.PersistenceManager;
@@ -26,7 +27,7 @@ class InitializeMusicMenuTask implements Task {
         this.uiProperties = uiProperties;
     }
 
-    public JComponent createComponent() {
+    public JComponent prepareToRun(TaskInfo taskInfo) {
         return new AntialiasLabel("Loading music database...", uiProperties);
     }
 

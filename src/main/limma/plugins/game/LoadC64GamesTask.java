@@ -2,6 +2,7 @@ package limma.plugins.game;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
+import limma.swing.TaskInfo;
 import limma.swing.menu.SimpleMenuNode;
 import limma.utils.DirectoryScanner;
 import limma.UIProperties;
@@ -24,7 +25,7 @@ class LoadC64GamesTask implements Task {
         this.gamesDir = gameConfig.getC64GamesDir();
     }
 
-    public JComponent createComponent() {
+    public JComponent prepareToRun(TaskInfo taskInfo) {
         return new AntialiasLabel("Loading C64 games from " + gamesDir.getAbsolutePath(), uiProperties);
     }
 

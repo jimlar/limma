@@ -2,6 +2,7 @@ package limma.plugins.video;
 
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
+import limma.swing.TaskInfo;
 import limma.UIProperties;
 import org.apache.commons.io.FileUtils;
 
@@ -26,7 +27,7 @@ class DetectImdbNumberTask implements Task {
         this.uiProperties = uiProperties;
     }
 
-    public JComponent createComponent() {
+    public JComponent prepareToRun(TaskInfo taskInfo) {
         return new AntialiasLabel("Detecting IMDB number...", uiProperties);
     }
 

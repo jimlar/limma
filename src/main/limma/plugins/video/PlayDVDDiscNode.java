@@ -4,6 +4,7 @@ import limma.swing.menu.SimpleMenuNode;
 import limma.swing.DialogManager;
 import limma.swing.Task;
 import limma.swing.AntialiasLabel;
+import limma.swing.TaskInfo;
 import limma.PlayerManager;
 import limma.Player;
 import limma.UIProperties;
@@ -27,7 +28,7 @@ class PlayDVDDiscNode extends SimpleMenuNode {
 
     public void performAction() {
         dialogManager.executeInDialog(new Task() {
-            public JComponent createComponent() {
+            public JComponent prepareToRun(TaskInfo taskInfo) {
                 return new AntialiasLabel("Playing DVD Disc...", uiProperties);
             }
 

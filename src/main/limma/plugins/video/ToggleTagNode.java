@@ -5,6 +5,7 @@ import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
 import limma.swing.TransactionalTask;
+import limma.swing.TaskInfo;
 import limma.swing.menu.MenuNode;
 import org.hibernate.Session;
 
@@ -46,7 +47,7 @@ class ToggleTagNode extends MenuNode {
                 session.update(video);
             }
 
-            public JComponent createComponent() {
+            public JComponent prepareToRun(TaskInfo taskInfo) {
                 return new AntialiasLabel("Toggling tag", uiProperties);
             }
         });

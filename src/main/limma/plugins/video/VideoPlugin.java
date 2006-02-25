@@ -60,6 +60,6 @@ public class VideoPlugin implements Plugin {
     public void reloadVideos() {
         SimpleMenuNode titlesNode = null;
         SimpleMenuNode tagsNode = null;
-        dialogManager.executeInDialog(new LoadVideosTask(persistenceManager, movieStorage, titlesNode, tagsNode, videoPlayer, dialogManager, imdbService, videoConfig, uiProperties));
+        dialogManager.executeInDialog(new LoadVideosTask(movieStorage, uiProperties));
     }
 }

@@ -3,6 +3,7 @@ package limma.plugins.video;
 import limma.persistence.PersistenceManager;
 import limma.swing.AntialiasLabel;
 import limma.swing.TransactionalTask;
+import limma.swing.TaskInfo;
 import limma.utils.DirectoryScanner;
 import limma.UIProperties;
 import org.apache.commons.lang.StringUtils;
@@ -26,7 +27,7 @@ class ScanForVideosTask extends TransactionalTask {
         this.videoFileExtensions = videoConfig.getVideoFileExtensions();
     }
 
-    public JComponent createComponent() {
+    public JComponent prepareToRun(TaskInfo taskInfo) {
         return new AntialiasLabel("Searching for videos...", uiProperties);
     }
 

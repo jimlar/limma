@@ -6,9 +6,8 @@ import limma.swing.DialogManager;
 import limma.swing.menu.MenuNode;
 import limma.swing.menu.SimpleMenuNode;
 
-import java.util.List;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 public class MovieNodeFactory {
     private VideoPlayer videoPlayer;
@@ -48,7 +47,7 @@ public class MovieNodeFactory {
     public MenuNode createEditTagsNode(Video video) {
         SimpleMenuNode editTagsNode = new SimpleMenuNode("Edit Tags");
 
-        Set<String> tags = movieStorage.getTags();
+        List<String> tags = movieStorage.getTags();
         for (Iterator<String> i = tags.iterator(); i.hasNext();) {
             String tag = i.next();
             editTagsNode.add(new ToggleTagNode(tag, video, dialogManager, persistenceManager, uiProperties));

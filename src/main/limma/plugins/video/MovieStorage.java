@@ -6,27 +6,32 @@ import java.util.*;
 
 public class MovieStorage {
     private PersistenceManager persistenceManager;
-    private List videos = new ArrayList();
+    private List<Video> videos = new ArrayList<Video>();
 
     public MovieStorage(PersistenceManager persistenceManager) {
         this.persistenceManager = persistenceManager;
     }
 
     public void refresh() {
-        videos = persistenceManager.query("all_videos");
+        videos = new ArrayList<Video>(persistenceManager.query("all_videos"));
+        Collections.sort(videos, new VideoComparator());
     }
 
-    public List getVideos() {
+    public List<Video> getVideos() {
         return videos;
     }
 
-    public Set<String> getTags() {
-        Set <String> tags = new HashSet<String>();
+    public List<String> getTags() {
+        Set<String> tags = new HashSet<String>();
         for (Iterator i = videos.iterator(); i.hasNext();) {
             Video video = (Video) i.next();
             tags.addAll(video.getTags());
         }
-        return tags;
+
+        ArrayList<String> result = new ArrayList<String>();
+        result.addAll(tags);
+        Collections.sort(result);
+        return result;
     }
 
     public List<Video> getVideosWithTag(String tag) {
@@ -37,6 +42,13 @@ public class MovieStorage {
                 result.add(video);
             }
         }
+        Collections.sort(result, new VideoComparator());
         return result;
+    }
+
+    private static class VideoComparator implements Comparator<Video> {
+        public int compare(Video v1, Video v2) {
+            return v1.getTitle().compareToIgnoreCase(v2.getTitle());
+        }
     }
 }

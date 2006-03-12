@@ -1,12 +1,12 @@
 package limma.plugins.video;
 
-import limma.utils.ExternalCommand;
 import limma.Player;
 import limma.PlayerManager;
+import limma.utils.ExternalCommand;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,6 +15,7 @@ import java.util.ListIterator;
 public class VideoPlayer implements Player {
     private VideoConfig videoConfig;
     private PlayerManager playerManager;
+    private static final long DVD_SIZE_THRESHOLD = 2L * 1024 * 1024 * 1024;
 
     public VideoPlayer(VideoConfig videoConfig, PlayerManager playerManager) {
         this.videoConfig = videoConfig;
@@ -85,7 +86,7 @@ public class VideoPlayer implements Player {
         }
 
         /* 4GB files are considered to be dvds */
-        if (file.getFile().isFile() && file.getFile().length() > (4L * 1024 * 1024 * 1024)) {
+        if (file.getFile().isFile() && file.getFile().length() > DVD_SIZE_THRESHOLD) {
             return true;
         }
 

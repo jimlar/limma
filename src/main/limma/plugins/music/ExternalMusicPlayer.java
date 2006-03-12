@@ -1,7 +1,7 @@
 package limma.plugins.music;
 
-import limma.utils.ExternalCommand;
 import limma.UIProperties;
+import limma.utils.ExternalCommand;
 
 import javax.swing.*;
 import java.io.*;
@@ -102,7 +102,7 @@ public class ExternalMusicPlayer extends AbstractMusicPlayer {
                 BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith("ANS_LENGTH=")) {
-                        player.setTrackLengthSeconds(Integer.parseInt(line.substring("ANS_LENGTH=".length())));
+                        player.setTrackLengthSeconds((int) Double.parseDouble(line.substring("ANS_LENGTH=".length())));
                     }
                     Pattern p = Pattern.compile(".: *(\\d*):?(\\d*).(\\d).*");
                     Matcher m = p.matcher(line);

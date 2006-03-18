@@ -32,6 +32,7 @@ public class MainWindow extends JFrame {
             }
         });
         slideInPlayerTimer.setCoalesce(true);
+        slideInPlayerTimer.setRepeats(false);
 
         playerManager.addListener(new PlayerManagerListener() {
             public void playerSwitched(Player player) {

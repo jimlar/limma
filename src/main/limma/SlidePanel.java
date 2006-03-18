@@ -8,6 +8,7 @@ import java.awt.*;
 public class SlidePanel extends JPanel {
     private boolean isOut = false;
     private JComponent slideComponent;
+    private TimingController lastTimer;
 
     public SlidePanel() {
         setLayout(new SlideLayout());
@@ -17,9 +18,10 @@ public class SlidePanel extends JPanel {
     public void slideIn(JComponent component) {
         if (component != slideComponent) {
             this.slideComponent = component;
-            slideComponent.setLocation(getWidth(), 0);
             removeAll();
             add(slideComponent);
+            doLayout();
+            slideComponent.setLocation(0, getHeight());
         }
         slideIn();
     }
@@ -43,22 +45,27 @@ public class SlidePanel extends JPanel {
             return;
         }
 
-        Cycle cycle = new Cycle(500, 30);
+        if (lastTimer != null) {
+            lastTimer.stop();
+        }
+
+        Cycle cycle = new Cycle(500, 10);
         Envelope envelope = new Envelope(1,
                                          0,
                                          Envelope.RepeatBehavior.FORWARD,
                                          Envelope.EndBehavior.HOLD);
         Point p0 = new Point(0, 0);
-        Point p1 = new Point(getWidth(), 0);
+        int height = getHeight();
+        Point p1 = new Point(0, height);
         PropertyRange range;
         if (out) {
             range = PropertyRange.createPropertyRangePoint("location", p0, p1);
         } else {
             range = PropertyRange.createPropertyRangePoint("location", p1, p0);
         }
-        TimingController timer = new TimingController(cycle, envelope, new ObjectModifier(slideComponent, range));
-        timer.setAcceleration(1.0f);
-        timer.start();
+        lastTimer = new TimingController(cycle, envelope, new ObjectModifier(slideComponent, range));
+        lastTimer.setAcceleration(1.0f);
+        lastTimer.start();
     }
 
     public static class SlideLayout implements LayoutManager2 {

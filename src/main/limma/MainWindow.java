@@ -31,6 +31,7 @@ public class MainWindow extends JFrame {
                 slidePanel.slideIn();
             }
         });
+        slideInPlayerTimer.setCoalesce(true);
 
         playerManager.addListener(new PlayerManagerListener() {
             public void playerSwitched(Player player) {

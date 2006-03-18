@@ -8,6 +8,8 @@ General
 * Titlebar that shows the title of the currently active menu node when menu is showing
 * Clock in titlebar?
 * Commons progress dialog support for loading database data etc...
+* Let the players be a layer that slides in from the right (Covering half the screen, the menu always visible in the background).
+  I could probably use the Sheet style from the oreilly swing hacks (hack44.pdf)
 
 
 TV plugin

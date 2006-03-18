@@ -1,8 +1,6 @@
 package limma.swing.menu;
 
 public interface MenuListener {
-    
-    void menuOpened(LimmaMenu menu);
 
-    void menuClosed(LimmaMenu menu);
+    void menuItemFocusChanged(LimmaMenu menu, MenuNode newFocusedItem);
 }

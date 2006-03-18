@@ -38,9 +38,9 @@ class DefaultMenuCellRenderer extends JLabel implements MenuCellRenderer {
         if (selected) {
             paintGradient(graphics);
             graphics.setColor(new Color(0x127ec7));
-            graphics.drawLine(0, 0, graphics.getClipBounds().width, 0);
+            graphics.drawLine(0, 0, getWidth(), 0);
             graphics.setColor(new Color(0x428ac5));
-            graphics.drawLine(0, graphics.getClipBounds().height - 1, graphics.getClipBounds().width, graphics.getClipBounds().height - 1);
+            graphics.drawLine(0, getHeight() - 1, getHeight(), getHeight() - 1);
         }
         if (!node.getChildren().isEmpty()) {
             graphics.setPaint(getForeground());
@@ -53,16 +53,16 @@ class DefaultMenuCellRenderer extends JLabel implements MenuCellRenderer {
     private void drawRigthString(Graphics2D graphics, String str) {
         Rectangle2D stringBounds = getFont().getStringBounds(str, graphics.getFontRenderContext());
         FontMetrics fontMetrics = getFontMetrics(getFont());
-        graphics.drawString(str, (int) (graphics.getClipBounds().width - stringBounds.getWidth()) - 10, (int) fontMetrics.getHeight() - fontMetrics.getDescent());
+        graphics.drawString(str, (int) (getWidth() - stringBounds.getWidth()) - 10, (int) fontMetrics.getHeight() - fontMetrics.getDescent());
     }
 
     private void paintGradient(Graphics2D graphics) {
         Color topColor = new Color(0x209bd6);
         Color bottomColor = new Color(0x0177bf);
-        int height = graphics.getClipBounds().height;
+        int height = getHeight();
         int yPos = 0;
         graphics.setPaint(new GradientPaint(0, yPos, topColor, 0, yPos + height, bottomColor));
-        graphics.fillRect(0, yPos, graphics.getClipBounds().width, height);
+        graphics.fillRect(0, yPos, getWidth(), height);
     }
 
 

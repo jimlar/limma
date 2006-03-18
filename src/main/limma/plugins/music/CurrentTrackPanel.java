@@ -1,9 +1,10 @@
 package limma.plugins.music;
 
-import limma.swing.AntialiasLabel;
 import limma.UIProperties;
+import limma.swing.AntialiasLabel;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -23,24 +24,27 @@ public class CurrentTrackPanel extends JPanel {
     public CurrentTrackPanel(UIProperties uiProperties) {
         super(new GridBagLayout());
         this.uiProperties = uiProperties;
-        setOpaque(false);
 
-        tracksLabel = addLabel(0, 0, 2, 1, 1);
-        coverLabel = addLabel(0, 1, 1, 3, 0);
+        setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.black, 1), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        setBackground(new Color(255, 255, 255, 128));
+        setOpaque(true);
+
+        coverLabel = addLabel(0);
         coverLabel.setPreferredSize(new Dimension(200, 200));
 
-        titleLabel = addLabel(1, 1, 1, 1, 1);
-        artistLabel = addLabel(1, 2, 1, 1, 1);
-        albumLabel = addLabel(1, 3, 1, 1, 1);
+        tracksLabel = addLabel(1);
+        titleLabel = addLabel(2);
+        artistLabel = addLabel(3);
+        albumLabel = addLabel(4);
 
-        timeLabel = addLabel(0, 4, 2, 1, 1);
+        timeLabel = addLabel(5);
     }
 
-    private AntialiasLabel addLabel(int column, int row, int gridwidth, int gridheight, int weightx) {
+    private AntialiasLabel addLabel(int row) {
         AntialiasLabel value = new AntialiasLabel(uiProperties);
         value.setFont(uiProperties.getLargeFont());
         value.setForeground(Color.black);
-        add(value, new GridBagConstraints(column, row, gridwidth, gridheight, weightx, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 0, 0));
+        add(value, new GridBagConstraints(0, row, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
         return value;
     }
 
@@ -56,7 +60,9 @@ public class CurrentTrackPanel extends JPanel {
             artistLabel.setText(file.getArtist());
             albumLabel.setText(file.getAlbum() + (file.getYear() == 0 ? "" : " (" + file.getYear() + ")"));
         }
-        coverLabel.setIcon(findCoverImage(file));
+        Icon coverImage = findCoverImage(file);
+        coverLabel.setIcon(coverImage);
+        coverLabel.setVisible(coverImage != null);
     }
 
     private Icon findCoverImage(MusicFile file) {

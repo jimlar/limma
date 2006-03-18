@@ -18,12 +18,8 @@ public class HeaderPanel extends JPanel {
         setOpaque(false);
 
         menu.addMenuListener(new MenuListener() {
-            public void menuOpened(LimmaMenu menu) {
-                updateTitle(menu.getMenuModel(), title);
-            }
 
-            public void menuClosed(LimmaMenu menu) {
-                title.setText("Limma");
+            public void menuItemFocusChanged(LimmaMenu menu, MenuNode newFocusedItem) {
             }
         });
 

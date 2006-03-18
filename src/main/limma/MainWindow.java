@@ -4,50 +4,44 @@ import limma.plugins.Plugin;
 import limma.swing.DialogManager;
 import limma.swing.ImagePanel;
 import limma.swing.LimmaDialog;
-import limma.swing.menu.LimmaMenu;
-import limma.swing.menu.MenuListener;
-import limma.swing.menu.MenuModel;
-import limma.swing.menu.SimpleMenuNode;
+import limma.swing.menu.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 public class MainWindow extends JFrame {
-    private CardLayout pluginCardsManager;
     private JPanel mainPanel;
     private DialogManager dialogManager;
 
     private PlayerManager playerManager;
-    private JComponent currentPlayerPane;
 
-    private limma.swing.menu.LimmaMenu limmaMenu;
-    private JPanel cardPanel;
+    private LimmaMenu limmaMenu;
 
-    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, MenuModel menuModel, limma.swing.menu.LimmaMenu limmaMenu, UIProperties uiProperties) {
+    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, MenuModel menuModel, LimmaMenu limmaMenu, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
         this.playerManager = playerManager;
         this.limmaMenu = limmaMenu;
 
+        final SlidePanel slidePanel = addSliderPanel();
+        final Timer slideInPlayerTimer = new Timer(2 * 1000, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                slidePanel.slideIn();
+            }
+        });
+
         playerManager.addListener(new PlayerManagerListener() {
             public void playerSwitched(Player player) {
-                if (currentPlayerPane != null) {
-                    cardPanel.remove(currentPlayerPane);
-                }
-                currentPlayerPane = player.getPlayerPane();
-                if (currentPlayerPane != null) {
-                    cardPanel.add(currentPlayerPane, "player");
-                }
+                slidePanel.slideIn(player.getPlayerPane());
             }
         });
 
         limmaMenu.addMenuListener(new MenuListener() {
-            public void menuOpened(LimmaMenu menu) {
-                pluginCardsManager.show(cardPanel, "menu");
-            }
-
-            public void menuClosed(LimmaMenu menu) {
-                pluginCardsManager.show(cardPanel, "player");
+            public void menuItemFocusChanged(LimmaMenu menu, MenuNode newFocusedItem) {
+                slidePanel.slideOut();
+                slideInPlayerTimer.restart();
             }
         });
 
@@ -56,16 +50,7 @@ public class MainWindow extends JFrame {
 
         ImageIcon background = new ImageIcon(uiProperties.getBackDropImage());
         mainPanel = new ImagePanel(background);
-
-//        mainPanel = new JPanel();
-//        mainPanel.setBackground(Color.white);
-//        mainPanel.setOpaque(true);
-
         mainPanel.setLayout(new BorderLayout());
-
-        pluginCardsManager = new CardLayout(0, 0);
-        cardPanel = new JPanel(pluginCardsManager);
-        cardPanel.setOpaque(false);
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             public boolean dispatchKeyEvent(KeyEvent e) {
@@ -87,14 +72,10 @@ public class MainWindow extends JFrame {
         scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        cardPanel.add(scrollPane, "menu");
-
-        JLabel defaultPlayer = new JLabel();
-        defaultPlayer.setOpaque(false);
-        cardPanel.add(defaultPlayer, "player");
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
         mainPanel.add(new HeaderPanel(uiProperties, limmaMenu), BorderLayout.NORTH);
-        mainPanel.add(cardPanel, BorderLayout.CENTER);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         dialogManager.setRoot(mainPanel);
 
@@ -110,7 +91,24 @@ public class MainWindow extends JFrame {
                 System.exit(0);
             }
         });
-        limmaMenu.open();
+    }
+
+    private SlidePanel addSliderPanel() {
+        final SlidePanel slidePanel = new SlidePanel();
+        JPanel glassPane = (JPanel) getGlassPane();
+        glassPane.setLayout(new BorderLayout());
+        glassPane.setVisible(true);
+
+        glassPane.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.SOUTHEAST;
+        gbc.gridx = 1;
+        glassPane.add(slidePanel, gbc);
+        gbc.gridx = 0;
+        gbc.weighty = Integer.MAX_VALUE;
+        gbc.weightx = Integer.MAX_VALUE;
+        glassPane.add(Box.createGlue(), gbc);
+        return slidePanel;
     }
 
     public void setSize(int width, int height) {
@@ -129,11 +127,11 @@ public class MainWindow extends JFrame {
                     getCurrentPlayer().stop();
                     return true;
                 case KeyEvent.VK_M:
-                    if (limmaMenu.isOpen()) {
-                        limmaMenu.close();
-                    } else {
-                        limmaMenu.open();
-                    }
+//                    if (limmaMenu.isOpen()) {
+//                        limmaMenu.close();
+//                    } else {
+//                        limmaMenu.open();
+//                    }
                     return true;
                 case KeyEvent.VK_N:
                     getCurrentPlayer().next();
@@ -150,34 +148,11 @@ public class MainWindow extends JFrame {
                 case KeyEvent.VK_SPACE:
                     getCurrentPlayer().pause();
                     return true;
-            }
-        }
-        if (limmaMenu.isOpen()) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_ESCAPE:
-                    limmaMenu.close();
-                    return true;
                 default:
                     limmaMenu.processKeyEvent(e);
                     return true;
             }
-        } else {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_DOWN:
-                    getCurrentPlayer().next();
-                    return true;
-                case KeyEvent.VK_UP:
-                    getCurrentPlayer().previous();
-                    return true;
-                case KeyEvent.VK_RIGHT:
-                    getCurrentPlayer().ff();
-                    return true;
-                case KeyEvent.VK_LEFT:
-                    getCurrentPlayer().rew();
-                    return true;
-            }
         }
-        return false;
     }
 
     private Player getCurrentPlayer() {

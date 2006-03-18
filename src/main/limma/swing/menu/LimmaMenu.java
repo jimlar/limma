@@ -3,6 +3,8 @@ package limma.swing.menu;
 import limma.UIProperties;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.text.Position;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,7 +14,6 @@ import java.util.List;
 public class LimmaMenu extends JList {
     private List<MenuCellRenderer> renderers = new ArrayList<MenuCellRenderer>();
     private Set<MenuListener> listeners = new HashSet<MenuListener>();
-    private boolean open = true;
 
     public LimmaMenu(final MenuModel model, UIProperties uiProperties) {
         super(model);
@@ -31,6 +32,11 @@ public class LimmaMenu extends JList {
         });
         setOpaque(false);
         addCellRenderer(new DefaultMenuCellRenderer(uiProperties));
+        addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                fireFocusChanged();
+            }
+        });
     }
 
     public void scrollToSelected() {
@@ -53,27 +59,15 @@ public class LimmaMenu extends JList {
         listeners.add(listener);
     }
 
-    public void close() {
-        open = false;
-        for (Iterator<MenuListener> i = listeners.iterator(); i.hasNext();) {
-            MenuListener listener = i.next();
-            listener.menuClosed(this);
-        }
-    }
-
-    public void open() {
-        open = true;
-        for (Iterator<MenuListener> i = listeners.iterator(); i.hasNext();) {
-            MenuListener listener = i.next();
-            listener.menuOpened(this);
-        }
-    }
-
-    public boolean isOpen() {
-        return open;
-    }
-
     public MenuModel getMenuModel() {
         return (MenuModel) getModel();
+    }
+
+    protected void fireFocusChanged() {
+        MenuNode node = (MenuNode) getMenuModel().getElementAt(getSelectedIndex());
+        for (Iterator<MenuListener> i = listeners.iterator(); i.hasNext();) {
+            MenuListener listener = i.next();
+            listener.menuItemFocusChanged(this, node);
+        }
     }
 }

@@ -13,9 +13,9 @@ import java.util.Comparator;
 import java.util.ListIterator;
 
 public class VideoPlayer implements Player {
+    private static final long DVD_SIZE_THRESHOLD = 2L * 1024 * 1024 * 1024;
     private VideoConfig videoConfig;
     private PlayerManager playerManager;
-    private static final long DVD_SIZE_THRESHOLD = 2L * 1024 * 1024 * 1024;
 
     public VideoPlayer(VideoConfig videoConfig, PlayerManager playerManager) {
         this.videoConfig = videoConfig;

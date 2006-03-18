@@ -19,6 +19,7 @@ class MenuKeyListener extends KeyAdapter {
             if (!child.getChildren().isEmpty()) {
                 model.setCurrentNode(child);
                 list.scrollToSelected();
+                list.fireFocusChanged();
                 e.consume();
             }
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -26,6 +27,7 @@ class MenuKeyListener extends KeyAdapter {
             if (parent != null) {
                 model.setCurrentNode(parent);
                 list.scrollToSelected();
+                list.fireFocusChanged();
                 e.consume();
             }
         } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {

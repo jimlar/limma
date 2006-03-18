@@ -1,9 +1,12 @@
 package limma;
 
+import org.jdesktop.animation.timing.*;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class SlidePanel extends JPanel {
+    private boolean isOut = false;
     private JComponent slideComponent;
 
     public SlidePanel() {
@@ -14,7 +17,7 @@ public class SlidePanel extends JPanel {
     public void slideIn(JComponent component) {
         if (component != slideComponent) {
             this.slideComponent = component;
-            slideComponent.setVisible(false);
+            slideComponent.setLocation(getWidth(), 0);
             removeAll();
             add(slideComponent);
         }
@@ -22,75 +25,41 @@ public class SlidePanel extends JPanel {
     }
 
     public void slideOut() {
-        slide(true);
+        if (!isOut) {
+            isOut = true;
+            slide(true);
+        }
     }
 
     public void slideIn() {
-        slide(false);
+        if (isOut) {
+            isOut = false;
+            slide(false);
+        }
     }
 
     private void slide(boolean out) {
         if (slideComponent == null) {
             return;
         }
-        slideComponent.setVisible(!out);
-//        Cycle cycle = new Cycle(3000, 50);
-//        Envelope envelope = new Envelope(1,
-//                                         0,
-//                                         Envelope.RepeatBehavior.FORWARD,
-//                                         Envelope.EndBehavior.HOLD);
-//        Point p0 = new Point(0, 0);
-//        Point p1 = new Point(slideComponent.getLocation().x, 0);
-//        PropertyRange range;
-//        if (out) {
-//            range = PropertyRange.createPropertyRangePoint("location", p0, p1);
-//        } else {
-//            range = PropertyRange.createPropertyRangePoint("location", p1, p0);
-//        }
-//        TimingController timer = new TimingController(cycle,
-//                                                      envelope,
-//                                                      new ObjectModifier(slideComponent, range));
-//        timer.setAcceleration(1.0f);
-//        timer.start();
+
+        Cycle cycle = new Cycle(500, 30);
+        Envelope envelope = new Envelope(1,
+                                         0,
+                                         Envelope.RepeatBehavior.FORWARD,
+                                         Envelope.EndBehavior.HOLD);
+        Point p0 = new Point(0, 0);
+        Point p1 = new Point(getWidth(), 0);
+        PropertyRange range;
+        if (out) {
+            range = PropertyRange.createPropertyRangePoint("location", p0, p1);
+        } else {
+            range = PropertyRange.createPropertyRangePoint("location", p1, p0);
+        }
+        TimingController timer = new TimingController(cycle, envelope, new ObjectModifier(slideComponent, range));
+        timer.setAcceleration(1.0f);
+        timer.start();
     }
-
-    public static void main(String[] args) throws InterruptedException {
-        JFrame frame = new JFrame("Test");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        SlidePanel slidePanel = new SlidePanel();
-
-        JPanel glassPane = (JPanel) frame.getGlassPane();
-        glassPane.setLayout(new SlideLayout());
-        glassPane.setVisible(true);
-
-        glassPane.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.SOUTHEAST;
-        gbc.gridx = 1;
-        glassPane.add(slidePanel, gbc);
-        gbc.gridx = 0;
-        gbc.weighty = Integer.MAX_VALUE;
-        gbc.weightx = Integer.MAX_VALUE;
-        glassPane.add(Box.createGlue(), gbc);
-
-        frame.setSize(400, 400);
-        frame.validate();
-        frame.setVisible(true);
-
-        Thread.sleep(2000);
-        System.out.println("Sliding in");
-        slidePanel.slideIn(new JLabel("<html>Hej heasdadasdaasj<br>Shiasdadssdsat!<br>dfssdfsdsdsdfdsfsfsdfsdf</html>"));
-        Thread.sleep(2000);
-        System.out.println("Sliding out");
-        slidePanel.slideOut();
-        Thread.sleep(2000);
-        System.out.println("Sliding in");
-        slidePanel.slideIn();
-        Thread.sleep(2000);
-        System.out.println("Sliding out");
-        slidePanel.slideOut();
-    }
-
 
     public static class SlideLayout implements LayoutManager2 {
         private Component component;
@@ -148,10 +117,6 @@ public class SlidePanel extends JPanel {
                     dim.height = Math.max(d.height, dim.height);
                 }
 
-                Insets insets = target.getInsets();
-                dim.width += insets.left + insets.right;
-                dim.height += insets.top + insets.bottom;
-
                 return dim;
             }
         }
@@ -165,10 +130,6 @@ public class SlidePanel extends JPanel {
                     dim.width += d.width;
                     dim.height = Math.max(d.height, dim.height);
                 }
-
-                Insets insets = target.getInsets();
-                dim.width += insets.left + insets.right;
-                dim.height += insets.top + insets.bottom;
 
                 return dim;
             }
@@ -191,15 +152,8 @@ public class SlidePanel extends JPanel {
 
         public void layoutContainer(Container target) {
             synchronized (target.getTreeLock()) {
-                Insets insets = target.getInsets();
-                int top = insets.top;
-                int bottom = target.getHeight() - insets.bottom;
-                int left = insets.left;
-                int right = target.getWidth() - insets.right;
-
-
                 if (component != null) {
-                    component.setBounds(left, top, right - left, bottom - top);
+                    component.setSize(target.getWidth(), target.getHeight());
                 }
             }
         }

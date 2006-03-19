@@ -9,7 +9,7 @@ import java.awt.*;
 public class HeaderPanel extends JPanel {
     private UIProperties uiProperties;
 
-    public HeaderPanel(UIProperties uiProperties, LimmaMenu menu) {
+    public HeaderPanel(UIProperties uiProperties, Navigation menu) {
         this.uiProperties = uiProperties;
         final AntialiasLabel title = new AntialiasLabel("Limma", uiProperties);
         title.setFont(uiProperties.getLargeFont());
@@ -17,23 +17,23 @@ public class HeaderPanel extends JPanel {
         add(title);
         setOpaque(false);
 
-        menu.addMenuListener(new MenuListener() {
+        menu.addMenuListener(new NavigationListener() {
 
-            public void menuItemFocusChanged(LimmaMenu menu, MenuNode newFocusedItem) {
+            public void navigationNodeFocusChanged(Navigation menu, NavigationNode newFocusedItem) {
             }
         });
 
-        menu.getMenuModel().addMenuListener(new MenuModelListener() {
-            public void currentNodeChanged(MenuModel menuModel, MenuNode node) {
-                updateTitle(menuModel, title);
+        menu.getMenuModel().addMenuListener(new NavigationModelListener() {
+            public void currentNodeChanged(NavigationModel navigationModel, NavigationNode node) {
+                updateTitle(navigationModel, title);
             }
         });
     }
 
-    private void updateTitle(MenuModel menuModel, AntialiasLabel title) {
+    private void updateTitle(NavigationModel navigationModel, AntialiasLabel title) {
         String text = "Limma";
-        MenuNode node = menuModel.getCurrentNode();
-        if (!menuModel.getRoot().equals(node)) {
+        NavigationNode node = navigationModel.getCurrentNode();
+        if (!navigationModel.getRoot().equals(node)) {
             text = node.getTitle();
         }
         title.setText(text);

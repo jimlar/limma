@@ -1,14 +1,14 @@
 package limma.plugins.game;
 
-import limma.swing.menu.SimpleMenuNode;
+import limma.swing.menu.SimpleNavigationNode;
 
 import java.io.IOException;
 
-public class GameMenuNode extends SimpleMenuNode {
+public class GameNavigationNode extends SimpleNavigationNode {
     private GameFile game;
     private GameConfig gameConfig;
 
-    public GameMenuNode(GameFile game, GameConfig gameConfig) {
+    public GameNavigationNode(GameFile game, GameConfig gameConfig) {
         super(game.getName());
         this.game = game;
         this.gameConfig = gameConfig;

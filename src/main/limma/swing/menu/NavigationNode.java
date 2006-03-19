@@ -2,17 +2,17 @@ package limma.swing.menu;
 
 import java.util.List;
 
-public abstract class MenuNode {
+public abstract class NavigationNode {
     private int selectedChildIndex;
-    private MenuNode parent;
+    private NavigationNode parent;
 
     public abstract String getTitle();
 
     public abstract void performAction();
 
-    public abstract List<MenuNode> getChildren();
+    public abstract List<NavigationNode> getChildren();
 
-    public MenuNode getParent() {
+    public NavigationNode getParent() {
         return parent;
     }
 
@@ -24,11 +24,11 @@ public abstract class MenuNode {
         this.selectedChildIndex = selectedChildIndex;
     }
 
-    public void setParent(MenuNode parent) {
+    public void setParent(NavigationNode parent) {
         this.parent = parent;
     }
 
-    public MenuNode getSelectedChild() {
+    public NavigationNode getSelectedChild() {
         return getChildren().get(selectedChildIndex);
     }
 }

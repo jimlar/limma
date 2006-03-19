@@ -1,31 +1,31 @@
 package limma.plugins.game;
 
+import limma.UIProperties;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.menu.MenuModel;
-import limma.swing.menu.SimpleMenuNode;
-import limma.UIProperties;
+import limma.swing.menu.NavigationModel;
+import limma.swing.menu.SimpleNavigationNode;
 
 public class GamePlugin implements Plugin {
     private DialogManager dialogManager;
     private GameConfig gameConfig;
-    private MenuModel menuModel;
+    private NavigationModel navigationModel;
     private UIProperties uiProperties;
 
-    public GamePlugin(DialogManager dialogManager, GameConfig gameConfig, MenuModel menuModel, UIProperties uiProperties) {
+    public GamePlugin(DialogManager dialogManager, GameConfig gameConfig, NavigationModel navigationModel, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
         this.gameConfig = gameConfig;
-        this.menuModel = menuModel;
+        this.navigationModel = navigationModel;
         this.uiProperties = uiProperties;
     }
 
     public void init() {
-        SimpleMenuNode gamesNode = new SimpleMenuNode("Games");
-        menuModel.add(gamesNode);
+        SimpleNavigationNode gamesNode = new SimpleNavigationNode("Games");
+        navigationModel.add(gamesNode);
 
-        SimpleMenuNode c64Node = new SimpleMenuNode("Commodore 64");
+        SimpleNavigationNode c64Node = new SimpleNavigationNode("Commodore 64");
         gamesNode.add(c64Node);
-        SimpleMenuNode snesNode = new SimpleMenuNode("Super Nintendo");
+        SimpleNavigationNode snesNode = new SimpleNavigationNode("Super Nintendo");
         gamesNode.add(snesNode);
 
         dialogManager.executeInDialog(new LoadC64GamesTask(gameConfig, c64Node, uiProperties));

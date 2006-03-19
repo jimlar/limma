@@ -1,17 +1,17 @@
 package limma.plugins.video;
 
-import limma.swing.menu.MenuNode;
+import limma.swing.menu.NavigationNode;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class MoviesMenuNode extends MenuNode {
+public class MoviesNavigationNode extends NavigationNode {
     private MovieStorage movieStorage;
     private MovieNodeFactory movieNodeFactory;
-    private List<MenuNode> trailingNodes = new ArrayList<MenuNode>();
+    private List<NavigationNode> trailingNodes = new ArrayList<NavigationNode>();
 
-    public MoviesMenuNode(MovieStorage movieStorage, MovieNodeFactory movieNodeFactory) {
+    public MoviesNavigationNode(MovieStorage movieStorage, MovieNodeFactory movieNodeFactory) {
         this.movieStorage = movieStorage;
         this.movieNodeFactory = movieNodeFactory;
     }
@@ -20,17 +20,17 @@ public class MoviesMenuNode extends MenuNode {
         return "Movies";
     }
 
-    public void addTrailingNode(MenuNode menuNode) {
-        trailingNodes.add(menuNode);
-        menuNode.setParent(this);
+    public void addTrailingNode(NavigationNode navigationNode) {
+        trailingNodes.add(navigationNode);
+        navigationNode.setParent(this);
     }
 
     public void performAction() {
     }
 
-    public List<MenuNode> getChildren() {
-        ArrayList<MenuNode> children = new ArrayList<MenuNode>();
-        MenuNode allMoviesNode = movieNodeFactory.createAllMoviesNode();
+    public List<NavigationNode> getChildren() {
+        ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
+        NavigationNode allMoviesNode = movieNodeFactory.createAllMoviesNode();
         allMoviesNode.setParent(this);
         children.add(allMoviesNode);
 

@@ -18,12 +18,12 @@ public class MainWindow extends JFrame {
 
     private PlayerManager playerManager;
 
-    private LimmaMenu limmaMenu;
+    private Navigation navigation;
 
-    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, MenuModel menuModel, LimmaMenu limmaMenu, UIProperties uiProperties) {
+    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, Navigation navigation, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
         this.playerManager = playerManager;
-        this.limmaMenu = limmaMenu;
+        this.navigation = navigation;
 
         final SlidePanel slidePanel = addSliderPanel();
         final Timer slideInPlayerTimer = new Timer(2 * 1000, new ActionListener() {
@@ -40,8 +40,8 @@ public class MainWindow extends JFrame {
             }
         });
 
-        limmaMenu.addMenuListener(new MenuListener() {
-            public void menuItemFocusChanged(LimmaMenu menu, MenuNode newFocusedItem) {
+        navigation.addMenuListener(new NavigationListener() {
+            public void navigationNodeFocusChanged(Navigation menu, NavigationNode newFocusedItem) {
                 slidePanel.slideOut();
                 slideInPlayerTimer.restart();
             }
@@ -67,7 +67,7 @@ public class MainWindow extends JFrame {
             }
         });
 
-        JScrollPane scrollPane = new JScrollPane(this.limmaMenu);
+        JScrollPane scrollPane = new JScrollPane(this.navigation);
         scrollPane.setOpaque(false);
         scrollPane.setAutoscrolls(true);
         scrollPane.getViewport().setOpaque(false);
@@ -76,7 +76,7 @@ public class MainWindow extends JFrame {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
-        mainPanel.add(new HeaderPanel(uiProperties, limmaMenu), BorderLayout.NORTH);
+        mainPanel.add(new HeaderPanel(uiProperties, navigation), BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         dialogManager.setRoot(mainPanel);
@@ -88,7 +88,7 @@ public class MainWindow extends JFrame {
             plugin.init();
         }
 
-        menuModel.add(new SimpleMenuNode("Exit") {
+        navigationModel.add(new SimpleNavigationNode("Exit") {
             public void performAction() {
                 System.exit(0);
             }
@@ -151,7 +151,7 @@ public class MainWindow extends JFrame {
                     getCurrentPlayer().pause();
                     return true;
                 default:
-                    limmaMenu.processKeyEvent(e);
+                    navigation.processKeyEvent(e);
                     return true;
             }
         }

@@ -1,25 +1,25 @@
 package limma.plugins.video;
 
-import limma.swing.menu.MenuNode;
-import limma.swing.Task;
+import limma.UIProperties;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
+import limma.swing.Task;
 import limma.swing.TaskInfo;
-import limma.UIProperties;
+import limma.swing.menu.NavigationNode;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-public class MovieMenuNode extends MenuNode {
+public class MovieNavigationNode extends NavigationNode {
     private Video video;
     private VideoPlayer player;
     private DialogManager dialogManager;
     private UIProperties uiProperties;
     private MovieNodeFactory movieNodeFactory;
 
-    public MovieMenuNode(Video video, VideoPlayer player, DialogManager dialogManager, UIProperties uiProperties, MovieNodeFactory movieNodeFactory) {
+    public MovieNavigationNode(Video video, VideoPlayer player, DialogManager dialogManager, UIProperties uiProperties, MovieNodeFactory movieNodeFactory) {
         this.movieNodeFactory = movieNodeFactory;
         this.video = video;
         this.player = player;
@@ -35,13 +35,13 @@ public class MovieMenuNode extends MenuNode {
         return video.getTitle();
     }
 
-    public List<MenuNode> getChildren() {
-        ArrayList<MenuNode> children = new ArrayList<MenuNode>();
-        MenuNode updateFromIMDBNode = movieNodeFactory.createUpdateFromIMDBNode(video);
+    public List<NavigationNode> getChildren() {
+        ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
+        NavigationNode updateFromIMDBNode = movieNodeFactory.createUpdateFromIMDBNode(video);
         updateFromIMDBNode.setParent(this);
         children.add(updateFromIMDBNode);
 
-        MenuNode editTagsNode = movieNodeFactory.createEditTagsNode(video);
+        NavigationNode editTagsNode = movieNodeFactory.createEditTagsNode(video);
         editTagsNode.setParent(this);
         children.add(editTagsNode);
         return children;

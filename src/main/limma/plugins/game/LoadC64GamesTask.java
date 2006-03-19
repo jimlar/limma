@@ -1,11 +1,11 @@
 package limma.plugins.game;
 
+import limma.UIProperties;
 import limma.swing.AntialiasLabel;
 import limma.swing.Task;
 import limma.swing.TaskInfo;
-import limma.swing.menu.SimpleMenuNode;
+import limma.swing.menu.SimpleNavigationNode;
 import limma.utils.DirectoryScanner;
-import limma.UIProperties;
 
 import javax.swing.*;
 import java.io.File;
@@ -14,11 +14,11 @@ import java.util.Iterator;
 
 class LoadC64GamesTask implements Task {
     private final File gamesDir;
-    private SimpleMenuNode c64Node;
+    private SimpleNavigationNode c64Node;
     private GameConfig gameConfig;
     private UIProperties uiProperties;
 
-    public LoadC64GamesTask(GameConfig gameConfig, SimpleMenuNode c64Node, UIProperties uiProperties) {
+    public LoadC64GamesTask(GameConfig gameConfig, SimpleNavigationNode c64Node, UIProperties uiProperties) {
         this.c64Node = c64Node;
         this.gameConfig = gameConfig;
         this.uiProperties = uiProperties;
@@ -34,7 +34,8 @@ class LoadC64GamesTask implements Task {
         new DirectoryScanner(gamesDir).accept(new DirectoryScanner.Visitor() {
             public boolean visit(File file) {
                 String name = file.getName().toLowerCase();
-                if (file.isFile() && (name.endsWith(".zip") || name.endsWith(".p00") || name.endsWith(".prg") || name.endsWith(".x64") || name.endsWith(".d64") || name.endsWith(".t64"))) {
+                if (file.isFile() && (name.endsWith(".zip") || name.endsWith(".p00") || name.endsWith(".prg") || name.endsWith(".x64") || name.endsWith(".d64") || name.endsWith(".t64")))
+                {
                     files.add(new GameFile(getGameName(file), file, GameFile.C64));
                 }
                 return true;
@@ -43,7 +44,7 @@ class LoadC64GamesTask implements Task {
 
         for (Iterator i = files.iterator(); i.hasNext();) {
             GameFile gameFile = (GameFile) i.next();
-            c64Node.add(new GameMenuNode(gameFile, gameConfig));
+            c64Node.add(new GameNavigationNode(gameFile, gameConfig));
         }
         c64Node.sortByTitle();
     }

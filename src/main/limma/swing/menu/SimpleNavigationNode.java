@@ -2,11 +2,11 @@ package limma.swing.menu;
 
 import java.util.*;
 
-public class SimpleMenuNode extends MenuNode {
+public class SimpleNavigationNode extends NavigationNode {
     private String title;
-    private List<MenuNode> children = new ArrayList<MenuNode>();
+    private List<NavigationNode> children = new ArrayList<NavigationNode>();
 
-    public SimpleMenuNode(String title) {
+    public SimpleNavigationNode(String title) {
         this.title = title;
     }
 
@@ -17,7 +17,7 @@ public class SimpleMenuNode extends MenuNode {
     public void performAction() {
     }
 
-    public void add(MenuNode node) {
+    public void add(NavigationNode node) {
         children.add(node);
         if (node.getParent() != null) {
             throw new IllegalArgumentException("Cannot add a node that already is added elsewhere!");
@@ -27,20 +27,20 @@ public class SimpleMenuNode extends MenuNode {
 
 
     public void sortByTitle() {
-        Collections.sort(children, new Comparator<MenuNode>() {
-            public int compare(MenuNode o1, MenuNode o2) {
+        Collections.sort(children, new Comparator<NavigationNode>() {
+            public int compare(NavigationNode o1, NavigationNode o2) {
                 return o1.getTitle().compareToIgnoreCase(o2.getTitle());
             }
         });
     }
 
-    public List<MenuNode> getChildren() {
+    public List<NavigationNode> getChildren() {
         return children;
     }
 
-    public MenuNode getFirstChildWithTitle(String title) {
-        for (Iterator<MenuNode> i = children.iterator(); i.hasNext();) {
-            MenuNode node = i.next();
+    public NavigationNode getFirstChildWithTitle(String title) {
+        for (Iterator<NavigationNode> i = children.iterator(); i.hasNext();) {
+            NavigationNode node = i.next();
             if (title.equals(node.getTitle())) {
                 return node;
             }

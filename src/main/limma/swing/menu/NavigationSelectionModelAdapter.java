@@ -1,17 +1,17 @@
 package limma.swing.menu;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
-import java.util.List;
+import javax.swing.event.ListSelectionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-class MenuSelectionModelAdapter implements ListSelectionModel {
-    private MenuModel model;
+class NavigationSelectionModelAdapter implements ListSelectionModel {
+    private NavigationModel model;
     private List<ListSelectionListener> listeners = new ArrayList<ListSelectionListener>();
 
-    public MenuSelectionModelAdapter(MenuModel model) {
+    public NavigationSelectionModelAdapter(NavigationModel model) {
         this.model = model;
     }
 

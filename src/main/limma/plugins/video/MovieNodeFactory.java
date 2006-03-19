@@ -3,8 +3,8 @@ package limma.plugins.video;
 import limma.UIProperties;
 import limma.persistence.PersistenceManager;
 import limma.swing.DialogManager;
-import limma.swing.menu.MenuNode;
-import limma.swing.menu.SimpleMenuNode;
+import limma.swing.menu.NavigationNode;
+import limma.swing.menu.SimpleNavigationNode;
 
 import java.util.Iterator;
 import java.util.List;
@@ -36,16 +36,16 @@ public class MovieNodeFactory {
         return new MovieTagNode(tag, movieStorage, this);
     }
 
-    public MovieMenuNode createMovieNode(Video video) {
-        return new MovieMenuNode(video, videoPlayer, dialogManager, uiProperties, this);
+    public MovieNavigationNode createMovieNode(Video video) {
+        return new MovieNavigationNode(video, videoPlayer, dialogManager, uiProperties, this);
     }
 
-    public MenuNode createUpdateFromIMDBNode(Video video) {
+    public NavigationNode createUpdateFromIMDBNode(Video video) {
         return new UpdateFromIMDBNode(video, dialogManager, imdbService, persistenceManager, videoConfig, uiProperties);
     }
 
-    public MenuNode createEditTagsNode(Video video) {
-        SimpleMenuNode editTagsNode = new SimpleMenuNode("Edit Tags");
+    public NavigationNode createEditTagsNode(Video video) {
+        SimpleNavigationNode editTagsNode = new SimpleNavigationNode("Edit Tags");
 
         List<String> tags = movieStorage.getTags();
         for (Iterator<String> i = tags.iterator(); i.hasNext();) {

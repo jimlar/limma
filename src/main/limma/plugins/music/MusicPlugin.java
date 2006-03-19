@@ -5,25 +5,25 @@ import limma.UIProperties;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.menu.MenuModel;
-import limma.swing.menu.SimpleMenuNode;
+import limma.swing.menu.NavigationModel;
+import limma.swing.menu.SimpleNavigationNode;
 
 public class MusicPlugin implements Plugin {
     private MusicPlayer musicPlayer;
-    private MenuModel menuModel;
+    private NavigationModel navigationModel;
     private PlayerManager playerManager;
     private UIProperties uiProperties;
     private DialogManager dialogManager;
     private PersistenceManager persistenceManager;
     private MusicConfig musicConfig;
-    private SimpleMenuNode musicNode;
+    private SimpleNavigationNode musicNode;
 
-    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer, MenuModel menuModel, PlayerManager playerManager, UIProperties uiProperties) {
+    public MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer, NavigationModel navigationModel, PlayerManager playerManager, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         this.musicConfig = musicConfig;
         this.musicPlayer = musicPlayer;
-        this.menuModel = menuModel;
+        this.navigationModel = navigationModel;
         this.playerManager = playerManager;
         this.uiProperties = uiProperties;
 
@@ -31,11 +31,11 @@ public class MusicPlugin implements Plugin {
     }
 
     public void init() {
-        musicNode = new SimpleMenuNode("Music");
-        menuModel.add(musicNode);
+        musicNode = new SimpleNavigationNode("Music");
+        navigationModel.add(musicNode);
 
-        SimpleMenuNode settingsNode = new SimpleMenuNode("Settings");
-        settingsNode.add(new SimpleMenuNode("Scan for new music files") {
+        SimpleNavigationNode settingsNode = new SimpleNavigationNode("Settings");
+        settingsNode.add(new SimpleNavigationNode("Scan for new music files") {
             public void performAction() {
                 dialogManager.executeInDialog(new ScanMusicFilesTask(MusicPlugin.this, persistenceManager, musicConfig, uiProperties));
             }

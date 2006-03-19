@@ -1,12 +1,12 @@
 package limma.plugins.video;
 
-import limma.swing.menu.MenuNode;
+import limma.swing.menu.NavigationNode;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-public class MovieTagNode extends MenuNode {
+public class MovieTagNode extends NavigationNode {
     private String tag;
     private MovieStorage movieStorage;
     private MovieNodeFactory movieNodeFactory;
@@ -24,12 +24,12 @@ public class MovieTagNode extends MenuNode {
     public void performAction() {
     }
 
-    public List<MenuNode> getChildren() {
-        ArrayList<MenuNode> children = new ArrayList<MenuNode>();
+    public List<NavigationNode> getChildren() {
+        ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
         List<Video> videosWithTag = movieStorage.getVideosWithTag(tag);
         for (Iterator<Video> i = videosWithTag.iterator(); i.hasNext();) {
             Video video = i.next();
-            MovieMenuNode movieNode = movieNodeFactory.createMovieNode(video);
+            MovieNavigationNode movieNode = movieNodeFactory.createMovieNode(video);
             movieNode.setParent(this);
             children.add(movieNode);
         }

@@ -6,26 +6,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-class DefaultMenuCellRenderer extends JLabel implements MenuCellRenderer {
+class DefaultNavigationNodeRenderer extends JLabel implements NavigationNodeRenderer {
     private boolean selected;
-    private MenuNode node;
+    private NavigationNode node;
     private UIProperties uiProperties;
 
-    public DefaultMenuCellRenderer(UIProperties uiProperties) {
+    public DefaultNavigationNodeRenderer(UIProperties uiProperties) {
         this.uiProperties = uiProperties;
         setOpaque(false);
         setFont(uiProperties.getLargeFont());
         setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
     }
 
-    public boolean supportsRendering(Object value) {
-        return value instanceof MenuNode;
+    public boolean supportsRendering(NavigationNode value) {
+        return true;
     }
 
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getNodeRendererComponent(Navigation navigation, NavigationNode value, int index, boolean isSelected, boolean cellHasFocus) {
         this.selected = isSelected;
-        node = (MenuNode) value;
-        setComponentOrientation(list.getComponentOrientation());
+        node = (NavigationNode) value;
+        setComponentOrientation(navigation.getComponentOrientation());
         setForeground(isSelected ? Color.white : Color.black);
         setText(node.getTitle());
         return this;

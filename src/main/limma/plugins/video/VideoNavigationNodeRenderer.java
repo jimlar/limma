@@ -1,15 +1,17 @@
 package limma.plugins.video;
 
-import limma.swing.AntialiasLabel;
-import limma.swing.menu.MenuCellRenderer;
 import limma.UIProperties;
+import limma.swing.AntialiasLabel;
+import limma.swing.menu.Navigation;
+import limma.swing.menu.NavigationNode;
+import limma.swing.menu.NavigationNodeRenderer;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-class VideoMenuCellRenderer extends JPanel implements MenuCellRenderer {
+class VideoNavigationNodeRenderer extends JPanel implements NavigationNodeRenderer {
     private AntialiasLabel titleLabel;
     private AntialiasLabel directorLabel;
     private JTextArea plotLabel;
@@ -20,7 +22,7 @@ class VideoMenuCellRenderer extends JPanel implements MenuCellRenderer {
     private boolean selected;
     private UIProperties uiProperties;
 
-    public VideoMenuCellRenderer(VideoConfig videoConfig, UIProperties uiProperties) {
+    public VideoNavigationNodeRenderer(VideoConfig videoConfig, UIProperties uiProperties) {
         super(new GridBagLayout());
         this.uiProperties = uiProperties;
         this.videoConfig = videoConfig;
@@ -77,8 +79,8 @@ class VideoMenuCellRenderer extends JPanel implements MenuCellRenderer {
         add(ratingPanel, new GridBagConstraints(1, 4, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
     }
 
-    public boolean supportsRendering(Object value) {
-        return value instanceof MovieMenuNode;
+    public boolean supportsRendering(NavigationNode value) {
+        return value instanceof MovieNavigationNode;
     }
 
     private AntialiasLabel createLabel(String text) {
@@ -87,9 +89,9 @@ class VideoMenuCellRenderer extends JPanel implements MenuCellRenderer {
         return antialiasLabel;
     }
 
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getNodeRendererComponent(Navigation navigation, NavigationNode value, int index, boolean isSelected, boolean cellHasFocus) {
         this.selected = isSelected;
-        Video video = ((MovieMenuNode) value).getVideo();
+        Video video = ((MovieNavigationNode) value).getVideo();
 
         titleLabel.setText(video.getTitle());
         String director = "Unknown";
@@ -109,9 +111,9 @@ class VideoMenuCellRenderer extends JPanel implements MenuCellRenderer {
         cover.setIcon(poster);
 
         plotLabel.setText(video.getPlot());
-        plotLabel.setSize(list.getWidth() - poster.getIconWidth() - 15, 100000);
+        plotLabel.setSize(navigation.getWidth() - poster.getIconWidth() - 15, 100000);
 
-        setComponentOrientation(list.getComponentOrientation());
+        setComponentOrientation(navigation.getComponentOrientation());
         setForeground(Color.white);
         setOpaque(false);
         return this;

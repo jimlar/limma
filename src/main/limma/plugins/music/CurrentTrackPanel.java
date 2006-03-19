@@ -18,7 +18,7 @@ public class CurrentTrackPanel extends JPanel {
     private int trackLength = 0;
 
     private AntialiasLabel tracksLabel;
-    private AntialiasLabel coverLabel;
+    private CoverImage coverLabel;
     private UIProperties uiProperties;
 
     public CurrentTrackPanel(UIProperties uiProperties) {
@@ -29,23 +29,27 @@ public class CurrentTrackPanel extends JPanel {
         setBackground(new Color(255, 255, 255, 128));
         setOpaque(true);
 
-        coverLabel = addLabel(0);
-        coverLabel.setPreferredSize(new Dimension(200, 200));
+        coverLabel = new CoverImage();
+        addRow(coverLabel);
 
-        tracksLabel = addLabel(1);
-        titleLabel = addLabel(2);
-        artistLabel = addLabel(3);
-        albumLabel = addLabel(4);
+        tracksLabel = addLabel();
+        titleLabel = addLabel();
+        artistLabel = addLabel();
+        albumLabel = addLabel();
 
-        timeLabel = addLabel(5);
+        timeLabel = addLabel();
     }
 
-    private AntialiasLabel addLabel(int row) {
+    private AntialiasLabel addLabel() {
         AntialiasLabel value = new AntialiasLabel(uiProperties);
         value.setFont(uiProperties.getLargeFont());
         value.setForeground(Color.black);
-        add(value, new GridBagConstraints(0, row, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+        addRow(value);
         return value;
+    }
+
+    private void addRow(JComponent component) {
+        add(component, new GridBagConstraints(0, getComponentCount(), 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
     }
 
     public void setCurrentTrack(MusicFile file, int trackNumber, int totalTracks) {
@@ -60,8 +64,8 @@ public class CurrentTrackPanel extends JPanel {
             artistLabel.setText(file.getArtist());
             albumLabel.setText(file.getAlbum() + (file.getYear() == 0 ? "" : " (" + file.getYear() + ")"));
         }
-        Icon coverImage = findCoverImage(file);
-        coverLabel.setIcon(coverImage);
+        ImageIcon coverImage = findCoverImage(file);
+        coverLabel.setCover(coverImage);
         coverLabel.setVisible(coverImage != null);
         repaintParent();
     }
@@ -73,7 +77,7 @@ public class CurrentTrackPanel extends JPanel {
         }
     }
 
-    private Icon findCoverImage(MusicFile file) {
+    private ImageIcon findCoverImage(MusicFile file) {
         File dir = file.getFile().getParentFile();
         File[] jpegFiles = dir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
@@ -107,5 +111,32 @@ public class CurrentTrackPanel extends JPanel {
     private void updateTime() {
         timeLabel.setText(secondsToString(playedTime) + "/" + secondsToString(trackLength));
         repaintParent();
+    }
+
+    private static class CoverImage extends JComponent {
+        private ImageIcon cover;
+
+        public Dimension getPreferredSize() {
+            return new Dimension(200, 200);
+        }
+
+        public Dimension getMinimumSize() {
+            return new Dimension(200, 200);
+        }
+
+        public Dimension getMaximumSize() {
+            return new Dimension(200, 200);
+        }
+
+        protected void paintComponent(Graphics g) {
+            if (cover != null) {
+                g.drawImage(cover.getImage(), 0, 0, getWidth(), getHeight(), null);
+            }
+            super.paintComponent(g);
+        }
+
+        public void setCover(ImageIcon cover) {
+            this.cover = cover;
+        }
     }
 }

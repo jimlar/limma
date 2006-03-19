@@ -50,7 +50,7 @@ public class MainWindow extends JFrame {
         setLayout(new BorderLayout());
         this.add(dialogManager.getDialogManagerComponent(), BorderLayout.CENTER);
 
-        ImageIcon background = new ImageIcon(uiProperties.getBackDropImage());
+        ImageIcon background = new ImageIcon(uiProperties.getBackgroundImage());
         mainPanel = new ImagePanel(background);
         mainPanel.setLayout(new BorderLayout());
 

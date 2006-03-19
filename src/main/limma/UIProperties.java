@@ -15,5 +15,5 @@ public interface UIProperties {
 
     float getHeaderTransparency();
 
-    URL getBackDropImage();
+    URL getBackgroundImage();
 }

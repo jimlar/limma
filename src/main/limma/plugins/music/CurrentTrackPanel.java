@@ -63,6 +63,14 @@ public class CurrentTrackPanel extends JPanel {
         Icon coverImage = findCoverImage(file);
         coverLabel.setIcon(coverImage);
         coverLabel.setVisible(coverImage != null);
+        repaintParent();
+    }
+
+    private void repaintParent() {
+        Container parent = getParent();
+        if (parent != null) {
+            parent.repaint();
+        }
     }
 
     private Icon findCoverImage(MusicFile file) {
@@ -98,5 +106,6 @@ public class CurrentTrackPanel extends JPanel {
 
     private void updateTime() {
         timeLabel.setText(secondsToString(playedTime) + "/" + secondsToString(trackLength));
+        repaintParent();
     }
 }

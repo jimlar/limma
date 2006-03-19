@@ -56,9 +56,13 @@ Movie plugin
 * Player panel
 * Close menu when starting selecting menu item.
 * Manual editing of movie data
+<<<<<<< todo.txt
+* Better patterns when detecting IMDB numbers
+=======
 * Support for more than one movies root dir
 * Better (more robust) IMDB scanning, they also changed the style of their poster images.
 
+>>>>>>> 1.34
 
 Pictures plugin
 ---------------

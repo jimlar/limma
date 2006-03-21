@@ -20,7 +20,6 @@
     {TimingFramework.jar}
     {asm.jar}
     {asm-attrs.jar}
-    {hibernate3.jar}
     {jl1.0.jar}
     {jta.jar}
     {mp3spi1.9.4.jar}

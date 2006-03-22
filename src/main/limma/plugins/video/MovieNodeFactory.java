@@ -37,7 +37,7 @@ public class MovieNodeFactory {
     }
 
     public MovieNavigationNode createMovieNode(Video video) {
-        return new MovieNavigationNode(video, videoPlayer, dialogManager, uiProperties, this);
+        return new MovieNavigationNode(video, videoPlayer, this);
     }
 
     public NavigationNode createUpdateFromIMDBNode(Video video) {

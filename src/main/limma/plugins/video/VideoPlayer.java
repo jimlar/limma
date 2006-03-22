@@ -2,6 +2,8 @@ package limma.plugins.video;
 
 import limma.Player;
 import limma.PlayerManager;
+import limma.UIProperties;
+import limma.swing.AntialiasLabel;
 import limma.utils.ExternalCommand;
 
 import javax.swing.*;
@@ -11,19 +13,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ListIterator;
+import java.awt.Color;
 
 public class VideoPlayer implements Player {
     private static final long DVD_SIZE_THRESHOLD = 2L * 1024 * 1024 * 1024;
     private VideoConfig videoConfig;
     private PlayerManager playerManager;
+    private AntialiasLabel playingLabel;
 
-    public VideoPlayer(VideoConfig videoConfig, PlayerManager playerManager) {
+    public VideoPlayer(VideoConfig videoConfig, PlayerManager playerManager, UIProperties uiProperties) {
         this.videoConfig = videoConfig;
         this.playerManager = playerManager;
+        this.playingLabel = new AntialiasLabel("Stopped", uiProperties);
+        playingLabel.setForeground(Color.black);
     }
 
     public JComponent getPlayerPane() {
-        return new JLabel();
+        return playingLabel;
     }
 
     public void next() {
@@ -44,7 +50,8 @@ public class VideoPlayer implements Player {
     public void stop() {
     }
 
-    public void play(Video video) throws IOException {
+    public void play(final Video video) {
+        setPlayingLabel("Playing " + video.getTitle() + "...");
         playerManager.switchTo(this);
         ArrayList sortedFiles = new ArrayList(video.getFiles());
         Collections.sort(sortedFiles, new Comparator() {
@@ -55,13 +62,32 @@ public class VideoPlayer implements Player {
             }
         });
 
-        String[] filenames = new String[video.getFiles().size()];
+        final String[] filenames = new String[video.getFiles().size()];
         for (ListIterator i = sortedFiles.listIterator(); i.hasNext();) {
             VideoFile file = (VideoFile) i.next();
             filenames[i.previousIndex()] = file.getPath();
         }
+        Thread thread = new Thread() {
+            public void run() {
+                try {
+                    getPlayer(video).execute(filenames);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally{
+                    setPlayingLabel(video.getTitle() + " (stopped)");
+                }
+            }
+        };
+        thread.start();
 
-        getPlayer(video).execute(filenames);
+    }
+
+    private void setPlayingLabel(final String text) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                playingLabel.setText(text);
+            }
+        });
     }
 
     private ExternalCommand getPlayer(Video video) {

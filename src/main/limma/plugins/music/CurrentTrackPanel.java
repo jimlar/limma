@@ -25,10 +25,6 @@ public class CurrentTrackPanel extends JPanel {
         super(new GridBagLayout());
         this.uiProperties = uiProperties;
 
-        setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.black, 1), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-        setBackground(new Color(255, 255, 255, 128));
-        setOpaque(true);
-
         coverLabel = new CoverImage();
         addRow(coverLabel);
 

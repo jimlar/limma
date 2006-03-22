@@ -3,6 +3,8 @@ package limma;
 import org.jdesktop.animation.timing.*;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.awt.*;
 
 public class SlidePanel extends JPanel {
@@ -19,9 +21,12 @@ public class SlidePanel extends JPanel {
         if (component != slideComponent) {
             this.slideComponent = component;
             removeAll();
+            slideComponent.setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.black, 1), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            slideComponent.setBackground(new Color(255, 255, 255, 128));
+            slideComponent.setOpaque(true);
+            slideComponent.doLayout();
+            slideComponent.setLocation(0, (int) slideComponent.getPreferredSize().getHeight());
             add(slideComponent);
-            doLayout();
-            slideComponent.setLocation(0, getHeight());
         }
         slideIn();
     }

@@ -34,6 +34,14 @@ public class MoviesNavigationNode extends NavigationNode {
         allMoviesNode.setParent(this);
         children.add(allMoviesNode);
 
+        NavigationNode lastWeeksMoviesNode = movieNodeFactory.createNewMoviesNode(7);
+        lastWeeksMoviesNode.setParent(this);
+        children.add(lastWeeksMoviesNode);
+
+        NavigationNode lastMonthMoviesNode = movieNodeFactory.createNewMoviesNode(30);
+        lastMonthMoviesNode.setParent(this);
+        children.add(lastMonthMoviesNode);
+
         for (Iterator<String> i = movieStorage.getTags().iterator(); i.hasNext();) {
             String tag = i.next();
             MovieTagNode movieTagNode = movieNodeFactory.createTagNode(tag);

@@ -1,23 +1,26 @@
 package limma;
 
 import limma.persistence.PersistenceConfigImpl;
+import limma.persistence.PersistenceManager;
 import limma.persistence.PersistenceManagerImpl;
 import limma.plugins.game.GameConfigImpl;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.ExternalMusicPlayer;
 import limma.plugins.music.MusicConfigImpl;
 import limma.plugins.music.MusicPlugin;
-import limma.plugins.video.IMDBServiceImpl;
-import limma.plugins.video.VideoConfigImpl;
-import limma.plugins.video.VideoPlayer;
-import limma.plugins.video.VideoPlugin;
-import limma.swing.CursorHider;
-import limma.swing.DialogManagerImpl;
+import limma.plugins.video.*;
+import limma.swing.*;
 import limma.swing.menu.NavigationModel;
+import org.hibernate.Session;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
 
 public class Main {
 
@@ -64,6 +67,32 @@ public class Main {
 //                mainWindow.setVisible(true);
 
                 mainWindow.requestFocus();
+                generateSql(pico);
+            }
+        });
+    }
+
+    private static void generateSql(DefaultPicoContainer pico) {
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DialogManager manager = (DialogManager) pico.getComponentInstanceOfType(DialogManager.class);
+        manager.executeInDialog(new TransactionalTask((PersistenceManager) pico.getComponentInstanceOfType(PersistenceManager.class)) {
+            public void runInTransaction(Session session) {
+                java.util.List videos = session.createQuery("from Video").list();
+                for (Iterator i = videos.iterator(); i.hasNext();) {
+                    Video video = (Video) i.next();
+                    Set files = video.getFiles();
+                    VideoFile videoFile = (VideoFile) files.iterator().next();
+                    File file = videoFile.getFile();
+                    if (!file.getParentFile().getName().startsWith("movies")) {
+                        file = file.getParentFile();
+                    }
+                    Date created = new Date(file.lastModified());
+                    System.out.println("update video set created = '" + format.format(created) + "' where id = " + video.getId() + ";");
+                }
+            }
+
+            public JComponent prepareToRun(TaskInfo taskInfo) {
+                return new JLabel("Updateing database");
             }
         });
     }

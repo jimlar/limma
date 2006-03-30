@@ -1,5 +1,8 @@
 General
 -------
+* Use maven instead of ant
+* Increase test coverage
+* Try out eclipse
 * Use KeyboardFocusManager (http://java.sun.com/docs/books/tutorial/uiswing/misc/focus.html) more intelligently
   instead of dispatching keys self. Change "focus traversal keys".
 * Skins (or atleast centralized control over colors, sizes and images).

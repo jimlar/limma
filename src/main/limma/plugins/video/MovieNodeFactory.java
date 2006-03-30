@@ -32,6 +32,10 @@ public class MovieNodeFactory {
         return new AllMoviesNode(movieStorage, this);
     }
 
+    public NavigationNode createNewMoviesNode(int numberOfDays) {
+        return new NewMoviesNode(movieStorage, this, numberOfDays);
+    }
+
     public MovieTagNode createTagNode(String tag) {
         return new MovieTagNode(tag, movieStorage, this);
     }

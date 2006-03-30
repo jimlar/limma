@@ -1,5 +1,6 @@
 package limma.plugins.video;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ public class Video {
     private int imdbNumber;
     private Set files = new HashSet();
     private Set tags = new HashSet();
+    private Date created;
 
 
     public Video() {
@@ -98,5 +100,13 @@ public class Video {
 
     public Set getTags() {
         return tags;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

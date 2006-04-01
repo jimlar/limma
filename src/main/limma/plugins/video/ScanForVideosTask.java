@@ -1,37 +1,32 @@
 package limma.plugins.video;
 
 import limma.persistence.PersistenceManager;
-import limma.swing.AntialiasLabel;
+import limma.swing.TaskFeedback;
 import limma.swing.TransactionalTask;
-import limma.swing.TaskInfo;
 import limma.utils.DirectoryScanner;
-import limma.UIProperties;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
 
-import javax.swing.*;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 class ScanForVideosTask extends TransactionalTask {
     private VideoPlugin videoPlugin;
     private VideoConfig videoConfig;
-    private UIProperties uiProperties;
     private Collection videoFileExtensions;
 
-    public ScanForVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager, VideoConfig videoConfig, UIProperties uiProperties) {
+    public ScanForVideosTask(VideoPlugin videoPlugin, PersistenceManager persistenceManager, VideoConfig videoConfig) {
         super(persistenceManager);
         this.videoPlugin = videoPlugin;
         this.videoConfig = videoConfig;
-        this.uiProperties = uiProperties;
         this.videoFileExtensions = videoConfig.getVideoFileExtensions();
     }
 
-    public JComponent prepareToRun(TaskInfo taskInfo) {
-        return new AntialiasLabel("Searching for videos...", uiProperties);
-    }
-
-    public void runInTransaction(Session session) {
+    public void runInTransaction(TaskFeedback feedback, Session session) {
+        feedback.setStatusMessage("Searching for videos...");
         List<File> moviesFiles = new ArrayList<File>();
         List<File> dvdDirectories = new ArrayList<File>();
 

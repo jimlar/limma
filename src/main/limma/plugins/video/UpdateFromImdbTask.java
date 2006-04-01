@@ -1,15 +1,12 @@
 package limma.plugins.video;
 
-import limma.UIProperties;
 import limma.persistence.PersistenceManager;
-import limma.swing.AntialiasLabel;
+import limma.swing.TaskFeedback;
 import limma.swing.TransactionalTask;
-import limma.swing.TaskInfo;
 import org.apache.commons.io.CopyUtils;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,26 +15,21 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 class UpdateFromImdbTask extends TransactionalTask {
-    private AntialiasLabel status;
     private IMDBService imdbService;
     private VideoConfig videoConfig;
     private Video video;
     private int imdbNumber;
 
-    public UpdateFromImdbTask(PersistenceManager persistenceManager, IMDBService imdbService, VideoConfig videoConfig, Video video, int imdbNumber, UIProperties uiProperties) {
+    public UpdateFromImdbTask(PersistenceManager persistenceManager, IMDBService imdbService, VideoConfig videoConfig, Video video, int imdbNumber) {
         super(persistenceManager);
         this.imdbService = imdbService;
         this.videoConfig = videoConfig;
         this.video = video;
         this.imdbNumber = imdbNumber;
-        this.status = new AntialiasLabel("Fetching information from IMDB...", uiProperties);
     }
 
-    public JComponent prepareToRun(TaskInfo taskInfo) {
-        return status;
-    }
-
-    public void runInTransaction(Session session) {
+    public void runInTransaction(TaskFeedback feedback, Session session) {
+        feedback.setStatusMessage("Fetching information from IMDB...");
         try {
             final IMDBInfo info = imdbService.getInfo(imdbNumber);
             video.setImdbNumber(info.getImdbNumber());
@@ -49,22 +41,18 @@ class UpdateFromImdbTask extends TransactionalTask {
             video.setYear(info.getYear());
             session.merge(video);
 
-            donwloadCoverIfNeeded(info);
+            donwloadCoverIfNeeded(info, feedback);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void donwloadCoverIfNeeded(IMDBInfo info) throws IOException {
+    private void donwloadCoverIfNeeded(IMDBInfo info, TaskFeedback feedback) throws IOException {
         if (info.getCover() == null) {
             return;
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                status.setText("Downloading cover image...");
-            }
-        });
+        feedback.setStatusMessage("Downloading cover image...");
 
         File posterFile = new File(videoConfig.getPosterDir(), String.valueOf(video.getImdbNumber()));
 

@@ -1,26 +1,17 @@
 package limma.plugins.video;
 
-import limma.UIProperties;
-import limma.swing.AntialiasLabel;
 import limma.swing.Task;
-import limma.swing.TaskInfo;
-
-import javax.swing.*;
+import limma.swing.TaskFeedback;
 
 class LoadVideosTask implements Task {
-    private UIProperties uiProperties;
     private MovieStorage movieStorage;
 
-    public LoadVideosTask(MovieStorage movieStorage, UIProperties uiProperties) {
+    public LoadVideosTask(MovieStorage movieStorage) {
         this.movieStorage = movieStorage;
-        this.uiProperties = uiProperties;
     }
 
-    public JComponent prepareToRun(TaskInfo taskInfo) {
-        return new AntialiasLabel("Loading movies...", uiProperties);
-    }
-
-    public void run() {
+    public void run(TaskFeedback feedback) {
+        feedback.setStatusMessage("Loading movies...");
         movieStorage.refresh();
     }
 

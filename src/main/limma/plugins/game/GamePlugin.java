@@ -1,6 +1,5 @@
 package limma.plugins.game;
 
-import limma.UIProperties;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
 import limma.swing.menu.NavigationModel;
@@ -10,13 +9,11 @@ public class GamePlugin implements Plugin {
     private DialogManager dialogManager;
     private GameConfig gameConfig;
     private NavigationModel navigationModel;
-    private UIProperties uiProperties;
 
-    public GamePlugin(DialogManager dialogManager, GameConfig gameConfig, NavigationModel navigationModel, UIProperties uiProperties) {
+    public GamePlugin(DialogManager dialogManager, GameConfig gameConfig, NavigationModel navigationModel) {
         this.dialogManager = dialogManager;
         this.gameConfig = gameConfig;
         this.navigationModel = navigationModel;
-        this.uiProperties = uiProperties;
     }
 
     public void init() {
@@ -28,7 +25,7 @@ public class GamePlugin implements Plugin {
         SimpleNavigationNode snesNode = new SimpleNavigationNode("Super Nintendo");
         gamesNode.add(snesNode);
 
-        dialogManager.executeInDialog(new LoadC64GamesTask(gameConfig, c64Node, uiProperties));
-        dialogManager.executeInDialog(new LoadSnesGamesTask(gameConfig, snesNode, uiProperties));
+        dialogManager.executeInDialog(new LoadC64GamesTask(gameConfig, c64Node));
+        dialogManager.executeInDialog(new LoadSnesGamesTask(gameConfig, snesNode));
     }
 }

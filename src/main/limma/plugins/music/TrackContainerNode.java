@@ -1,6 +1,7 @@
 package limma.plugins.music;
 
 import limma.PlayerManager;
+import limma.swing.DialogManager;
 import limma.swing.menu.NavigationNode;
 import limma.swing.menu.SimpleNavigationNode;
 
@@ -18,7 +19,7 @@ public class TrackContainerNode extends SimpleNavigationNode {
         this.playerManager = playerManager;
     }
 
-    public void performAction() {
+    public void performAction(DialogManager dialogManager) {
         playerManager.switchTo(musicPlayer);
         musicPlayer.play(this);
     }

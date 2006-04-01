@@ -1,7 +1,6 @@
 package limma.swing;
 
-import javax.swing.*;
+public interface Task {
 
-public interface Task extends Runnable {
-    JComponent prepareToRun(TaskInfo taskInfo);
+    void run(TaskFeedback feedback);
 }

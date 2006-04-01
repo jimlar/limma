@@ -5,12 +5,15 @@ import limma.UIProperties;
 import javax.swing.*;
 import java.util.Stack;
 
+
 public class DialogManagerImpl implements DialogManager {
-    private Stack dialogStack = new Stack();
+    private Stack<LimmaDialog> dialogStack = new Stack<LimmaDialog>();
     private JLayeredPane layeredPane;
     private TaskDialog dialog;
+    private DialogFactory dialogFactory;
 
-    public DialogManagerImpl(UIProperties uiProperties) {
+    public DialogManagerImpl(DialogFactory dialogFactory, UIProperties uiProperties) {
+        this.dialogFactory = dialogFactory;
         layeredPane = new JLayeredPane();
         layeredPane.setOpaque(false);
         dialog = new TaskDialog(this, uiProperties);
@@ -53,5 +56,11 @@ public class DialogManagerImpl implements DialogManager {
             return null;
         }
         return (LimmaDialog) dialogStack.peek();
+    }
+
+    public LimmaDialog createAndOpen(Class dialog) {
+        LimmaDialog limmaDialog = dialogFactory.createDialog(dialog);
+        limmaDialog.open();
+        return limmaDialog;
     }
 }

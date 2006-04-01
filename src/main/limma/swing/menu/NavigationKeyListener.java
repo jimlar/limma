@@ -1,15 +1,19 @@
 package limma.swing.menu;
 
+import limma.swing.DialogManager;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 class NavigationKeyListener extends KeyAdapter {
     private Navigation list;
     private final NavigationModel model;
+    private DialogManager dialogManager;
 
-    public NavigationKeyListener(Navigation list, NavigationModel model) {
+    public NavigationKeyListener(Navigation list, NavigationModel model, DialogManager dialogManager) {
         this.list = list;
         this.model = model;
+        this.dialogManager = dialogManager;
     }
 
     public void keyPressed(KeyEvent e) {
@@ -32,7 +36,7 @@ class NavigationKeyListener extends KeyAdapter {
             }
         } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             NavigationNode child = currentNode.getSelectedChild();
-            child.performAction();
+            child.performAction(dialogManager);
         }
     }
 }

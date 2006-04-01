@@ -7,12 +7,11 @@ import limma.plugins.game.GamePlugin;
 import limma.plugins.music.ExternalMusicPlayer;
 import limma.plugins.music.MusicConfigImpl;
 import limma.plugins.music.MusicPlugin;
-import limma.plugins.video.IMDBServiceImpl;
-import limma.plugins.video.VideoConfigImpl;
-import limma.plugins.video.VideoPlayer;
-import limma.plugins.video.VideoPlugin;
+import limma.plugins.video.*;
 import limma.swing.CursorHider;
+import limma.swing.DialogFactory;
 import limma.swing.DialogManagerImpl;
+import limma.swing.LimmaDialog;
 import limma.swing.menu.NavigationModel;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
@@ -26,7 +25,7 @@ public class Main {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                DefaultPicoContainer pico = new DefaultPicoContainer();
+                final DefaultPicoContainer pico = new DefaultPicoContainer();
                 pico.registerComponentImplementation(UIPropertiesImpl.class);
                 pico.registerComponentImplementation(PlayerManager.class);
                 pico.registerComponentImplementation(NavigationModel.class);
@@ -40,6 +39,8 @@ public class Main {
                 pico.registerComponentImplementation(VideoConfigImpl.class);
                 pico.registerComponentImplementation(VideoPlayer.class);
                 pico.registerComponentImplementation(IMDBServiceImpl.class);
+                pico.registerComponentImplementation(IMDBDialog.class);
+                pico.registerComponentImplementation(EditMovieDialog.class);
 
                 pico.registerComponentImplementation(MusicPlugin.class);
                 pico.registerComponentImplementation(MusicConfigImpl.class);
@@ -49,6 +50,12 @@ public class Main {
                 pico.registerComponentImplementation(GameConfigImpl.class);
 
                 pico.registerComponentImplementation(MainWindow.class);
+
+                pico.registerComponentInstance(new DialogFactory() {
+                    public LimmaDialog createDialog(Class dialog) {
+                        return (LimmaDialog) pico.getComponentInstanceOfType(dialog);
+                    }
+                });
 
                 pico.start();
 

@@ -11,8 +11,8 @@
             <generator class="native"/>
         </id>
 
-        <timestamp name="created" access="field"/>
 
+        <property name="created" access="field"/>
         <property name="title" access="field"/>
 
         <set name="files" inverse="true" access="field">

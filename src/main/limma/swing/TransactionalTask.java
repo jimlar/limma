@@ -11,12 +11,12 @@ public abstract class TransactionalTask implements Task {
         this.persistenceManager = persistenceManager;
     }
 
-    public final void run() {
+    public final void run(TaskFeedback feedback) {
         Session session = persistenceManager.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            runInTransaction(session);
+            runInTransaction(feedback, session);
             transaction.commit();
             transaction = null;
         } finally {
@@ -27,5 +27,5 @@ public abstract class TransactionalTask implements Task {
         }
     }
 
-    public abstract void runInTransaction(Session session);
+    public abstract void runInTransaction(TaskFeedback feedback, Session session);
 }

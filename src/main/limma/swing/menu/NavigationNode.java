@@ -1,16 +1,22 @@
 package limma.swing.menu;
 
+import limma.swing.DialogManager;
+
+import java.util.Collections;
 import java.util.List;
 
-public abstract class NavigationNode {
+public abstract class NavigationNode implements Comparable {
     private int selectedChildIndex;
     private NavigationNode parent;
 
     public abstract String getTitle();
 
-    public abstract void performAction();
+    public void performAction(DialogManager dialogManager) {
+    }
 
-    public abstract List<NavigationNode> getChildren();
+    public List<NavigationNode> getChildren() {
+        return Collections.emptyList();
+    }
 
     public NavigationNode getParent() {
         return parent;
@@ -30,5 +36,9 @@ public abstract class NavigationNode {
 
     public NavigationNode getSelectedChild() {
         return getChildren().get(selectedChildIndex);
+    }
+
+    public int compareTo(Object o) {
+        return getTitle().compareToIgnoreCase(((NavigationNode) o).getTitle());
     }
 }

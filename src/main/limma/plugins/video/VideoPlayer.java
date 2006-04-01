@@ -7,13 +7,11 @@ import limma.swing.AntialiasLabel;
 import limma.utils.ExternalCommand;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.ListIterator;
-import java.awt.Color;
+import java.util.*;
+import java.util.List;
 
 public class VideoPlayer implements Player {
     private static final long DVD_SIZE_THRESHOLD = 2L * 1024 * 1024 * 1024;
@@ -50,9 +48,12 @@ public class VideoPlayer implements Player {
     public void stop() {
     }
 
+
+    public void play(VideoFile file) {
+        playVideoFiles(file.getVideo(), Collections.singletonList(file));
+    }
+
     public void play(final Video video) {
-        setPlayingLabel("Playing " + video.getTitle() + "...");
-        playerManager.switchTo(this);
         ArrayList sortedFiles = new ArrayList(video.getFiles());
         Collections.sort(sortedFiles, new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -62,24 +63,37 @@ public class VideoPlayer implements Player {
             }
         });
 
-        final String[] filenames = new String[video.getFiles().size()];
-        for (ListIterator i = sortedFiles.listIterator(); i.hasNext();) {
+        playVideoFiles(video, sortedFiles);
+    }
+
+    private void playVideoFiles(final Video video, List filesToPlay) {
+        setPlayingLabel("Playing " + video.getTitle() + "...");
+        playerManager.switchTo(this);
+        final String[] filenames = new String[filesToPlay.size()];
+        for (ListIterator i = filesToPlay.listIterator(); i.hasNext();) {
             VideoFile file = (VideoFile) i.next();
             filenames[i.previousIndex()] = file.getPath();
         }
         Thread thread = new Thread() {
             public void run() {
                 try {
-                    getPlayer(video).execute(filenames);
+                    ExternalCommand player = getPlayer(video);
+                    if (isDvd(video)) {
+                        for (int i = 0; i < filenames.length; i++) {
+                            String filename = filenames[i];
+                            player.execute(filename);
+                        }
+                    } else {
+                        player.execute(filenames);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
-                } finally{
+                } finally {
                     setPlayingLabel(video.getTitle() + " (stopped)");
                 }
             }
         };
         thread.start();
-
     }
 
     private void setPlayingLabel(final String text) {
@@ -100,10 +114,6 @@ public class VideoPlayer implements Player {
     }
 
     private boolean isDvd(Video video) {
-        if (video.getFiles().size() != 1) {
-            return false;
-        }
-
         VideoFile file = (VideoFile) video.getFiles().iterator().next();
 
         /* Its a dvd on disk directory */

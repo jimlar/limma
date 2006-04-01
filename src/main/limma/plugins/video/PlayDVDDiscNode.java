@@ -2,11 +2,9 @@ package limma.plugins.video;
 
 import limma.Player;
 import limma.PlayerManager;
-import limma.UIProperties;
-import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
 import limma.swing.Task;
-import limma.swing.TaskInfo;
+import limma.swing.TaskFeedback;
 import limma.swing.menu.SimpleNavigationNode;
 
 import javax.swing.*;
@@ -16,23 +14,19 @@ class PlayDVDDiscNode extends SimpleNavigationNode {
     private final DialogManager dialogManager;
     private final VideoConfig videoConfig;
     private PlayerManager playerManager;
-    private UIProperties uiProperties;
 
-    public PlayDVDDiscNode(DialogManager dialogManager, VideoConfig videoConfig, PlayerManager playerManager, UIProperties uiProperties) {
+    public PlayDVDDiscNode(DialogManager dialogManager, VideoConfig videoConfig, PlayerManager playerManager) {
         super("Play DVD Disc");
         this.dialogManager = dialogManager;
         this.videoConfig = videoConfig;
         this.playerManager = playerManager;
-        this.uiProperties = uiProperties;
     }
 
-    public void performAction() {
-        dialogManager.executeInDialog(new Task() {
-            public JComponent prepareToRun(TaskInfo taskInfo) {
-                return new AntialiasLabel("Playing DVD Disc...", uiProperties);
-            }
+    public void performAction(DialogManager dialogManager) {
+        this.dialogManager.executeInDialog(new Task() {
 
-            public void run() {
+            public void run(TaskFeedback feedback) {
+                feedback.setStatusMessage("Playing DVD Disc...");
                 playerManager.switchTo(new Player() {
                     public JComponent getPlayerPane() {
                         return new JLabel("Playing DVD Disc");

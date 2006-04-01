@@ -1,25 +1,25 @@
 package limma.plugins.video;
 
+import limma.persistence.PersistenceManager;
 import limma.swing.menu.NavigationNode;
 
 import java.util.*;
 
 public class NewMoviesNode extends NavigationNode {
     private MovieStorage movieStorage;
-    private MovieNodeFactory movieNodeFactory;
     private int numberOfDays;
+    private VideoPlayer videoPlayer;
+    private PersistenceManager persistenceManager;
 
-    public NewMoviesNode(MovieStorage movieStorage, MovieNodeFactory movieNodeFactory, int numberOfDays) {
+    public NewMoviesNode(MovieStorage movieStorage, int numberOfDays, VideoPlayer videoPlayer, PersistenceManager persistenceManager) {
         this.movieStorage = movieStorage;
-        this.movieNodeFactory = movieNodeFactory;
         this.numberOfDays = numberOfDays;
+        this.videoPlayer = videoPlayer;
+        this.persistenceManager = persistenceManager;
     }
 
     public String getTitle() {
         return "New (" + numberOfDays + " days)";
-    }
-
-    public void performAction() {
     }
 
     public List<NavigationNode> getChildren() {
@@ -32,7 +32,7 @@ public class NewMoviesNode extends NavigationNode {
             Video video = (Video) i.next();
             if (video.getCreated() != null && boundaryDate.before(video.getCreated())) {
 
-                MovieNavigationNode movieNode = movieNodeFactory.createMovieNode(video);
+                MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, movieStorage, persistenceManager);
                 movieNode.setParent(this);
                 children.add(movieNode);
             }

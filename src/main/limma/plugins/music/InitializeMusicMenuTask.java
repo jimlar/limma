@@ -1,11 +1,9 @@
 package limma.plugins.music;
 
 import limma.PlayerManager;
-import limma.UIProperties;
 import limma.persistence.PersistenceManager;
-import limma.swing.AntialiasLabel;
 import limma.swing.Task;
-import limma.swing.TaskInfo;
+import limma.swing.TaskFeedback;
 import limma.swing.menu.NavigationNode;
 import limma.swing.menu.SimpleNavigationNode;
 
@@ -17,21 +15,16 @@ class InitializeMusicMenuTask implements Task {
     private SimpleNavigationNode musicNode;
     private MusicPlayer musicPlayer;
     private PlayerManager playerManager;
-    private UIProperties uiProperties;
 
-    public InitializeMusicMenuTask(PersistenceManager persistenceManager, SimpleNavigationNode musicNode, MusicPlayer musicPlayer, PlayerManager playerManager, UIProperties uiProperties) {
+    public InitializeMusicMenuTask(PersistenceManager persistenceManager, SimpleNavigationNode musicNode, MusicPlayer musicPlayer, PlayerManager playerManager) {
         this.persistenceManager = persistenceManager;
         this.musicNode = musicNode;
         this.musicPlayer = musicPlayer;
         this.playerManager = playerManager;
-        this.uiProperties = uiProperties;
     }
 
-    public JComponent prepareToRun(TaskInfo taskInfo) {
-        return new AntialiasLabel("Loading music database...", uiProperties);
-    }
-
-    public void run() {
+    public void run(TaskFeedback feedback) {
+        feedback.setStatusMessage("Loading music database...");
         final TrackContainerNode artistsNode = new TrackContainerNode("Artists", musicPlayer, playerManager);
         final TrackContainerNode albumsNode = new TrackContainerNode("Albums", musicPlayer, playerManager);
         final TrackContainerNode songsNode = new TrackContainerNode("Songs", musicPlayer, playerManager);

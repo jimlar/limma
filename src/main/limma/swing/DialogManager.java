@@ -15,4 +15,6 @@ public interface DialogManager {
     void close(LimmaDialog dialog);
 
     LimmaDialog getTopDialog();
+
+    LimmaDialog createAndOpen(Class dialog);
 }

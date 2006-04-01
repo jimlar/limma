@@ -89,7 +89,7 @@ public class MainWindow extends JFrame {
         }
 
         navigationModel.add(new SimpleNavigationNode("Exit") {
-            public void performAction() {
+            public void performAction(DialogManager dialogManager) {
                 System.exit(0);
             }
         });

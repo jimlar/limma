@@ -1,6 +1,7 @@
 package limma.swing.menu;
 
 import limma.UIProperties;
+import limma.swing.DialogManager;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -15,9 +16,9 @@ public class Navigation extends JList {
     private List<NavigationNodeRenderer> renderers = new ArrayList<NavigationNodeRenderer>();
     private Set<NavigationListener> listeners = new HashSet<NavigationListener>();
 
-    public Navigation(final NavigationModel model, UIProperties uiProperties) {
+    public Navigation(final NavigationModel model, UIProperties uiProperties, DialogManager dialogManager) {
         super(model);
-        addKeyListener(new NavigationKeyListener(this, model));
+        addKeyListener(new NavigationKeyListener(this, model, dialogManager));
         setSelectionModel(new NavigationSelectionModelAdapter(model));
         setCellRenderer(new ListCellRenderer() {
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {

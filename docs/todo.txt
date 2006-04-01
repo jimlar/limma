@@ -6,19 +6,14 @@ General
 * Use KeyboardFocusManager (http://java.sun.com/docs/books/tutorial/uiswing/misc/focus.html) more intelligently
   instead of dispatching keys self. Change "focus traversal keys".
 * Skins (or atleast centralized control over colors, sizes and images).
-* Mouse cursor that diappears when it stands still for a few seconds
 * Sorting in menu
-* Titlebar that shows the title of the currently active menu node when menu is showing
 * Clock in titlebar?
-* Commons progress dialog support for loading database data etc...
-* Let the players be a layer that slides in from the right (Covering half the screen, the menu always visible in the background).
-  I could probably use the Sheet style from the oreilly swing hacks (hack44.pdf)
 
 
 TV plugin
 ---------
 * How to do anything? (linux dvb?)
-* Program guides (xmltv?)
+* Program guides (xmltv?) (swedb.se?)
 
 
 Music plugin
@@ -38,7 +33,6 @@ Music plugin
 * Repeat option
 * Genre menu item.
 * Indicate currently playing song in menu
-* Close menu when starting to play
 * Editing of ID3 data
 
 
@@ -57,11 +51,9 @@ Movie plugin
 * File mangement (move file to different video, split out file to a new video, create new video, etc...)
 * Start playback from a selected file in the video (for tv series etc...)
 * Player panel
-* Close menu when starting selecting menu item.
 * Manual editing of movie data
 * Better patterns when detecting IMDB numbers
 * Support for more than one movies root dir
-* Better (more robust) IMDB scanning, they also changed the style of their poster images.
 
 Pictures plugin
 ---------------

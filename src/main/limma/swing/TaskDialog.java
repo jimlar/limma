@@ -3,8 +3,8 @@ package limma.swing;
 import limma.UIProperties;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class TaskDialog extends LimmaDialog {
     private UIProperties uiProperties;
@@ -17,22 +17,20 @@ public class TaskDialog extends LimmaDialog {
 
     public void executeInDialog(final Task task) {
 
-        final DefaultBoundedRangeModel boundedRangeModel = new DefaultBoundedRangeModel();
-        JProgressBar jProgressBar = new JProgressBar(boundedRangeModel);
-        final AntialiasLabel label = new AntialiasLabel(uiProperties);
-        TaskInfo taskInfo = new TaskInfo() {
-            public void setMessage(String message) {
-                label.setText(message);
-            }
-
-            public BoundedRangeModel getProgressModel() {
-                return boundedRangeModel;
-            }  
-        };
         final JPanel panel = new JPanel(new BorderLayout(10, 0));
         panel.setOpaque(false);
-        panel.add(jProgressBar, BorderLayout.WEST);
-        panel.add(task.prepareToRun(taskInfo), BorderLayout.CENTER);
+        final AntialiasLabel status = new AntialiasLabel("", uiProperties);
+        panel.add(status, BorderLayout.CENTER);
+
+        final TaskFeedback feedback = new TaskFeedback() {
+            public void setStatusMessage(final String message) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        status.setText(message);
+                    }
+                });
+            }
+        };
 
         new Thread() {
             public void run() {
@@ -47,7 +45,7 @@ public class TaskDialog extends LimmaDialog {
                     }
                 });
                 try {
-                    task.run();
+                    task.run(feedback);
                 } finally {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {

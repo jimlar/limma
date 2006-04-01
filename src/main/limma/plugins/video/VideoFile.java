@@ -31,4 +31,8 @@ public class VideoFile {
     public File getFile() {
         return new File(getPath());
     }
+
+    public String getName() {
+        return getFile().getName();
+    }
 }

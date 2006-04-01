@@ -1,13 +1,10 @@
 package limma.plugins.game;
 
-import limma.UIProperties;
-import limma.swing.AntialiasLabel;
 import limma.swing.Task;
-import limma.swing.TaskInfo;
+import limma.swing.TaskFeedback;
 import limma.swing.menu.SimpleNavigationNode;
 import limma.utils.DirectoryScanner;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,20 +13,15 @@ class LoadSnesGamesTask implements Task {
     private final File gamesDir;
     private SimpleNavigationNode snesNode;
     private GameConfig gameConfig;
-    private UIProperties uiProperties;
 
-    public LoadSnesGamesTask(GameConfig gameConfig, SimpleNavigationNode snesNode, UIProperties uiProperties) {
+    public LoadSnesGamesTask(GameConfig gameConfig, SimpleNavigationNode snesNode) {
         this.snesNode = snesNode;
         this.gameConfig = gameConfig;
-        this.uiProperties = uiProperties;
         this.gamesDir = gameConfig.getSnesGamesDir();
     }
 
-    public JComponent prepareToRun(TaskInfo taskInfo) {
-        return new AntialiasLabel("Loading SNES games from " + gamesDir.getAbsolutePath(), uiProperties);
-    }
-
-    public void run() {
+    public void run(TaskFeedback feedback) {
+        feedback.setStatusMessage("Loading SNES games from " + gamesDir.getAbsolutePath());
         final ArrayList<GameFile> files = new ArrayList<GameFile>();
         new DirectoryScanner(gamesDir).accept(new DirectoryScanner.Visitor() {
             public boolean visit(File file) {

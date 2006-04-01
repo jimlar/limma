@@ -1,5 +1,6 @@
 package limma.plugins.game;
 
+import limma.swing.DialogManager;
 import limma.swing.menu.SimpleNavigationNode;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class GameNavigationNode extends SimpleNavigationNode {
         this.gameConfig = gameConfig;
     }
 
-    public void performAction() {
+    public void performAction(DialogManager dialogManager) {
         try {
             if (game.getType().equals(GameFile.C64)) {
                 gameConfig.getC64Command().execute(game.getFile().getAbsolutePath());

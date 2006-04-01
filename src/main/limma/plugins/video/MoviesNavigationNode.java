@@ -1,5 +1,6 @@
 package limma.plugins.video;
 
+import limma.persistence.PersistenceManager;
 import limma.swing.menu.NavigationNode;
 
 import java.util.ArrayList;
@@ -8,12 +9,14 @@ import java.util.List;
 
 public class MoviesNavigationNode extends NavigationNode {
     private MovieStorage movieStorage;
-    private MovieNodeFactory movieNodeFactory;
+    private VideoPlayer videoPlayer;
+    private PersistenceManager persistenceManager;
     private List<NavigationNode> trailingNodes = new ArrayList<NavigationNode>();
 
-    public MoviesNavigationNode(MovieStorage movieStorage, MovieNodeFactory movieNodeFactory) {
+    public MoviesNavigationNode(MovieStorage movieStorage, VideoPlayer videoPlayer, PersistenceManager persistenceManager) {
         this.movieStorage = movieStorage;
-        this.movieNodeFactory = movieNodeFactory;
+        this.videoPlayer = videoPlayer;
+        this.persistenceManager = persistenceManager;
     }
 
     public String getTitle() {
@@ -25,26 +28,23 @@ public class MoviesNavigationNode extends NavigationNode {
         navigationNode.setParent(this);
     }
 
-    public void performAction() {
-    }
-
     public List<NavigationNode> getChildren() {
         ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
-        NavigationNode allMoviesNode = movieNodeFactory.createAllMoviesNode();
+        NavigationNode allMoviesNode = new AllMoviesNode(movieStorage, videoPlayer, persistenceManager);
         allMoviesNode.setParent(this);
         children.add(allMoviesNode);
 
-        NavigationNode lastWeeksMoviesNode = movieNodeFactory.createNewMoviesNode(7);
+        NavigationNode lastWeeksMoviesNode = new NewMoviesNode(movieStorage, 7, videoPlayer, persistenceManager);
         lastWeeksMoviesNode.setParent(this);
         children.add(lastWeeksMoviesNode);
 
-        NavigationNode lastMonthMoviesNode = movieNodeFactory.createNewMoviesNode(30);
+        NavigationNode lastMonthMoviesNode = new NewMoviesNode(movieStorage, 30, videoPlayer, persistenceManager);
         lastMonthMoviesNode.setParent(this);
         children.add(lastMonthMoviesNode);
 
         for (Iterator<String> i = movieStorage.getTags().iterator(); i.hasNext();) {
             String tag = i.next();
-            MovieTagNode movieTagNode = movieNodeFactory.createTagNode(tag);
+            MovieTagNode movieTagNode = new MovieTagNode(tag, movieStorage, videoPlayer, persistenceManager);
             movieTagNode.setParent(this);
             children.add(movieTagNode);
         }

@@ -19,11 +19,13 @@ public class Video {
     private Date created;
 
 
-    public Video() {
+    /* For hibernate */
+    private Video() {
     }
 
     public Video(String title) {
         this.title = title;
+        this.created = new Date();
     }
 
     public String getTitle() {

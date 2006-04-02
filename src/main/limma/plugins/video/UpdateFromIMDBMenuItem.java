@@ -1,17 +1,14 @@
 package limma.plugins.video;
 
 import limma.swing.DialogManager;
-import limma.swing.menu.NavigationNode;
+import limma.swing.navigation.MenuItem;
 
-class UpdateFromIMDBNode extends NavigationNode {
+class UpdateFromIMDBMenuItem extends MenuItem {
     private final Video video;
 
-    public UpdateFromIMDBNode(Video video) {
+    public UpdateFromIMDBMenuItem(Video video) {
+        super("Update from IMDB");
         this.video = video;
-    }
-
-    public String getTitle() {
-        return "Update from IMDB";
     }
 
     public void performAction(DialogManager dialogManager) {

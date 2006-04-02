@@ -1,4 +1,4 @@
-package limma.swing.menu;
+package limma.swing.navigation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,6 +8,7 @@ import java.util.List;
 public class SimpleNavigationNode extends NavigationNode {
     private String title;
     private List<NavigationNode> children = new ArrayList<NavigationNode>();
+    private List<MenuItem> menuItems = new ArrayList<MenuItem>();
 
     public SimpleNavigationNode(String title) {
         this.title = title;
@@ -25,6 +26,13 @@ public class SimpleNavigationNode extends NavigationNode {
         node.setParent(this);
     }
 
+    public void add(MenuItem menuItem) {
+        menuItems.add(menuItem);
+    }
+
+    public List<MenuItem> getMenuItems() {
+        return menuItems;
+    }
 
     public void sortByTitle() {
         Collections.sort(children);

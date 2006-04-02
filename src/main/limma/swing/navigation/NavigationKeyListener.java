@@ -1,4 +1,4 @@
-package limma.swing.menu;
+package limma.swing.navigation;
 
 import limma.swing.DialogManager;
 
@@ -37,6 +37,7 @@ class NavigationKeyListener extends KeyAdapter {
         } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             NavigationNode child = currentNode.getSelectedChild();
             child.performAction(dialogManager);
+
         }
     }
 }

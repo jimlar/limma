@@ -2,7 +2,7 @@ package limma.plugins.game;
 
 import limma.swing.Task;
 import limma.swing.TaskFeedback;
-import limma.swing.menu.SimpleNavigationNode;
+import limma.swing.navigation.SimpleNavigationNode;
 import limma.utils.DirectoryScanner;
 
 import java.io.File;

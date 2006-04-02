@@ -1,7 +1,7 @@
 package limma;
 
 import limma.swing.AntialiasLabel;
-import limma.swing.menu.*;
+import limma.swing.navigation.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,13 +17,13 @@ public class HeaderPanel extends JPanel {
         add(title);
         setOpaque(false);
 
-        menu.addMenuListener(new NavigationListener() {
+        menu.addNavigationListener(new NavigationListener() {
 
             public void navigationNodeFocusChanged(Navigation menu, NavigationNode newFocusedItem) {
             }
         });
 
-        menu.getMenuModel().addMenuListener(new NavigationModelListener() {
+        menu.getNavigationModel().addMenuListener(new NavigationModelListener() {
             public void currentNodeChanged(NavigationModel navigationModel, NavigationNode node) {
                 updateTitle(navigationModel, title);
             }

@@ -4,7 +4,7 @@ import limma.persistence.PersistenceManager;
 import limma.swing.DialogManager;
 import limma.swing.TaskFeedback;
 import limma.swing.TransactionalTask;
-import limma.swing.menu.NavigationNode;
+import limma.swing.navigation.NavigationNode;
 import org.hibernate.Session;
 
 class ToggleTagNode extends NavigationNode {

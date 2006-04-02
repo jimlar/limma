@@ -1,6 +1,7 @@
 General
 -------
 * Use maven instead of ant
+* Migrate to Subversion
 * Increase test coverage
 * Try out eclipse
 * Use KeyboardFocusManager (http://java.sun.com/docs/books/tutorial/uiswing/misc/focus.html) more intelligently

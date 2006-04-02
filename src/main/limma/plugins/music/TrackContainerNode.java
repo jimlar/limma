@@ -2,8 +2,8 @@ package limma.plugins.music;
 
 import limma.PlayerManager;
 import limma.swing.DialogManager;
-import limma.swing.menu.NavigationNode;
-import limma.swing.menu.SimpleNavigationNode;
+import limma.swing.navigation.NavigationNode;
+import limma.swing.navigation.SimpleNavigationNode;
 
 import java.util.ArrayList;
 import java.util.Iterator;

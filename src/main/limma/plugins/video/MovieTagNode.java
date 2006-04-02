@@ -1,7 +1,7 @@
 package limma.plugins.video;
 
 import limma.persistence.PersistenceManager;
-import limma.swing.menu.NavigationNode;
+import limma.swing.navigation.NavigationNode;
 
 import java.util.ArrayList;
 import java.util.Iterator;

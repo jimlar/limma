@@ -2,9 +2,9 @@ package limma.plugins.video;
 
 import limma.UIProperties;
 import limma.swing.AntialiasLabel;
-import limma.swing.menu.Navigation;
-import limma.swing.menu.NavigationNode;
-import limma.swing.menu.NavigationNodeRenderer;
+import limma.swing.navigation.Navigation;
+import limma.swing.navigation.NavigationNode;
+import limma.swing.navigation.NavigationNodeRenderer;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;

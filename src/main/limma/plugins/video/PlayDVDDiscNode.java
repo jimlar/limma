@@ -5,7 +5,7 @@ import limma.PlayerManager;
 import limma.swing.DialogManager;
 import limma.swing.Task;
 import limma.swing.TaskFeedback;
-import limma.swing.menu.SimpleNavigationNode;
+import limma.swing.navigation.SimpleNavigationNode;
 
 import javax.swing.*;
 import java.io.IOException;

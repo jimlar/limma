@@ -1,4 +1,4 @@
-package limma.swing.menu;
+package limma.swing.navigation;
 
 import java.awt.*;
 

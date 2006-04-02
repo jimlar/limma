@@ -2,8 +2,8 @@ package limma.plugins.video;
 
 import limma.persistence.PersistenceManager;
 import limma.swing.DialogManager;
-import limma.swing.menu.NavigationNode;
-import limma.swing.menu.SimpleNavigationNode;
+import limma.swing.navigation.NavigationNode;
+import limma.swing.navigation.SimpleNavigationNode;
 
 import java.util.Iterator;
 import java.util.List;
@@ -21,10 +21,11 @@ public class MovieNavigationNode extends SimpleNavigationNode {
         this.movieStorage = movieStorage;
         this.video = video;
         this.player = player;
-        add(new EditMovieNode(video));
-        add(new UpdateFromIMDBNode(video));
+        add(new EditMovieMenuItem(video));
+        add(new UpdateFromIMDBMenuItem(video));
+
 //        add(createEditTagsNode(video));
-        add(createFilesNode(video));
+        addFileNodes(video);
         sortByTitle();
     }
 
@@ -36,11 +37,12 @@ public class MovieNavigationNode extends SimpleNavigationNode {
         return video.getTitle();
     }
 
+
     public void performAction(DialogManager dialogManager) {
         player.play(getVideo());
     }
 
-    public NavigationNode createEditTagsNode(Video video) {
+    private NavigationNode createEditTagsNode(Video video) {
         SimpleNavigationNode editTagsNode = new SimpleNavigationNode("Tags");
 
         List<String> tags = movieStorage.getTags();
@@ -53,19 +55,15 @@ public class MovieNavigationNode extends SimpleNavigationNode {
     }
 
 
-    public NavigationNode createFilesNode(Video video) {
-        SimpleNavigationNode filesNode = new SimpleNavigationNode("Files");
-
+    private void addFileNodes(Video video) {
         Set files = video.getFiles();
         for (Iterator i = files.iterator(); i.hasNext();) {
             final VideoFile file = (VideoFile) i.next();
-            filesNode.add(new SimpleNavigationNode(file.getName()) {
+            add(new SimpleNavigationNode(file.getName()) {
                 public void performAction(DialogManager dialogManager) {
                     player.play(file);
                 }
             });
         }
-
-        return filesNode;
     }
 }

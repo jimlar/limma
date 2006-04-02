@@ -4,8 +4,8 @@ import limma.PlayerManager;
 import limma.persistence.PersistenceManager;
 import limma.swing.Task;
 import limma.swing.TaskFeedback;
-import limma.swing.menu.NavigationNode;
-import limma.swing.menu.SimpleNavigationNode;
+import limma.swing.navigation.NavigationNode;
+import limma.swing.navigation.SimpleNavigationNode;
 
 import javax.swing.*;
 import java.util.Iterator;
@@ -49,6 +49,7 @@ class InitializeMusicMenuTask implements Task {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+                musicNode.removeAllChildren();
                 musicNode.add(artistsNode);
                 musicNode.add(albumsNode);
                 musicNode.add(songsNode);

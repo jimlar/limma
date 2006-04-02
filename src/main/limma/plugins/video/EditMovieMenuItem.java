@@ -1,17 +1,14 @@
 package limma.plugins.video;
 
 import limma.swing.DialogManager;
-import limma.swing.menu.NavigationNode;
+import limma.swing.navigation.MenuItem;
 
-class EditMovieNode extends NavigationNode {
+class EditMovieMenuItem extends MenuItem {
     private final Video video;
 
-    public EditMovieNode(Video video) {
+    public EditMovieMenuItem(Video video) {
+        super("Edit");
         this.video = video;
-    }
-
-    public String getTitle() {
-        return "Edit";
     }
 
     public void performAction(DialogManager dialogManager) {

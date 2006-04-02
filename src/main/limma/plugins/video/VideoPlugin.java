@@ -5,8 +5,8 @@ import limma.UIProperties;
 import limma.persistence.PersistenceManager;
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
-import limma.swing.menu.NavigationModel;
-import limma.swing.menu.SimpleNavigationNode;
+import limma.swing.navigation.MenuItem;
+import limma.swing.navigation.NavigationModel;
 
 
 public class VideoPlugin implements Plugin {
@@ -17,7 +17,7 @@ public class VideoPlugin implements Plugin {
     private MoviesNavigationNode moviesNode;
     private MovieStorage movieStorage;
 
-    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager, VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, limma.swing.menu.Navigation navigation, PlayerManager playerManager, UIProperties uiProperties) {
+    public VideoPlugin(final DialogManager dialogManager, PersistenceManager persistenceManager, VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, limma.swing.navigation.Navigation navigation, PlayerManager playerManager, UIProperties uiProperties) {
         this.dialogManager = dialogManager;
         this.persistenceManager = persistenceManager;
         this.videoConfig = videoConfig;
@@ -27,12 +27,9 @@ public class VideoPlugin implements Plugin {
 
         movieStorage = new MovieStorage(persistenceManager);
         moviesNode = new MoviesNavigationNode(movieStorage, videoPlayer, persistenceManager);
-        moviesNode.addTrailingNode(new PlayDVDDiscNode(dialogManager, videoConfig, playerManager));
+        moviesNode.add(new PlayDVDDiscNode(dialogManager, videoConfig, playerManager));
 
-        SimpleNavigationNode settingsNode = new SimpleNavigationNode("Settings");
-        moviesNode.addTrailingNode(settingsNode);
-
-        settingsNode.add(new SimpleNavigationNode("Scan for new videos") {
+        moviesNode.add(new MenuItem("Scan for new videos") {
             public void performAction(DialogManager dialogManager) {
                 scanForVideos();
             }

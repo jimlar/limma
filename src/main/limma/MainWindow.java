@@ -4,7 +4,7 @@ import limma.plugins.Plugin;
 import limma.swing.DialogManager;
 import limma.swing.ImagePanel;
 import limma.swing.LimmaDialog;
-import limma.swing.menu.*;
+import limma.swing.navigation.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,10 +25,10 @@ public class MainWindow extends JFrame {
         this.playerManager = playerManager;
         this.navigation = navigation;
 
-        final SlidePanel slidePanel = addSliderPanel();
+        final SlidePanel playerSlidePanel = addPlayerSlidePanel();
         final Timer slideInPlayerTimer = new Timer(2 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                slidePanel.slideIn();
+                playerSlidePanel.slideIn();
             }
         });
         slideInPlayerTimer.setCoalesce(true);
@@ -36,13 +36,13 @@ public class MainWindow extends JFrame {
 
         playerManager.addListener(new PlayerManagerListener() {
             public void playerSwitched(Player player) {
-                slidePanel.slideIn(player.getPlayerPane());
+                playerSlidePanel.slideIn(player.getPlayerPane());
             }
         });
 
-        navigation.addMenuListener(new NavigationListener() {
+        navigation.addNavigationListener(new NavigationListener() {
             public void navigationNodeFocusChanged(Navigation menu, NavigationNode newFocusedItem) {
-                slidePanel.slideOut();
+                playerSlidePanel.slideOut();
                 slideInPlayerTimer.restart();
             }
         });
@@ -95,8 +95,9 @@ public class MainWindow extends JFrame {
         });
     }
 
-    private SlidePanel addSliderPanel() {
+    private SlidePanel addPlayerSlidePanel() {
         final SlidePanel slidePanel = new SlidePanel();
+
         JPanel glassPane = (JPanel) getGlassPane();
         glassPane.setLayout(new BorderLayout());
         glassPane.setVisible(true);
@@ -106,6 +107,7 @@ public class MainWindow extends JFrame {
         gbc.anchor = GridBagConstraints.SOUTHEAST;
         gbc.gridx = 1;
         glassPane.add(slidePanel, gbc);
+
         gbc.gridx = 0;
         gbc.weighty = Integer.MAX_VALUE;
         gbc.weightx = Integer.MAX_VALUE;
@@ -127,13 +129,6 @@ public class MainWindow extends JFrame {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_S:
                     getCurrentPlayer().stop();
-                    return true;
-                case KeyEvent.VK_M:
-//                    if (limmaMenu.isOpen()) {
-//                        limmaMenu.close();
-//                    } else {
-//                        limmaMenu.open();
-//                    }
                     return true;
                 case KeyEvent.VK_N:
                     getCurrentPlayer().next();

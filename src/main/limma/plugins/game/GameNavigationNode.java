@@ -1,7 +1,7 @@
 package limma.plugins.game;
 
 import limma.swing.DialogManager;
-import limma.swing.menu.SimpleNavigationNode;
+import limma.swing.navigation.SimpleNavigationNode;
 
 import java.io.IOException;
 

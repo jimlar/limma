@@ -32,5 +32,9 @@ public abstract class LimmaDialog extends JPanel {
         dialogManager.close(this);
     }
 
+    public DialogManager getDialogManager() {
+        return dialogManager;
+    }
+
     public abstract boolean keyPressed(KeyEvent e);
 }

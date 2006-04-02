@@ -2,7 +2,7 @@ package limma.plugins.music;
 
 import limma.PlayerManager;
 import limma.swing.DialogManager;
-import limma.swing.menu.SimpleNavigationNode;
+import limma.swing.navigation.SimpleNavigationNode;
 
 public class TrackNode extends SimpleNavigationNode {
     private MusicFile musicFile;

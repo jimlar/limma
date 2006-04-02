@@ -12,7 +12,9 @@ import limma.swing.CursorHider;
 import limma.swing.DialogFactory;
 import limma.swing.DialogManagerImpl;
 import limma.swing.LimmaDialog;
-import limma.swing.menu.NavigationModel;
+import limma.swing.navigation.Navigation;
+import limma.swing.navigation.NavigationModel;
+import limma.swing.navigation.NavigationPopupMenu;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
 import javax.swing.*;
@@ -29,7 +31,8 @@ public class Main {
                 pico.registerComponentImplementation(UIPropertiesImpl.class);
                 pico.registerComponentImplementation(PlayerManager.class);
                 pico.registerComponentImplementation(NavigationModel.class);
-                pico.registerComponentImplementation(limma.swing.menu.Navigation.class);
+                pico.registerComponentImplementation(Navigation.class);
+                pico.registerComponentImplementation(NavigationPopupMenu.class);
                 pico.registerComponentImplementation(PersistenceManagerImpl.class);
                 pico.registerComponentImplementation(PersistenceConfigImpl.class);
                 pico.registerComponentImplementation(DialogManagerImpl.class);

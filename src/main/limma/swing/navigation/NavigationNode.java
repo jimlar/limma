@@ -1,4 +1,4 @@
-package limma.swing.menu;
+package limma.swing.navigation;
 
 import limma.swing.DialogManager;
 
@@ -15,6 +15,10 @@ public abstract class NavigationNode implements Comparable {
     }
 
     public List<NavigationNode> getChildren() {
+        return Collections.emptyList();
+    }
+
+    public List<MenuItem> getMenuItems() {
         return Collections.emptyList();
     }
 

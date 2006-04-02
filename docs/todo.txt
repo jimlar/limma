@@ -7,8 +7,8 @@ General
 * Use KeyboardFocusManager (http://java.sun.com/docs/books/tutorial/uiswing/misc/focus.html) more intelligently
   instead of dispatching keys self. Change "focus traversal keys".
 * Skins (or atleast centralized control over colors, sizes and images).
-* Sorting in menu
 * Clock in titlebar?
+* Let popup menu items be pushed down to childs in the navigation hierarchy?
 
 
 TV plugin
@@ -50,8 +50,6 @@ Movie plugin
 * Show not watched movies
 * Support for cue/bin files?
 * File mangement (move file to different video, split out file to a new video, create new video, etc...)
-* Start playback from a selected file in the video (for tv series etc...)
-* Player panel
 * Manual editing of movie data
 * Better patterns when detecting IMDB numbers
 * Support for more than one movies root dir

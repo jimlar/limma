@@ -58,8 +58,8 @@ public class DialogManagerImpl implements DialogManager {
         return (LimmaDialog) dialogStack.peek();
     }
 
-    public LimmaDialog createAndOpen(Class dialog) {
-        LimmaDialog limmaDialog = dialogFactory.createDialog(dialog);
+    public LimmaDialog createAndOpen(Class dialogClass) {
+        LimmaDialog limmaDialog = dialogFactory.createDialog(dialogClass);
         limmaDialog.open();
         return limmaDialog;
     }

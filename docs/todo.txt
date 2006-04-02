@@ -9,6 +9,8 @@ General
 * Skins (or atleast centralized control over colors, sizes and images).
 * Clock in titlebar?
 * Let popup menu items be pushed down to childs in the navigation hierarchy?
+* More stylish popup dialogs...  sliding?
+* Introduce general play() which resumes playing in current player
 
 
 TV plugin

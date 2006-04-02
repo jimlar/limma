@@ -47,6 +47,7 @@ public class Main {
 
                 pico.registerComponentImplementation(MusicPlugin.class);
                 pico.registerComponentImplementation(MusicConfigImpl.class);
+//                pico.registerComponentImplementation(JavaSoundMusicPlayer.class);
                 pico.registerComponentImplementation(ExternalMusicPlayer.class);
 
                 pico.registerComponentImplementation(GamePlugin.class);

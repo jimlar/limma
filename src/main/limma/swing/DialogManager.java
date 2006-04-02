@@ -16,5 +16,5 @@ public interface DialogManager {
 
     LimmaDialog getTopDialog();
 
-    LimmaDialog createAndOpen(Class dialog);
+    LimmaDialog createAndOpen(Class dialogClass);
 }

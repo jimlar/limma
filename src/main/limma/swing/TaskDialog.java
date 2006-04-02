@@ -27,6 +27,8 @@ public class TaskDialog extends LimmaDialog {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         status.setText(message);
+                        invalidate();
+                        repaint();
                     }
                 });
             }

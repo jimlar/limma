@@ -94,6 +94,6 @@ class ScanMusicFilesTask extends TransactionalTask {
 
     private boolean isMusicFile(File file) {
         String name = file.getName().toLowerCase();
-        return file.isFile() && (name.endsWith(".mp3") || name.endsWith(".flac"));
+        return file.isFile() && (name.endsWith(".mp3") || name.endsWith(".flac") || name.endsWith(".ogg"));
     }
 }

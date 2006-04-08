@@ -4,6 +4,7 @@ import limma.plugins.Plugin;
 import limma.swing.DialogManager;
 import limma.swing.ImagePanel;
 import limma.swing.LimmaDialog;
+import limma.swing.navigation.MenuItem;
 import limma.swing.navigation.*;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 public class MainWindow extends JFrame {
     private JPanel mainPanel;
@@ -20,7 +22,7 @@ public class MainWindow extends JFrame {
 
     private Navigation navigation;
 
-    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, Navigation navigation, UIProperties uiProperties) {
+    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, Navigation navigation, UIProperties uiProperties, final GeneralConfig generalConfig) {
         this.dialogManager = dialogManager;
         this.playerManager = playerManager;
         this.navigation = navigation;
@@ -88,9 +90,15 @@ public class MainWindow extends JFrame {
             plugin.init();
         }
 
-        navigationModel.add(new SimpleNavigationNode("Exit") {
+        navigationModel.add(new MenuItem("Shutdown") {
             public void performAction(DialogManager dialogManager) {
-                System.exit(0);
+                dialogManager.createAndOpen(ShuttingDownDialog.class);
+                try {
+                    generalConfig.getShutdownCommand().execute();
+                } catch (IOException e) {
+                    System.out.println("Could not shutdown");
+                    e.printStackTrace();
+                }
             }
         });
     }

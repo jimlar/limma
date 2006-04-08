@@ -33,7 +33,7 @@ public class MusicPlugin implements Plugin {
         musicNode.add(new MenuItem("") {
 
             public String getTitle() {
-                return musicPlayer.isShuffling() ? "Turn off suffle" : "Turn on shuffle";
+                return musicPlayer.isShuffling() ? "Turn off shuffle" : "Turn on shuffle";
             }
 
             public void performAction(DialogManager dialogManager) {

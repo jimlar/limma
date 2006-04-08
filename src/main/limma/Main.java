@@ -28,6 +28,7 @@ public class Main {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 final DefaultPicoContainer pico = new DefaultPicoContainer();
+                pico.registerComponentImplementation(GeneralConfigImpl.class);
                 pico.registerComponentImplementation(UIPropertiesImpl.class);
                 pico.registerComponentImplementation(PlayerManager.class);
                 pico.registerComponentImplementation(NavigationModel.class);

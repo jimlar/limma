@@ -1,7 +1,6 @@
 package limma;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,7 +39,9 @@ public abstract class AbstractConfiguration {
     }
 
     protected String getString(String property) {
-        property = prefix + "." + property;
+        if (prefix != null) {
+            property = prefix + "." + property;
+        }
         String value = properties.getProperty(property);
         if (value == null) {
             throw new IllegalArgumentException("Configuration property missing: " + property);

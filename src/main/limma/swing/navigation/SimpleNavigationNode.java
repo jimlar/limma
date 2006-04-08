@@ -30,7 +30,12 @@ public class SimpleNavigationNode extends NavigationNode {
         menuItems.add(menuItem);
     }
 
-    public List<MenuItem> getMenuItems() {
+    public List<MenuItem> getAllMenuItems() {
+        ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>(this.menuItems);
+
+        if (getParent() != null) {
+            menuItems.addAll(getParent().getAllMenuItems());
+        }
         return menuItems;
     }
 

@@ -10,6 +10,10 @@ public class NavigationModel extends AbstractListModel {
     private SimpleNavigationNode root = new SimpleNavigationNode(null);
     private NavigationNode currentNode = root;
 
+    public void add(MenuItem menuItem) {
+        root.add(menuItem);
+    }
+
     public void add(NavigationNode node) {
         root.add(node);
     }

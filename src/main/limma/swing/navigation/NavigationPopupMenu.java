@@ -32,6 +32,7 @@ public class NavigationPopupMenu extends LimmaDialog {
     public boolean keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
+            case KeyEvent.VK_M:
                 close();
                 return true;
             case KeyEvent.VK_UP:

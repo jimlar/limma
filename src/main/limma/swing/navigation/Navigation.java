@@ -57,7 +57,7 @@ public class Navigation extends JList {
             case KeyEvent.VK_M:
                 NavigationNode currentNode = getNavigationModel().getCurrentNode();
                 NavigationNode child = currentNode.getSelectedChild();
-                List<MenuItem> menuItems = child.getMenuItems();
+                List<MenuItem> menuItems = child.getAllMenuItems();
                 if (!menuItems.isEmpty()) {
                     NavigationPopupMenu menu = (NavigationPopupMenu) dialogManager.createAndOpen(NavigationPopupMenu.class);
                     menu.setItems(menuItems);

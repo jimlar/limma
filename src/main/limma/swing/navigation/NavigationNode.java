@@ -2,6 +2,7 @@ package limma.swing.navigation;
 
 import limma.swing.DialogManager;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,8 +19,13 @@ public abstract class NavigationNode implements Comparable {
         return Collections.emptyList();
     }
 
-    public List<MenuItem> getMenuItems() {
-        return Collections.emptyList();
+    public List<MenuItem> getAllMenuItems() {
+        ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
+
+        if (parent != null) {
+            menuItems.addAll(parent.getAllMenuItems());
+        }
+        return menuItems;
     }
 
     public NavigationNode getParent() {

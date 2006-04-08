@@ -29,6 +29,7 @@ public class Main {
             public void run() {
                 final DefaultPicoContainer pico = new DefaultPicoContainer();
                 pico.registerComponentImplementation(GeneralConfigImpl.class);
+                pico.registerComponentImplementation(ShuttingDownDialog.class);
                 pico.registerComponentImplementation(UIPropertiesImpl.class);
                 pico.registerComponentImplementation(PlayerManager.class);
                 pico.registerComponentImplementation(NavigationModel.class);

@@ -92,9 +92,9 @@ public class MainWindow extends JFrame {
 
         navigationModel.add(new MenuItem("Shutdown") {
             public void performAction(DialogManager dialogManager) {
-                dialogManager.createAndOpen(ShuttingDownDialog.class);
                 try {
                     generalConfig.getShutdownCommand().execute();
+                    dialogManager.createAndOpen(ShuttingDownDialog.class);
                 } catch (IOException e) {
                     System.out.println("Could not shutdown");
                     e.printStackTrace();

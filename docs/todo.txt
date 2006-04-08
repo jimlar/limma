@@ -11,6 +11,7 @@ General
 * Let popup menu items be pushed down to childs in the navigation hierarchy?
 * More stylish popup dialogs...  sliding?
 * Introduce general play() which resumes playing in current player
+* Wrapping in navigation and menus (pressing down on last item should go to the first)
 
 
 TV plugin

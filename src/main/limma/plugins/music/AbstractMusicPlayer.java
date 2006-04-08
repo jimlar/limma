@@ -3,36 +3,74 @@ package limma.plugins.music;
 import limma.UIProperties;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections;
+import java.util.Random;
 
 public abstract class AbstractMusicPlayer implements MusicPlayer {
+    private Random random = new Random();
+    private List<MusicFile> playList = new ArrayList<MusicFile>();
+    private List<MusicFile> history = new ArrayList<MusicFile>();
+    private boolean shuffle = true;
     private CurrentTrackPanel currentTrackPanel;
-    private List<MusicFile> playList = Collections.emptyList();
 
     protected AbstractMusicPlayer(UIProperties uiProperties) {
         currentTrackPanel = new CurrentTrackPanel(uiProperties);
     }
 
-    protected abstract void startPlaying(MusicFile musicFile);
+    private void startPlaying(final MusicFile musicFile) {
+        stop();
+        if (musicFile != null) {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                public void run() {
+                    currentTrackPanel.setCurrentTrack(musicFile, getPlayList().indexOf(musicFile) + 1, getPlayList().size());
+                }
+
+            });
+
+            startPlayer(musicFile);
+        }
+    }
+
+    protected abstract void startPlayer(MusicFile musicFile);
 
     public void play(TrackContainerNode trackContainerNode) {
+        history.clear();
         setPlayList(trackContainerNode.getAllMusicFiles());
-        startPlaying(getNextFile());
+        if (isShuffling()) {
+            startPlaying(getNextFile());
+        } else {
+            startPlaying(getPlayList().get(0));
+        }
     }
 
     public void play(TrackNode trackNode) {
-        setPlayList(trackNode.getTrackContainer().getAllMusicFiles());
+        history.clear();
+        List<MusicFile> allMusicFiles = trackNode.getTrackContainer().getAllMusicFiles();
+        setPlayList(allMusicFiles);
+        if (!isShuffling()) {
+            history.addAll(allMusicFiles.subList(0, allMusicFiles.indexOf(trackNode.getMusicFile())));
+        }
         startPlaying(trackNode.getMusicFile());
     }
 
+    public boolean isShuffling() {
+        return shuffle;
+    }
+
+    public void setShuffling(boolean shuffle) {
+        this.shuffle = shuffle;
+    }
+
     public JComponent getPlayerPane() {
-        return getCurrentTrackPanel();
+        return currentTrackPanel;
     }
 
     public void next() {
         MusicFile nextFile = getNextFile();
         if (nextFile != null) {
+            history.add(getPlayingFile());
             startPlaying(nextFile);
         }
     }
@@ -40,43 +78,44 @@ public abstract class AbstractMusicPlayer implements MusicPlayer {
     public void previous() {
         MusicFile previousFile = getPreviousFile();
         if (previousFile != null) {
+            history.remove(previousFile);
             startPlaying(previousFile);
         }
     }
 
     private MusicFile getNextFile() {
-        int index = getIndexOfPlayingFile();
-        if (index == -1 && !playList.isEmpty()) {
-            return playList.get(0);
+        if (isShuffling()) {
+            ArrayList<MusicFile> candidates = new ArrayList<MusicFile>(playList);
+            candidates.removeAll(history);
+            candidates.remove(getPlayingFile());
+            return candidates.get(random.nextInt(candidates.size()));
+
+        } else {
+            int index = getPlayList().indexOf(getPlayingFile());
+            if (index == -1 && !playList.isEmpty()) {
+                return playList.get(0);
+            }
+            if (index < playList.size() - 1) {
+                return playList.get(index + 1);
+            }
         }
-        if (index < playList.size() - 1) {
-            return playList.get(index + 1);
-        }
+
         return null;
     }
 
     protected abstract MusicFile getPlayingFile();
 
-    private int getIndexOfPlayingFile() {
-        return getPlayList().indexOf(getPlayingFile());
-    }
-
-    protected int getPlayingTrackNumber() {
-        return getIndexOfPlayingFile() + 1;
-    }
-
     private MusicFile getPreviousFile() {
-        int index = getIndexOfPlayingFile();
-        if (index > 0 && getPlayList().size() > index - 1) {
-            return getPlayList().get(index - 1);
+        if (history.isEmpty()) {
+            return null;
         }
-        return null;
+        return history.get(history.size() - 1);
     }
 
     protected void setPlayedSeconds(final int seconds) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                getCurrentTrackPanel().setPlayedSeconds(seconds);
+                currentTrackPanel.setPlayedSeconds(seconds);
             }
         });
     }
@@ -84,7 +123,7 @@ public abstract class AbstractMusicPlayer implements MusicPlayer {
     protected void setTrackLengthSeconds(final int seconds) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                getCurrentTrackPanel().setTrackLengthSeconds(seconds);
+                currentTrackPanel.setTrackLengthSeconds(seconds);
             }
         });
     }
@@ -93,11 +132,8 @@ public abstract class AbstractMusicPlayer implements MusicPlayer {
         this.playList = playList;
     }
 
-    public List<MusicFile> getPlayList() {
+    private List<MusicFile> getPlayList() {
         return playList;
     }
 
-    public CurrentTrackPanel getCurrentTrackPanel() {
-        return currentTrackPanel;
-    }
 }

@@ -30,6 +30,17 @@ public class MusicPlugin implements Plugin {
 
     public void init() {
         musicNode = new SimpleNavigationNode("Music");
+        musicNode.add(new MenuItem("") {
+
+            public String getTitle() {
+                return musicPlayer.isShuffling() ? "Turn off suffle" : "Turn on shuffle";
+            }
+
+            public void performAction(DialogManager dialogManager) {
+                musicPlayer.setShuffling(!musicPlayer.isShuffling());
+
+            }
+        });
         navigationModel.add(musicNode);
 
         musicNode.add(new MenuItem("Scan for new music files") {

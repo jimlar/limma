@@ -56,6 +56,7 @@ Movie plugin
 * Manual editing of movie data
 * Better patterns when detecting IMDB numbers
 * Support for more than one movies root dir
+* BUG: if there is space in a fliename ogle does not work (Nya Hyss av emil)
 
 Pictures plugin
 ---------------

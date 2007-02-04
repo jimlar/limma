@@ -20,6 +20,9 @@ public class IMDBServiceImpl implements IMDBService {
 
     public IMDBServiceImpl(WebClient webClient) {
         this.webClient = webClient;
+        webClient.setThrowExceptionOnScriptError(false);
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.setJavaScriptEnabled(false);
         titleAndYearPattern = Pattern.compile(".*?(.+) \\((\\d+).*\\).*");
     }
 
@@ -52,7 +55,7 @@ public class IMDBServiceImpl implements IMDBService {
         }
 
 
-        HtmlElement ratingLabel = getElementContainingText("User Rating:", contentCell); 
+        HtmlElement ratingLabel = getElementContainingText("User Rating:", contentCell);
         String ratingText = getSiblingText(ratingLabel, UnknownHtmlElement.class);
         imdbInfo.setRating(ratingText);
 

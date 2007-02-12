@@ -8,12 +8,8 @@ public class PersistenceConfigImpl extends AbstractConfiguration implements Pers
         super("mysql");
     }
 
-    public String getHost() {
-        return getString("host");
-    }
-
-    public String getDatabase() {
-        return getString("database");
+    public String getUrl() {
+        return getString("url");
     }
 
     public String getUsername() {
@@ -22,5 +18,9 @@ public class PersistenceConfigImpl extends AbstractConfiguration implements Pers
 
     public String getPassword() {
         return getString("password");
+    }
+
+    public String getDriver() {
+        return getString("driver");
     }
 }

@@ -1,7 +1,7 @@
 package limma;
 
+import limma.persistence.HibernatePersistenceManagerImpl;
 import limma.persistence.PersistenceConfigImpl;
-import limma.persistence.PersistenceManagerImpl;
 import limma.plugins.game.GameConfigImpl;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.ExternalMusicPlayer;
@@ -35,7 +35,7 @@ public class Main {
                 pico.registerComponentImplementation(NavigationModel.class);
                 pico.registerComponentImplementation(Navigation.class);
                 pico.registerComponentImplementation(NavigationPopupMenu.class);
-                pico.registerComponentImplementation(PersistenceManagerImpl.class);
+                pico.registerComponentImplementation(HibernatePersistenceManagerImpl.class);
                 pico.registerComponentImplementation(PersistenceConfigImpl.class);
                 pico.registerComponentImplementation(DialogManagerImpl.class);
                 pico.registerComponentImplementation(CursorHider.class);
@@ -66,19 +66,29 @@ public class Main {
                 pico.start();
 
                 MainWindow mainWindow = (MainWindow) pico.getComponentInstanceOfType(MainWindow.class);
-                mainWindow.setUndecorated(true);
-                mainWindow.setResizable(false);
 
-                GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-                device.setFullScreenWindow(mainWindow);
-                mainWindow.setSize(device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight());
+                if (useFullScreen()) {
+                    mainWindow.setUndecorated(true);
+                    mainWindow.setResizable(false);
 
-//                mainWindow.setSize(800, 600);
-//                mainWindow.setVisible(true);
+                    GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+                    device.setFullScreenWindow(mainWindow);
+                    mainWindow.setSize(device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight());
+
+                } else {
+                    System.out.println("Starting in windowed mode");
+                    mainWindow.setSize(800, 600);
+                    mainWindow.setVisible(true);
+                }
+
 
                 mainWindow.requestFocus();
             }
         });
+    }
+
+    private static boolean useFullScreen() {
+        return !"true".equalsIgnoreCase(System.getProperty("limma.window"));
     }
 
     private static void tweakSwing() {

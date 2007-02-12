@@ -13,7 +13,7 @@ public class MovieStorage {
     }
 
     public void refresh() {
-        videos = new ArrayList<Video>(persistenceManager.query("all_videos"));
+        videos = new ArrayList<Video>(persistenceManager.loadAll(Video.class));
         Collections.sort(videos, new VideoComparator());
     }
 

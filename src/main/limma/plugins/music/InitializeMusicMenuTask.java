@@ -29,7 +29,7 @@ class InitializeMusicMenuTask implements Task {
         final TrackContainerNode albumsNode = new TrackContainerNode("Albums", musicPlayer, playerManager);
         final TrackContainerNode songsNode = new TrackContainerNode("Songs", musicPlayer, playerManager);
 
-        java.util.List musicFiles = persistenceManager.query("all_musicfiles");
+        java.util.List musicFiles = persistenceManager.loadAll(MusicFile.class);
 
         for (Iterator i = musicFiles.iterator(); i.hasNext();) {
             MusicFile file = (MusicFile) i.next();

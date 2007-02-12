@@ -1,18 +1,16 @@
 package limma.persistence;
 
-import org.hibernate.Session;
-
 import java.util.List;
 
 public interface PersistenceManager {
 
     void addPersistentClass(Class clazz);
 
-    List query(String queryName);
+    void save(Object o);
 
-    List query(String queryName, String parameterName, Object parameterValue);
+    Object create(Object o);
 
-    Object querySingle(String queryName, String parameterName, Object parameterValue);
+    void delete(Object o);
 
-    Session openSession();
+    List loadAll(Class aClass);
 }

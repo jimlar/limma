@@ -5,7 +5,6 @@ import limma.swing.TaskFeedback;
 import limma.swing.TransactionalTask;
 import org.apache.commons.io.CopyUtils;
 import org.apache.commons.io.IOUtils;
-import org.hibernate.Session;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,7 +27,7 @@ class UpdateFromImdbTask extends TransactionalTask {
         this.imdbNumber = imdbNumber;
     }
 
-    public void runInTransaction(TaskFeedback feedback, Session session) {
+    public void runInTransaction(TaskFeedback feedback, PersistenceManager persistenceManager) {
         feedback.setStatusMessage("Fetching information from IMDB...");
         try {
             final IMDBInfo info = imdbService.getInfo(imdbNumber);
@@ -39,7 +38,7 @@ class UpdateFromImdbTask extends TransactionalTask {
             video.setPlot(info.getPlot());
             video.setRating(info.getRating());
             video.setYear(info.getYear());
-            session.merge(video);
+            persistenceManager.save(video);
 
             donwloadCoverIfNeeded(info, feedback);
 

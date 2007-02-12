@@ -3,7 +3,6 @@ package limma.plugins.video;
 import limma.UIProperties;
 import limma.persistence.PersistenceManager;
 import limma.swing.*;
-import org.hibernate.Session;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -63,10 +62,10 @@ public class EditMovieDialog extends LimmaDialog {
             this.newTitle = newTitle;
         }
 
-        public void runInTransaction(TaskFeedback feedback, Session session) {
+        public void runInTransaction(TaskFeedback feedback, PersistenceManager persistenceManager) {
             feedback.setStatusMessage("Saving...");
             video.setTitle(newTitle);
-            session.merge(video);
+            persistenceManager.save(video);
         }
     }
 }

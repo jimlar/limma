@@ -4,7 +4,6 @@ import limma.persistence.PersistenceManager;
 import limma.swing.TaskFeedback;
 import limma.swing.TransactionalTask;
 import limma.utils.DirectoryScanner;
-import org.hibernate.Session;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,10 +21,10 @@ class ScanMusicFilesTask extends TransactionalTask {
         musicDir = musicConfig.getMusicDir();
     }
 
-    public void runInTransaction(TaskFeedback feedback, Session session) {
+    public void runInTransaction(TaskFeedback feedback, PersistenceManager persistenceManager) {
         feedback.setStatusMessage("Scanning for music files in " + musicDir.getAbsolutePath());
-        List musicFiles = session.getNamedQuery("all_musicfiles").list();
-        updateMusicDatabase(session, musicFiles, feedback);
+        List musicFiles = persistenceManager.loadAll(MusicFile.class);
+        updateMusicDatabase(musicFiles, feedback, persistenceManager);
         musicPlugin.reloadFileList();
     }
 
@@ -43,24 +42,24 @@ class ScanMusicFilesTask extends TransactionalTask {
         return result[0];
     }
 
-    private void updateMusicDatabase(Session session, List musicFiles, TaskFeedback feedback) {
+    private void updateMusicDatabase(List musicFiles, TaskFeedback feedback, PersistenceManager persistenceManager) {
         int numDiskFiles = countDiskFiles();
-        deleteRemovedOrOutdatedFiles(musicFiles, numDiskFiles, session, feedback);
-        addMissingFiles(musicFiles, numDiskFiles, session, feedback);
+        deleteRemovedOrOutdatedFiles(musicFiles, numDiskFiles, feedback, persistenceManager);
+        addMissingFiles(musicFiles, numDiskFiles, feedback, persistenceManager);
     }
 
-    private void deleteRemovedOrOutdatedFiles(List musicFiles, int numDiskFiles, Session session, TaskFeedback feedback) {
+    private void deleteRemovedOrOutdatedFiles(List musicFiles, int numDiskFiles, TaskFeedback feedback, PersistenceManager persistenceManager) {
         for (ListIterator i = musicFiles.listIterator(); i.hasNext();) {
             MusicFile musicFile = (MusicFile) i.next();
             File diskFile = musicFile.getFile();
             if (!diskFile.isFile() || diskFile.lastModified() != musicFile.getLastModified().getTime()) {
-                session.delete(musicFile);
+                persistenceManager.delete(musicFile);
                 updateProgress(musicFiles.size() + numDiskFiles, i.nextIndex(), feedback);
             }
         }
     }
 
-    private void addMissingFiles(final List musicFiles, final int numDiskFiles, final Session session, final TaskFeedback feedback) {
+    private void addMissingFiles(final List musicFiles, final int numDiskFiles, final TaskFeedback feedback, final PersistenceManager persistenceManager) {
         final int numDatabaseFiles = musicFiles.size();
         final ArrayList<File> persistentFiles = new ArrayList<File>();
         for (Iterator i = musicFiles.iterator(); i.hasNext();) {
@@ -74,7 +73,7 @@ class ScanMusicFilesTask extends TransactionalTask {
             public boolean visit(File file) {
                 if (isMusicFile(file)) {
                     if (!persistentFiles.contains(file)) {
-                        session.save(new MusicFile(file));
+                        persistenceManager.create(new MusicFile(file));
                     }
                     filesScanned[0]++;
                     updateProgress(numDatabaseFiles + numDiskFiles, filesScanned[0], feedback);

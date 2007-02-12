@@ -1,11 +1,11 @@
 package limma;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 public class PlayerManager {
-    public Player player;
+    private Player player;
     private List<PlayerManagerListener> listeners = new ArrayList<PlayerManagerListener>();
 
     public void switchTo(Player player) {

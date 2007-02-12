@@ -5,7 +5,6 @@ import limma.swing.DialogManager;
 import limma.swing.TaskFeedback;
 import limma.swing.TransactionalTask;
 import limma.swing.navigation.NavigationNode;
-import org.hibernate.Session;
 
 class ToggleTagNode extends NavigationNode {
     private String tag;
@@ -36,14 +35,14 @@ class ToggleTagNode extends NavigationNode {
             this.tag = tag;
         }
 
-        public void runInTransaction(TaskFeedback feedback, Session session) {
+        public void runInTransaction(TaskFeedback feedback, PersistenceManager persistenceManager) {
             feedback.setStatusMessage("Toggling tag");
             if (video.getTags().contains(tag)) {
                 video.getTags().remove(tag);
             } else {
                 video.getTags().add(tag);
             }
-            session.update(video);
+            persistenceManager.save(video);
         }
     }
 }

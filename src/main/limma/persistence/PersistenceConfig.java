@@ -2,9 +2,9 @@ package limma.persistence;
 
 public interface PersistenceConfig {
 
-    String getHost();
+    String getDriver();
 
-    String getDatabase();
+    String getUrl();
 
     String getUsername();
 

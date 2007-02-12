@@ -10,27 +10,62 @@
     <name>Limma HTPC frontend</name>
     <url>http://blackbits.homeip.net</url>
 
-    <scm>
-        <connection>scm:cvs:pserver:blackbits.homeip.net:/var/cvsroot</connection>
-    </scm>
-
     <repositories>
         <repository>
-            <id>limma-repo</id>
-            <name>Limma Project Repository</name>
-            <url>file://repository</url>
+            <id>localLibs</id>
+            <name>Local libraries</name>
+            <url>file://${basedir}/lib</url>
+            <layout>default</layout>
         </repository>
     </repositories>
 
     <dependencies>
-        <!--
-            {TimingFramework.jar}
-            {asm.jar}
-            {asm-attrs.jar}
-            {jl1.0.jar}
-            {jta.jar}
-            {mp3spi1.9.4.jar}
-        -->
+
+        <dependency>
+            <groupId>tritonus</groupId>
+            <artifactId>tritonus_jorbis</artifactId>
+            <version>0.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>tritonus</groupId>
+            <artifactId>tritonus_remaining</artifactId>
+            <version>0.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>tritonus</groupId>
+            <artifactId>tritonus_share</artifactId>
+            <version>0.3.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>asm</groupId>
+            <artifactId>asm-attrs</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>timingframework</groupId>
+            <artifactId>timingframework</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jl</groupId>
+            <artifactId>jl</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mp3spi</groupId>
+            <artifactId>mp3spi</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+
 
         <dependency>
             <groupId>hibernate</groupId>
@@ -157,21 +192,8 @@
             <artifactId>saxpath</artifactId>
             <version>1.0-FCS</version>
         </dependency>
-        <dependency>
-            <groupId>tritonus_jorbis</groupId>
-            <artifactId>tritonus_jorbis</artifactId>
-            <version>0.3.6</version>
-        </dependency>
-        <dependency>
-            <groupId>tritonus_remaining</groupId>
-            <artifactId>tritonus_remaining</artifactId>
-            <version>0.3.6</version>
-        </dependency>
-        <dependency>
-            <groupId>tritonus_share</groupId>
-            <artifactId>tritonus_share</artifactId>
-            <version>0.3.6</version>
-        </dependency>
+
+
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
@@ -181,15 +203,37 @@
             <groupId>xerces</groupId>
             <artifactId>xmlParserAPIs</artifactId>
             <version>2.2.1</version>
+        </dependency>
 
+        <dependency>
+            <groupId>com.agical.rmock</groupId>
+            <artifactId>rmock</artifactId>
+            <version>2.0.0-rc-6</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.7</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
 
     <build>
-        <directory>build</directory>
+        <directory>target</directory>
         <sourceDirectory>src/main</sourceDirectory>
         <testSourceDirectory>src/test</testSourceDirectory>
+
+        <resources>
+            <resource>
+                <directory>src/main</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
 
         <plugins>
             <plugin>
@@ -200,6 +244,32 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>limma.Main</mainClass>
+                    <keepAlive>true</keepAlive>
+                </configuration>
+            </plugin>
+
+<!--
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/assembly/limma-assembly.xml</descriptor>
+                    </descriptors>
+                    <archive>
+                        <manifest>
+                            <mainClass>limma.Main</mainClass>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+-->
         </plugins>
     </build>
 

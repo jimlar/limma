@@ -5,7 +5,6 @@ import limma.swing.TaskFeedback;
 import limma.swing.TransactionalTask;
 import limma.utils.DirectoryScanner;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Session;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,34 +24,34 @@ class ScanForVideosTask extends TransactionalTask {
         this.videoFileExtensions = videoConfig.getVideoFileExtensions();
     }
 
-    public void runInTransaction(TaskFeedback feedback, Session session) {
+    public void runInTransaction(TaskFeedback feedback, PersistenceManager persistenceManager) {
         feedback.setStatusMessage("Searching for videos...");
         List<File> moviesFiles = new ArrayList<File>();
         List<File> dvdDirectories = new ArrayList<File>();
 
         scanForDiskFiles(moviesFiles, dvdDirectories);
 
-        deleteVideosNoLongerOnDisk(session);
+        deleteVideosNoLongerOnDisk(persistenceManager);
 
-        List<File> persistentFiles = getPersistentFiles(session);
+        List<File> persistentFiles = getPersistentFiles(persistenceManager);
 
-        updateDvdDirectories(dvdDirectories, persistentFiles, session);
+        updateDvdDirectories(dvdDirectories, persistentFiles, persistenceManager);
 
-        updateFileVideos(moviesFiles, persistentFiles, session);
+        updateFileVideos(moviesFiles, persistentFiles, persistenceManager);
 
         videoPlugin.reloadVideos();
     }
 
-    private void updateFileVideos(List<File> moviesFiles, List<File> persistentFiles, Session session) {
+    private void updateFileVideos(List<File> moviesFiles, List<File> persistentFiles, PersistenceManager persistenceManager) {
         for (Iterator<File> i = moviesFiles.iterator(); i.hasNext();) {
             File movieFile = i.next();
             if (!persistentFiles.contains(movieFile)) {
                 System.out.println("Adding movie " + movieFile);
 
                 Video video = new Video(guessNameFromFile(movieFile));
-                video = (Video) session.get(Video.class, session.save(video));
+                video = (Video) persistenceManager.create(video);
                 VideoFile videoFile = new VideoFile(video, movieFile.getAbsolutePath());
-                session.save(videoFile);
+                persistenceManager.create(videoFile);
                 persistentFiles.add(movieFile);
 
                 List<File> similarFiles = findSimilarFiles(movieFile, moviesFiles, videoConfig.getSimilarFileDistance());
@@ -62,7 +61,7 @@ class ScanForVideosTask extends TransactionalTask {
                     if (!persistentFiles.contains(similarFile)) {
                         videoFile = new VideoFile(video, similarFile.getAbsolutePath());
                     }
-                    session.save(videoFile);
+                    persistenceManager.create(videoFile);
                     persistentFiles.add(similarFile);
                 }
             }
@@ -86,8 +85,8 @@ class ScanForVideosTask extends TransactionalTask {
         });
     }
 
-    private List<File> getPersistentFiles(Session session) {
-        List videoFiles = session.getNamedQuery("all_video_files").list();
+    private List<File> getPersistentFiles(PersistenceManager persistenceManager) {
+        List videoFiles = persistenceManager.loadAll(VideoFile.class);
         ArrayList<File> persistentFiles = new ArrayList<File>();
         for (Iterator i = videoFiles.iterator(); i.hasNext();) {
             VideoFile videoFile = (VideoFile) i.next();
@@ -96,7 +95,7 @@ class ScanForVideosTask extends TransactionalTask {
         return persistentFiles;
     }
 
-    private void updateDvdDirectories(List<File> dvdFiles, List<File> persistentFiles, Session session) {
+    private void updateDvdDirectories(List<File> dvdFiles, List<File> persistentFiles, PersistenceManager persistenceManager) {
         for (Iterator<File> i = dvdFiles.iterator(); i.hasNext();) {
             File dvdFile = i.next();
 
@@ -104,15 +103,15 @@ class ScanForVideosTask extends TransactionalTask {
                 System.out.println("Adding DVD directory: " + dvdFile);
 
                 Video video = new Video(guessNameFromFile(dvdFile));
-                video = (Video) session.get(Video.class, session.save(video));
+                video = (Video) persistenceManager.create(video);
                 VideoFile videoFile = new VideoFile(video, dvdFile.getAbsolutePath());
-                session.save(videoFile);
+                persistenceManager.create(videoFile);
             }
         }
     }
 
-    private void deleteVideosNoLongerOnDisk(Session session) {
-        List videoFiles = session.getNamedQuery("all_video_files").list();
+    private void deleteVideosNoLongerOnDisk(PersistenceManager persistenceManager) {
+        List videoFiles = persistenceManager.loadAll(VideoFile.class);
         for (Iterator i = videoFiles.iterator(); i.hasNext();) {
             VideoFile videoFile = (VideoFile) i.next();
             Video video = videoFile.getVideo();
@@ -120,11 +119,11 @@ class ScanForVideosTask extends TransactionalTask {
             if (!videoFile.getFile().exists()) {
 
                 System.out.println("Deleting video file " + videoFile.getFile());
-                session.delete(videoFile);
+                persistenceManager.delete(videoFile);
                 video.getFiles().remove(videoFile);
                 if (video.getFiles().isEmpty()) {
                     System.out.println(" - Video now empty, deletig video " + video.getTitle());
-                    session.delete(video);
+                    persistenceManager.delete(video);
                 }
             }
         }

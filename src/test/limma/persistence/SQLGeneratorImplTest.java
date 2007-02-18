@@ -21,6 +21,14 @@ public class SQLGeneratorImplTest extends TestCase {
         assertEquals("select id, name from Product", sql);
     }
 
+    public void testGenerateLastInsertSQLForHSQL() throws Exception {
+        assertEquals("call identity()", sqlGenerator.generateLastIdentitySQL());
+    }
+
+    public void testGenerateLastInsertSQLForMySQL() throws Exception {
+        assertEquals("select last_insert_id()", sqlGenerator.generateLastIdentitySQL());
+    }
+
 
     private static class Product {
         private long id;

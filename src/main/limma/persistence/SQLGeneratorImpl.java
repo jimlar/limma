@@ -52,4 +52,8 @@ public class SQLGeneratorImpl implements SQLGenerator {
         }
         return result;
     }
+
+    public String generateLastIdentitySQL() {
+        return "call identity()";
+    }
 }

@@ -8,4 +8,6 @@ public interface SQLGenerator {
     String generateSelectAllSQL(Class persistentClass);
 
     List<String> getColumns(Class persistentClass, boolean includeIdColumn);
+
+    String generateLastIdentitySQL();
 }

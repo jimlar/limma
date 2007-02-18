@@ -26,42 +26,50 @@ public class JDBCPersistenceManager implements PersistenceManager {
     public Object create(final Object o) {
         final Class persistentClass = o.getClass();
 
-        return executeSql(sqlGenerator.generateInsertSQL(o), new StatementBlock() {
-            public Object run(PreparedStatement statement) throws SQLException {
-                for (ListIterator<String> i = sqlGenerator.getColumns(persistentClass, false).listIterator(); i.hasNext();)
-                {
-                    String column = i.next();
-                    try {
-                        Field field = persistentClass.getDeclaredField(column);
-                        field.setAccessible(true);
-                        statement.setObject(i.previousIndex() + 1, field.get(o));
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    } catch (NoSuchFieldException e) {
-                        throw new RuntimeException(e);
+        return runWithConnection(new ConnectionBlock() {
+            public Object run(Connection connection) {
+                runWithStatement(sqlGenerator.generateInsertSQL(o), connection, new StatementBlock() {
+                    public Object run(PreparedStatement statement) throws SQLException {
+                        for (ListIterator<String> i = sqlGenerator.getColumns(persistentClass, false).listIterator(); i.hasNext();)
+                        {
+                            String column = i.next();
+                            try {
+                                Field field = persistentClass.getDeclaredField(column);
+                                field.setAccessible(true);
+                                statement.setObject(i.previousIndex() + 1, field.get(o));
+                            } catch (IllegalAccessException e) {
+                                throw new RuntimeException(e);
+                            } catch (NoSuchFieldException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        statement.execute();
+                        return o;
                     }
-                }
-                statement.execute();
-                return o;
+                });
+
+                return runWithStatement(sqlGenerator.generateLastIdentitySQL(), connection, new StatementBlock() {
+                    public Object run(PreparedStatement statement) throws SQLException {
+                        ResultSet result = statement.executeQuery();
+                        if (result.next()) {
+                            Object id = result.getObject(1);
+                            setField(o, persistentClass, "id", id);
+                            return o;
+                        }
+                        throw new RuntimeException("Could not populate object with generated id, no id found");
+                    }
+                });
             }
         });
-
-
-        /*
-        För att hämta ID't
-
-        mysql: select last_insert_id()
-        hsql:  call identity()
-         */
     }
 
     public List loadAll(final Class persistentClass) {
         String sql = sqlGenerator.generateSelectAllSQL(persistentClass);
-        return (List) executeSql(sql, new StatementBlock() {
+        return (List) runWithStatement(sql, new StatementBlock() {
             public Object run(PreparedStatement statement) throws SQLException {
                 statement.execute();
                 ResultSet resultSet = statement.getResultSet();
-                return unmarschalObjects(resultSet, persistentClass);
+                return unmarshalObjects(resultSet, persistentClass);
             }
         });
     }
@@ -75,12 +83,19 @@ public class JDBCPersistenceManager implements PersistenceManager {
     }
 
 
-    private Object executeSql(String sql, StatementBlock statementBlock) {
+    private Object runWithStatement(final String sql, final StatementBlock statementBlock) {
+        return runWithConnection(new ConnectionBlock() {
+            public Object run(Connection connection) {
+                return runWithStatement(sql, connection, statementBlock);
+            }
+        });
+    }
+
+    private Object runWithStatement(String sql, Connection connection, final StatementBlock statementBlock) {
         System.out.println("sql = " + sql);
-        Connection connection = null;
+
         PreparedStatement statement = null;
         try {
-            connection = DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
             statement = connection.prepareStatement(sql);
             return statementBlock.run(statement);
 
@@ -93,6 +108,18 @@ public class JDBCPersistenceManager implements PersistenceManager {
                 } catch (SQLException e) {
                 }
             }
+        }
+    }
+
+    private Object runWithConnection(ConnectionBlock connectionBlock) {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
+            return connectionBlock.run(connection);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
             if (connection != null) {
                 try {
                     connection.close();
@@ -102,16 +129,14 @@ public class JDBCPersistenceManager implements PersistenceManager {
         }
     }
 
-    private List unmarschalObjects(ResultSet resultSet, Class persistentClass) {
+    private List unmarshalObjects(ResultSet resultSet, Class persistentClass) {
         try {
+            List<String> columns = sqlGenerator.getColumns(persistentClass, true);
             ArrayList result = new ArrayList();
             while (resultSet.next()) {
                 Object o = persistentClass.newInstance();
-                List<String> columns = sqlGenerator.getColumns(persistentClass, true);
-                for (String column : columns) {
-                    Field field = persistentClass.getDeclaredField(column);
-                    field.setAccessible(true);
-                    field.set(o, resultSet.getObject(column));
+                for (String columnName : columns) {
+                    setField(o, persistentClass, columnName, resultSet.getObject(columnName));
                 }
                 result.add(o);
             }
@@ -122,12 +147,26 @@ public class JDBCPersistenceManager implements PersistenceManager {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void setField(Object o, Class persistentClass, String fieldName, Object value) {
+        try {
+            Field field = persistentClass.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(o, value);
         } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
     private static interface StatementBlock {
         Object run(PreparedStatement statement) throws SQLException;
+    }
+
+    private static interface ConnectionBlock {
+        Object run(Connection connection);
     }
 }

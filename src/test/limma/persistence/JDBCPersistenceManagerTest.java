@@ -37,6 +37,7 @@ public class JDBCPersistenceManagerTest extends TestCase {
     public void testCreateSetsAnIdOnObjectsReturned() throws Exception {
         Product product1 = (Product) manager.create(new Product("bike"));
         Product product2 = (Product) manager.create(new Product("bike"));
+
         assertEquals(1, product1.id);
         assertEquals(2, product2.id);
     }

@@ -2,7 +2,8 @@ package limma.persistence;
 
 import java.util.List;
 
-public interface SQLGenerator {
+public interface SQLDialect {
+
     String generateInsertSQL(Object o);
 
     String generateSelectAllSQL(Class persistentClass);

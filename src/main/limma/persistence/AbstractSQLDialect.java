@@ -6,8 +6,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQLGeneratorImpl implements SQLGenerator {
-
+public abstract class AbstractSQLDialect implements SQLDialect {
     public String generateInsertSQL(Object o) {
         Class persistentClass = o.getClass();
         List<String> columns = getColumns(persistentClass, false);
@@ -51,9 +50,5 @@ public class SQLGeneratorImpl implements SQLGenerator {
             }
         }
         return result;
-    }
-
-    public String generateLastIdentitySQL() {
-        return "call identity()";
     }
 }

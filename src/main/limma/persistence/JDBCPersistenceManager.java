@@ -8,11 +8,11 @@ import java.util.ListIterator;
 
 public class JDBCPersistenceManager implements PersistenceManager {
     private PersistenceConfig config;
-    private SQLGenerator sqlGenerator;
+    private SQLDialect sqlDialect;
 
-    public JDBCPersistenceManager(PersistenceConfig config, SQLGenerator sqlGenerator) {
+    public JDBCPersistenceManager(PersistenceConfig config, SQLDialect sqlDialect) {
         this.config = config;
-        this.sqlGenerator = sqlGenerator;
+        this.sqlDialect = sqlDialect;
         try {
             Class.forName(config.getDriver());
         } catch (ClassNotFoundException e) {
@@ -28,9 +28,9 @@ public class JDBCPersistenceManager implements PersistenceManager {
 
         return runWithConnection(new ConnectionBlock() {
             public Object run(Connection connection) {
-                runWithStatement(sqlGenerator.generateInsertSQL(o), connection, new StatementBlock() {
+                runWithStatement(sqlDialect.generateInsertSQL(o), connection, new StatementBlock() {
                     public Object run(PreparedStatement statement) throws SQLException {
-                        for (ListIterator<String> i = sqlGenerator.getColumns(persistentClass, false).listIterator(); i.hasNext();)
+                        for (ListIterator<String> i = sqlDialect.getColumns(persistentClass, false).listIterator(); i.hasNext();)
                         {
                             String column = i.next();
                             try {
@@ -48,7 +48,7 @@ public class JDBCPersistenceManager implements PersistenceManager {
                     }
                 });
 
-                return runWithStatement(sqlGenerator.generateLastIdentitySQL(), connection, new StatementBlock() {
+                return runWithStatement(sqlDialect.generateLastIdentitySQL(), connection, new StatementBlock() {
                     public Object run(PreparedStatement statement) throws SQLException {
                         ResultSet result = statement.executeQuery();
                         if (result.next()) {
@@ -64,7 +64,7 @@ public class JDBCPersistenceManager implements PersistenceManager {
     }
 
     public List loadAll(final Class persistentClass) {
-        String sql = sqlGenerator.generateSelectAllSQL(persistentClass);
+        String sql = sqlDialect.generateSelectAllSQL(persistentClass);
         return (List) runWithStatement(sql, new StatementBlock() {
             public Object run(PreparedStatement statement) throws SQLException {
                 statement.execute();
@@ -92,8 +92,6 @@ public class JDBCPersistenceManager implements PersistenceManager {
     }
 
     private Object runWithStatement(String sql, Connection connection, final StatementBlock statementBlock) {
-        System.out.println("sql = " + sql);
-
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);
@@ -131,7 +129,7 @@ public class JDBCPersistenceManager implements PersistenceManager {
 
     private List unmarshalObjects(ResultSet resultSet, Class persistentClass) {
         try {
-            List<String> columns = sqlGenerator.getColumns(persistentClass, true);
+            List<String> columns = sqlDialect.getColumns(persistentClass, true);
             ArrayList result = new ArrayList();
             while (resultSet.next()) {
                 Object o = persistentClass.newInstance();

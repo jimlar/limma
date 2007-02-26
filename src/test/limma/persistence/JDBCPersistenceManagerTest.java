@@ -16,7 +16,7 @@ public class JDBCPersistenceManagerTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         config = new HSQLConfig();
-        manager = new JDBCPersistenceManager(config, new SQLGeneratorImpl());
+        manager = new JDBCPersistenceManager(config, new HSQLDialect());
         manager.addPersistentClass(Product.class);
 
         sql("set WRITE_DELAY 0");
@@ -40,6 +40,15 @@ public class JDBCPersistenceManagerTest extends TestCase {
 
         assertEquals(1, product1.id);
         assertEquals(2, product2.id);
+    }
+
+
+    public void testCreate() throws Exception {
+        fail();
+    }
+
+    public void testSave() throws Exception {
+        fail();
     }
 
     public static class Product {

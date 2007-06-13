@@ -44,6 +44,7 @@ public class XMLMusicRepositoryImpl implements MusicRepository {
         } finally {
             IOUtils.closeQuietly(writer);
         }
+        musicFiles = load();
     }
 
     private int countDiskFiles() {
@@ -102,6 +103,7 @@ public class XMLMusicRepositoryImpl implements MusicRepository {
 
 
     private List<MusicFile> load() {
+        long start = System.currentTimeMillis();
         File cacheFile = musicConfig.getCacheFile();
         if (!cacheFile.isFile() || cacheFile.length() == 0) {
             return new ArrayList<MusicFile>();
@@ -115,6 +117,7 @@ public class XMLMusicRepositoryImpl implements MusicRepository {
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(reader);
+            System.out.println("Loaded music cache in " + (System.currentTimeMillis() - start) + " ms");
         }
     }
 

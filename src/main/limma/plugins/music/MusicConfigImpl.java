@@ -1,14 +1,18 @@
 package limma.plugins.music;
 
+import java.io.File;
+
 import limma.AbstractConfiguration;
 import limma.utils.ExternalCommand;
-
-import java.io.File;
 
 public class MusicConfigImpl extends AbstractConfiguration implements MusicConfig {
 
     public MusicConfigImpl() {
         super("music");
+    }
+
+    public File getCacheFile() {
+        return new File(getMusicDir(), "cache.xml");
     }
 
     public File getMusicDir() {

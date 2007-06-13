@@ -329,7 +329,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/limma.iml" filepath="$PROJECT_DIR$/limma.iml"/>
-      <module fileurl="file://$PROJECT_DIR$/limma.iml" filepath="$PROJECT_DIR$/limma.iml"/>
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5"
@@ -349,15 +348,18 @@
   </component>
   <component name="StarteamVcsAdapter"/>
   <component name="TestDox.ConfigurationController">
-    <option value="false" name="allowCustomPackages"/>
-    <option value="&lt;classname&gt;Test" name="testNameTemplate"/>
-    <option value="false" name="alphabeticalSorting"/>
-    <option value="true" name="createTestIfMissing"/>
-    <option value="false" name="underscoreMode"/>
-    <option value="false" name="showFullyQualifiedClassName"/>
-    <option value="false" name="autoscrolling"/>
-    <option value="true" name="autoApplyChangesToTests"/>
-    <option value="true" name="deletePackageOccurrences"/>
+    <option name="allowCustomPackages" value="false"/>
+    <option name="testNameTemplate" value="&lt;classname&gt;Test"/>
+    <option name="alphabeticalSorting" value="false"/>
+    <option name="createTestIfMissing" value="true"/>
+    <option name="underscoreMode" value="false"/>
+    <option name="showFullyQualifiedClassName" value="false"/>
+    <option name="autoscrolling" value="false"/>
+    <option name="autoApplyChangesToTests" value="true"/>
+    <option name="deletePackageOccurrences" value="true"/>
+    <option name="testMethodPrefix" value="test"/>
+    <option name="testMethodAnnotation"/>
+    <option name="usingAnnotations" value="false"/>
     <custom-packaging allow="false"/>
   </component>
   <component name="VssVcs"/>

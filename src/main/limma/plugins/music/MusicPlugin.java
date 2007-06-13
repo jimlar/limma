@@ -43,7 +43,7 @@ public class MusicPlugin implements Plugin {
 
         musicNode.add(new MenuItem("Scan for new music files") {
             public void performAction(DialogManager dialogManager) {
-                MusicPlugin.this.dialogManager.executeInDialog(new ScanMusicFilesTask(MusicPlugin.this, musicConfig, musicRepository));
+                MusicPlugin.this.dialogManager.executeInDialog(new ScanMusicFilesTask(MusicPlugin.this, musicRepository));
             }
         });
 

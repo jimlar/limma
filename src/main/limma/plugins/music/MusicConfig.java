@@ -1,10 +1,12 @@
 package limma.plugins.music;
 
-import limma.utils.ExternalCommand;
-
 import java.io.File;
 
+import limma.utils.ExternalCommand;
+
 public interface MusicConfig {
+
+    File getCacheFile();
 
     File getMusicDir();
 

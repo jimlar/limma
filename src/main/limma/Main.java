@@ -6,6 +6,8 @@ import java.awt.GraphicsEnvironment;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import limma.domain.music.XMLMusicRepositoryImpl;
+import limma.domain.video.HibernateVideoRepositoryImpl;
 import limma.persistence.PersistenceConfigImpl;
 import limma.persistence.hibernate.HibernatePersistenceManagerImpl;
 import limma.plugins.game.GameConfigImpl;
@@ -43,6 +45,7 @@ public class Main {
                 pico.registerComponentImplementation(DialogManagerImpl.class);
                 pico.registerComponentImplementation(CursorHider.class);
 
+                pico.registerComponentImplementation(HibernateVideoRepositoryImpl.class);
                 pico.registerComponentImplementation(VideoPlugin.class);
                 pico.registerComponentImplementation(VideoConfigImpl.class);
                 pico.registerComponentImplementation(VideoPlayer.class);
@@ -50,6 +53,7 @@ public class Main {
                 pico.registerComponentImplementation(IMDBDialog.class);
                 pico.registerComponentImplementation(EditMovieDialog.class);
 
+                pico.registerComponentImplementation(XMLMusicRepositoryImpl.class);
                 pico.registerComponentImplementation(MusicPlugin.class);
                 pico.registerComponentImplementation(MusicConfigImpl.class);
 //                pico.registerComponentImplementation(JavaSoundMusicPlayer.class);

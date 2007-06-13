@@ -1,6 +1,7 @@
 package limma.plugins.music;
 
 import limma.PlayerManager;
+import limma.domain.music.MusicFile;
 import limma.swing.DialogManager;
 import limma.swing.navigation.SimpleNavigationNode;
 

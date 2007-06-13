@@ -1,11 +1,14 @@
 package limma.plugins.music;
 
-import limma.UIProperties;
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+
+import limma.UIProperties;
+import limma.domain.music.MusicFile;
 
 public abstract class AbstractMusicPlayer implements MusicPlayer {
     private Random random = new Random();

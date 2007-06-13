@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="limma.plugins.music">
+  <class name="MusicFile" table="music_file">
+    <id name="id" access="field">
+      <generator class="native"/>
+    </id>
+    <property name="lastModified" access="field" not-null="true"/>
+    <property name="path" access="field"/>
+    <property name="artist" access="field"/>
+    <property name="title" access="field"/>
+    <property name="album" access="field"/>
+    <property name="year" access="field"/>
+    <property name="lengthInSeconds" access="field"/>
+    <property name="longName" access="field"/>
+  </class>
+
+  <query name="all_musicfiles">from MusicFile</query>
+  <query name="musicfile_by_path">from MusicFile where path = :path</query>
+</hibernate-mapping>
+

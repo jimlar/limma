@@ -1,11 +1,11 @@
 package limma.plugins.video;
 
-import org.jmock.Mock;
-import org.jmock.MockObjectTestCase;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 public class ScanForVideosTaskTest extends MockObjectTestCase {
     private ScanForVideosTask task;
@@ -15,7 +15,7 @@ public class ScanForVideosTaskTest extends MockObjectTestCase {
         super.setUp();
         Mock mock = mock(VideoConfig.class);
         mock.stubs().method("getVideoFileExtensions").will(returnValue(null));
-        task = new ScanForVideosTask(null, null, (VideoConfig) mock.proxy());
+        task = new ScanForVideosTask(null, (VideoConfig) mock.proxy(), null);
         moviesFiles = new ArrayList<File>();
         moviesFiles.add(new File("/test/test-cd1.avi"));
         moviesFiles.add(new File("/test/test-cd2.avi"));

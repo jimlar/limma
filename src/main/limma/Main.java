@@ -1,7 +1,13 @@
 package limma;
 
-import limma.persistence.HibernatePersistenceManagerImpl;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import limma.persistence.PersistenceConfigImpl;
+import limma.persistence.hibernate.HibernatePersistenceManagerImpl;
 import limma.plugins.game.GameConfigImpl;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.ExternalMusicPlayer;
@@ -16,9 +22,6 @@ import limma.swing.navigation.Navigation;
 import limma.swing.navigation.NavigationModel;
 import limma.swing.navigation.NavigationPopupMenu;
 import org.picocontainer.defaults.DefaultPicoContainer;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class Main {
 

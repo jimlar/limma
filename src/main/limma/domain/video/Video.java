@@ -1,4 +1,4 @@
-package limma.plugins.video;
+package limma.domain.video;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -111,4 +111,6 @@ public class Video {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+
 }

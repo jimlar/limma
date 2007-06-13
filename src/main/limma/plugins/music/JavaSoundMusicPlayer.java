@@ -1,6 +1,7 @@
 package limma.plugins.music;
 
 import limma.UIProperties;
+import limma.domain.music.MusicFile;
 
 public class JavaSoundMusicPlayer extends AbstractMusicPlayer {
     private JavaSoundPlayerThread playerThread;

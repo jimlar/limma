@@ -1,26 +1,28 @@
 package limma.plugins.video;
 
-import limma.persistence.PersistenceManager;
-import limma.swing.DialogManager;
-import limma.swing.navigation.NavigationNode;
-import limma.swing.navigation.SimpleNavigationNode;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import limma.domain.video.Video;
+import limma.domain.video.VideoFile;
+import limma.domain.video.VideoRepository;
+import limma.swing.DialogManager;
+import limma.swing.navigation.NavigationNode;
+import limma.swing.navigation.SimpleNavigationNode;
+
 public class MovieNavigationNode extends SimpleNavigationNode {
     private Video video;
     private VideoPlayer player;
+    private VideoRepository videoRepository;
     private MovieStorage movieStorage;
-    private PersistenceManager persistenceManager;
 
-    public MovieNavigationNode(Video video, VideoPlayer player, MovieStorage movieStorage, PersistenceManager persistenceManager) {
+    public MovieNavigationNode(Video video, VideoPlayer player, MovieStorage movieStorage, VideoRepository videoRepository) {
         super(video.getTitle());
-        this.persistenceManager = persistenceManager;
         this.movieStorage = movieStorage;
         this.video = video;
         this.player = player;
+        this.videoRepository = videoRepository;
         add(new EditMovieMenuItem(video));
         add(new UpdateFromIMDBMenuItem(video));
 
@@ -48,7 +50,7 @@ public class MovieNavigationNode extends SimpleNavigationNode {
         List<String> tags = movieStorage.getTags();
         for (Iterator<String> i = tags.iterator(); i.hasNext();) {
             String tag = i.next();
-            editTagsNode.add(new ToggleTagNode(tag, video, persistenceManager));
+            editTagsNode.add(new ToggleTagNode(tag, video, videoRepository));
         }
 
         return editTagsNode;

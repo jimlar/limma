@@ -1,5 +1,6 @@
 package limma.plugins.video;
 
+import limma.domain.video.Video;
 import limma.swing.DialogManager;
 import limma.swing.navigation.MenuItem;
 

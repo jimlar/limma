@@ -1,17 +1,20 @@
 package limma.plugins.video;
 
-import limma.Player;
-import limma.PlayerManager;
-import limma.UIProperties;
-import limma.swing.AntialiasLabel;
-import limma.utils.ExternalCommand;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.List;
+
+import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+
+import limma.Player;
+import limma.PlayerManager;
+import limma.UIProperties;
+import limma.domain.video.Video;
+import limma.domain.video.VideoFile;
+import limma.swing.AntialiasLabel;
+import limma.utils.ExternalCommand;
 
 public class VideoPlayer implements Player {
     private static final long DVD_SIZE_THRESHOLD = 2L * 1024 * 1024 * 1024;

@@ -1,11 +1,5 @@
 package limma.plugins.video;
 
-import limma.persistence.PersistenceManager;
-import limma.swing.TaskFeedback;
-import limma.swing.TransactionalTask;
-import org.apache.commons.io.CopyUtils;
-import org.apache.commons.io.IOUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,21 +7,29 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-class UpdateFromImdbTask extends TransactionalTask {
+import limma.domain.video.Video;
+import limma.domain.video.VideoRepository;
+import limma.swing.Task;
+import limma.swing.TaskFeedback;
+import org.apache.commons.io.CopyUtils;
+import org.apache.commons.io.IOUtils;
+
+class UpdateFromImdbTask implements Task {
     private IMDBService imdbService;
     private VideoConfig videoConfig;
     private Video video;
     private int imdbNumber;
+    private VideoRepository videoRepository;
 
-    public UpdateFromImdbTask(PersistenceManager persistenceManager, IMDBService imdbService, VideoConfig videoConfig, Video video, int imdbNumber) {
-        super(persistenceManager);
+    public UpdateFromImdbTask(IMDBService imdbService, VideoConfig videoConfig, Video video, int imdbNumber, VideoRepository videoRepository) {
         this.imdbService = imdbService;
         this.videoConfig = videoConfig;
         this.video = video;
         this.imdbNumber = imdbNumber;
+        this.videoRepository = videoRepository;
     }
 
-    public void runInTransaction(TaskFeedback feedback, PersistenceManager persistenceManager) {
+    public void run(TaskFeedback feedback) {
         feedback.setStatusMessage("Fetching information from IMDB...");
         try {
             final IMDBInfo info = imdbService.getInfo(imdbNumber);
@@ -38,7 +40,7 @@ class UpdateFromImdbTask extends TransactionalTask {
             video.setPlot(info.getPlot());
             video.setRating(info.getRating());
             video.setYear(info.getYear());
-            persistenceManager.save(video);
+            videoRepository.save(video);
 
             donwloadCoverIfNeeded(info, feedback);
 

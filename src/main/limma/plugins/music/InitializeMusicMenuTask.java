@@ -1,26 +1,28 @@
 package limma.plugins.music;
 
+import java.util.Iterator;
+
+import javax.swing.SwingUtilities;
+
 import limma.PlayerManager;
-import limma.persistence.PersistenceManager;
+import limma.domain.music.MusicFile;
+import limma.domain.music.MusicRepository;
 import limma.swing.Task;
 import limma.swing.TaskFeedback;
 import limma.swing.navigation.NavigationNode;
 import limma.swing.navigation.SimpleNavigationNode;
 
-import javax.swing.*;
-import java.util.Iterator;
-
 class InitializeMusicMenuTask implements Task {
-    private PersistenceManager persistenceManager;
     private SimpleNavigationNode musicNode;
     private MusicPlayer musicPlayer;
     private PlayerManager playerManager;
+    private MusicRepository musicRepository;
 
-    public InitializeMusicMenuTask(PersistenceManager persistenceManager, SimpleNavigationNode musicNode, MusicPlayer musicPlayer, PlayerManager playerManager) {
-        this.persistenceManager = persistenceManager;
+    public InitializeMusicMenuTask(SimpleNavigationNode musicNode, MusicPlayer musicPlayer, PlayerManager playerManager, MusicRepository musicRepository) {
         this.musicNode = musicNode;
         this.musicPlayer = musicPlayer;
         this.playerManager = playerManager;
+        this.musicRepository = musicRepository;
     }
 
     public void run(TaskFeedback feedback) {
@@ -29,7 +31,7 @@ class InitializeMusicMenuTask implements Task {
         final TrackContainerNode albumsNode = new TrackContainerNode("Albums", musicPlayer, playerManager);
         final TrackContainerNode songsNode = new TrackContainerNode("Songs", musicPlayer, playerManager);
 
-        java.util.List musicFiles = persistenceManager.loadAll(MusicFile.class);
+        java.util.List musicFiles = musicRepository.getAll();
 
         for (Iterator i = musicFiles.iterator(); i.hasNext();) {
             MusicFile file = (MusicFile) i.next();

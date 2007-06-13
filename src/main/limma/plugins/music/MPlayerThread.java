@@ -1,10 +1,11 @@
 package limma.plugins.music;
 
-import limma.utils.ExternalCommand;
-
 import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import limma.domain.music.MusicFile;
+import limma.utils.ExternalCommand;
 
 class MPlayerThread extends Thread {
     private MusicConfig musicConfig;

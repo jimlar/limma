@@ -1,21 +1,22 @@
 package limma.plugins.video;
 
-import limma.persistence.PersistenceManager;
-import limma.swing.navigation.NavigationNode;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import limma.domain.video.Video;
+import limma.domain.video.VideoRepository;
+import limma.swing.navigation.NavigationNode;
+
 public class AllMoviesNode extends NavigationNode {
     private MovieStorage movieStorage;
     private VideoPlayer videoPlayer;
-    private PersistenceManager persistenceManager;
+    private VideoRepository videoRepository;
 
-    public AllMoviesNode(MovieStorage movieStorage, VideoPlayer videoPlayer, PersistenceManager persistenceManager) {
-        this.persistenceManager = persistenceManager;
+    public AllMoviesNode(MovieStorage movieStorage, VideoPlayer videoPlayer, VideoRepository videoRepository) {
         this.movieStorage = movieStorage;
         this.videoPlayer = videoPlayer;
+        this.videoRepository = videoRepository;
     }
 
     public String getTitle() {
@@ -26,7 +27,7 @@ public class AllMoviesNode extends NavigationNode {
         ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
         for (Iterator i = movieStorage.getVideos().iterator(); i.hasNext();) {
             Video video = (Video) i.next();
-            MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, movieStorage, persistenceManager);
+            MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, movieStorage, videoRepository);
             movieNode.setParent(this);
             children.add(movieNode);
         }

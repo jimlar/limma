@@ -1,30 +1,32 @@
 package limma.plugins.music;
 
-import limma.persistence.PersistenceManager;
-import limma.swing.TaskFeedback;
-import limma.swing.TransactionalTask;
-import limma.utils.DirectoryScanner;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-class ScanMusicFilesTask extends TransactionalTask {
+import limma.domain.music.MusicFile;
+import limma.domain.music.MusicRepository;
+import limma.swing.Task;
+import limma.swing.TaskFeedback;
+import limma.utils.DirectoryScanner;
+
+class ScanMusicFilesTask implements Task {
     private MusicPlugin musicPlugin;
+    private MusicRepository musicRepository;
     private File musicDir;
 
-    public ScanMusicFilesTask(MusicPlugin musicPlugin, PersistenceManager persistenceManager, MusicConfig musicConfig) {
-        super(persistenceManager);
+    public ScanMusicFilesTask(MusicPlugin musicPlugin, MusicConfig musicConfig, MusicRepository musicRepository) {
         this.musicPlugin = musicPlugin;
+        this.musicRepository = musicRepository;
         musicDir = musicConfig.getMusicDir();
     }
 
-    public void runInTransaction(TaskFeedback feedback, PersistenceManager persistenceManager) {
+    public void run(TaskFeedback feedback) {
         feedback.setStatusMessage("Scanning for music files in " + musicDir.getAbsolutePath());
-        List musicFiles = persistenceManager.loadAll(MusicFile.class);
-        updateMusicDatabase(musicFiles, feedback, persistenceManager);
+        List musicFiles = musicRepository.getAll();
+        updateMusicDatabase(musicFiles, feedback);
         musicPlugin.reloadFileList();
     }
 
@@ -42,24 +44,24 @@ class ScanMusicFilesTask extends TransactionalTask {
         return result[0];
     }
 
-    private void updateMusicDatabase(List musicFiles, TaskFeedback feedback, PersistenceManager persistenceManager) {
+    private void updateMusicDatabase(List musicFiles, TaskFeedback feedback) {
         int numDiskFiles = countDiskFiles();
-        deleteRemovedOrOutdatedFiles(musicFiles, numDiskFiles, feedback, persistenceManager);
-        addMissingFiles(musicFiles, numDiskFiles, feedback, persistenceManager);
+        deleteRemovedOrOutdatedFiles(musicFiles, numDiskFiles, feedback);
+        addMissingFiles(musicFiles, numDiskFiles, feedback);
     }
 
-    private void deleteRemovedOrOutdatedFiles(List musicFiles, int numDiskFiles, TaskFeedback feedback, PersistenceManager persistenceManager) {
+    private void deleteRemovedOrOutdatedFiles(List musicFiles, int numDiskFiles, TaskFeedback feedback) {
         for (ListIterator i = musicFiles.listIterator(); i.hasNext();) {
             MusicFile musicFile = (MusicFile) i.next();
             File diskFile = musicFile.getFile();
             if (!diskFile.isFile() || diskFile.lastModified() != musicFile.getLastModified().getTime()) {
-                persistenceManager.delete(musicFile);
+                musicRepository.remove(musicFile);
                 updateProgress(musicFiles.size() + numDiskFiles, i.nextIndex(), feedback);
             }
         }
     }
 
-    private void addMissingFiles(final List musicFiles, final int numDiskFiles, final TaskFeedback feedback, final PersistenceManager persistenceManager) {
+    private void addMissingFiles(final List musicFiles, final int numDiskFiles, final TaskFeedback feedback) {
         final int numDatabaseFiles = musicFiles.size();
         final ArrayList<File> persistentFiles = new ArrayList<File>();
         for (Iterator i = musicFiles.iterator(); i.hasNext();) {
@@ -73,7 +75,7 @@ class ScanMusicFilesTask extends TransactionalTask {
             public boolean visit(File file) {
                 if (isMusicFile(file)) {
                     if (!persistentFiles.contains(file)) {
-                        persistenceManager.create(new MusicFile(file));
+                        musicRepository.add(new MusicFile(file));
                     }
                     filesScanned[0]++;
                     updateProgress(numDatabaseFiles + numDiskFiles, filesScanned[0], feedback);

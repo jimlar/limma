@@ -1,19 +1,22 @@
 package limma.plugins.video;
 
-import limma.swing.Task;
-import limma.swing.TaskFeedback;
-import org.apache.commons.io.FileUtils;
-
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.swing.JTextField;
+
+import limma.domain.video.Video;
+import limma.domain.video.VideoFile;
+import limma.swing.Task;
+import limma.swing.TaskFeedback;
+import org.apache.commons.io.FileUtils;
+
 class DetectImdbNumberTask implements Task {
     private static final String[] IMDB_PREFIXES = {"imdb.com/title/tt",
-                                                   "imdb.com/Title?"};
+            "imdb.com/Title?"};
     private static final long MAX_FILE_SIZE_TO_SEARCH = 100 * 1024;
     private Video video;
     private JTextField imdbNumberTextField;

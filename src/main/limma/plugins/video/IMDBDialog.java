@@ -1,28 +1,31 @@
 package limma.plugins.video;
 
+import java.awt.event.KeyEvent;
+
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import limma.UIProperties;
-import limma.persistence.PersistenceManager;
+import limma.domain.video.Video;
+import limma.domain.video.VideoRepository;
 import limma.swing.AntialiasLabel;
 import limma.swing.DialogManager;
 import limma.swing.LimmaDialog;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 public class IMDBDialog extends LimmaDialog {
     private DialogManager dialogManager;
     private JTextField textField;
     private Video video;
     private IMDBService imdbService;
-    private PersistenceManager persistenceManager;
     private VideoConfig videoConfig;
+    private VideoRepository videoRepository;
 
-    public IMDBDialog(DialogManager dialogManager, IMDBService imdbService, PersistenceManager persistenceManager, VideoConfig videoConfig, UIProperties uiProperties) {
+    public IMDBDialog(DialogManager dialogManager, IMDBService imdbService, VideoConfig videoConfig, UIProperties uiProperties, VideoRepository videoRepository) {
         super(dialogManager);
         this.dialogManager = dialogManager;
         this.imdbService = imdbService;
-        this.persistenceManager = persistenceManager;
         this.videoConfig = videoConfig;
+        this.videoRepository = videoRepository;
 
         JPanel panel = new JPanel();
         panel.setOpaque(false);
@@ -57,7 +60,7 @@ public class IMDBDialog extends LimmaDialog {
                 close();
                 return true;
             case KeyEvent.VK_ENTER:
-                dialogManager.executeInDialog(new UpdateFromImdbTask(persistenceManager, imdbService, videoConfig, video, getEnteredImdbNumber()));
+                dialogManager.executeInDialog(new UpdateFromImdbTask(imdbService, videoConfig, video, getEnteredImdbNumber(), videoRepository));
                 close();
                 return true;
         }

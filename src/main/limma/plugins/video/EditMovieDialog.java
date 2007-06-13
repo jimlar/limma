@@ -1,22 +1,25 @@
 package limma.plugins.video;
 
-import limma.UIProperties;
-import limma.persistence.PersistenceManager;
-import limma.swing.*;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
+
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import limma.UIProperties;
+import limma.domain.video.Video;
+import limma.domain.video.VideoRepository;
+import limma.swing.*;
 
 public class EditMovieDialog extends LimmaDialog {
     private DialogManager dialogManager;
     private JTextField textField;
     private Video video;
-    private PersistenceManager persistenceManager;
+    private VideoRepository videoRepository;
 
-    public EditMovieDialog(DialogManager dialogManager, PersistenceManager persistenceManager, UIProperties uiProperties) {
+    public EditMovieDialog(DialogManager dialogManager, UIProperties uiProperties, VideoRepository videoRepository) {
         super(dialogManager);
         this.dialogManager = dialogManager;
-        this.persistenceManager = persistenceManager;
+        this.videoRepository = videoRepository;
 
         JPanel panel = new JPanel();
         panel.setOpaque(false);
@@ -45,27 +48,28 @@ public class EditMovieDialog extends LimmaDialog {
                 close();
                 return true;
             case KeyEvent.VK_ENTER:
-                dialogManager.executeInDialog(new SaveTitleTask(persistenceManager, video, textField.getText()));
+                dialogManager.executeInDialog(new SaveTitleTask(video, textField.getText(), videoRepository));
                 close();
                 return true;
         }
         return false;
     }
 
-    private static class SaveTitleTask extends TransactionalTask {
+    private static class SaveTitleTask implements Task {
         private Video video;
         private String newTitle;
+        private VideoRepository videoRepository;
 
-        public SaveTitleTask(PersistenceManager persistenceManager, Video video, String newTitle) {
-            super(persistenceManager);
+        public SaveTitleTask(Video video, String newTitle, VideoRepository videoRepository) {
             this.video = video;
             this.newTitle = newTitle;
+            this.videoRepository = videoRepository;
         }
 
-        public void runInTransaction(TaskFeedback feedback, PersistenceManager persistenceManager) {
+        public void run(TaskFeedback feedback) {
             feedback.setStatusMessage("Saving...");
             video.setTitle(newTitle);
-            persistenceManager.save(video);
+            videoRepository.save(video);
         }
     }
 }

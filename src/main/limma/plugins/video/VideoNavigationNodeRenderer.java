@@ -1,15 +1,17 @@
 package limma.plugins.video;
 
+import java.awt.*;
+import java.io.File;
+
+import javax.swing.*;
+
 import limma.UIProperties;
+import limma.domain.video.Video;
 import limma.swing.AntialiasLabel;
 import limma.swing.navigation.Navigation;
 import limma.swing.navigation.NavigationNode;
 import limma.swing.navigation.NavigationNodeRenderer;
 import org.apache.commons.lang.StringUtils;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
 
 class VideoNavigationNodeRenderer extends JPanel implements NavigationNodeRenderer {
     private AntialiasLabel titleLabel;

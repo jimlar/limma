@@ -1,20 +1,20 @@
 package limma.plugins.video;
 
-import limma.persistence.PersistenceManager;
-
 import java.util.*;
 
+import limma.domain.video.Video;
+import limma.domain.video.VideoRepository;
+
 public class MovieStorage {
-    private PersistenceManager persistenceManager;
+    private VideoRepository videoRepository;
     private List<Video> videos = new ArrayList<Video>();
 
-    public MovieStorage(PersistenceManager persistenceManager) {
-        this.persistenceManager = persistenceManager;
+    public MovieStorage(VideoRepository videoRepository) {
+        this.videoRepository = videoRepository;
     }
 
     public void refresh() {
-        videos = new ArrayList<Video>(persistenceManager.loadAll(Video.class));
-        Collections.sort(videos, new VideoComparator());
+        videos = videoRepository.getAllVideos();
     }
 
     public List<Video> getVideos() {
@@ -35,20 +35,6 @@ public class MovieStorage {
     }
 
     public List<Video> getVideosWithTag(String tag) {
-        ArrayList<Video> result = new ArrayList<Video>();
-        for (Iterator i = this.videos.iterator(); i.hasNext();) {
-            Video video = (Video) i.next();
-            if (video.getTags().contains(tag)) {
-                result.add(video);
-            }
-        }
-        Collections.sort(result, new VideoComparator());
-        return result;
-    }
-
-    private static class VideoComparator implements Comparator<Video> {
-        public int compare(Video v1, Video v2) {
-            return v1.getTitle().compareToIgnoreCase(v2.getTitle());
-        }
+        return videoRepository.getVideosWithTag(tag);
     }
 }

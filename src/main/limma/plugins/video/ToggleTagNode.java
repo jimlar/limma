@@ -1,20 +1,21 @@
 package limma.plugins.video;
 
-import limma.persistence.PersistenceManager;
+import limma.domain.video.Video;
+import limma.domain.video.VideoRepository;
 import limma.swing.DialogManager;
+import limma.swing.Task;
 import limma.swing.TaskFeedback;
-import limma.swing.TransactionalTask;
 import limma.swing.navigation.NavigationNode;
 
 class ToggleTagNode extends NavigationNode {
     private String tag;
     private Video video;
-    private PersistenceManager persistenceManager;
+    private VideoRepository videoRepository;
 
-    public ToggleTagNode(String tag, Video video, PersistenceManager persistenceManager) {
-        this.persistenceManager = persistenceManager;
+    public ToggleTagNode(String tag, Video video, VideoRepository videoRepository) {
         this.tag = tag;
         this.video = video;
+        this.videoRepository = videoRepository;
     }
 
     public String getTitle() {
@@ -22,27 +23,28 @@ class ToggleTagNode extends NavigationNode {
     }
 
     public void performAction(DialogManager dialogManager) {
-        dialogManager.executeInDialog(new ToggleTagTask(persistenceManager, video, tag));
+        dialogManager.executeInDialog(new ToggleTagTask(video, tag, videoRepository));
     }
 
-    public static class ToggleTagTask extends TransactionalTask {
+    public static class ToggleTagTask implements Task {
         private Video video;
         private String tag;
+        private VideoRepository videoRepository;
 
-        public ToggleTagTask(PersistenceManager persistenceManager, Video video, String tag) {
-            super(persistenceManager);
+        public ToggleTagTask(Video video, String tag, VideoRepository videoRepository) {
             this.video = video;
             this.tag = tag;
+            this.videoRepository = videoRepository;
         }
 
-        public void runInTransaction(TaskFeedback feedback, PersistenceManager persistenceManager) {
+        public void run(TaskFeedback feedback) {
             feedback.setStatusMessage("Toggling tag");
             if (video.getTags().contains(tag)) {
                 video.getTags().remove(tag);
             } else {
                 video.getTags().add(tag);
             }
-            persistenceManager.save(video);
+            videoRepository.save(video);
         }
     }
 }

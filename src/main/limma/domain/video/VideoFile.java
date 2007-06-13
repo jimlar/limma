@@ -1,4 +1,4 @@
-package limma.plugins.video;
+package limma.domain.video;
 
 import java.io.File;
 

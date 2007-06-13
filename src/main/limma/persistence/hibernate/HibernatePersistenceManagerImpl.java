@@ -1,11 +1,13 @@
-package limma.persistence;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+package limma.persistence.hibernate;
 
 import java.io.IOException;
 import java.util.List;
+
+import limma.persistence.PersistenceConfig;
+import limma.persistence.PersistenceManager;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 public class HibernatePersistenceManagerImpl implements PersistenceManager {
     private Configuration configuration;

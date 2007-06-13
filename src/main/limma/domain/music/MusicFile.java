@@ -1,11 +1,11 @@
-package limma.plugins.music;
-
-import de.vdheide.mp3.MP3File;
-import org.apache.commons.lang.StringUtils;
+package limma.domain.music;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
+
+import de.vdheide.mp3.MP3File;
+import org.apache.commons.lang.StringUtils;
 
 public class MusicFile extends Object implements Serializable {
     private long id;

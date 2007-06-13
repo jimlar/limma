@@ -1,11 +1,13 @@
 package limma.plugins.music;
 
-import org.apache.commons.io.IOUtils;
-
-import javax.sound.sampled.*;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.sound.sampled.*;
+
+import limma.domain.music.MusicFile;
+import org.apache.commons.io.IOUtils;
 
 class JavaSoundPlayerThread extends Thread {
     private boolean stopping = false;

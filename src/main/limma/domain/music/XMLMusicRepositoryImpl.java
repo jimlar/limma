@@ -33,9 +33,9 @@ public class XMLMusicRepositoryImpl implements MusicRepository {
         int numDiskFiles = countDiskFiles();
         deleteRemovedOrOutdatedFiles(numDiskFiles, progressListener);
         addMissingFiles(numDiskFiles, progressListener);
-        FileWriter writer = null;
+        Writer writer = null;
         try {
-            writer = new FileWriter(musicConfig.getCacheFile());
+            writer = new OutputStreamWriter(new FileOutputStream(musicConfig.getCacheFile()), "UTF-8");
             MusicList musicList = new MusicList();
             musicList.setTracks(musicFiles);
             xStream.toXML(musicList, writer);
@@ -108,12 +108,12 @@ public class XMLMusicRepositoryImpl implements MusicRepository {
         if (!cacheFile.isFile() || cacheFile.length() == 0) {
             return new ArrayList<MusicFile>();
         }
-        FileReader reader = null;
+        Reader reader = null;
         try {
-            reader = new FileReader(cacheFile);
+            reader = new InputStreamReader(new FileInputStream(cacheFile), "UTF-8");
             MusicList musicList = (MusicList) xStream.fromXML(reader);
             return new ArrayList<MusicFile>(musicList.getTracks());
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(reader);

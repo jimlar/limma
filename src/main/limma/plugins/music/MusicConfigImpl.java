@@ -12,7 +12,7 @@ public class MusicConfigImpl extends AbstractConfiguration implements MusicConfi
     }
 
     public File getCacheFile() {
-        return new File(getMusicDir(), "cache.xml");
+        return new File(getMusicDir(), "cache.xml.gz");
     }
 
     public File getMusicDir() {

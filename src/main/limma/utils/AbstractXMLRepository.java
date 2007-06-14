@@ -3,6 +3,8 @@ package limma.utils;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.basic.DateConverter;
@@ -26,7 +28,7 @@ public abstract class AbstractXMLRepository {
         backupXML();
         Writer writer = null;
         try {
-            writer = new OutputStreamWriter(new FileOutputStream(xmlFile), "UTF-8");
+            writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(xmlFile)), "UTF-8");
             xStream.toXML(object, writer);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -48,13 +50,13 @@ public abstract class AbstractXMLRepository {
         long start = System.currentTimeMillis();
         Reader reader = null;
         try {
-            reader = new InputStreamReader(new FileInputStream(xmlFile), "UTF-8");
+            reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(xmlFile)), "UTF-8");
             return xStream.fromXML(reader);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(reader);
-            System.out.println("Loaded " + xmlFile.getAbsolutePath() + " cache in " + (System.currentTimeMillis() - start) + " ms");
+            System.out.println("Loaded " + xmlFile.getAbsolutePath() + " in " + (System.currentTimeMillis() - start) + " ms");
         }
     }
 }

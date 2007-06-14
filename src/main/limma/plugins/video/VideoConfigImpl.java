@@ -56,7 +56,7 @@ public class VideoConfigImpl extends AbstractConfiguration implements VideoConfi
     }
 
     public File getMetaDataFile() {
-        return new File(getMovieDir(), "metadata.xml");
+        return new File(getMovieDir(), "metadata.xml.gz");
     }
 
     public Collection<String> getTags() {

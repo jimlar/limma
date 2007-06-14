@@ -28,45 +28,46 @@ public class Main {
     public static void main(String[] args) {
         tweakSwing();
 
+        final DefaultPicoContainer pico = new DefaultPicoContainer();
+        pico.registerComponentImplementation(GeneralConfigImpl.class);
+        pico.registerComponentImplementation(ShuttingDownDialog.class);
+        pico.registerComponentImplementation(UIPropertiesImpl.class);
+        pico.registerComponentImplementation(PlayerManager.class);
+        pico.registerComponentImplementation(NavigationModel.class);
+        pico.registerComponentImplementation(Navigation.class);
+        pico.registerComponentImplementation(NavigationPopupMenu.class);
+        pico.registerComponentImplementation(DialogManagerImpl.class);
+        pico.registerComponentImplementation(CursorHider.class);
+
+        pico.registerComponentImplementation(XMLVideoRepositoryImpl.class);
+        pico.registerComponentImplementation(VideoPlugin.class);
+        pico.registerComponentImplementation(VideoConfigImpl.class);
+        pico.registerComponentImplementation(VideoPlayer.class);
+        pico.registerComponentImplementation(IMDBServiceImpl.class);
+        pico.registerComponentImplementation(IMDBDialog.class);
+        pico.registerComponentImplementation(EditMovieDialog.class);
+
+        pico.registerComponentImplementation(XMLMusicRepositoryImpl.class);
+        pico.registerComponentImplementation(MusicPlugin.class);
+        pico.registerComponentImplementation(MusicConfigImpl.class);
+//                pico.registerComponentImplementation(JavaSoundMusicPlayer.class);
+        pico.registerComponentImplementation(ExternalMusicPlayer.class);
+
+        pico.registerComponentImplementation(GamePlugin.class);
+        pico.registerComponentImplementation(GameConfigImpl.class);
+
+        pico.registerComponentImplementation(MainWindow.class);
+
+        pico.registerComponentInstance(new DialogFactory() {
+            public LimmaDialog createDialog(Class dialog) {
+                return (LimmaDialog) pico.getComponentInstanceOfType(dialog);
+            }
+        });
+
+        pico.start();
+
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                final DefaultPicoContainer pico = new DefaultPicoContainer();
-                pico.registerComponentImplementation(GeneralConfigImpl.class);
-                pico.registerComponentImplementation(ShuttingDownDialog.class);
-                pico.registerComponentImplementation(UIPropertiesImpl.class);
-                pico.registerComponentImplementation(PlayerManager.class);
-                pico.registerComponentImplementation(NavigationModel.class);
-                pico.registerComponentImplementation(Navigation.class);
-                pico.registerComponentImplementation(NavigationPopupMenu.class);
-                pico.registerComponentImplementation(DialogManagerImpl.class);
-                pico.registerComponentImplementation(CursorHider.class);
-
-                pico.registerComponentImplementation(XMLVideoRepositoryImpl.class);
-                pico.registerComponentImplementation(VideoPlugin.class);
-                pico.registerComponentImplementation(VideoConfigImpl.class);
-                pico.registerComponentImplementation(VideoPlayer.class);
-                pico.registerComponentImplementation(IMDBServiceImpl.class);
-                pico.registerComponentImplementation(IMDBDialog.class);
-                pico.registerComponentImplementation(EditMovieDialog.class);
-
-                pico.registerComponentImplementation(XMLMusicRepositoryImpl.class);
-                pico.registerComponentImplementation(MusicPlugin.class);
-                pico.registerComponentImplementation(MusicConfigImpl.class);
-//                pico.registerComponentImplementation(JavaSoundMusicPlayer.class);
-                pico.registerComponentImplementation(ExternalMusicPlayer.class);
-
-                pico.registerComponentImplementation(GamePlugin.class);
-                pico.registerComponentImplementation(GameConfigImpl.class);
-
-                pico.registerComponentImplementation(MainWindow.class);
-
-                pico.registerComponentInstance(new DialogFactory() {
-                    public LimmaDialog createDialog(Class dialog) {
-                        return (LimmaDialog) pico.getComponentInstanceOfType(dialog);
-                    }
-                });
-
-                pico.start();
 
                 MainWindow mainWindow = (MainWindow) pico.getComponentInstanceOfType(MainWindow.class);
 

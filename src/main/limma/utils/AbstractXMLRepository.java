@@ -16,7 +16,7 @@ public abstract class AbstractXMLRepository {
 
     protected AbstractXMLRepository(File xmlFile) {
         this.xmlFile = xmlFile;
-        DateConverter dateConverter = new DateConverter();
+        DateConverter dateConverter = new DateConverter("yyyy-MM-dd HH:mm:ss", new String[0]);
         xStream.registerConverter(dateConverter);
     }
 

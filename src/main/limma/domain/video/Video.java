@@ -14,13 +14,12 @@ public class Video {
     private String plot;
     private String rating;
     private int imdbNumber;
-    private Set files = new HashSet();
-    private Set tags = new HashSet();
+    private Set<VideoFile> files = new HashSet<VideoFile>();
+    private Set<String> tags = new HashSet<String>();
     private Date created;
 
 
-    /* For hibernate */
-    private Video() {
+    public Video() {
     }
 
     public Video(String title) {
@@ -40,7 +39,7 @@ public class Video {
         return title;
     }
 
-    public Set getFiles() {
+    public Set<VideoFile> getFiles() {
         return files;
     }
 
@@ -92,15 +91,11 @@ public class Video {
         this.imdbNumber = imdbNumber;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public boolean hasImdbNumber() {
         return getImdbNumber() != 0;
     }
 
-    public Set getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
@@ -112,5 +107,13 @@ public class Video {
         this.created = created;
     }
 
+    public void add(VideoFile videoFile) {
+        files.add(videoFile);
+        videoFile.setVideo(this);
+    }
 
+    public void remove(VideoFile videoFile) {
+        files.remove(videoFile);
+        videoFile.setVideo(null);
+    }
 }

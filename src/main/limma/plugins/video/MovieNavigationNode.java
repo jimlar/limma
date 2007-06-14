@@ -15,11 +15,9 @@ public class MovieNavigationNode extends SimpleNavigationNode {
     private Video video;
     private VideoPlayer player;
     private VideoRepository videoRepository;
-    private MovieStorage movieStorage;
 
-    public MovieNavigationNode(Video video, VideoPlayer player, MovieStorage movieStorage, VideoRepository videoRepository) {
+    public MovieNavigationNode(Video video, VideoPlayer player, VideoRepository videoRepository) {
         super(video.getTitle());
-        this.movieStorage = movieStorage;
         this.video = video;
         this.player = player;
         this.videoRepository = videoRepository;
@@ -47,7 +45,7 @@ public class MovieNavigationNode extends SimpleNavigationNode {
     private NavigationNode createEditTagsNode(Video video) {
         SimpleNavigationNode editTagsNode = new SimpleNavigationNode("Tags");
 
-        List<String> tags = movieStorage.getTags();
+        List<String> tags = videoRepository.getTags();
         for (Iterator<String> i = tags.iterator(); i.hasNext();) {
             String tag = i.next();
             editTagsNode.add(new ToggleTagNode(tag, video, videoRepository));

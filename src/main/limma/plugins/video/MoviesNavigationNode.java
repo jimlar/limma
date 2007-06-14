@@ -9,34 +9,32 @@ import limma.swing.navigation.NavigationNode;
 import limma.swing.navigation.SimpleNavigationNode;
 
 public class MoviesNavigationNode extends SimpleNavigationNode {
-    private MovieStorage movieStorage;
     private VideoPlayer videoPlayer;
     private VideoRepository videoRepository;
 
-    public MoviesNavigationNode(MovieStorage movieStorage, VideoPlayer videoPlayer, VideoRepository videoRepository) {
+    public MoviesNavigationNode(VideoPlayer videoPlayer, VideoRepository videoRepository) {
         super("Movies");
-        this.movieStorage = movieStorage;
         this.videoPlayer = videoPlayer;
         this.videoRepository = videoRepository;
     }
 
     public List<NavigationNode> getChildren() {
         ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
-        NavigationNode allMoviesNode = new AllMoviesNode(movieStorage, videoPlayer, videoRepository);
+        NavigationNode allMoviesNode = new AllMoviesNode(videoPlayer, videoRepository);
         allMoviesNode.setParent(this);
         children.add(allMoviesNode);
 
-        NavigationNode lastWeeksMoviesNode = new NewMoviesNode(movieStorage, 7, videoPlayer, videoRepository);
+        NavigationNode lastWeeksMoviesNode = new NewMoviesNode(7, videoPlayer, videoRepository);
         lastWeeksMoviesNode.setParent(this);
         children.add(lastWeeksMoviesNode);
 
-        NavigationNode lastMonthMoviesNode = new NewMoviesNode(movieStorage, 30, videoPlayer, videoRepository);
+        NavigationNode lastMonthMoviesNode = new NewMoviesNode(30, videoPlayer, videoRepository);
         lastMonthMoviesNode.setParent(this);
         children.add(lastMonthMoviesNode);
 
-        for (Iterator<String> i = movieStorage.getTags().iterator(); i.hasNext();) {
+        for (Iterator<String> i = videoRepository.getTags().iterator(); i.hasNext();) {
             String tag = i.next();
-            MovieTagNode movieTagNode = new MovieTagNode(tag, movieStorage, videoPlayer, videoRepository);
+            MovieTagNode movieTagNode = new MovieTagNode(tag, videoPlayer, videoRepository);
             movieTagNode.setParent(this);
             children.add(movieTagNode);
         }

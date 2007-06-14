@@ -8,11 +8,11 @@ public class VideoFile {
     private Video video;
     private String path;
 
+
     public VideoFile() {
     }
 
-    public VideoFile(Video video, String path) {
-        this.video = video;
+    public VideoFile(String path) {
         this.path = path;
     }
 
@@ -34,5 +34,9 @@ public class VideoFile {
 
     public String getName() {
         return getFile().getName();
+    }
+
+    void setVideo(Video video) {
+        this.video = video;
     }
 }

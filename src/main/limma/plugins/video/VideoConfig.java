@@ -1,9 +1,9 @@
 package limma.plugins.video;
 
-import limma.utils.ExternalCommand;
-
 import java.io.File;
 import java.util.Collection;
+
+import limma.utils.ExternalCommand;
 
 public interface VideoConfig {
     File getMovieDir();
@@ -24,4 +24,5 @@ public interface VideoConfig {
 
     ExternalCommand getPlayDvdDiscCommand();
 
+    File getMetaDataFile();
 }

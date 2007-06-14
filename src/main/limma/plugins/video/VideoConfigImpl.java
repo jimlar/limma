@@ -1,12 +1,12 @@
 package limma.plugins.video;
 
-import limma.AbstractConfiguration;
-import limma.utils.ExternalCommand;
-import org.apache.commons.lang.StringUtils;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import limma.AbstractConfiguration;
+import limma.utils.ExternalCommand;
+import org.apache.commons.lang.StringUtils;
 
 public class VideoConfigImpl extends AbstractConfiguration implements VideoConfig {
 
@@ -53,6 +53,10 @@ public class VideoConfigImpl extends AbstractConfiguration implements VideoConfi
 
     public ExternalCommand getPlayDvdDiscCommand() {
         return new ExternalCommand(getString("command.dvddisc"));
+    }
+
+    public File getMetaDataFile() {
+        return new File(getMovieDir(), "metadata.xml");
     }
 
     public Collection<String> getTags() {

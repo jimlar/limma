@@ -9,12 +9,10 @@ import limma.domain.video.VideoRepository;
 import limma.swing.navigation.NavigationNode;
 
 public class AllMoviesNode extends NavigationNode {
-    private MovieStorage movieStorage;
     private VideoPlayer videoPlayer;
     private VideoRepository videoRepository;
 
-    public AllMoviesNode(MovieStorage movieStorage, VideoPlayer videoPlayer, VideoRepository videoRepository) {
-        this.movieStorage = movieStorage;
+    public AllMoviesNode(VideoPlayer videoPlayer, VideoRepository videoRepository) {
         this.videoPlayer = videoPlayer;
         this.videoRepository = videoRepository;
     }
@@ -25,9 +23,9 @@ public class AllMoviesNode extends NavigationNode {
 
     public List<NavigationNode> getChildren() {
         ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
-        for (Iterator i = movieStorage.getVideos().iterator(); i.hasNext();) {
+        for (Iterator i = videoRepository.getAllVideos().iterator(); i.hasNext();) {
             Video video = (Video) i.next();
-            MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, movieStorage, videoRepository);
+            MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, videoRepository);
             movieNode.setParent(this);
             children.add(movieNode);
         }

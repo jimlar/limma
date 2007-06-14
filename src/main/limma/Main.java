@@ -7,9 +7,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import limma.domain.music.XMLMusicRepositoryImpl;
-import limma.domain.video.HibernateVideoRepositoryImpl;
-import limma.persistence.PersistenceConfigImpl;
-import limma.persistence.hibernate.HibernatePersistenceManagerImpl;
+import limma.domain.video.XMLVideoRepositoryImpl;
 import limma.plugins.game.GameConfigImpl;
 import limma.plugins.game.GamePlugin;
 import limma.plugins.music.ExternalMusicPlayer;
@@ -40,12 +38,10 @@ public class Main {
                 pico.registerComponentImplementation(NavigationModel.class);
                 pico.registerComponentImplementation(Navigation.class);
                 pico.registerComponentImplementation(NavigationPopupMenu.class);
-                pico.registerComponentImplementation(HibernatePersistenceManagerImpl.class);
-                pico.registerComponentImplementation(PersistenceConfigImpl.class);
                 pico.registerComponentImplementation(DialogManagerImpl.class);
                 pico.registerComponentImplementation(CursorHider.class);
 
-                pico.registerComponentImplementation(HibernateVideoRepositoryImpl.class);
+                pico.registerComponentImplementation(XMLVideoRepositoryImpl.class);
                 pico.registerComponentImplementation(VideoPlugin.class);
                 pico.registerComponentImplementation(VideoConfigImpl.class);
                 pico.registerComponentImplementation(VideoPlayer.class);

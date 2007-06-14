@@ -1,28 +1,26 @@
 package limma.domain.music;
 
-import java.io.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.thoughtworks.xstream.XStream;
 import limma.plugins.music.MusicConfig;
+import limma.utils.AbstractXMLRepository;
 import limma.utils.DirectoryScanner;
-import org.apache.commons.io.IOUtils;
 
-public class XMLMusicRepositoryImpl implements MusicRepository {
-    private XStream xStream;
+public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements MusicRepository {
     private List<MusicFile> musicFiles;
     private MusicConfig musicConfig;
 
 
     public XMLMusicRepositoryImpl(MusicConfig musicConfig) {
+        super(musicConfig.getCacheFile());
         this.musicConfig = musicConfig;
-        xStream = new XStream();
-        xStream.alias("music", MusicList.class);
-        xStream.alias("track", MusicFile.class);
-        musicFiles = load();
+        addXmlAlias("music", MusicList.class);
+        addXmlAlias("track", MusicFile.class);
+        reReadMusicCache();
     }
 
     public List<MusicFile> getAll() {
@@ -33,18 +31,12 @@ public class XMLMusicRepositoryImpl implements MusicRepository {
         int numDiskFiles = countDiskFiles();
         deleteRemovedOrOutdatedFiles(numDiskFiles, progressListener);
         addMissingFiles(numDiskFiles, progressListener);
-        Writer writer = null;
-        try {
-            writer = new OutputStreamWriter(new FileOutputStream(musicConfig.getCacheFile()), "UTF-8");
-            MusicList musicList = new MusicList();
-            musicList.setTracks(musicFiles);
-            xStream.toXML(musicList, writer);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            IOUtils.closeQuietly(writer);
-        }
-        musicFiles = load();
+
+        MusicList musicList = new MusicList();
+        musicList.setTracks(musicFiles);
+        store(musicList);
+
+        reReadMusicCache();
     }
 
     private int countDiskFiles() {
@@ -102,23 +94,15 @@ public class XMLMusicRepositoryImpl implements MusicRepository {
     }
 
 
-    private List<MusicFile> load() {
+    private void reReadMusicCache() {
         long start = System.currentTimeMillis();
-        File cacheFile = musicConfig.getCacheFile();
-        if (!cacheFile.isFile() || cacheFile.length() == 0) {
-            return new ArrayList<MusicFile>();
+        MusicList musicList = (MusicList) load();
+        if (musicList == null) {
+            this.musicFiles = new ArrayList<MusicFile>();
+        } else {
+            this.musicFiles = new ArrayList<MusicFile>(musicList.getTracks());
         }
-        Reader reader = null;
-        try {
-            reader = new InputStreamReader(new FileInputStream(cacheFile), "UTF-8");
-            MusicList musicList = (MusicList) xStream.fromXML(reader);
-            return new ArrayList<MusicFile>(musicList.getTracks());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            IOUtils.closeQuietly(reader);
-            System.out.println("Loaded music cache in " + (System.currentTimeMillis() - start) + " ms");
-        }
+        System.out.println("Loaded music cache in " + (System.currentTimeMillis() - start) + " ms");
     }
 
     public static class MusicList {

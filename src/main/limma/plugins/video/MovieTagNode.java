@@ -10,13 +10,11 @@ import limma.swing.navigation.NavigationNode;
 
 public class MovieTagNode extends NavigationNode {
     private String tag;
-    private MovieStorage movieStorage;
     private VideoPlayer videoPlayer;
     private VideoRepository videoRepository;
 
-    public MovieTagNode(String tag, MovieStorage movieStorage, VideoPlayer videoPlayer, VideoRepository videoRepository) {
+    public MovieTagNode(String tag, VideoPlayer videoPlayer, VideoRepository videoRepository) {
         this.tag = tag;
-        this.movieStorage = movieStorage;
         this.videoPlayer = videoPlayer;
         this.videoRepository = videoRepository;
     }
@@ -27,10 +25,10 @@ public class MovieTagNode extends NavigationNode {
 
     public List<NavigationNode> getChildren() {
         ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
-        List<Video> videosWithTag = movieStorage.getVideosWithTag(tag);
+        List<Video> videosWithTag = videoRepository.getVideosWithTag(tag);
         for (Iterator<Video> i = videosWithTag.iterator(); i.hasNext();) {
             Video video = i.next();
-            MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, movieStorage, videoRepository);
+            MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, videoRepository);
             movieNode.setParent(this);
             children.add(movieNode);
         }

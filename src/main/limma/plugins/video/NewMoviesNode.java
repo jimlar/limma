@@ -7,13 +7,11 @@ import limma.domain.video.VideoRepository;
 import limma.swing.navigation.NavigationNode;
 
 public class NewMoviesNode extends NavigationNode {
-    private MovieStorage movieStorage;
     private int numberOfDays;
     private VideoPlayer videoPlayer;
     private VideoRepository videoRepository;
 
-    public NewMoviesNode(MovieStorage movieStorage, int numberOfDays, VideoPlayer videoPlayer, VideoRepository videoRepository) {
-        this.movieStorage = movieStorage;
+    public NewMoviesNode(int numberOfDays, VideoPlayer videoPlayer, VideoRepository videoRepository) {
         this.numberOfDays = numberOfDays;
         this.videoPlayer = videoPlayer;
         this.videoRepository = videoRepository;
@@ -29,11 +27,11 @@ public class NewMoviesNode extends NavigationNode {
         Date boundaryDate = calendar.getTime();
 
         ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
-        for (Iterator i = movieStorage.getVideos().iterator(); i.hasNext();) {
+        for (Iterator i = videoRepository.getAllVideos().iterator(); i.hasNext();) {
             Video video = (Video) i.next();
             if (video.getCreated() != null && boundaryDate.before(video.getCreated())) {
 
-                MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, movieStorage, videoRepository);
+                MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, videoRepository);
                 movieNode.setParent(this);
                 children.add(movieNode);
             }

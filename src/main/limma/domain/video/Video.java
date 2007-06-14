@@ -6,7 +6,6 @@ import java.util.Set;
 
 
 public class Video {
-    private long id;
     private String title;
     private String director;
     private String runtime;
@@ -18,9 +17,6 @@ public class Video {
     private Set<String> tags = new HashSet<String>();
     private Date created;
 
-
-    public Video() {
-    }
 
     public Video(String title) {
         this.title = title;

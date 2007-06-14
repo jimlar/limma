@@ -370,15 +370,7 @@
       </value>
     </option>
   </component>
-  <component name="libraryTable">
-    <library name="junit-3.8.1">
-      <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/junit-3.8.1.jar!/"/>
-      </CLASSES>
-      <JAVADOC/>
-      <SOURCES/>
-    </library>
-  </component>
+  <component name="libraryTable"/>
   <component name="uidesigner-configuration">
     <option name="INSTRUMENT_CLASSES" value="true"/>
     <option name="COPY_FORMS_RUNTIME_TO_OUTPUT" value="true"/>

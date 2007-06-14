@@ -4,13 +4,8 @@ import java.io.File;
 
 
 public class VideoFile {
-    private long id;
     private Video video;
     private String path;
-
-
-    public VideoFile() {
-    }
 
     public VideoFile(String path) {
         this.path = path;

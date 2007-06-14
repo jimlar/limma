@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.basic.DateConverter;
 import org.apache.commons.io.IOUtils;
 
 public abstract class AbstractXMLRepository {
@@ -13,6 +14,8 @@ public abstract class AbstractXMLRepository {
 
     protected AbstractXMLRepository(File xmlFile) {
         this.xmlFile = xmlFile;
+        DateConverter dateConverter = new DateConverter();
+        xStream.registerConverter(dateConverter);
     }
 
     protected void addXmlAlias(String tagName, Class aClass) {
@@ -42,6 +45,7 @@ public abstract class AbstractXMLRepository {
         if (!xmlFile.isFile() || xmlFile.length() == 0) {
             return null;
         }
+        long start = System.currentTimeMillis();
         Reader reader = null;
         try {
             reader = new InputStreamReader(new FileInputStream(xmlFile), "UTF-8");
@@ -50,6 +54,7 @@ public abstract class AbstractXMLRepository {
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(reader);
+            System.out.println("Loaded " + xmlFile.getAbsolutePath() + " cache in " + (System.currentTimeMillis() - start) + " ms");
         }
     }
 }

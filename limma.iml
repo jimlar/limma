@@ -42,15 +42,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="xstream">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../.m2/repository/xstream/xstream/1.0.2/xstream-1.0.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library name="xpp3">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../../.m2/repository/xpp3/xpp3/1.1.2a/xpp3-1.1.2a.jar!/" />
@@ -576,6 +567,15 @@
       <library name="xmlParserAPIs">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../../.m2/repository/xerces/xmlParserAPIs/2.2.1/xmlParserAPIs-2.2.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../.m2/repository/com/thoughtworks/xstream/xstream/1.2.2/xstream-1.2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

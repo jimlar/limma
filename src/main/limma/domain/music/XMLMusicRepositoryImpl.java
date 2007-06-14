@@ -95,14 +95,12 @@ public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements Mus
 
 
     private void reReadMusicCache() {
-        long start = System.currentTimeMillis();
         MusicList musicList = (MusicList) load();
         if (musicList == null) {
             this.musicFiles = new ArrayList<MusicFile>();
         } else {
             this.musicFiles = new ArrayList<MusicFile>(musicList.getTracks());
         }
-        System.out.println("Loaded music cache in " + (System.currentTimeMillis() - start) + " ms");
     }
 
     public static class MusicList {

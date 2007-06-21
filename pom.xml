@@ -248,10 +248,33 @@
       </plugin>
 
       <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <copy todir="${project.build.directory}/limma">
+                  <fileset dir="${basedir}" includes="config/**/*"/>
+                  <fileset dir="${basedir}" includes="resources/**/*"/>
+                </copy>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>appassembler-maven-plugin</artifactId>
         <configuration>
           <assembleDirectory>${project.build.directory}/limma</assembleDirectory>
+          <platforms>
+            <platform>unix</platform>
+          </platforms>
           <programs>
             <program>
               <mainClass>limma.Main</mainClass>
@@ -259,6 +282,14 @@
             </program>
           </programs>
         </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
       </plugin>
 
     </plugins>

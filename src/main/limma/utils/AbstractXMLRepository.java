@@ -25,6 +25,7 @@ public abstract class AbstractXMLRepository {
     }
 
     protected void store(Object object) {
+        long start = System.currentTimeMillis();
         backupXML();
         Writer writer = null;
         try {
@@ -34,6 +35,7 @@ public abstract class AbstractXMLRepository {
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(writer);
+            System.out.println("Wrote " + xmlFile.getAbsolutePath() + " in " + (System.currentTimeMillis() - start) + " ms");
         }
     }
 
@@ -56,7 +58,7 @@ public abstract class AbstractXMLRepository {
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(reader);
-            System.out.println("Loaded " + xmlFile.getAbsolutePath() + " in " + (System.currentTimeMillis() - start) + " ms");
+            System.out.println("Read " + xmlFile.getAbsolutePath() + " in " + (System.currentTimeMillis() - start) + " ms");
         }
     }
 }

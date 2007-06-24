@@ -112,4 +112,13 @@ public class Video {
         files.remove(videoFile);
         videoFile.setVideo(null);
     }
+
+
+    public void setFiles(Set<VideoFile> files) {
+        this.files = files;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
+    }
 }

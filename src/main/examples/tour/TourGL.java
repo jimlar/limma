@@ -1,4 +1,4 @@
-// TourGL.java
+package examples.tour;// TourGL.java
 // Andrew Davison, 7th February 2007, ad@fivedots.coe.psu.ac.th
 
 /* A JFrame contains a JPanel which holds a Canvas subclass called

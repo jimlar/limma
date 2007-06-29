@@ -1,4 +1,4 @@
-// TourCanvasGL.java
+package examples.tour;// TourCanvasGL.java
 // Andrew Davison, February 2007, ad@fivedots.coe.psu.ac.th
 
 /* A single thread is spawned which initialises the rendering
@@ -492,7 +492,7 @@ animation thread yields to other running threads. */
 
 
     private Texture loadTexture(String fnm) {
-        String fileName = "src/main/images/" + fnm;
+        String fileName = "src/main/examples/tour/images/" + fnm;
         Texture tex = null;
         try {
             tex = TextureIO.newTexture(new File(fileName), false);

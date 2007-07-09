@@ -9,7 +9,7 @@ import javax.media.opengl.GLAutoDrawable;
 import com.sun.opengl.util.j2d.TextRenderer;
 import limma.jogl.utils.Time;
 
-public class Cube {
+public class Cube implements Drawable {
     private TextRenderer renderer;
     private float textScaleFactor;
     private float xAng;

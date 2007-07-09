@@ -542,7 +542,9 @@
           <root url="jar://$MODULE_DIR$/../../.m2/repository/jogl/jogl/1.1.0/jogl-1.1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../download/jogl-1.1.0-src.zip!/jogl/src/classes" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">

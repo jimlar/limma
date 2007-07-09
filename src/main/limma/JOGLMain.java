@@ -13,6 +13,8 @@ import javax.media.opengl.glu.GLU;
 
 import com.sun.opengl.util.Animator;
 import limma.jogl.Cube;
+import limma.jogl.Drawable;
+import limma.jogl.Grid;
 import limma.jogl.utils.FPSCounter;
 import limma.jogl.utils.SystemTime;
 import limma.jogl.utils.Time;
@@ -23,7 +25,7 @@ public class JOGLMain implements GLEventListener {
     private Time time;
     private FPSCounter fps;
 
-    private Cube cube;
+    private Drawable root;
 
     public static void main(String[] args) {
         Frame frame = new Frame("Text Cube");
@@ -64,7 +66,13 @@ public class JOGLMain implements GLEventListener {
         ((SystemTime) time).rebase();
         gl.setSwapInterval(0);
 
-        cube = new Cube();
+        Grid grid = new Grid(2, 2);
+        grid.set(0, 0, new Cube());
+        grid.set(0, 1, new Cube());
+        grid.set(1, 0, new Cube());
+        grid.set(1, 1, new Cube());
+        root = grid;
+
     }
 
     public void display(GLAutoDrawable drawable) {
@@ -77,7 +85,7 @@ public class JOGLMain implements GLEventListener {
                       0, 0, 0,
                       0, 1, 0);
 
-        cube.draw(drawable, time);
+        root.draw(drawable, time);
 
         fps.draw();
         time.update();

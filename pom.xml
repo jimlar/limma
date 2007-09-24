@@ -230,8 +230,7 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <configuration>
-          <mainClass>limma.JOGLMain</mainClass>
-          <!--<mainClass>limma.Main</mainClass>-->
+          <mainClass>limma.Main</mainClass>
         </configuration>
       </plugin>
 

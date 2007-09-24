@@ -139,7 +139,8 @@ public class MainWindow extends JFrame {
             return topDialog.keyPressed(e);
 
         } else {
-            if (!playerManager.getPlayer().consume(command)) {
+            Player player = playerManager.getPlayer();
+            if (player == null || !player.consume(command)) {
                 navigation.processKeyEvent(e);
             }
             return true;

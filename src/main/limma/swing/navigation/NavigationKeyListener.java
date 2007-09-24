@@ -1,9 +1,9 @@
 package limma.swing.navigation;
 
-import limma.swing.DialogManager;
-
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
+import limma.swing.DialogManager;
 
 class NavigationKeyListener extends KeyAdapter {
     private Navigation list;
@@ -18,26 +18,31 @@ class NavigationKeyListener extends KeyAdapter {
 
     public void keyPressed(KeyEvent e) {
         NavigationNode currentNode = model.getCurrentNode();
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            NavigationNode child = currentNode.getSelectedChild();
-            if (!child.getChildren().isEmpty()) {
-                model.setCurrentNode(child);
-                list.scrollToSelected();
-                list.fireFocusChanged();
-                e.consume();
-            }
-        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            NavigationNode parent = currentNode.getParent();
-            if (parent != null) {
-                model.setCurrentNode(parent);
-                list.scrollToSelected();
-                list.fireFocusChanged();
-                e.consume();
-            }
-        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            NavigationNode child = currentNode.getSelectedChild();
-            child.performAction(dialogManager);
+        NavigationNode child = currentNode.getSelectedChild();
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_KP_RIGHT:
+                if (!child.getChildren().isEmpty()) {
+                    model.setCurrentNode(child);
+                    list.scrollToSelected();
+                    list.fireFocusChanged();
+                    e.consume();
+                }
+                break;
 
+            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_KP_LEFT:
+                NavigationNode parent = currentNode.getParent();
+                if (parent != null) {
+                    model.setCurrentNode(parent);
+                    list.scrollToSelected();
+                    list.fireFocusChanged();
+                    e.consume();
+                }
+                break;
+            case KeyEvent.VK_ENTER:
+                child.performAction(dialogManager);
+                break;
         }
     }
 }

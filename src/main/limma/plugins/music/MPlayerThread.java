@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import limma.Command;
 import limma.domain.music.MusicFile;
 import limma.utils.ExternalCommand;
 
@@ -56,7 +57,7 @@ class MPlayerThread extends Thread {
         } finally {
             kill();
             if (!forceStopped) {
-                player.next();
+                player.consume(Command.NEXT);
             }
         }
     }

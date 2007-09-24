@@ -1,18 +1,19 @@
 package limma;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+
+import javax.swing.*;
+
 import limma.plugins.Plugin;
 import limma.swing.DialogManager;
 import limma.swing.ImagePanel;
 import limma.swing.LimmaDialog;
 import limma.swing.navigation.MenuItem;
 import limma.swing.navigation.*;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 public class MainWindow extends JFrame {
     private JPanel mainPanel;
@@ -21,11 +22,13 @@ public class MainWindow extends JFrame {
     private PlayerManager playerManager;
 
     private Navigation navigation;
+    private KeyConfig keyConfig;
 
-    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, Navigation navigation, UIProperties uiProperties, final GeneralConfig generalConfig) {
+    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, Navigation navigation, UIProperties uiProperties, final GeneralConfig generalConfig, KeyConfig keyConfig) {
         this.dialogManager = dialogManager;
         this.playerManager = playerManager;
         this.navigation = navigation;
+        this.keyConfig = keyConfig;
 
         final SlidePanel playerSlidePanel = addPlayerSlidePanel();
         final Timer slideInPlayerTimer = new Timer(2 * 1000, new ActionListener() {
@@ -129,38 +132,17 @@ public class MainWindow extends JFrame {
     }
 
     private boolean dispatchKey(KeyEvent e) {
+        Command command = keyConfig.getCommandForEvent(e);
+
         LimmaDialog topDialog = dialogManager.getTopDialog();
         if (topDialog != null) {
             return topDialog.keyPressed(e);
 
         } else {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_S:
-                    getCurrentPlayer().stop();
-                    return true;
-                case KeyEvent.VK_N:
-                    getCurrentPlayer().next();
-                    return true;
-                case KeyEvent.VK_P:
-                    getCurrentPlayer().previous();
-                    return true;
-                case KeyEvent.VK_F:
-                    getCurrentPlayer().ff();
-                    return true;
-                case KeyEvent.VK_R:
-                    getCurrentPlayer().rew();
-                    return true;
-                case KeyEvent.VK_SPACE:
-                    getCurrentPlayer().pause();
-                    return true;
-                default:
-                    navigation.processKeyEvent(e);
-                    return true;
+            if (!playerManager.getPlayer().consume(command)) {
+                navigation.processKeyEvent(e);
             }
+            return true;
         }
-    }
-
-    private Player getCurrentPlayer() {
-        return playerManager.getPlayer();
     }
 }

@@ -2,6 +2,7 @@ package limma.plugins.music;
 
 import java.io.IOException;
 
+import limma.Command;
 import limma.UIProperties;
 import limma.domain.music.MusicFile;
 
@@ -27,10 +28,31 @@ public class ExternalMusicPlayer extends AbstractMusicPlayer {
         mPlayerThread.start();
     }
 
-    public void stop() {
-        if (mPlayerThread != null) {
-            mPlayerThread.quit();
+
+    public boolean consume(Command command) {
+        if (super.consume(command)) {
+            return true;
         }
+        switch (command) {
+            case STOP:
+                if (mPlayerThread != null) {
+                    mPlayerThread.quit();
+                }
+                return true;
+
+            case FF:
+                mplayerCommand("seek 10 0");
+                return true;
+
+            case REW:
+                mplayerCommand("seek -10 0");
+                return true;
+
+            case PAUSE:
+                mplayerCommand("pause");
+                return true;
+        }
+        return false;
     }
 
     protected MusicFile getPlayingFile() {
@@ -38,19 +60,6 @@ public class ExternalMusicPlayer extends AbstractMusicPlayer {
             return mPlayerThread.getMusicFile();
         }
         return null;
-    }
-
-
-    public void ff() {
-        mplayerCommand("seek 10 0");
-    }
-
-    public void rew() {
-        mplayerCommand("seek -10 0");
-    }
-
-    public void pause() {
-        mplayerCommand("pause");
     }
 
     private void mplayerCommand(String command) {

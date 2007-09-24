@@ -1,14 +1,17 @@
 package limma.plugins.video;
 
+import java.io.IOException;
+
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+
+import limma.Command;
 import limma.Player;
 import limma.PlayerManager;
 import limma.swing.DialogManager;
 import limma.swing.Task;
 import limma.swing.TaskFeedback;
 import limma.swing.navigation.SimpleNavigationNode;
-
-import javax.swing.*;
-import java.io.IOException;
 
 class PlayDVDDiscNode extends SimpleNavigationNode {
     private final DialogManager dialogManager;
@@ -32,22 +35,8 @@ class PlayDVDDiscNode extends SimpleNavigationNode {
                         return new JLabel("Playing DVD Disc");
                     }
 
-                    public void next() {
-                    }
-
-                    public void previous() {
-                    }
-
-                    public void ff() {
-                    }
-
-                    public void rew() {
-                    }
-
-                    public void pause() {
-                    }
-
-                    public void stop() {
+                    public boolean consume(Command command) {
+                        return false;
                     }
                 });
                 try {

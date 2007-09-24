@@ -6,6 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.sound.sampled.*;
 
+import limma.Command;
 import limma.domain.music.MusicFile;
 import org.apache.commons.io.IOUtils;
 
@@ -44,7 +45,7 @@ class JavaSoundPlayerThread extends Thread {
                 if (!stopping) {
                     line.drain();
                     System.out.println("Completed " + currentFile);
-                    player.next();
+                    player.consume(Command.NEXT);
                 } else {
                     System.out.println("Stopped");
                 }

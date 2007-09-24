@@ -1,6 +1,6 @@
 package limma;
 
-import java.awt.*;
+import java.awt.Font;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -10,9 +10,9 @@ public class UIPropertiesImpl implements UIProperties {
     private Font smallFont;
 
     public UIPropertiesImpl() {
-        largeFond = Font.decode("Verdana 40");
-        mediumFont = Font.decode("Verdana 30");
-        smallFont = Font.decode("Verdana bold 20");
+        largeFond = Font.decode("Verdana 30");
+        mediumFont = Font.decode("Verdana 20");
+        smallFont = Font.decode("Verdana bold 15");
     }
 
     public Font getLargeFont() {

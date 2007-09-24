@@ -8,6 +8,7 @@ import java.util.*;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
+import limma.Command;
 import limma.Player;
 import limma.PlayerManager;
 import limma.UIProperties;
@@ -33,24 +34,9 @@ public class VideoPlayer implements Player {
         return playingLabel;
     }
 
-    public void next() {
+    public boolean consume(Command command) {
+        return false;
     }
-
-    public void previous() {
-    }
-
-    public void ff() {
-    }
-
-    public void rew() {
-    }
-
-    public void pause() {
-    }
-
-    public void stop() {
-    }
-
 
     public void play(VideoFile file) {
         playVideoFiles(file.getVideo(), Collections.singletonList(file));

@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
+import limma.Command;
 import limma.UIProperties;
 import limma.domain.music.MusicFile;
 
@@ -22,7 +23,7 @@ public abstract class AbstractMusicPlayer implements MusicPlayer {
     }
 
     private void startPlaying(final MusicFile musicFile) {
-        stop();
+        consume(Command.STOP);
         if (musicFile != null) {
             SwingUtilities.invokeLater(new Runnable() {
 
@@ -70,20 +71,26 @@ public abstract class AbstractMusicPlayer implements MusicPlayer {
         return currentTrackPanel;
     }
 
-    public void next() {
-        MusicFile nextFile = getNextFile();
-        if (nextFile != null) {
-            history.add(getPlayingFile());
-            startPlaying(nextFile);
-        }
-    }
 
-    public void previous() {
-        MusicFile previousFile = getPreviousFile();
-        if (previousFile != null) {
-            history.remove(previousFile);
-            startPlaying(previousFile);
+    public boolean consume(Command command) {
+        switch (command) {
+            case NEXT:
+                MusicFile nextFile = getNextFile();
+                if (nextFile != null) {
+                    history.add(getPlayingFile());
+                    startPlaying(nextFile);
+                }
+                return true;
+
+            case PREVIOUS:
+                MusicFile previousFile = getPreviousFile();
+                if (previousFile != null) {
+                    history.remove(previousFile);
+                    startPlaying(previousFile);
+                }
+                return true;
         }
+        return false;
     }
 
     private MusicFile getNextFile() {

@@ -1,5 +1,6 @@
 package limma.plugins.music;
 
+import limma.Command;
 import limma.UIProperties;
 import limma.domain.music.MusicFile;
 
@@ -19,17 +20,15 @@ public class JavaSoundMusicPlayer extends AbstractMusicPlayer {
         return playerThread.getCurrentFile();
     }
 
-    public void stop() {
-        playerThread.signalStopping();
+    public boolean consume(Command command) {
+        if (super.consume(command)) {
+            return true;
+        }
+        switch (command) {
+            case STOP:
+                playerThread.signalStopping();
+                return true;
+        }
+        return false;
     }
-
-    public void ff() {
-    }
-
-    public void rew() {
-    }
-
-    public void pause() {
-    }
-
 }

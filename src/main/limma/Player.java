@@ -1,20 +1,8 @@
 package limma;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
-public interface Player {
+public interface Player extends CommandConsumer {
 
     JComponent getPlayerPane();
-
-    void next();
-
-    void previous();
-
-    void ff();
-
-    void rew();
-
-    void pause();
-
-    void stop();
 }

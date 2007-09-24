@@ -20,12 +20,14 @@ import org.xith3d.scenegraph.BranchGroup;
 import org.xith3d.ui.hud.HUD;
 import org.xith3d.ui.hud.utils.ButtonListener;
 import org.xith3d.ui.hud.widgets.Button;
+import org.xith3d.utility.timing.PerformanceStats;
 
 public class XithMain extends ExtRenderLoop implements ButtonListener {
     private Canvas3DWrapper canvas;
 
     public XithMain() {
         super(128);
+        scheduleOperation(new PerformanceStats());
 
         Xith3DEnvironment env = new Xith3DEnvironment(this);
 
@@ -53,7 +55,7 @@ public class XithMain extends ExtRenderLoop implements ButtonListener {
         app.setTexture(TextureLoader.getInstance().getTexture("stone.jpg"));
         Cube cube = new Cube(app, 3.0f);
 
-        RotatableGroup rotatableGroup = new RotatableGroup(new TransformationDirectives(0.3f, 0.2f, 0.0f));
+        RotatableGroup rotatableGroup = new RotatableGroup(new TransformationDirectives(0.3f, 0.2f, 1.0f));
         rotatableGroup.addChild(cube);
         addAnimatableObject(rotatableGroup);
         return new BranchGroup(rotatableGroup);
@@ -61,7 +63,7 @@ public class XithMain extends ExtRenderLoop implements ButtonListener {
 
     private HUD createHUD(Sized2i canvasSize) {
         HUD hud = new HUD(canvasSize, 800f, 600f, this);
-        // or: HUD hud = new HUD( canvasSize, this );
+//        HUD hud = new HUD( canvasSize, this );
         hud.registerKeyboard(getInputManager().getKeyboard());
         hud.registerMouse(getInputManager().getMouse());
 
@@ -74,11 +76,6 @@ public class XithMain extends ExtRenderLoop implements ButtonListener {
         hud.addWidget(button2, 70, 500);
 
         return (hud);
-    }
-
-    protected void onFPSCountIntervalHit(double fps) {
-        super.onFPSCountIntervalHit(fps);
-        canvas.setTitle("My empty scene, FPS: " + (int) fps);
     }
 
     protected void onKeyReleased(int key) {

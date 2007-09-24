@@ -3,6 +3,7 @@ package limma;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -29,6 +30,7 @@ public class Main {
         tweakSwing();
 
         final DefaultPicoContainer pico = new DefaultPicoContainer();
+        pico.registerComponentImplementation(KeyConfig.class);
         pico.registerComponentImplementation(GeneralConfigImpl.class);
         pico.registerComponentImplementation(ShuttingDownDialog.class);
         pico.registerComponentImplementation(UIPropertiesImpl.class);
@@ -82,6 +84,7 @@ public class Main {
                 } else {
                     System.out.println("Starting in windowed mode");
                     mainWindow.setSize(800, 600);
+                    mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     mainWindow.setVisible(true);
                 }
 

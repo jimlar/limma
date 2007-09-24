@@ -10,7 +10,7 @@ public class PlayerManager {
 
     public void switchTo(Player player) {
         if (this.player != null) {
-            this.player.stop();
+            this.player.consume(Command.STOP);
         }
         this.player = player;
         firePlayerSwitched();

@@ -13,5 +13,7 @@ public enum Command {
     NEXT(),
     PREVIOUS(),
     ACTION(),
-    NOTHING, MENU, EXIT;
+    NOTHING,
+    MENU,
+    EXIT;
 }

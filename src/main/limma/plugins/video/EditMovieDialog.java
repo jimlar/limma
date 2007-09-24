@@ -1,10 +1,9 @@
 package limma.plugins.video;
 
-import java.awt.event.KeyEvent;
-
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import limma.Command;
 import limma.UIProperties;
 import limma.domain.video.Video;
 import limma.domain.video.VideoRepository;
@@ -42,12 +41,13 @@ public class EditMovieDialog extends LimmaDialog {
         textField.setText(video.getTitle());
     }
 
-    public boolean keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_ESCAPE:
+
+    public boolean consume(Command command) {
+        switch (command) {
+            case EXIT:
                 close();
                 return true;
-            case KeyEvent.VK_ENTER:
+            case ACTION:
                 dialogManager.executeInDialog(new SaveTitleTask(video, textField.getText(), videoRepository));
                 close();
                 return true;

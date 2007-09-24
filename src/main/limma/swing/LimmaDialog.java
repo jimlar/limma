@@ -1,11 +1,14 @@
 package limma.swing;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.event.KeyEvent;
+import java.awt.Color;
 
-public abstract class LimmaDialog extends JPanel {
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
+import limma.CommandConsumer;
+
+public abstract class LimmaDialog extends JPanel implements CommandConsumer {
     private static final int PADDING = 10;
     private DialogManager dialogManager;
 
@@ -35,6 +38,4 @@ public abstract class LimmaDialog extends JPanel {
     public DialogManager getDialogManager() {
         return dialogManager;
     }
-
-    public abstract boolean keyPressed(KeyEvent e);
 }

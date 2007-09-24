@@ -1,14 +1,17 @@
 package limma.swing.navigation;
 
+import java.awt.Color;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+
+import limma.Command;
 import limma.UIProperties;
 import limma.swing.DialogManager;
 import limma.swing.LimmaDialog;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.Iterator;
-import java.util.List;
 
 public class NavigationPopupMenu extends LimmaDialog {
     private JList list;
@@ -29,27 +32,32 @@ public class NavigationPopupMenu extends LimmaDialog {
         add(list);
     }
 
-    public boolean keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_ESCAPE:
-            case KeyEvent.VK_M:
+
+    public boolean consume(Command command) {
+        switch (command) {
+            case EXIT:
+            case MENU:
                 close();
                 return true;
-            case KeyEvent.VK_UP:
+
+            case UP:
                 if (list.getSelectedIndex() > 0) {
                     list.setSelectedIndex(list.getSelectedIndex() - 1);
                 }
                 return true;
-            case KeyEvent.VK_DOWN:
+
+            case DOWN:
                 if (list.getSelectedIndex() < listModel.getSize() - 1) {
                     list.setSelectedIndex(list.getSelectedIndex() + 1);
                 }
                 return true;
-            case KeyEvent.VK_ENTER:
+
+            case ACTION:
                 MenuItem menuItem = (MenuItem) list.getSelectedValue();
                 close();
                 menuItem.performAction(getDialogManager());
                 return true;
+
         }
         return false;
     }

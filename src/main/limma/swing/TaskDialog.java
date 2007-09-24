@@ -1,10 +1,13 @@
 package limma.swing;
 
-import limma.UIProperties;
+import java.awt.BorderLayout;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import limma.Command;
+import limma.UIProperties;
 
 public class TaskDialog extends LimmaDialog {
     private UIProperties uiProperties;
@@ -67,7 +70,7 @@ public class TaskDialog extends LimmaDialog {
     }
 
 
-    public boolean keyPressed(KeyEvent e) {
+    public boolean consume(Command command) {
         return true;
     }
 }

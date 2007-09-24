@@ -1,18 +1,20 @@
 package limma.swing.navigation;
 
-import limma.UIProperties;
-import limma.swing.DialogManager;
+import java.awt.Component;
+import java.util.*;
 
-import javax.swing.*;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.Position;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.*;
-import java.util.List;
 
-public class Navigation extends JList {
+import limma.Command;
+import limma.CommandConsumer;
+import limma.UIProperties;
+import limma.swing.DialogManager;
+
+public class Navigation extends JList implements CommandConsumer {
     private List<NavigationNodeRenderer> renderers = new ArrayList<NavigationNodeRenderer>();
     private Set<NavigationListener> listeners = new HashSet<NavigationListener>();
     private DialogManager dialogManager;
@@ -21,7 +23,6 @@ public class Navigation extends JList {
         super(model);
         this.dialogManager = dialogManager;
 
-        addKeyListener(new NavigationKeyListener(this, model, dialogManager));
         setSelectionModel(new NavigationSelectionModelAdapter(model));
         setCellRenderer(new ListCellRenderer() {
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -52,21 +53,58 @@ public class Navigation extends JList {
         return -1;
     }
 
-    public void processKeyEvent(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_M:
-                NavigationNode currentNode = getNavigationModel().getCurrentNode();
-                NavigationNode child = currentNode.getSelectedChild();
+
+    public boolean consume(Command command) {
+        NavigationModel model = (NavigationModel) getModel();
+        NavigationNode currentNode = model.getCurrentNode();
+        NavigationNode child = currentNode.getSelectedChild();
+
+        switch (command) {
+            case MENU:
                 List<MenuItem> menuItems = child.getAllMenuItems();
                 if (!menuItems.isEmpty()) {
                     NavigationPopupMenu menu = (NavigationPopupMenu) dialogManager.createAndOpen(NavigationPopupMenu.class);
                     menu.setItems(menuItems);
                 }
-                break;
-            default:
-                super.processKeyEvent(e);
+                return true;
+
+            case LEFT:
+                NavigationNode parent = currentNode.getParent();
+                if (parent != null) {
+                    model.setCurrentNode(parent);
+                    scrollToSelected();
+                    fireFocusChanged();
+                }
+                return true;
+
+            case RIGHT:
+                if (!child.getChildren().isEmpty()) {
+                    model.setCurrentNode(child);
+                    scrollToSelected();
+                    fireFocusChanged();
+                }
+                return true;
+
+            case UP:
+                if (getSelectedIndex() > 0) {
+                    setSelectedIndex(getSelectedIndex() - 1);
+                    scrollToSelected();
+                }
+                return true;
+
+            case DOWN:
+                if (getSelectedIndex() < getModel().getSize() - 1) {
+                    setSelectedIndex(getSelectedIndex() + 1);
+                    scrollToSelected();
+                }
+                return true;
+
+            case ACTION:
+                child.performAction(dialogManager);
+                return true;
 
         }
+        return false;
     }
 
     public void addCellRenderer(NavigationNodeRenderer renderer) {

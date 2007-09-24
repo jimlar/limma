@@ -136,12 +136,12 @@ public class MainWindow extends JFrame {
 
         LimmaDialog topDialog = dialogManager.getTopDialog();
         if (topDialog != null) {
-            return topDialog.keyPressed(e);
+            return topDialog.consume(command);
 
         } else {
             Player player = playerManager.getPlayer();
             if (player == null || !player.consume(command)) {
-                navigation.processKeyEvent(e);
+                navigation.consume(command);
             }
             return true;
         }

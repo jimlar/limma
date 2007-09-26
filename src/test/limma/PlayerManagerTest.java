@@ -1,5 +1,6 @@
 package limma;
 
+import limma.ui.Player;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 

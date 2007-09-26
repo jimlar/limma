@@ -52,25 +52,25 @@
       <entry_point TYPE="method"
                    FQNAME="limma.persistence.PersistenceManagerImpl.PersistenceManagerImpl(PersistenceConfig persistenceConfig)"/>
       <entry_point TYPE="method"
-                   FQNAME="limma.plugins.game.GamePlugin.GamePlugin(DialogManager dialogManager, GameConfig gameConfig, MenuModel menuModel, UIProperties uiProperties)"/>
-      <entry_point TYPE="method" FQNAME="limma.plugins.game.GameConfigImpl.GameConfigImpl()"/>
+                   FQNAME="limma.application.game.GamePlugin.GamePlugin(DialogManager dialogManager, GameConfig gameConfig, MenuModel menuModel, UIProperties uiProperties)"/>
+      <entry_point TYPE="method" FQNAME="limma.application.game.GameConfigImpl.GameConfigImpl()"/>
       <entry_point TYPE="method"
-                   FQNAME="limma.plugins.music.ExternalMusicPlayer.ExternalMusicPlayer(MusicConfig musicConfig, UIProperties uiProperties)"/>
+                   FQNAME="limma.application.music.ExternalMusicPlayer.ExternalMusicPlayer(MusicConfig musicConfig, UIProperties uiProperties)"/>
       <entry_point TYPE="method"
-                   FQNAME="limma.plugins.music.JavaSoundMusicPlayer.JavaSoundMusicPlayer(UIProperties uiProperties)"/>
-      <entry_point TYPE="method" FQNAME="limma.plugins.music.MusicConfigImpl.MusicConfigImpl()"/>
+                   FQNAME="limma.application.music.JavaSoundMusicPlayer.JavaSoundMusicPlayer(UIProperties uiProperties)"/>
+      <entry_point TYPE="method" FQNAME="limma.application.music.MusicConfigImpl.MusicConfigImpl()"/>
       <entry_point TYPE="method"
-                   FQNAME="limma.plugins.music.MusicPlugin.MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer, MenuModel menuModel, PlayerManager playerManager, UIProperties uiProperties)"/>
+                   FQNAME="limma.application.music.MusicPlugin.MusicPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, MusicConfig musicConfig, MusicPlayer musicPlayer, MenuModel menuModel, PlayerManager playerManager, UIProperties uiProperties)"/>
       <entry_point TYPE="method" FQNAME="limma.domain.music.MusicFile.MusicFile()"/>
-      <entry_point TYPE="method" FQNAME="limma.plugins.video.IMDBSeviceImpl.IMDBSeviceImpl()"/>
+      <entry_point TYPE="method" FQNAME="limma.application.video.IMDBSeviceImpl.IMDBSeviceImpl()"/>
       <entry_point TYPE="method" FQNAME="limma.domain.video.Video.Video()"/>
-      <entry_point TYPE="method" FQNAME="limma.plugins.video.VideoConfigImpl.VideoConfigImpl()"/>
+      <entry_point TYPE="method" FQNAME="limma.application.video.VideoConfigImpl.VideoConfigImpl()"/>
       <entry_point TYPE="method"
-                   FQNAME="limma.plugins.video.VideoPlayer.VideoPlayer(VideoConfig videoConfig, PlayerManager playerManager)"/>
+                   FQNAME="limma.application.video.VideoPlayer.VideoPlayer(VideoConfig videoConfig, PlayerManager playerManager)"/>
       <entry_point TYPE="method"
-                   FQNAME="limma.plugins.video.VideoPlugin.VideoPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, VideoConfig videoConfig, VideoPlayer videoPlayer, MenuModel menuModel, LimmaMenu limmaMenu, ...)"/>
-      <entry_point TYPE="method" FQNAME="limma.swing.DialogManagerImpl.DialogManagerImpl()"/>
-      <entry_point TYPE="method" FQNAME="limma.swing.CursorHider.CursorHider(JFrame frame)"/>
+                   FQNAME="limma.application.video.VideoPlugin.VideoPlugin(DialogManager dialogManager, PersistenceManager persistenceManager, IMDBSevice imdbSevice, VideoConfig videoConfig, VideoPlayer videoPlayer, MenuModel menuModel, LimmaMenu limmaMenu, ...)"/>
+      <entry_point TYPE="method" FQNAME="limma.ui.dialogs.DialogManagerImpl.DialogManagerImpl()"/>
+      <entry_point TYPE="method" FQNAME="limma.ui.CursorHider.CursorHider(JFrame frame)"/>
       <entry_point TYPE="method"
                    FQNAME="limma.swing.menu.LimmaMenu.LimmaMenu(MenuModel model, UIProperties uiProperties)"/>
       <entry_point TYPE="method" FQNAME="limma.domain.video.VideoFile.VideoFile()"/>

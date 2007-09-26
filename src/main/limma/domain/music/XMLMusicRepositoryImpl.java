@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import limma.plugins.music.MusicConfig;
-import limma.utils.AbstractXMLRepository;
+import limma.application.music.MusicConfig;
+import limma.domain.AbstractXMLRepository;
 import limma.utils.DirectoryScanner;
 
 public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements MusicRepository {

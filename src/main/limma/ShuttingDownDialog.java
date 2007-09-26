@@ -1,8 +1,9 @@
 package limma;
 
-import limma.swing.AntialiasLabel;
-import limma.swing.DialogManager;
-import limma.swing.LimmaDialog;
+import limma.ui.AntialiasLabel;
+import limma.ui.UIProperties;
+import limma.ui.dialogs.DialogManager;
+import limma.ui.dialogs.LimmaDialog;
 
 public class ShuttingDownDialog extends LimmaDialog {
     public ShuttingDownDialog(DialogManager dialogManager, UIProperties uiProperties) {

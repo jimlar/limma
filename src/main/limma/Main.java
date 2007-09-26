@@ -7,21 +7,22 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import limma.application.game.GameConfigImpl;
+import limma.application.game.GamePlugin;
+import limma.application.music.ExternalMusicPlayer;
+import limma.application.music.MusicConfigImpl;
+import limma.application.music.MusicPlugin;
+import limma.application.video.*;
 import limma.domain.music.XMLMusicRepositoryImpl;
 import limma.domain.video.XMLVideoRepositoryImpl;
-import limma.plugins.game.GameConfigImpl;
-import limma.plugins.game.GamePlugin;
-import limma.plugins.music.ExternalMusicPlayer;
-import limma.plugins.music.MusicConfigImpl;
-import limma.plugins.music.MusicPlugin;
-import limma.plugins.video.*;
-import limma.swing.CursorHider;
-import limma.swing.DialogFactory;
-import limma.swing.DialogManagerImpl;
-import limma.swing.LimmaDialog;
-import limma.swing.navigation.Navigation;
-import limma.swing.navigation.NavigationModel;
-import limma.swing.navigation.NavigationPopupMenu;
+import limma.ui.CursorHider;
+import limma.ui.UIPropertiesImpl;
+import limma.ui.browser.Navigation;
+import limma.ui.browser.NavigationModel;
+import limma.ui.browser.NavigationPopupMenu;
+import limma.ui.dialogs.DialogFactory;
+import limma.ui.dialogs.DialogManagerImpl;
+import limma.ui.dialogs.LimmaDialog;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
 public class Main {

@@ -3,8 +3,8 @@ package limma.domain.video;
 import java.io.File;
 import java.util.*;
 
-import limma.plugins.video.VideoConfig;
-import limma.utils.AbstractXMLRepository;
+import limma.application.video.VideoConfig;
+import limma.domain.AbstractXMLRepository;
 import limma.utils.DirectoryScanner;
 import org.apache.commons.lang.StringUtils;
 

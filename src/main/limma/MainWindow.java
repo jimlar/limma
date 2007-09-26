@@ -8,12 +8,16 @@ import java.io.IOException;
 
 import javax.swing.*;
 
-import limma.plugins.Plugin;
-import limma.swing.DialogManager;
-import limma.swing.ImagePanel;
-import limma.swing.LimmaDialog;
-import limma.swing.navigation.MenuItem;
-import limma.swing.navigation.*;
+import limma.application.Plugin;
+import limma.ui.ImagePanel;
+import limma.ui.Player;
+import limma.ui.UIProperties;
+import limma.ui.browser.Navigation;
+import limma.ui.browser.NavigationListener;
+import limma.ui.browser.NavigationModel;
+import limma.ui.browser.NavigationNode;
+import limma.ui.dialogs.DialogManager;
+import limma.ui.dialogs.LimmaDialog;
 
 public class MainWindow extends JFrame {
     private JPanel mainPanel;
@@ -93,7 +97,7 @@ public class MainWindow extends JFrame {
             plugin.init();
         }
 
-        navigationModel.add(new MenuItem("Shutdown") {
+        navigationModel.add(new limma.ui.browser.MenuItem("Shutdown") {
             public void performAction(DialogManager dialogManager) {
                 try {
                     generalConfig.getShutdownCommand().execute();

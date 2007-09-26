@@ -61,42 +61,23 @@ public class Navigation extends JList implements CommandConsumer {
 
         switch (command) {
             case MENU:
-                List<MenuItem> menuItems = child.getAllMenuItems();
-                if (!menuItems.isEmpty()) {
-                    NavigationPopupMenu menu = (NavigationPopupMenu) dialogManager.createAndOpen(NavigationPopupMenu.class);
-                    menu.setItems(menuItems);
-                }
+                openMenu();
                 return true;
 
             case LEFT:
-                NavigationNode parent = currentNode.getParent();
-                if (parent != null) {
-                    model.setCurrentNode(parent);
-                    scrollToSelected();
-                    fireFocusChanged();
-                }
+                goLeft();
                 return true;
 
             case RIGHT:
-                if (!child.getChildren().isEmpty()) {
-                    model.setCurrentNode(child);
-                    scrollToSelected();
-                    fireFocusChanged();
-                }
+                goRight();
                 return true;
 
             case UP:
-                if (getSelectedIndex() > 0) {
-                    setSelectedIndex(getSelectedIndex() - 1);
-                    scrollToSelected();
-                }
+                goUp();
                 return true;
 
             case DOWN:
-                if (getSelectedIndex() < getModel().getSize() - 1) {
-                    setSelectedIndex(getSelectedIndex() + 1);
-                    scrollToSelected();
-                }
+                goDown();
                 return true;
 
             case ACTION:
@@ -105,6 +86,56 @@ public class Navigation extends JList implements CommandConsumer {
 
         }
         return false;
+    }
+
+    private void goDown() {
+        if (getSelectedIndex() < getModel().getSize() - 1) {
+            setSelectedIndex(getSelectedIndex() + 1);
+            scrollToSelected();
+        }
+    }
+
+    private void goUp() {
+        if (getSelectedIndex() > 0) {
+            setSelectedIndex(getSelectedIndex() - 1);
+            scrollToSelected();
+        }
+    }
+
+    private void goRight() {
+        NavigationModel model = (NavigationModel) getModel();
+        NavigationNode currentNode = model.getCurrentNode();
+        NavigationNode child = currentNode.getSelectedChild();
+
+        if (!child.getChildren().isEmpty()) {
+            model.setCurrentNode(child);
+            scrollToSelected();
+            fireFocusChanged();
+        }
+    }
+
+    private void goLeft() {
+        NavigationModel model = (NavigationModel) getModel();
+        NavigationNode currentNode = model.getCurrentNode();
+
+        NavigationNode parent = currentNode.getParent();
+        if (parent != null) {
+            model.setCurrentNode(parent);
+            scrollToSelected();
+            fireFocusChanged();
+        }
+    }
+
+    private void openMenu() {
+        NavigationModel model = (NavigationModel) getModel();
+        NavigationNode currentNode = model.getCurrentNode();
+        NavigationNode child = currentNode.getSelectedChild();
+
+        List<MenuItem> menuItems = child.getAllMenuItems();
+        if (!menuItems.isEmpty()) {
+            NavigationPopupMenu menu = (NavigationPopupMenu) dialogManager.createAndOpen(NavigationPopupMenu.class);
+            menu.setItems(menuItems);
+        }
     }
 
     public void addCellRenderer(NavigationNodeRenderer renderer) {

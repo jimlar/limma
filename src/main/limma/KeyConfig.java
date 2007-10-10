@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 
 public class KeyConfig {
     public Command getCommandForEvent(KeyEvent event) {
-        System.out.println("event.getKeyCode() = " + KeyEvent.getKeyText(event.getKeyCode()));
 
         switch (event.getKeyCode()) {
 

@@ -1,12 +1,13 @@
-package limma.application.video;
+package limma.ui.video;
+
+import limma.application.video.VideoPlayer;
+import limma.domain.video.VideoRepository;
+import limma.ui.browser.NavigationNode;
+import limma.ui.browser.SimpleNavigationNode;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import limma.domain.video.VideoRepository;
-import limma.ui.browser.NavigationNode;
-import limma.ui.browser.SimpleNavigationNode;
 
 public class MoviesNavigationNode extends SimpleNavigationNode {
     private VideoPlayer videoPlayer;

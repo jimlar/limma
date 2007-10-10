@@ -1,7 +1,9 @@
-package limma.application.video;
+package limma.ui.video;
 
 import limma.PlayerManager;
 import limma.application.Plugin;
+import limma.application.video.VideoConfig;
+import limma.application.video.VideoPlayer;
 import limma.domain.video.VideoRepository;
 import limma.ui.UIProperties;
 import limma.ui.browser.MenuItem;

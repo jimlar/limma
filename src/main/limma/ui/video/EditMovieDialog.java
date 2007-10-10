@@ -1,7 +1,4 @@
-package limma.application.video;
-
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+package limma.ui.video;
 
 import limma.Command;
 import limma.domain.video.Video;
@@ -10,28 +7,28 @@ import limma.ui.AntialiasLabel;
 import limma.ui.UIProperties;
 import limma.ui.dialogs.DialogManager;
 import limma.ui.dialogs.LimmaDialog;
+import limma.ui.dialogs.Task;
+import limma.ui.dialogs.TaskFeedback;
 
-public class IMDBDialog extends LimmaDialog {
+import javax.swing.*;
+
+public class EditMovieDialog extends LimmaDialog {
     private DialogManager dialogManager;
     private JTextField textField;
     private Video video;
-    private IMDBService imdbService;
-    private VideoConfig videoConfig;
     private VideoRepository videoRepository;
 
-    public IMDBDialog(DialogManager dialogManager, IMDBService imdbService, VideoConfig videoConfig, UIProperties uiProperties, VideoRepository videoRepository) {
+    public EditMovieDialog(DialogManager dialogManager, UIProperties uiProperties, VideoRepository videoRepository) {
         super(dialogManager);
         this.dialogManager = dialogManager;
-        this.imdbService = imdbService;
-        this.videoConfig = videoConfig;
         this.videoRepository = videoRepository;
 
         JPanel panel = new JPanel();
         panel.setOpaque(false);
-        panel.add(new AntialiasLabel("IMDB Number:", uiProperties));
+        panel.add(new AntialiasLabel("Title:", uiProperties));
         textField = new JTextField();
         textField.setOpaque(true);
-        textField.setColumns(10);
+        textField.setColumns(30);
         textField.setFont(uiProperties.getSmallFont());
         panel.add(textField);
         add(panel);
@@ -39,18 +36,12 @@ public class IMDBDialog extends LimmaDialog {
 
     public void open() {
         super.open();
-        textField.setText("");
         textField.requestFocusInWindow();
     }
 
     public void setVideo(Video video) {
         this.video = video;
-        textField.setText("");
-        if (video.hasImdbNumber()) {
-            textField.setText(String.valueOf(video.getImdbNumber()));
-        } else {
-            dialogManager.executeInDialog(new DetectImdbNumberTask(video, textField));
-        }
+        textField.setText(video.getTitle());
     }
 
 
@@ -60,15 +51,28 @@ public class IMDBDialog extends LimmaDialog {
                 close();
                 return true;
             case ACTION:
-                dialogManager.executeInDialog(new UpdateFromImdbTask(imdbService, videoConfig, video, getEnteredImdbNumber(), videoRepository));
+                dialogManager.executeInDialog(new SaveTitleTask(video, textField.getText(), videoRepository));
                 close();
                 return true;
         }
         return false;
     }
 
-    private int getEnteredImdbNumber() {
-        return Integer.parseInt(textField.getText());
-    }
+    private static class SaveTitleTask implements Task {
+        private Video video;
+        private String newTitle;
+        private VideoRepository videoRepository;
 
+        public SaveTitleTask(Video video, String newTitle, VideoRepository videoRepository) {
+            this.video = video;
+            this.newTitle = newTitle;
+            this.videoRepository = videoRepository;
+        }
+
+        public void run(TaskFeedback feedback) {
+            feedback.setStatusMessage("Saving...");
+            video.setTitle(newTitle);
+            videoRepository.save(video);
+        }
+    }
 }

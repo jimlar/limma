@@ -1,20 +1,16 @@
 package limma;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
 import limma.application.game.GameConfigImpl;
 import limma.application.game.GamePlugin;
 import limma.application.music.ExternalMusicPlayer;
 import limma.application.music.MusicConfigImpl;
 import limma.application.music.MusicPlugin;
-import limma.application.video.*;
+import limma.application.video.IMDBServiceImpl;
+import limma.application.video.VideoConfigImpl;
+import limma.application.video.VideoPlayer;
 import limma.domain.music.XMLMusicRepositoryImpl;
 import limma.domain.video.XMLVideoRepositoryImpl;
+import limma.ui.CommandDispatcher;
 import limma.ui.CursorHider;
 import limma.ui.UIPropertiesImpl;
 import limma.ui.browser.Navigation;
@@ -23,7 +19,13 @@ import limma.ui.browser.NavigationPopupMenu;
 import limma.ui.dialogs.DialogFactory;
 import limma.ui.dialogs.DialogManagerImpl;
 import limma.ui.dialogs.LimmaDialog;
+import limma.ui.video.EditMovieDialog;
+import limma.ui.video.IMDBDialog;
+import limma.ui.video.VideoPlugin;
 import org.picocontainer.defaults.DefaultPicoContainer;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 
@@ -32,6 +34,7 @@ public class Main {
 
         final DefaultPicoContainer pico = new DefaultPicoContainer();
         pico.registerComponentImplementation(KeyConfig.class);
+        pico.registerComponentImplementation(CommandDispatcher.class);
         pico.registerComponentImplementation(GeneralConfigImpl.class);
         pico.registerComponentImplementation(ShuttingDownDialog.class);
         pico.registerComponentImplementation(UIPropertiesImpl.class);

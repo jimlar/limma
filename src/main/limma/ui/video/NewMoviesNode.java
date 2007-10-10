@@ -1,10 +1,11 @@
-package limma.application.video;
+package limma.ui.video;
 
-import java.util.*;
-
+import limma.application.video.VideoPlayer;
 import limma.domain.video.Video;
 import limma.domain.video.VideoRepository;
 import limma.ui.browser.NavigationNode;
+
+import java.util.*;
 
 public class NewMoviesNode extends NavigationNode {
     private int numberOfDays;

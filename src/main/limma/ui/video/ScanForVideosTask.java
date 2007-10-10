@@ -1,4 +1,4 @@
-package limma.application.video;
+package limma.ui.video;
 
 import limma.domain.video.VideoRepository;
 import limma.ui.dialogs.Task;

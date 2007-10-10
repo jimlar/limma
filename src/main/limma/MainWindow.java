@@ -1,13 +1,5 @@
 package limma;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-
-import javax.swing.*;
-
 import limma.application.Plugin;
 import limma.ui.ImagePanel;
 import limma.ui.Player;
@@ -17,23 +9,17 @@ import limma.ui.browser.NavigationListener;
 import limma.ui.browser.NavigationModel;
 import limma.ui.browser.NavigationNode;
 import limma.ui.dialogs.DialogManager;
-import limma.ui.dialogs.LimmaDialog;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class MainWindow extends JFrame {
     private JPanel mainPanel;
-    private DialogManager dialogManager;
 
-    private PlayerManager playerManager;
-
-    private Navigation navigation;
-    private KeyConfig keyConfig;
-
-    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, Navigation navigation, UIProperties uiProperties, final GeneralConfig generalConfig, KeyConfig keyConfig) {
-        this.dialogManager = dialogManager;
-        this.playerManager = playerManager;
-        this.navigation = navigation;
-        this.keyConfig = keyConfig;
-
+    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, Navigation navigation, UIProperties uiProperties, final GeneralConfig generalConfig) {
         final SlidePanel playerSlidePanel = addPlayerSlidePanel();
         final Timer slideInPlayerTimer = new Timer(2 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -63,20 +49,7 @@ public class MainWindow extends JFrame {
         mainPanel = new ImagePanel(background);
         mainPanel.setLayout(new BorderLayout());
 
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-            public boolean dispatchKeyEvent(KeyEvent e) {
-                if (e.getID() == KeyEvent.KEY_PRESSED) {
-                    boolean b = dispatchKey(e);
-                    if (b) {
-                        e.consume();
-                    }
-                    return b;
-                }
-                return false;
-            }
-        });
-
-        JScrollPane scrollPane = new JScrollPane(this.navigation);
+        JScrollPane scrollPane = new JScrollPane(navigation);
         scrollPane.setOpaque(false);
         scrollPane.setAutoscrolls(true);
         scrollPane.getViewport().setOpaque(false);
@@ -133,21 +106,5 @@ public class MainWindow extends JFrame {
     public void setSize(int width, int height) {
         super.setSize(width, height);
         mainPanel.setSize(width, height);
-    }
-
-    private boolean dispatchKey(KeyEvent e) {
-        Command command = keyConfig.getCommandForEvent(e);
-
-        LimmaDialog topDialog = dialogManager.getTopDialog();
-        if (topDialog != null) {
-            return topDialog.consume(command);
-
-        } else {
-            Player player = playerManager.getPlayer();
-            if (player == null || !player.consume(command)) {
-                navigation.consume(command);
-            }
-            return true;
-        }
     }
 }

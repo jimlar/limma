@@ -1,18 +1,17 @@
-package limma.application.video;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.swing.JTextField;
+package limma.ui.video;
 
 import limma.domain.video.Video;
 import limma.domain.video.VideoFile;
 import limma.ui.dialogs.Task;
 import limma.ui.dialogs.TaskFeedback;
 import org.apache.commons.io.FileUtils;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 class DetectImdbNumberTask implements Task {
     private static final String[] IMDB_PREFIXES = {"imdb.com/title/tt",

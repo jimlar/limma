@@ -1,4 +1,14 @@
-package limma.application.video;
+package limma.ui.video;
+
+import limma.application.video.IMDBInfo;
+import limma.application.video.IMDBService;
+import limma.application.video.VideoConfig;
+import limma.domain.video.Video;
+import limma.domain.video.VideoRepository;
+import limma.ui.dialogs.Task;
+import limma.ui.dialogs.TaskFeedback;
+import org.apache.commons.io.CopyUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,13 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import limma.domain.video.Video;
-import limma.domain.video.VideoRepository;
-import limma.ui.dialogs.Task;
-import limma.ui.dialogs.TaskFeedback;
-import org.apache.commons.io.CopyUtils;
-import org.apache.commons.io.IOUtils;
 
 class UpdateFromImdbTask implements Task {
     private IMDBService imdbService;

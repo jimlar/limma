@@ -1,9 +1,10 @@
 package limma.ui.browser;
 
-import javax.swing.*;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import javax.swing.AbstractListModel;
 
 public class NavigationModel extends AbstractListModel {
     private Set<NavigationModelListener> listeners = new HashSet<NavigationModelListener>();

@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 public class SimpleNavigationNode extends NavigationNode {
     private String title;
     private List<NavigationNode> children = new ArrayList<NavigationNode>();
@@ -59,5 +61,11 @@ public class SimpleNavigationNode extends NavigationNode {
 
     public void removeAllChildren() {
         children.clear();
+    }
+
+
+    public String toString() {
+        return new ToStringBuilder(this).append("title", title).toString();
+
     }
 }

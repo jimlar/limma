@@ -1,5 +1,10 @@
 package limma.ui.video;
 
+import java.awt.*;
+import java.io.File;
+
+import javax.swing.*;
+
 import limma.application.video.VideoConfig;
 import limma.domain.video.Video;
 import limma.ui.AntialiasLabel;
@@ -8,10 +13,6 @@ import limma.ui.browser.BrowserList;
 import limma.ui.browser.NavigationNode;
 import limma.ui.browser.NavigationNodeRenderer;
 import org.apache.commons.lang.StringUtils;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
 
 class VideoNavigationNodeRenderer extends JPanel implements NavigationNodeRenderer {
     private AntialiasLabel titleLabel;

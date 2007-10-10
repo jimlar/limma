@@ -1,15 +1,20 @@
 package limma.ui.browser;
 
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import limma.application.Command;
 import limma.ui.UIProperties;
 import limma.ui.dialogs.DialogManager;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.util.HashSet;
-import java.util.Set;
 
 public class BrowserImpl extends JPanel implements Browser {
     private BrowserList leftList;
@@ -166,7 +171,6 @@ public class BrowserImpl extends JPanel implements Browser {
             navigationModel.setCurrentNode(selectedNode.getParent());
             leftList.setSelectedIndex(selectedNode.getParent().getSelectedChildIndex());
             rightList.setSelectedIndex(selectedNode.getSelectedChildIndex());
-            System.out.println("selectedNode = " + selectedNode);
             selectedNodeChanged();
         }
         repaint();

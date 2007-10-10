@@ -1,9 +1,9 @@
 package limma.application.game;
 
+import java.io.File;
+
 import limma.application.AbstractConfiguration;
 import limma.utils.ExternalCommand;
-
-import java.io.File;
 
 public class GameConfigImpl extends AbstractConfiguration implements GameConfig {
 

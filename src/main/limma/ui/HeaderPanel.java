@@ -1,12 +1,9 @@
-package limma;
+package limma.ui;
 
-import java.awt.*;
-
-import javax.swing.JPanel;
-
-import limma.ui.AntialiasLabel;
-import limma.ui.UIProperties;
 import limma.ui.browser.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class HeaderPanel extends JPanel {
     private UIProperties uiProperties;

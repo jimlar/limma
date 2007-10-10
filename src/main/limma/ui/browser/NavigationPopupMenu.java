@@ -1,17 +1,14 @@
 package limma.ui.browser;
 
-import java.awt.Color;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
-
-import limma.Command;
+import limma.application.Command;
 import limma.ui.UIProperties;
 import limma.ui.dialogs.DialogManager;
 import limma.ui.dialogs.LimmaDialog;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Iterator;
+import java.util.List;
 
 public class NavigationPopupMenu extends LimmaDialog {
     private JList list;

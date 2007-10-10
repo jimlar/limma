@@ -1,14 +1,15 @@
-package limma.application.music;
+package limma.ui.music;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import limma.PlayerManager;
+import limma.application.PlayerManager;
+import limma.application.music.MusicPlayer;
 import limma.domain.music.MusicFile;
 import limma.ui.browser.NavigationNode;
 import limma.ui.browser.SimpleNavigationNode;
 import limma.ui.dialogs.DialogManager;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class TrackContainerNode extends SimpleNavigationNode {
     private MusicPlayer musicPlayer;

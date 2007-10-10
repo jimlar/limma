@@ -1,16 +1,13 @@
-package limma.application.music;
-
-import java.awt.*;
-import java.io.File;
-import java.io.FilenameFilter;
-
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+package limma.ui.music;
 
 import limma.domain.music.MusicFile;
 import limma.ui.AntialiasLabel;
 import limma.ui.UIProperties;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.FilenameFilter;
 
 public class CurrentTrackPanel extends JPanel {
     private AntialiasLabel artistLabel;

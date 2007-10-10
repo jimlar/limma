@@ -1,6 +1,6 @@
 package limma.ui.video;
 
-import limma.Command;
+import limma.application.Command;
 import limma.domain.video.Video;
 import limma.domain.video.VideoRepository;
 import limma.ui.AntialiasLabel;

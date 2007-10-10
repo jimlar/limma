@@ -1,6 +1,6 @@
 package limma.application.music;
 
-import limma.Command;
+import limma.application.Command;
 import limma.domain.music.MusicFile;
 import limma.ui.UIProperties;
 

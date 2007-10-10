@@ -1,14 +1,11 @@
 package limma.ui.dialogs;
 
-import java.awt.BorderLayout;
-
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import limma.Command;
+import limma.application.Command;
 import limma.ui.AntialiasLabel;
 import limma.ui.UIProperties;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class TaskDialog extends LimmaDialog {
     private UIProperties uiProperties;

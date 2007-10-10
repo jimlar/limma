@@ -1,18 +1,17 @@
 package limma.ui.browser;
 
-import java.awt.Component;
-import java.util.*;
+import limma.application.Command;
+import limma.application.CommandConsumer;
+import limma.ui.UIProperties;
+import limma.ui.dialogs.DialogManager;
 
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.Position;
-
-import limma.Command;
-import limma.CommandConsumer;
-import limma.ui.UIProperties;
-import limma.ui.dialogs.DialogManager;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 public class Navigation extends JList implements CommandConsumer {
     private List<NavigationNodeRenderer> renderers = new ArrayList<NavigationNodeRenderer>();

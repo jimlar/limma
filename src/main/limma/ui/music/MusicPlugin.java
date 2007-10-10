@@ -1,7 +1,8 @@
-package limma.application.music;
+package limma.ui.music;
 
-import limma.PlayerManager;
+import limma.application.PlayerManager;
 import limma.application.Plugin;
+import limma.application.music.MusicPlayer;
 import limma.domain.music.MusicRepository;
 import limma.ui.browser.MenuItem;
 import limma.ui.browser.NavigationModel;
@@ -14,12 +15,10 @@ public class MusicPlugin implements Plugin {
     private PlayerManager playerManager;
     private MusicRepository musicRepository;
     private DialogManager dialogManager;
-    private MusicConfig musicConfig;
     private SimpleNavigationNode musicNode;
 
-    public MusicPlugin(DialogManager dialogManager, MusicConfig musicConfig, MusicPlayer musicPlayer, NavigationModel navigationModel, PlayerManager playerManager, MusicRepository musicRepository) {
+    public MusicPlugin(DialogManager dialogManager, MusicPlayer musicPlayer, NavigationModel navigationModel, PlayerManager playerManager, MusicRepository musicRepository) {
         this.dialogManager = dialogManager;
-        this.musicConfig = musicConfig;
         this.musicPlayer = musicPlayer;
         this.navigationModel = navigationModel;
         this.playerManager = playerManager;

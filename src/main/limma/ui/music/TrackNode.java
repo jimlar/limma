@@ -1,6 +1,7 @@
-package limma.application.music;
+package limma.ui.music;
 
-import limma.PlayerManager;
+import limma.application.PlayerManager;
+import limma.application.music.MusicPlayer;
 import limma.domain.music.MusicFile;
 import limma.ui.browser.SimpleNavigationNode;
 import limma.ui.dialogs.DialogManager;

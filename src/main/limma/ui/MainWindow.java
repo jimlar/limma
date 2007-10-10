@@ -1,9 +1,9 @@
-package limma;
+package limma.ui;
 
+import limma.application.GeneralConfig;
+import limma.application.PlayerManager;
+import limma.application.PlayerManagerListener;
 import limma.application.Plugin;
-import limma.ui.ImagePanel;
-import limma.ui.Player;
-import limma.ui.UIProperties;
 import limma.ui.browser.Navigation;
 import limma.ui.browser.NavigationListener;
 import limma.ui.browser.NavigationModel;

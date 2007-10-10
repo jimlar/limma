@@ -1,4 +1,4 @@
-package limma;
+package limma.application;
 
 import limma.ui.Player;
 import org.jmock.Mock;

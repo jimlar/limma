@@ -1,10 +1,10 @@
-package limma;
+package limma.application;
+
+import limma.ui.Player;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import limma.ui.Player;
 
 public class PlayerManager {
     private Player player;

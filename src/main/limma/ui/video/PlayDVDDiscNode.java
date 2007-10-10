@@ -1,7 +1,7 @@
 package limma.ui.video;
 
-import limma.Command;
-import limma.PlayerManager;
+import limma.application.Command;
+import limma.application.PlayerManager;
 import limma.application.video.VideoConfig;
 import limma.ui.Player;
 import limma.ui.browser.SimpleNavigationNode;

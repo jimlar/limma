@@ -1,10 +1,10 @@
 package limma.application.music;
 
-import java.io.IOException;
-
-import limma.Command;
+import limma.application.Command;
 import limma.domain.music.MusicFile;
 import limma.ui.UIProperties;
+
+import java.io.IOException;
 
 public class ExternalMusicPlayer extends AbstractMusicPlayer {
     private MusicConfig musicConfig;

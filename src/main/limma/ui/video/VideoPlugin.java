@@ -1,6 +1,6 @@
 package limma.ui.video;
 
-import limma.PlayerManager;
+import limma.application.PlayerManager;
 import limma.application.Plugin;
 import limma.application.video.VideoConfig;
 import limma.application.video.VideoPlayer;

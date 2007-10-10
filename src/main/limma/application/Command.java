@@ -1,4 +1,4 @@
-package limma;
+package limma.application;
 
 public enum Command {
     UP(),

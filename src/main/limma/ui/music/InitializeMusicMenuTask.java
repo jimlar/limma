@@ -1,16 +1,16 @@
-package limma.application.music;
+package limma.ui.music;
 
-import java.util.Iterator;
-
-import javax.swing.SwingUtilities;
-
-import limma.PlayerManager;
+import limma.application.PlayerManager;
+import limma.application.music.MusicPlayer;
 import limma.domain.music.MusicFile;
 import limma.domain.music.MusicRepository;
 import limma.ui.browser.NavigationNode;
 import limma.ui.browser.SimpleNavigationNode;
 import limma.ui.dialogs.Task;
 import limma.ui.dialogs.TaskFeedback;
+
+import javax.swing.*;
+import java.util.Iterator;
 
 class InitializeMusicMenuTask implements Task {
     private SimpleNavigationNode musicNode;

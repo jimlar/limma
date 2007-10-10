@@ -1,8 +1,8 @@
 package limma.ui;
 
-import javax.swing.JComponent;
+import limma.application.CommandConsumer;
 
-import limma.CommandConsumer;
+import javax.swing.*;
 
 public interface Player extends CommandConsumer {
 

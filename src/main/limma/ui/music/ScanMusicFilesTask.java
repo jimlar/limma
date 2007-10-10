@@ -1,4 +1,4 @@
-package limma.application.music;
+package limma.ui.music;
 
 import limma.domain.music.MusicRepository;
 import limma.domain.music.ProgressListener;

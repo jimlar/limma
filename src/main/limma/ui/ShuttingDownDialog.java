@@ -1,7 +1,6 @@
-package limma;
+package limma.ui;
 
-import limma.ui.AntialiasLabel;
-import limma.ui.UIProperties;
+import limma.application.Command;
 import limma.ui.dialogs.DialogManager;
 import limma.ui.dialogs.LimmaDialog;
 

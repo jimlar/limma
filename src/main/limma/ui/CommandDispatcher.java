@@ -1,8 +1,7 @@
 package limma.ui;
 
-import limma.Command;
-import limma.KeyConfig;
-import limma.PlayerManager;
+import limma.application.Command;
+import limma.application.PlayerManager;
 import limma.ui.browser.Navigation;
 import limma.ui.dialogs.DialogManager;
 import limma.ui.dialogs.LimmaDialog;

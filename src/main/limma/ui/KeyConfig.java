@@ -1,4 +1,6 @@
-package limma;
+package limma.ui;
+
+import limma.application.Command;
 
 import java.awt.event.KeyEvent;
 

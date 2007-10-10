@@ -1,4 +1,4 @@
-package limma;
+package limma.application;
 
 import org.apache.commons.io.IOUtils;
 

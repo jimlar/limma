@@ -1,9 +1,9 @@
 package limma.application.music;
 
-import java.io.File;
-
-import limma.AbstractConfiguration;
+import limma.application.AbstractConfiguration;
 import limma.utils.ExternalCommand;
+
+import java.io.File;
 
 public class MusicConfigImpl extends AbstractConfiguration implements MusicConfig {
 

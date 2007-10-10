@@ -1,6 +1,6 @@
 package limma.ui.video;
 
-import limma.Command;
+import limma.application.Command;
 import limma.application.video.IMDBService;
 import limma.application.video.VideoConfig;
 import limma.domain.video.Video;

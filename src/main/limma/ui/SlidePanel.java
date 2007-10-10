@@ -1,10 +1,9 @@
-package limma;
+package limma.ui;
 
 import org.jdesktop.animation.timing.*;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-
 import java.awt.*;
 
 public class SlidePanel extends JPanel {

@@ -1,12 +1,10 @@
 package limma.ui.dialogs;
 
-import java.awt.Color;
+import limma.application.CommandConsumer;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.Border;
-
-import limma.CommandConsumer;
+import java.awt.*;
 
 public abstract class LimmaDialog extends JPanel implements CommandConsumer {
     private static final int PADDING = 10;

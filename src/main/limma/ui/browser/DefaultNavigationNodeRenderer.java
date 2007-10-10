@@ -10,6 +10,7 @@ class DefaultNavigationNodeRenderer extends JLabel implements NavigationNodeRend
     private boolean selected;
     private NavigationNode node;
     private UIProperties uiProperties;
+    private boolean cellHasFocus;
 
     public DefaultNavigationNodeRenderer(UIProperties uiProperties) {
         this.uiProperties = uiProperties;
@@ -24,6 +25,7 @@ class DefaultNavigationNodeRenderer extends JLabel implements NavigationNodeRend
 
     public Component getNodeRendererComponent(BrowserList browserList, NavigationNode value, int index, boolean isSelected, boolean cellHasFocus) {
         this.selected = isSelected;
+        this.cellHasFocus = cellHasFocus;
         node = value;
         setComponentOrientation(browserList.getComponentOrientation());
         setForeground(isSelected ? Color.white : Color.black);
@@ -35,17 +37,17 @@ class DefaultNavigationNodeRenderer extends JLabel implements NavigationNodeRend
         Graphics2D graphics = (Graphics2D) g;
         Composite oldComposite = graphics.getComposite();
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, uiProperties.getMenuTransparency()));
-        if (selected) {
+        if (selected || cellHasFocus) {
             paintGradient(graphics);
             graphics.setColor(new Color(0x127ec7));
             graphics.drawLine(0, 0, getWidth(), 0);
             graphics.setColor(new Color(0x428ac5));
             graphics.drawLine(0, getHeight() - 1, getHeight(), getHeight() - 1);
         }
-        if (!node.getChildren().isEmpty()) {
-            graphics.setPaint(getForeground());
-            drawRigthString(graphics, "+");
-        }
+//        if (!node.getChildren().isEmpty()) {
+//            graphics.setPaint(getForeground());
+//            drawRigthString(graphics, "+");
+//        }
         super.paintComponent(g);
         graphics.setComposite(oldComposite);
     }

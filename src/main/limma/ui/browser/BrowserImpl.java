@@ -5,23 +5,55 @@ import limma.ui.UIProperties;
 import limma.ui.dialogs.DialogManager;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BrowserImpl extends JPanel implements Browser {
     private BrowserList leftList;
     private BrowserList rightList;
     private BrowserList activeList;
+    private NavigationModel navigationModel;
+    private DialogManager dialogManager;
+    private Set<NavigationListener> listeners = new HashSet<NavigationListener>();
 
     public BrowserImpl(final NavigationModel model, UIProperties uiProperties, DialogManager dialogManager) {
-        leftList = new BrowserList(model, uiProperties, dialogManager);
-        rightList = new BrowserList(model, uiProperties, dialogManager);
-        activeList = leftList;
-        leftList.setEnabled(true);
-        rightList.setEnabled(false);
+        this.navigationModel = model;
+        this.dialogManager = dialogManager;
+
+        leftList = createList(uiProperties, model);
+        rightList = createList(uiProperties, new RightBrowserListModel(model));
+
+        activateLeftList();
 
         setLayout(new GridLayout(1, 2));
-        add(leftList);
-        add(rightList);
+        add(wrapInScrollPane(leftList));
+        add(wrapInScrollPane(rightList));
+        setOpaque(false);
+    }
+
+    private Component wrapInScrollPane(BrowserList list) {
+        JScrollPane scrollPane = new JScrollPane(list);
+        scrollPane.setOpaque(false);
+        scrollPane.setAutoscrolls(true);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        return scrollPane;
+    }
+
+    private BrowserList createList(UIProperties uiProperties, ListModel model) {
+        BrowserList list = new BrowserList(uiProperties, model);
+        list.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                selectedNodeChanged();
+            }
+        });
+        return list;
     }
 
     public void addCellRenderer(NavigationNodeRenderer renderer) {
@@ -30,27 +62,127 @@ public class BrowserImpl extends JPanel implements Browser {
     }
 
     public void addNavigationListener(NavigationListener listener) {
-        leftList.addNavigationListener(listener);
-        rightList.addNavigationListener(listener);
+        listeners.add(listener);
+    }
+
+    public NavigationNode getSelectedNode() {
+        if (isLeftListActive()) {
+            return navigationModel.getCurrentNode().getSelectedChild();
+        } else {
+            return navigationModel.getCurrentNode().getSelectedChild().getSelectedChild();
+        }
     }
 
     public boolean consume(Command command) {
+        switch (command) {
+            case MENU:
+                openMenu();
+                return true;
 
-        if (command.equals(Command.LEFT) && activeList != leftList) {
-            rightList.setEnabled(false);
-            leftList.setEnabled(true);
-            activeList = leftList;
+            case LEFT:
+                goLeft();
+                return true;
+
+            case RIGHT:
+                goRight();
+                return true;
+
+            case UP:
+                goUp();
+                return true;
+
+            case DOWN:
+                goDown();
+                return true;
+
+            case ACTION:
+                getSelectedNode().performAction(dialogManager);
+                return true;
+
+        }
+        return false;
+    }
+
+    private void activateRightList() {
+        rightList.setEnabled(true);
+        leftList.setEnabled(false);
+        activeList = rightList;
+        repaint();
+    }
+
+    private boolean isLeftListActive() {
+        return activeList == leftList;
+    }
+
+    private void activateLeftList() {
+        rightList.setEnabled(false);
+        leftList.setEnabled(true);
+        activeList = leftList;
+        repaint();
+    }
+
+    private void goDown() {
+        if (activeList.getSelectedIndex() < activeList.getModel().getSize() - 1) {
+            activeList.setSelectedIndex(activeList.getSelectedIndex() + 1);
             repaint();
-            return true;
+        }
+    }
+
+    private void goUp() {
+        if (activeList.getSelectedIndex() > 0) {
+            activeList.setSelectedIndex(activeList.getSelectedIndex() - 1);
+            repaint();
+        }
+    }
+
+    private void goLeft() {
+        if (!isLeftListActive()) {
+            activateLeftList();
+            return;
         }
 
-        if (command.equals(Command.RIGHT) && activeList != rightList) {
-            rightList.setEnabled(true);
-            leftList.setEnabled(false);
-            activeList = rightList;
-            repaint();
-            return true;
+        NavigationModel model = navigationModel;
+        NavigationNode currentNode = model.getCurrentNode();
+
+        NavigationNode parent = currentNode.getParent();
+        if (parent != null) {
+            model.setCurrentNode(parent);
+            activeList.setSelectedIndex(parent.getSelectedChildIndex());
+            selectedNodeChanged();
         }
-        return activeList.consume(command);
+        repaint();
+    }
+
+    private void goRight() {
+        if (isLeftListActive()) {
+            rightList.setSelectedIndex(getSelectedNode().getSelectedChildIndex());
+            activateRightList();
+            return;
+        }
+
+        NavigationNode selectedNode = getSelectedNode();
+
+        if (!selectedNode.getChildren().isEmpty()) {
+            navigationModel.setCurrentNode(selectedNode.getParent());
+            leftList.setSelectedIndex(selectedNode.getParent().getSelectedChildIndex());
+            rightList.setSelectedIndex(selectedNode.getSelectedChildIndex());
+            System.out.println("selectedNode = " + selectedNode);
+            selectedNodeChanged();
+        }
+        repaint();
+    }
+
+    private void openMenu() {
+        java.util.List<MenuItem> menuItems = getSelectedNode().getAllMenuItems();
+        if (!menuItems.isEmpty()) {
+            NavigationPopupMenu menu = (NavigationPopupMenu) dialogManager.createAndOpen(NavigationPopupMenu.class);
+            menu.setItems(menuItems);
+        }
+    }
+
+    protected void selectedNodeChanged() {
+        for (NavigationListener listener : listeners) {
+            listener.navigationNodeFocusChanged();
+        }
     }
 }

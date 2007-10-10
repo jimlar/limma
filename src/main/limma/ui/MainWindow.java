@@ -48,17 +48,8 @@ public class MainWindow extends JFrame {
         mainPanel = new ImagePanel(background);
         mainPanel.setLayout(new BorderLayout());
 
-        JScrollPane scrollPane = new JScrollPane(browserImpl);
-        scrollPane.setOpaque(false);
-        scrollPane.setAutoscrolls(true);
-        scrollPane.getViewport().setOpaque(false);
-        scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-
         mainPanel.add(new HeaderPanel(uiProperties, browserImpl, navigationModel), BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.add(browserImpl, BorderLayout.CENTER);
 
         dialogManager.setRoot(mainPanel);
 

@@ -1,6 +1,9 @@
 package limma.ui;
 
-import limma.ui.browser.*;
+import limma.ui.browser.Browser;
+import limma.ui.browser.NavigationModel;
+import limma.ui.browser.NavigationModelListener;
+import limma.ui.browser.NavigationNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,21 +19,11 @@ public class HeaderPanel extends JPanel {
         add(title);
         setOpaque(false);
 
-        browser.addNavigationListener(new NavigationListener() {
-
-            public void navigationNodeFocusChanged() {
-            }
-        });
-
         navigationModel.addMenuListener(new NavigationModelListener() {
             public void currentNodeChanged(NavigationModel navigationModel, NavigationNode node) {
-                updateTitle(navigationModel, title);
+                title.setText(node.getTitle());
             }
         });
-    }
-
-    private void updateTitle(NavigationModel navigationModel, AntialiasLabel title) {
-        title.setText(navigationModel.getCurrentNode().getTitle());
     }
 
     protected void paintComponent(Graphics g) {

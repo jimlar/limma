@@ -12,7 +12,7 @@ import limma.application.video.VideoPlayer;
 import limma.domain.music.XMLMusicRepositoryImpl;
 import limma.domain.video.XMLVideoRepositoryImpl;
 import limma.ui.*;
-import limma.ui.browser.Navigation;
+import limma.ui.browser.BrowserImpl;
 import limma.ui.browser.NavigationModel;
 import limma.ui.browser.NavigationPopupMenu;
 import limma.ui.dialogs.DialogFactory;
@@ -40,7 +40,7 @@ public class Main {
         pico.registerComponentImplementation(UIPropertiesImpl.class);
         pico.registerComponentImplementation(PlayerManager.class);
         pico.registerComponentImplementation(NavigationModel.class);
-        pico.registerComponentImplementation(Navigation.class);
+        pico.registerComponentImplementation(BrowserImpl.class);
         pico.registerComponentImplementation(NavigationPopupMenu.class);
         pico.registerComponentImplementation(DialogManagerImpl.class);
         pico.registerComponentImplementation(CursorHider.class);

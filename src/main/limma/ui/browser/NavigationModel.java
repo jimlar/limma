@@ -1,14 +1,13 @@
 package limma.ui.browser;
 
+import javax.swing.*;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.swing.AbstractListModel;
-
 public class NavigationModel extends AbstractListModel {
     private Set<NavigationModelListener> listeners = new HashSet<NavigationModelListener>();
-    private SimpleNavigationNode root = new SimpleNavigationNode(null);
+    private SimpleNavigationNode root = new SimpleNavigationNode("Limma");
     private NavigationNode currentNode = root;
 
     public void add(MenuItem menuItem) {

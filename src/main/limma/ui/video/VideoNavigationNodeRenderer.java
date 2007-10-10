@@ -4,7 +4,7 @@ import limma.application.video.VideoConfig;
 import limma.domain.video.Video;
 import limma.ui.AntialiasLabel;
 import limma.ui.UIProperties;
-import limma.ui.browser.Navigation;
+import limma.ui.browser.BrowserList;
 import limma.ui.browser.NavigationNode;
 import limma.ui.browser.NavigationNodeRenderer;
 import org.apache.commons.lang.StringUtils;
@@ -91,7 +91,7 @@ class VideoNavigationNodeRenderer extends JPanel implements NavigationNodeRender
         return antialiasLabel;
     }
 
-    public Component getNodeRendererComponent(Navigation navigation, NavigationNode value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getNodeRendererComponent(BrowserList browserList, NavigationNode value, int index, boolean isSelected, boolean cellHasFocus) {
         this.selected = isSelected;
         Video video = ((MovieNavigationNode) value).getVideo();
 
@@ -113,9 +113,9 @@ class VideoNavigationNodeRenderer extends JPanel implements NavigationNodeRender
         cover.setIcon(poster);
 
         plotLabel.setText(video.getPlot());
-        plotLabel.setSize(navigation.getWidth() - poster.getIconWidth() - 15, 100000);
+        plotLabel.setSize(browserList.getWidth() - poster.getIconWidth() - 15, 100000);
 
-        setComponentOrientation(navigation.getComponentOrientation());
+        setComponentOrientation(browserList.getComponentOrientation());
         setForeground(Color.white);
         setOpaque(false);
         return this;

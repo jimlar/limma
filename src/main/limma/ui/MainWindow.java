@@ -4,10 +4,9 @@ import limma.application.GeneralConfig;
 import limma.application.PlayerManager;
 import limma.application.PlayerManagerListener;
 import limma.application.Plugin;
-import limma.ui.browser.Navigation;
+import limma.ui.browser.BrowserImpl;
 import limma.ui.browser.NavigationListener;
 import limma.ui.browser.NavigationModel;
-import limma.ui.browser.NavigationNode;
 import limma.ui.dialogs.DialogManager;
 
 import javax.swing.*;
@@ -19,7 +18,7 @@ import java.io.IOException;
 public class MainWindow extends JFrame {
     private JPanel mainPanel;
 
-    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, Navigation navigation, UIProperties uiProperties, final GeneralConfig generalConfig) {
+    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, BrowserImpl browserImpl, UIProperties uiProperties, final GeneralConfig generalConfig) {
         final SlidePanel playerSlidePanel = addPlayerSlidePanel();
         final Timer slideInPlayerTimer = new Timer(2 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -35,8 +34,8 @@ public class MainWindow extends JFrame {
             }
         });
 
-        navigation.addNavigationListener(new NavigationListener() {
-            public void navigationNodeFocusChanged(Navigation menu, NavigationNode newFocusedItem) {
+        browserImpl.addNavigationListener(new NavigationListener() {
+            public void navigationNodeFocusChanged() {
                 playerSlidePanel.slideOut();
                 slideInPlayerTimer.restart();
             }
@@ -49,7 +48,7 @@ public class MainWindow extends JFrame {
         mainPanel = new ImagePanel(background);
         mainPanel.setLayout(new BorderLayout());
 
-        JScrollPane scrollPane = new JScrollPane(navigation);
+        JScrollPane scrollPane = new JScrollPane(browserImpl);
         scrollPane.setOpaque(false);
         scrollPane.setAutoscrolls(true);
         scrollPane.getViewport().setOpaque(false);
@@ -58,15 +57,14 @@ public class MainWindow extends JFrame {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
-        mainPanel.add(new HeaderPanel(uiProperties, navigation), BorderLayout.NORTH);
+        mainPanel.add(new HeaderPanel(uiProperties, browserImpl, navigationModel), BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         dialogManager.setRoot(mainPanel);
 
         validate();
 
-        for (int i = 0; i < plugins.length; i++) {
-            Plugin plugin = plugins[i];
+        for (Plugin plugin : plugins) {
             plugin.init();
         }
 

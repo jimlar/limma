@@ -1,9 +1,9 @@
 package limma.ui.browser;
 
-import java.awt.Component;
+import java.awt.*;
 
 public interface NavigationNodeRenderer {
     boolean supportsRendering(NavigationNode value);
 
-    Component getNodeRendererComponent(Navigation navigation, NavigationNode value, int index, boolean isSelected, boolean cellHasFocus);
+    Component getNodeRendererComponent(BrowserList browserList, NavigationNode value, int index, boolean isSelected, boolean cellHasFocus);
 }

@@ -1,7 +1,6 @@
 package limma.ui.browser;
 
 import limma.application.Command;
-import limma.application.CommandConsumer;
 import limma.ui.UIProperties;
 import limma.ui.dialogs.DialogManager;
 
@@ -10,15 +9,17 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.Position;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class Navigation extends JList implements CommandConsumer {
+public class BrowserList extends JList {
     private List<NavigationNodeRenderer> renderers = new ArrayList<NavigationNodeRenderer>();
     private Set<NavigationListener> listeners = new HashSet<NavigationListener>();
     private DialogManager dialogManager;
 
-    public Navigation(final NavigationModel model, UIProperties uiProperties, DialogManager dialogManager) {
+    public BrowserList(final NavigationModel model, UIProperties uiProperties, DialogManager dialogManager) {
         super(model);
         this.dialogManager = dialogManager;
 
@@ -26,10 +27,9 @@ public class Navigation extends JList implements CommandConsumer {
         setCellRenderer(new ListCellRenderer() {
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 NavigationNode node = (NavigationNode) value;
-                for (Iterator<NavigationNodeRenderer> i = renderers.iterator(); i.hasNext();) {
-                    NavigationNodeRenderer renderer = i.next();
+                for (NavigationNodeRenderer renderer : renderers) {
                     if (renderer.supportsRendering(node)) {
-                        return renderer.getNodeRendererComponent(Navigation.this, node, index, isSelected, cellHasFocus);
+                        return renderer.getNodeRendererComponent(BrowserList.this, node, index, isSelected & isEnabled(), cellHasFocus);
                     }
                 }
                 throw new IllegalArgumentException("Rendering of " + value + " is not supported (is it a subclass of NavigationNode?)");
@@ -44,14 +44,21 @@ public class Navigation extends JList implements CommandConsumer {
         });
     }
 
-    public void scrollToSelected() {
-        scrollRectToVisible(getCellBounds(getSelectedIndex(), getSelectedIndex()));
-    }
-
     public int getNextMatch(String prefix, int startIndex, Position.Bias bias) {
         return -1;
     }
 
+    public void addCellRenderer(NavigationNodeRenderer renderer) {
+        renderers.add(0, renderer);
+    }
+
+    public void addNavigationListener(NavigationListener listener) {
+        listeners.add(listener);
+    }
+
+    public NavigationModel getNavigationModel() {
+        return (NavigationModel) getModel();
+    }
 
     public boolean consume(Command command) {
         NavigationModel model = (NavigationModel) getModel();
@@ -137,23 +144,13 @@ public class Navigation extends JList implements CommandConsumer {
         }
     }
 
-    public void addCellRenderer(NavigationNodeRenderer renderer) {
-        renderers.add(0, renderer);
-    }
-
-    public void addNavigationListener(NavigationListener listener) {
-        listeners.add(listener);
-    }
-
-    public NavigationModel getNavigationModel() {
-        return (NavigationModel) getModel();
-    }
-
-    protected void fireFocusChanged() {
-        NavigationNode node = (NavigationNode) getNavigationModel().getElementAt(getSelectedIndex());
-        for (Iterator<NavigationListener> i = listeners.iterator(); i.hasNext();) {
-            NavigationListener listener = i.next();
-            listener.navigationNodeFocusChanged(this, node);
+    private void fireFocusChanged() {
+        for (NavigationListener listener : listeners) {
+            listener.navigationNodeFocusChanged();
         }
+    }
+
+    private void scrollToSelected() {
+        scrollRectToVisible(getCellBounds(getSelectedIndex(), getSelectedIndex()));
     }
 }

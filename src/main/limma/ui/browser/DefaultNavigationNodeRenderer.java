@@ -1,12 +1,10 @@
 package limma.ui.browser;
 
+import limma.ui.UIProperties;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-
-import limma.ui.UIProperties;
 
 class DefaultNavigationNodeRenderer extends JLabel implements NavigationNodeRenderer {
     private boolean selected;
@@ -24,10 +22,10 @@ class DefaultNavigationNodeRenderer extends JLabel implements NavigationNodeRend
         return true;
     }
 
-    public Component getNodeRendererComponent(Navigation navigation, NavigationNode value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getNodeRendererComponent(BrowserList browserList, NavigationNode value, int index, boolean isSelected, boolean cellHasFocus) {
         this.selected = isSelected;
-        node = (NavigationNode) value;
-        setComponentOrientation(navigation.getComponentOrientation());
+        node = value;
+        setComponentOrientation(browserList.getComponentOrientation());
         setForeground(isSelected ? Color.white : Color.black);
         setText(node.getTitle());
         return this;

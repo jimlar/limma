@@ -6,8 +6,8 @@ import limma.application.video.VideoConfig;
 import limma.application.video.VideoPlayer;
 import limma.domain.video.VideoRepository;
 import limma.ui.UIProperties;
+import limma.ui.browser.Browser;
 import limma.ui.browser.MenuItem;
-import limma.ui.browser.Navigation;
 import limma.ui.browser.NavigationModel;
 import limma.ui.dialogs.DialogManager;
 
@@ -18,7 +18,7 @@ public class VideoPlugin implements Plugin {
     private VideoRepository videoRepository;
     private MoviesNavigationNode moviesNode;
 
-    public VideoPlugin(final DialogManager dialogManager, VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, Navigation navigation, PlayerManager playerManager, UIProperties uiProperties, VideoRepository videoRepository) {
+    public VideoPlugin(final DialogManager dialogManager, VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, Browser browser, PlayerManager playerManager, UIProperties uiProperties, VideoRepository videoRepository) {
         this.dialogManager = dialogManager;
         this.navigationModel = navigationModel;
         this.videoRepository = videoRepository;
@@ -32,7 +32,7 @@ public class VideoPlugin implements Plugin {
             }
         });
 
-        navigation.addCellRenderer(new VideoNavigationNodeRenderer(videoConfig, uiProperties));
+        browser.addCellRenderer(new VideoNavigationNodeRenderer(videoConfig, uiProperties));
     }
 
     public void init() {

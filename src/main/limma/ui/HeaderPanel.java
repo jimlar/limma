@@ -8,7 +8,7 @@ import java.awt.*;
 public class HeaderPanel extends JPanel {
     private UIProperties uiProperties;
 
-    public HeaderPanel(UIProperties uiProperties, Navigation menu) {
+    public HeaderPanel(UIProperties uiProperties, Browser browser, NavigationModel navigationModel) {
         this.uiProperties = uiProperties;
         final AntialiasLabel title = new AntialiasLabel("Limma", uiProperties);
         title.setFont(uiProperties.getLargeFont());
@@ -16,13 +16,13 @@ public class HeaderPanel extends JPanel {
         add(title);
         setOpaque(false);
 
-        menu.addNavigationListener(new NavigationListener() {
+        browser.addNavigationListener(new NavigationListener() {
 
-            public void navigationNodeFocusChanged(Navigation menu, NavigationNode newFocusedItem) {
+            public void navigationNodeFocusChanged() {
             }
         });
 
-        menu.getNavigationModel().addMenuListener(new NavigationModelListener() {
+        navigationModel.addMenuListener(new NavigationModelListener() {
             public void currentNodeChanged(NavigationModel navigationModel, NavigationNode node) {
                 updateTitle(navigationModel, title);
             }
@@ -30,12 +30,7 @@ public class HeaderPanel extends JPanel {
     }
 
     private void updateTitle(NavigationModel navigationModel, AntialiasLabel title) {
-        String text = "Limma";
-        NavigationNode node = navigationModel.getCurrentNode();
-        if (!navigationModel.getRoot().equals(node)) {
-            text = node.getTitle();
-        }
-        title.setText(text);
+        title.setText(navigationModel.getCurrentNode().getTitle());
     }
 
     protected void paintComponent(Graphics g) {

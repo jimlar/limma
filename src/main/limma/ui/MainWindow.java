@@ -46,10 +46,10 @@ public class MainWindow extends JFrame {
 
         ImageIcon background = new ImageIcon(uiProperties.getBackgroundImage());
         mainPanel = new ImagePanel(background);
-        mainPanel.setLayout(new BorderLayout());
 
-        mainPanel.add(new HeaderPanel(uiProperties, browserImpl, navigationModel), BorderLayout.NORTH);
+        mainPanel.setLayout(new BorderLayout());
         mainPanel.add(browserImpl, BorderLayout.CENTER);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         dialogManager.setRoot(mainPanel);
 

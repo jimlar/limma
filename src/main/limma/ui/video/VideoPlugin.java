@@ -32,7 +32,7 @@ public class VideoPlugin implements Plugin {
             }
         });
 
-        browser.addCellRenderer(new VideoNavigationNodeRenderer(videoConfig, uiProperties));
+        //browser.addCellRenderer(new VideoNavigationNodeRenderer(videoConfig, uiProperties));
     }
 
     public void init() {

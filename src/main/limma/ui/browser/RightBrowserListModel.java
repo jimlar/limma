@@ -1,23 +1,28 @@
 package limma.ui.browser;
 
 import javax.swing.*;
-import javax.swing.event.ListDataListener;
-import javax.swing.event.ListDataEvent;
 
 public class RightBrowserListModel extends AbstractListModel {
     private NavigationModel navigationModel;
 
     public RightBrowserListModel(NavigationModel navigationModel) {
         this.navigationModel = navigationModel;
-        navigationModel.addListDataListener(new ListDataListener() {
-            public void intervalAdded(ListDataEvent e) {
-                fireIntervalAdded(e.getSource(), e.getIndex0(), e.getIndex1());
+
+        navigationModel.addMenuListener(new NavigationModelListener() {
+            public void currentNodeChanged(NavigationModel navigationModel, NavigationNode oldNode, NavigationNode newNode) {
+                currentNodeChanged(oldNode, newNode);
             }
-            public void intervalRemoved(ListDataEvent e) {
-                fireIntervalRemoved(e.getSource(), e.getIndex0(), e.getIndex1());
-            }
-            public void contentsChanged(ListDataEvent e) {
-                fireContentsChanged(e.getSource(), e.getIndex0(), e.getIndex1());
+
+            private void currentNodeChanged(NavigationNode oldNode, NavigationNode newNode) {
+                oldNode = getCurrentNode(oldNode);
+                newNode = getCurrentNode(newNode);
+
+                if (!oldNode.getChildren().isEmpty()) {
+                    fireIntervalRemoved(this, 0, oldNode.getChildren().size() - 1);
+                }
+                if (!newNode.getChildren().isEmpty()) {
+                    fireIntervalAdded(this, 0, newNode.getChildren().size() - 1);
+                }
             }
         });
     }
@@ -27,10 +32,19 @@ public class RightBrowserListModel extends AbstractListModel {
     }
 
     private NavigationNode getCurrentNode() {
-        return navigationModel.getCurrentNode().getSelectedChild();
+        return getCurrentNode(navigationModel.getCurrentNode());
+    }
+
+    private NavigationNode getCurrentNode(NavigationNode currentNavModelNode) {
+        return currentNavModelNode.getSelectedChild();
     }
 
     public Object getElementAt(int index) {
         return getCurrentNode().getChildren().get(index);
+    }
+
+    public void fireContentsChanged() {
+        fireIntervalRemoved(this, 0, Integer.MAX_VALUE);
+        fireIntervalAdded(this, 0, getSize() - 1);
     }
 }

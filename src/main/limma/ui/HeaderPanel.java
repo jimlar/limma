@@ -20,8 +20,8 @@ public class HeaderPanel extends JPanel {
         setOpaque(false);
 
         navigationModel.addMenuListener(new NavigationModelListener() {
-            public void currentNodeChanged(NavigationModel navigationModel, NavigationNode node) {
-                title.setText(node.getTitle());
+            public void currentNodeChanged(NavigationModel navigationModel, NavigationNode oldNode, NavigationNode newNode) {
+                title.setText(newNode.getTitle());
             }
         });
     }

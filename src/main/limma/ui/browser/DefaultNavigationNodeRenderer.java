@@ -28,7 +28,7 @@ class DefaultNavigationNodeRenderer extends JLabel implements NavigationNodeRend
         this.cellHasFocus = cellHasFocus;
         node = value;
         setComponentOrientation(browserList.getComponentOrientation());
-        setForeground(isSelected ? Color.white : Color.black);
+        setForeground(isSelected || cellHasFocus ? Color.white : Color.black);
         setText(node.getTitle());
         return this;
     }
@@ -37,7 +37,7 @@ class DefaultNavigationNodeRenderer extends JLabel implements NavigationNodeRend
         Graphics2D graphics = (Graphics2D) g;
         Composite oldComposite = graphics.getComposite();
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, uiProperties.getMenuTransparency()));
-        if (selected || cellHasFocus) {
+        if (selected) {
             paintGradient(graphics);
             graphics.setColor(new Color(0x127ec7));
             graphics.drawLine(0, 0, getWidth(), 0);

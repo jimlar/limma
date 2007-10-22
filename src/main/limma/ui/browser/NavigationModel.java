@@ -1,10 +1,9 @@
 package limma.ui.browser;
 
+import javax.swing.*;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
-import javax.swing.AbstractListModel;
 
 public class NavigationModel extends AbstractListModel {
     private Set<NavigationModelListener> listeners = new HashSet<NavigationModelListener>();
@@ -19,15 +18,17 @@ public class NavigationModel extends AbstractListModel {
         root.add(node);
     }
 
-    public void setCurrentNode(NavigationNode currentNode) {
-        if (!this.currentNode.getChildren().isEmpty()) {
-            fireIntervalRemoved(this, 0, this.currentNode.getChildren().size() - 1);
+    public void setCurrentNode(NavigationNode newNode) {
+        NavigationNode oldNode = this.currentNode;
+
+        if (!oldNode.getChildren().isEmpty()) {
+            fireIntervalRemoved(this, 0, oldNode.getChildren().size() - 1);
         }
-        this.currentNode = currentNode;
+        this.currentNode = newNode;
         if (!this.currentNode.getChildren().isEmpty()) {
             fireIntervalAdded(this, 0, this.currentNode.getChildren().size() - 1);
         }
-        fireCurrentNodeChanged();
+        fireCurrentNodeChanged(oldNode, newNode);
     }
 
     public int getSize() {
@@ -50,10 +51,10 @@ public class NavigationModel extends AbstractListModel {
         return root;
     }
 
-    private void fireCurrentNodeChanged() {
+    private void fireCurrentNodeChanged(NavigationNode oldNode, NavigationNode newNode) {
         for (Iterator<NavigationModelListener> i = listeners.iterator(); i.hasNext();) {
             NavigationModelListener listener = i.next();
-            listener.currentNodeChanged(this, currentNode);
+            listener.currentNodeChanged(this, oldNode, newNode);
         }
     }
 }

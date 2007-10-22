@@ -1,24 +1,20 @@
 package limma.ui.browser;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
+import limma.ui.UIProperties;
 
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListModel;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.Position;
-
-import limma.ui.UIProperties;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BrowserList extends JList {
     private List<NavigationNodeRenderer> renderers = new ArrayList<NavigationNodeRenderer>();
 
     public BrowserList(UIProperties uiProperties, ListModel listModel) {
         super(listModel);
-
         setCellRenderer(new ListCellRenderer() {
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 NavigationNode node = (NavigationNode) value;
@@ -41,7 +37,6 @@ public class BrowserList extends JList {
                 }
             }
         });
-
     }
 
     public int getNextMatch(String prefix, int startIndex, Position.Bias bias) {

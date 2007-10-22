@@ -36,23 +36,27 @@ class MPlayerThread extends Thread {
                 if (line.startsWith("ANS_LENGTH=")) {
                     player.setTrackLengthSeconds((int) Double.parseDouble(line.substring("ANS_LENGTH=".length())));
                 }
-                Pattern p = Pattern.compile(".: *(\\d*):?(\\d*).(\\d).*");
-                Matcher m = p.matcher(line);
-                if (m.matches()) {
-                    int newPlayedSeconds;
-                    if (m.group(2).equals("")) {
-                        newPlayedSeconds = Integer.parseInt(m.group(1));
-                    } else {
-                        newPlayedSeconds = Integer.parseInt(m.group(1)) * 60 + Integer.parseInt(m.group(2));
+                try {
+                    Pattern p = Pattern.compile(".: *(\\d*):?(\\d*).(\\d).*");
+                    Matcher m = p.matcher(line);
+                    if (m.matches()) {
+                        int newPlayedSeconds;
+                        if (m.group(2).equals("")) {
+                            newPlayedSeconds = Integer.parseInt(m.group(1));
+                        } else {
+                            newPlayedSeconds = Integer.parseInt(m.group(1)) * 60 + Integer.parseInt(m.group(2));
+                        }
+                        if (playedSeconds != newPlayedSeconds) {
+                            playedSeconds = newPlayedSeconds;
+                            player.setPlayedSeconds(playedSeconds);
+                        }
                     }
-                    if (playedSeconds != newPlayedSeconds) {
-                        playedSeconds = newPlayedSeconds;
-                        player.setPlayedSeconds(playedSeconds);
-                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("can parse mplayer line: " + line);
                 }
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             kill();

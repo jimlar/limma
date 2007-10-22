@@ -36,20 +36,20 @@ public class CommandDispatcher extends EventQueue implements Startable {
             KeyEvent keyEvent = (KeyEvent) event;
             Command command = keyConfig.getCommandForEvent(keyEvent);
 
-            System.out.println("Mapped key " + KeyEvent.getKeyText(keyEvent.getKeyCode()) + " to command " + command);
+            synchronized (this) {
+                LimmaDialog topDialog = dialogManager.getTopDialog();
+                if (topDialog != null) {
+                    if (topDialog.consume(command)) {
+                        return;
+                    }
 
-            LimmaDialog topDialog = dialogManager.getTopDialog();
-            if (topDialog != null) {
-                if (topDialog.consume(command)) {
+                } else {
+                    Player player = playerManager.getPlayer();
+                    if (player == null || !player.consume(command)) {
+                        browser.consume(command);
+                    }
                     return;
                 }
-
-            } else {
-                Player player = playerManager.getPlayer();
-                if (player == null || !player.consume(command)) {
-                    browser.consume(command);
-                }
-                return;
             }
         }
         super.dispatchEvent(event);

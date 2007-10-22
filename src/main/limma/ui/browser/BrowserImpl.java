@@ -1,20 +1,15 @@
 package limma.ui.browser;
 
-import java.awt.Component;
-import java.awt.GridLayout;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import limma.application.Command;
 import limma.ui.UIProperties;
 import limma.ui.dialogs.DialogManager;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BrowserImpl extends JPanel implements Browser {
     private BrowserList leftList;
@@ -28,15 +23,27 @@ public class BrowserImpl extends JPanel implements Browser {
         this.navigationModel = model;
         this.dialogManager = dialogManager;
 
+
+        final RightBrowserListModel rightBrowserListModel = new RightBrowserListModel(model);
+
+
         leftList = createList(uiProperties, model);
-        rightList = createList(uiProperties, new RightBrowserListModel(model));
+        rightList = createList(uiProperties, rightBrowserListModel);
+
+
+        leftList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                rightList.setModel(rightBrowserListModel);
+            }
+        });
+
 
         activateLeftList();
-
-        setLayout(new GridLayout(1, 2));
-        add(wrapInScrollPane(leftList));
-        add(wrapInScrollPane(rightList));
         setOpaque(false);
+
+        setLayout(new GridBagLayout());
+        add(wrapInScrollPane(leftList), new GridBagConstraints(0, 0, 1, 1, 0.3, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        add(wrapInScrollPane(rightList), new GridBagConstraints(1, 0, 1, 1, 0.7, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
     }
 
     private Component wrapInScrollPane(BrowserList list) {
@@ -109,10 +116,14 @@ public class BrowserImpl extends JPanel implements Browser {
     }
 
     private void activateRightList() {
-        rightList.setEnabled(true);
-        leftList.setEnabled(false);
-        activeList = rightList;
-        repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                rightList.setEnabled(true);
+                leftList.setEnabled(false);
+                activeList = rightList;
+                repaint();
+            }
+        });
     }
 
     private boolean isLeftListActive() {
@@ -120,23 +131,35 @@ public class BrowserImpl extends JPanel implements Browser {
     }
 
     private void activateLeftList() {
-        rightList.setEnabled(false);
-        leftList.setEnabled(true);
-        activeList = leftList;
-        repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                rightList.setEnabled(false);
+                leftList.setEnabled(true);
+                activeList = leftList;
+                repaint();
+            }
+        });
     }
 
     private void goDown() {
         if (activeList.getSelectedIndex() < activeList.getModel().getSize() - 1) {
-            activeList.setSelectedIndex(activeList.getSelectedIndex() + 1);
-            repaint();
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    activeList.setSelectedIndex(activeList.getSelectedIndex() + 1);
+                    repaint();
+                }
+            });
         }
     }
 
     private void goUp() {
         if (activeList.getSelectedIndex() > 0) {
-            activeList.setSelectedIndex(activeList.getSelectedIndex() - 1);
-            repaint();
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    activeList.setSelectedIndex(activeList.getSelectedIndex() - 1);
+                    repaint();
+                }
+            });
         }
     }
 
@@ -146,16 +169,20 @@ public class BrowserImpl extends JPanel implements Browser {
             return;
         }
 
-        NavigationModel model = navigationModel;
-        NavigationNode currentNode = model.getCurrentNode();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                NavigationModel model = navigationModel;
+                NavigationNode currentNode = model.getCurrentNode();
 
-        NavigationNode parent = currentNode.getParent();
-        if (parent != null) {
-            model.setCurrentNode(parent);
-            activeList.setSelectedIndex(parent.getSelectedChildIndex());
-            selectedNodeChanged();
-        }
-        repaint();
+                NavigationNode parent = currentNode.getParent();
+                if (parent != null) {
+                    model.setCurrentNode(parent);
+                    activeList.setSelectedIndex(parent.getSelectedChildIndex());
+                    selectedNodeChanged();
+                }
+                repaint();
+            }
+        });
     }
 
     private void goRight() {
@@ -165,15 +192,19 @@ public class BrowserImpl extends JPanel implements Browser {
             return;
         }
 
-        NavigationNode selectedNode = getSelectedNode();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                NavigationNode selectedNode = getSelectedNode();
 
-        if (!selectedNode.getChildren().isEmpty()) {
-            navigationModel.setCurrentNode(selectedNode.getParent());
-            leftList.setSelectedIndex(selectedNode.getParent().getSelectedChildIndex());
-            rightList.setSelectedIndex(selectedNode.getSelectedChildIndex());
-            selectedNodeChanged();
-        }
-        repaint();
+                if (!selectedNode.getChildren().isEmpty()) {
+                    navigationModel.setCurrentNode(selectedNode.getParent());
+                    leftList.setSelectedIndex(selectedNode.getParent().getSelectedChildIndex());
+                    rightList.setSelectedIndex(selectedNode.getSelectedChildIndex());
+                    selectedNodeChanged();
+                }
+                repaint();
+            }
+        });
     }
 
     private void openMenu() {

@@ -1,9 +1,7 @@
 package limma.ui;
 
-import java.awt.Graphics;
-
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 public class ImagePanel extends JPanel {
     private final ImageIcon background;
@@ -11,6 +9,7 @@ public class ImagePanel extends JPanel {
     public ImagePanel(ImageIcon image) {
         this.background = image;
         setOpaque(false);
+        setBorder(BorderFactory.createEmptyBorder());
     }
 
     protected void paintComponent(Graphics g) {

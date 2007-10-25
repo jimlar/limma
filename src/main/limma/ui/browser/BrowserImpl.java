@@ -3,6 +3,7 @@ package limma.ui.browser;
 import limma.application.Command;
 import limma.ui.UIProperties;
 import limma.ui.dialogs.DialogManager;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -18,10 +19,12 @@ public class BrowserImpl extends JPanel implements Browser {
     private NavigationModel navigationModel;
     private DialogManager dialogManager;
     private Set<NavigationListener> listeners = new HashSet<NavigationListener>();
+    private UIProperties uiProperties;
 
     public BrowserImpl(final NavigationModel model, UIProperties uiProperties, DialogManager dialogManager) {
         this.navigationModel = model;
         this.dialogManager = dialogManager;
+        this.uiProperties = uiProperties;
 
 
         final RightBrowserListModel rightBrowserListModel = new RightBrowserListModel(model);
@@ -30,31 +33,32 @@ public class BrowserImpl extends JPanel implements Browser {
         leftList = createList(uiProperties, model);
         rightList = createList(uiProperties, rightBrowserListModel);
 
-
         leftList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 rightList.setModel(rightBrowserListModel);
             }
         });
 
-
         activateLeftList();
         setOpaque(false);
-
-        setLayout(new GridBagLayout());
-        add(wrapInScrollPane(leftList), new GridBagConstraints(0, 0, 1, 1, 0.3, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-        add(wrapInScrollPane(rightList), new GridBagConstraints(1, 0, 1, 1, 0.7, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        setLayout(new MigLayout("", "[200]5[ grow]", "[ grow]"));
+        add(wrapInScrollPane(leftList, false), "grow");
+        add(wrapInScrollPane(rightList, true), "grow");
+        setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
     }
 
-    private Component wrapInScrollPane(BrowserList list) {
+    private Component wrapInScrollPane(BrowserList list, boolean scrollbar) {
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setOpaque(false);
         scrollPane.setAutoscrolls(true);
         scrollPane.getViewport().setOpaque(false);
-        scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setViewportBorder(BorderFactory.createLineBorder(uiProperties.getBorderColor()));
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(scrollbar ? JScrollPane.VERTICAL_SCROLLBAR_ALWAYS : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+        JScrollBar scrollBar = scrollPane.getVerticalScrollBar();
+        scrollBar.setOpaque(false);
         return scrollPane;
     }
 

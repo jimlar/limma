@@ -16,11 +16,17 @@
       <id>localLibs</id>
       <name>Local libraries</name>
       <url>file://${basedir}/lib</url>
-      <layout>default</layout>
+      <layout>default</layout> 
     </repository>
   </repositories>
 
   <dependencies>
+
+    <dependency>
+      <groupId>miglayout</groupId>
+      <artifactId>miglayout</artifactId>
+      <version>3.0</version>
+    </dependency>
 
     <dependency>
       <groupId>jogl</groupId>

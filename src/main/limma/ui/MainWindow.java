@@ -45,11 +45,11 @@ public class MainWindow extends JFrame {
         this.add(dialogManager.getDialogManagerComponent(), BorderLayout.CENTER);
 
         ImageIcon background = new ImageIcon(uiProperties.getBackgroundImage());
-        mainPanel = new ImagePanel(background);
 
+        mainPanel = new ImagePanel(background);
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(browserImpl, BorderLayout.CENTER);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         dialogManager.setRoot(mainPanel);
 

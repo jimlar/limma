@@ -44,4 +44,8 @@ public class UIPropertiesImpl implements UIProperties {
             throw new RuntimeException(e);
         }
     }
+
+    public Color getBorderColor() {
+        return Color.BLACK;
+    }
 }

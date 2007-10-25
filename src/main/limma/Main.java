@@ -1,12 +1,5 @@
 package limma;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
 import limma.application.GeneralConfigImpl;
 import limma.application.PlayerManager;
 import limma.application.game.GameConfigImpl;
@@ -30,6 +23,9 @@ import limma.ui.video.EditMovieDialog;
 import limma.ui.video.IMDBDialog;
 import limma.ui.video.VideoPlugin;
 import org.picocontainer.defaults.DefaultPicoContainer;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 
@@ -92,6 +88,7 @@ public class Main {
                 } else {
                     System.out.println("Starting in windowed mode");
                     mainWindow.setSize(800, 600);
+                    mainWindow.setResizable(false);
                     mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     mainWindow.setVisible(true);
                 }

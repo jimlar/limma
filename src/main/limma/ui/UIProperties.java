@@ -1,6 +1,6 @@
 package limma.ui;
 
-import java.awt.Font;
+import java.awt.*;
 import java.net.URL;
 
 public interface UIProperties {
@@ -16,4 +16,6 @@ public interface UIProperties {
     float getHeaderTransparency();
 
     URL getBackgroundImage();
+
+    Color getBorderColor();
 }

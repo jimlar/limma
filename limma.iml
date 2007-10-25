@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module relativePaths="false" type="JAVA_MODULE" version="4">
+<module version="4" relativePaths="false" type="JAVA_MODULE">
+  <component name="ModuleRootManager" />
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <exclude-output />
@@ -492,6 +493,15 @@
       <library name="xmlParserAPIs">
         <CLASSES>
           <root url="jar:///Users/jimmy/.m2/repository/xerces/xmlParserAPIs/2.2.1/xmlParserAPIs-2.2.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///Users/jimmy/.m2/repository/miglayout/miglayout/3.0/miglayout-3.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

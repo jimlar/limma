@@ -1,8 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
-export JAVA_HOME=/opt/jdk1.5.0_05
-export MAVEN_HOME=/home/jimmy/bin/maven-2.0.6
+export OGLE_OSS_RESET_BUG=1
 
-export PATH=${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${PATH}
+LIMMA_HOME=`dirname $0`
 
-mvn exec:java
+cd $LIMMA_HOME
+
+LIBS=`find lib -iname *.jar | tr '\n' ':'`
+
+echo "------ Starting limma ------"
+echo "LIMMA_HOME=${LIMMA_HOME}"
+echo "LIBS=${LIBS}"
+
+
+java -classpath $LIBS limma.Main

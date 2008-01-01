@@ -11,6 +11,7 @@ import java.util.*;
 public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements VideoRepository {
     private VideoConfig videoConfig;
     private List<Video> videos = new ArrayList<Video>();
+    private Date lastUpdated = new Date();
 
 
     public XMLVideoRepositoryImpl(VideoConfig videoConfig) {
@@ -20,6 +21,10 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
         addXmlAlias("file", VideoFile.class);
         addXmlAlias("video-metadata", VideoList.class);
         reReadVideoMetaData();
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
     }
 
     public void save(Video video) {
@@ -73,6 +78,7 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
         return result;
     }
 
+
     private void storeVideoMetaData() {
         VideoList list = new VideoList();
         list.setVideos(videos);
@@ -87,6 +93,7 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
             this.videos = new ArrayList<Video>(videoList.getVideos());
         }
         Collections.sort(videos, new VideoComparator());
+        lastUpdated = new Date();
     }
 
     private List<VideoFile> getAllVideoFiles() {

@@ -6,16 +6,27 @@ import limma.domain.video.VideoRepository;
 import limma.ui.browser.model.BrowserModelNode;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 
 public class AllMoviesNode extends BrowserModelNode {
     private VideoPlayer videoPlayer;
     private VideoRepository videoRepository;
+    private List<Video> allVideos = new ArrayList<Video>();
+    private Date lastUpdated;
 
     public AllMoviesNode(VideoPlayer videoPlayer, VideoRepository videoRepository) {
         this.videoPlayer = videoPlayer;
         this.videoRepository = videoRepository;
+
+        refreshVideosIfNeeded();
+    }
+
+    private void refreshVideosIfNeeded() {
+        if (lastUpdated == null || lastUpdated.before(videoRepository.getLastUpdated())) {
+            allVideos = videoRepository.getAllVideos();
+            lastUpdated = videoRepository.getLastUpdated();
+        }
     }
 
     public String getTitle() {
@@ -23,9 +34,11 @@ public class AllMoviesNode extends BrowserModelNode {
     }
 
     public List<BrowserModelNode> getChildren() {
+        refreshVideosIfNeeded();
+
         ArrayList<BrowserModelNode> children = new ArrayList<BrowserModelNode>();
-        for (Iterator i = videoRepository.getAllVideos().iterator(); i.hasNext();) {
-            Video video = (Video) i.next();
+        for (Object o : allVideos) {
+            Video video = (Video) o;
             MovieBrowserNode movieNode = new MovieBrowserNode(video, videoPlayer, videoRepository);
             movieNode.setParent(this);
             children.add(movieNode);

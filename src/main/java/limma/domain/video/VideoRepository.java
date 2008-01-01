@@ -1,5 +1,6 @@
 package limma.domain.video;
 
+import java.util.Date;
 import java.util.List;
 
 public interface VideoRepository {
@@ -13,4 +14,6 @@ public interface VideoRepository {
     void scanForVideos();
 
     List<String> getTags();
+
+    Date getLastUpdated();
 }

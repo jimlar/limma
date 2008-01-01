@@ -5,9 +5,9 @@ import limma.application.CommandConsumer;
 
 public interface Browser extends CommandConsumer {
 
-    void addCellRenderer(NavigationNodeRenderer renderer);
+    void addCellRenderer(BrowserNodeRenderer renderer);
 
-    void addNavigationListener(NavigationListener listener);
+    void addNavigationListener(BrowserListener listener);
 
     boolean consume(Command command);
 }

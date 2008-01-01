@@ -5,8 +5,8 @@ import limma.application.PlayerManager;
 import limma.application.PlayerManagerListener;
 import limma.application.Plugin;
 import limma.ui.browser.BrowserImpl;
-import limma.ui.browser.NavigationListener;
-import limma.ui.browser.NavigationModel;
+import limma.ui.browser.BrowserListener;
+import limma.ui.browser.model.BrowserModel;
 import limma.ui.dialogs.DialogManager;
 
 import javax.swing.*;
@@ -18,7 +18,7 @@ import java.io.IOException;
 public class MainWindow extends JFrame {
     private JPanel mainPanel;
 
-    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, NavigationModel navigationModel, BrowserImpl browserImpl, UIProperties uiProperties, final GeneralConfig generalConfig) {
+    public MainWindow(DialogManager dialogManager, Plugin[] plugins, PlayerManager playerManager, BrowserModel browserModel, BrowserImpl browserImpl, UIProperties uiProperties, final GeneralConfig generalConfig) {
         final SlidePanel playerSlidePanel = addPlayerSlidePanel();
         final Timer slideInPlayerTimer = new Timer(2 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -34,7 +34,7 @@ public class MainWindow extends JFrame {
             }
         });
 
-        browserImpl.addNavigationListener(new NavigationListener() {
+        browserImpl.addNavigationListener(new BrowserListener() {
             public void navigationNodeFocusChanged() {
                 playerSlidePanel.slideOut();
                 slideInPlayerTimer.restart();
@@ -59,7 +59,7 @@ public class MainWindow extends JFrame {
             plugin.init();
         }
 
-        navigationModel.add(new limma.ui.browser.MenuItem("Shutdown") {
+        browserModel.add(new limma.ui.browser.model.MenuItem("Shutdown") {
             public void performAction(DialogManager dialogManager) {
                 try {
                     generalConfig.getShutdownCommand().execute();

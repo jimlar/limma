@@ -1,28 +1,28 @@
 package limma.application.game;
 
 import limma.application.Plugin;
-import limma.ui.browser.NavigationModel;
-import limma.ui.browser.SimpleNavigationNode;
+import limma.ui.browser.model.BrowserModel;
+import limma.ui.browser.model.SimpleBrowserNode;
 import limma.ui.dialogs.DialogManager;
 
 public class GamePlugin implements Plugin {
     private DialogManager dialogManager;
     private GameConfig gameConfig;
-    private NavigationModel navigationModel;
+    private BrowserModel browserModel;
 
-    public GamePlugin(DialogManager dialogManager, GameConfig gameConfig, NavigationModel navigationModel) {
+    public GamePlugin(DialogManager dialogManager, GameConfig gameConfig, BrowserModel browserModel) {
         this.dialogManager = dialogManager;
         this.gameConfig = gameConfig;
-        this.navigationModel = navigationModel;
+        this.browserModel = browserModel;
     }
 
     public void init() {
-        SimpleNavigationNode gamesNode = new SimpleNavigationNode("Games");
-        navigationModel.add(gamesNode);
+        SimpleBrowserNode gamesNode = new SimpleBrowserNode("Games");
+        browserModel.add(gamesNode);
 
-        SimpleNavigationNode c64Node = new SimpleNavigationNode("Commodore 64");
+        SimpleBrowserNode c64Node = new SimpleBrowserNode("Commodore 64");
         gamesNode.add(c64Node);
-        SimpleNavigationNode snesNode = new SimpleNavigationNode("Super Nintendo");
+        SimpleBrowserNode snesNode = new SimpleBrowserNode("Super Nintendo");
         gamesNode.add(snesNode);
 
         dialogManager.executeInDialog(new LoadC64GamesTask(gameConfig, c64Node));

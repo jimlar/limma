@@ -1,6 +1,6 @@
 package limma.application.game;
 
-import limma.ui.browser.SimpleNavigationNode;
+import limma.ui.browser.model.SimpleBrowserNode;
 import limma.ui.dialogs.Task;
 import limma.ui.dialogs.TaskFeedback;
 import limma.utils.DirectoryScanner;
@@ -11,10 +11,10 @@ import java.util.Iterator;
 
 class LoadSnesGamesTask implements Task {
     private final File gamesDir;
-    private SimpleNavigationNode snesNode;
+    private SimpleBrowserNode snesNode;
     private GameConfig gameConfig;
 
-    public LoadSnesGamesTask(GameConfig gameConfig, SimpleNavigationNode snesNode) {
+    public LoadSnesGamesTask(GameConfig gameConfig, SimpleBrowserNode snesNode) {
         this.snesNode = snesNode;
         this.gameConfig = gameConfig;
         this.gamesDir = gameConfig.getSnesGamesDir();
@@ -36,7 +36,7 @@ class LoadSnesGamesTask implements Task {
         snesNode.removeAllChildren();
         for (Iterator i = files.iterator(); i.hasNext();) {
             GameFile gameFile = (GameFile) i.next();
-            snesNode.add(new GameNavigationNode(gameFile, gameConfig));
+            snesNode.add(new GameBrowserNode(gameFile, gameConfig));
         }
         snesNode.sortByTitle();
     }

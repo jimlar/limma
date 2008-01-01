@@ -1,6 +1,7 @@
 package limma.ui.browser;
 
 import limma.ui.UIProperties;
+import limma.ui.browser.model.BrowserModelNode;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -11,27 +12,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BrowserList extends JList {
-    private List<NavigationNodeRenderer> renderers = new ArrayList<NavigationNodeRenderer>();
+    private List<BrowserNodeRenderer> renderers = new ArrayList<BrowserNodeRenderer>();
 
     public BrowserList(UIProperties uiProperties, ListModel listModel) {
         super(listModel);
         setCellRenderer(new ListCellRenderer() {
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                NavigationNode node = (NavigationNode) value;
-                for (NavigationNodeRenderer renderer : renderers) {
+                BrowserModelNode node = (BrowserModelNode) value;
+                for (BrowserNodeRenderer renderer : renderers) {
                     if (renderer.supportsRendering(node)) {
                         return renderer.getNodeRendererComponent(BrowserList.this, node, index, isSelected & isEnabled(), isSelected);
                     }
                 }
-                throw new IllegalArgumentException("Rendering of " + value + " is not supported (is it a subclass of NavigationNode?)");
+                throw new IllegalArgumentException("Rendering of " + value + " is not supported (is it a subclass of BrowserModelNode?)");
             }
         });
         setOpaque(false);
-        addCellRenderer(new DefaultNavigationNodeRenderer(uiProperties));
+        addCellRenderer(new DefaultBrowserNodeRenderer(uiProperties));
 
         addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
-                NavigationNode selectedNode = (NavigationNode) getSelectedValue();
+                BrowserModelNode selectedNode = (BrowserModelNode) getSelectedValue();
                 if (selectedNode != null) {
                     selectedNode.getParent().setSelectedChildIndex(getSelectedIndex());
                 }
@@ -43,7 +44,7 @@ public class BrowserList extends JList {
         return -1;
     }
 
-    public void addCellRenderer(NavigationNodeRenderer renderer) {
+    public void addCellRenderer(BrowserNodeRenderer renderer) {
         renderers.add(0, renderer);
     }
 

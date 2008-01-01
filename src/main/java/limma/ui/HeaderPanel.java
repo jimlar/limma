@@ -1,9 +1,9 @@
 package limma.ui;
 
 import limma.ui.browser.Browser;
-import limma.ui.browser.NavigationModel;
-import limma.ui.browser.NavigationModelListener;
-import limma.ui.browser.NavigationNode;
+import limma.ui.browser.model.BrowserModel;
+import limma.ui.browser.model.BrowserModelListener;
+import limma.ui.browser.model.BrowserModelNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.awt.*;
 public class HeaderPanel extends JPanel {
     private UIProperties uiProperties;
 
-    public HeaderPanel(UIProperties uiProperties, Browser browser, NavigationModel navigationModel) {
+    public HeaderPanel(UIProperties uiProperties, Browser browser, BrowserModel browserModel) {
         this.uiProperties = uiProperties;
         final AntialiasLabel title = new AntialiasLabel("Limma", uiProperties);
         title.setFont(uiProperties.getLargeFont());
@@ -19,8 +19,8 @@ public class HeaderPanel extends JPanel {
         add(title);
         setOpaque(false);
 
-        navigationModel.addMenuListener(new NavigationModelListener() {
-            public void currentNodeChanged(NavigationModel navigationModel, NavigationNode oldNode, NavigationNode newNode) {
+        browserModel.addListener(new BrowserModelListener() {
+            public void currentNodeChanged(BrowserModel browserModel, BrowserModelNode oldNode, BrowserModelNode newNode) {
                 title.setText(newNode.getTitle());
             }
         });

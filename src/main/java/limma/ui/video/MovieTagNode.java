@@ -3,13 +3,13 @@ package limma.ui.video;
 import limma.application.video.VideoPlayer;
 import limma.domain.video.Video;
 import limma.domain.video.VideoRepository;
-import limma.ui.browser.NavigationNode;
+import limma.ui.browser.model.BrowserModelNode;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class MovieTagNode extends NavigationNode {
+public class MovieTagNode extends BrowserModelNode {
     private String tag;
     private VideoPlayer videoPlayer;
     private VideoRepository videoRepository;
@@ -24,12 +24,12 @@ public class MovieTagNode extends NavigationNode {
         return tag;
     }
 
-    public List<NavigationNode> getChildren() {
-        ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
+    public List<BrowserModelNode> getChildren() {
+        ArrayList<BrowserModelNode> children = new ArrayList<BrowserModelNode>();
         List<Video> videosWithTag = videoRepository.getVideosWithTag(tag);
         for (Iterator<Video> i = videosWithTag.iterator(); i.hasNext();) {
             Video video = i.next();
-            MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, videoRepository);
+            MovieBrowserNode movieNode = new MovieBrowserNode(video, videoPlayer, videoRepository);
             movieNode.setParent(this);
             children.add(movieNode);
         }

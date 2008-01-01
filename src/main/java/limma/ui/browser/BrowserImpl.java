@@ -2,6 +2,8 @@ package limma.ui.browser;
 
 import limma.application.Command;
 import limma.ui.UIProperties;
+import limma.ui.browser.model.BrowserModel;
+import limma.ui.browser.model.BrowserModelNode;
 import limma.ui.dialogs.DialogManager;
 import net.miginfocom.swing.MigLayout;
 
@@ -16,28 +18,19 @@ public class BrowserImpl extends JPanel implements Browser {
     private BrowserList leftList;
     private BrowserList rightList;
     private BrowserList activeList;
-    private NavigationModel navigationModel;
+    private BrowserModel browserModel;
     private DialogManager dialogManager;
-    private Set<NavigationListener> listeners = new HashSet<NavigationListener>();
+    private Set<BrowserListener> listeners = new HashSet<BrowserListener>();
     private UIProperties uiProperties;
 
-    public BrowserImpl(final NavigationModel model, UIProperties uiProperties, DialogManager dialogManager) {
-        this.navigationModel = model;
+    public BrowserImpl(final BrowserModel model, UIProperties uiProperties, DialogManager dialogManager) {
+        this.browserModel = model;
         this.dialogManager = dialogManager;
         this.uiProperties = uiProperties;
 
 
-        final RightBrowserListModel rightBrowserListModel = new RightBrowserListModel(model);
-
-
-        leftList = createList(uiProperties, model);
-        rightList = createList(uiProperties, rightBrowserListModel);
-
-        leftList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                rightList.setModel(rightBrowserListModel);
-            }
-        });
+        leftList = createList(uiProperties, model.getLeftListModel(), model.getLeftListSelectionModel());
+        rightList = createList(uiProperties, model.getRightListModel(), model.getRightListSelectionModel());
 
         activateLeftList();
         setOpaque(false);
@@ -62,30 +55,35 @@ public class BrowserImpl extends JPanel implements Browser {
         return scrollPane;
     }
 
-    private BrowserList createList(UIProperties uiProperties, ListModel model) {
+    private BrowserList createList(UIProperties uiProperties, ListModel model, ListSelectionModel listSelectionModel) {
         BrowserList list = new BrowserList(uiProperties, model);
+        list.setSelectionModel(listSelectionModel);
         list.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
-                selectedNodeChanged();
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        selectedNodeChanged();
+                    }
+                });
             }
         });
         return list;
     }
 
-    public void addCellRenderer(NavigationNodeRenderer renderer) {
+    public void addCellRenderer(BrowserNodeRenderer renderer) {
         leftList.addCellRenderer(renderer);
         rightList.addCellRenderer(renderer);
     }
 
-    public void addNavigationListener(NavigationListener listener) {
+    public void addNavigationListener(BrowserListener listener) {
         listeners.add(listener);
     }
 
-    public NavigationNode getSelectedNode() {
+    public BrowserModelNode getSelectedNode() {
         if (isLeftListActive()) {
-            return navigationModel.getCurrentNode().getSelectedChild();
+            return browserModel.getBaseNode().getSelectedChild();
         } else {
-            return navigationModel.getCurrentNode().getSelectedChild().getSelectedChild();
+            return browserModel.getBaseNode().getSelectedChild().getSelectedChild();
         }
     }
 
@@ -175,12 +173,12 @@ public class BrowserImpl extends JPanel implements Browser {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                NavigationModel model = navigationModel;
-                NavigationNode currentNode = model.getCurrentNode();
+                BrowserModel model = browserModel;
+                BrowserModelNode currentNode = model.getBaseNode();
 
-                NavigationNode parent = currentNode.getParent();
+                BrowserModelNode parent = currentNode.getParent();
                 if (parent != null) {
-                    model.setCurrentNode(parent);
+                    model.setBaseNode(parent);
                     activeList.setSelectedIndex(parent.getSelectedChildIndex());
                     selectedNodeChanged();
                 }
@@ -198,10 +196,10 @@ public class BrowserImpl extends JPanel implements Browser {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                NavigationNode selectedNode = getSelectedNode();
+                BrowserModelNode selectedNode = getSelectedNode();
 
                 if (!selectedNode.getChildren().isEmpty()) {
-                    navigationModel.setCurrentNode(selectedNode.getParent());
+                    browserModel.setBaseNode(selectedNode.getParent());
                     leftList.setSelectedIndex(selectedNode.getParent().getSelectedChildIndex());
                     rightList.setSelectedIndex(selectedNode.getSelectedChildIndex());
                     selectedNodeChanged();
@@ -212,15 +210,15 @@ public class BrowserImpl extends JPanel implements Browser {
     }
 
     private void openMenu() {
-        java.util.List<MenuItem> menuItems = getSelectedNode().getAllMenuItems();
+        java.util.List<limma.ui.browser.model.MenuItem> menuItems = getSelectedNode().getAllMenuItems();
         if (!menuItems.isEmpty()) {
-            NavigationPopupMenu menu = (NavigationPopupMenu) dialogManager.createAndOpen(NavigationPopupMenu.class);
+            BrowserPopupMenu menu = (BrowserPopupMenu) dialogManager.createAndOpen(BrowserPopupMenu.class);
             menu.setItems(menuItems);
         }
     }
 
-    protected void selectedNodeChanged() {
-        for (NavigationListener listener : listeners) {
+    private void selectedNodeChanged() {
+        for (BrowserListener listener : listeners) {
             listener.navigationNodeFocusChanged();
         }
     }

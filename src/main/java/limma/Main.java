@@ -13,8 +13,8 @@ import limma.domain.music.XMLMusicRepositoryImpl;
 import limma.domain.video.XMLVideoRepositoryImpl;
 import limma.ui.*;
 import limma.ui.browser.BrowserImpl;
-import limma.ui.browser.NavigationModel;
-import limma.ui.browser.NavigationPopupMenu;
+import limma.ui.browser.BrowserPopupMenu;
+import limma.ui.browser.model.BrowserModel;
 import limma.ui.dialogs.DialogFactory;
 import limma.ui.dialogs.DialogManagerImpl;
 import limma.ui.dialogs.LimmaDialog;
@@ -39,9 +39,9 @@ public class Main {
         pico.registerComponentImplementation(ShuttingDownDialog.class);
         pico.registerComponentImplementation(UIPropertiesImpl.class);
         pico.registerComponentImplementation(PlayerManager.class);
-        pico.registerComponentImplementation(NavigationModel.class);
+        pico.registerComponentImplementation(BrowserModel.class);
         pico.registerComponentImplementation(BrowserImpl.class);
-        pico.registerComponentImplementation(NavigationPopupMenu.class);
+        pico.registerComponentImplementation(BrowserPopupMenu.class);
         pico.registerComponentImplementation(DialogManagerImpl.class);
         pico.registerComponentImplementation(CursorHider.class);
 

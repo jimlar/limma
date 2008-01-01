@@ -3,10 +3,10 @@ package limma.ui.music;
 import limma.application.PlayerManager;
 import limma.application.music.MusicPlayer;
 import limma.domain.music.MusicFile;
-import limma.ui.browser.SimpleNavigationNode;
+import limma.ui.browser.model.SimpleBrowserNode;
 import limma.ui.dialogs.DialogManager;
 
-public class TrackNode extends SimpleNavigationNode {
+public class TrackNode extends SimpleBrowserNode {
     private MusicFile musicFile;
     private MusicPlayer musicPlayer;
     private PlayerManager playerManager;

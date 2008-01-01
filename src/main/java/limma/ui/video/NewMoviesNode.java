@@ -3,11 +3,11 @@ package limma.ui.video;
 import limma.application.video.VideoPlayer;
 import limma.domain.video.Video;
 import limma.domain.video.VideoRepository;
-import limma.ui.browser.NavigationNode;
+import limma.ui.browser.model.BrowserModelNode;
 
 import java.util.*;
 
-public class NewMoviesNode extends NavigationNode {
+public class NewMoviesNode extends BrowserModelNode {
     private int numberOfDays;
     private VideoPlayer videoPlayer;
     private VideoRepository videoRepository;
@@ -22,26 +22,26 @@ public class NewMoviesNode extends NavigationNode {
         return "New (" + numberOfDays + " days)";
     }
 
-    public List<NavigationNode> getChildren() {
+    public List<BrowserModelNode> getChildren() {
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.add(Calendar.DAY_OF_YEAR, -numberOfDays);
         Date boundaryDate = calendar.getTime();
 
-        ArrayList<NavigationNode> children = new ArrayList<NavigationNode>();
+        ArrayList<BrowserModelNode> children = new ArrayList<BrowserModelNode>();
         for (Iterator i = videoRepository.getAllVideos().iterator(); i.hasNext();) {
             Video video = (Video) i.next();
             if (video.getCreated() != null && boundaryDate.before(video.getCreated())) {
 
-                MovieNavigationNode movieNode = new MovieNavigationNode(video, videoPlayer, videoRepository);
+                MovieBrowserNode movieNode = new MovieBrowserNode(video, videoPlayer, videoRepository);
                 movieNode.setParent(this);
                 children.add(movieNode);
             }
         }
 
-        Collections.sort(children, new Comparator<NavigationNode>() {
-            public int compare(NavigationNode o1, NavigationNode o2) {
-                MovieNavigationNode node1 = (MovieNavigationNode) o1;
-                MovieNavigationNode node2 = (MovieNavigationNode) o2;
+        Collections.sort(children, new Comparator<BrowserModelNode>() {
+            public int compare(BrowserModelNode o1, BrowserModelNode o2) {
+                MovieBrowserNode node1 = (MovieBrowserNode) o1;
+                MovieBrowserNode node2 = (MovieBrowserNode) o2;
                 return node2.getVideo().getCreated().compareTo(node1.getVideo().getCreated());
             }
         });

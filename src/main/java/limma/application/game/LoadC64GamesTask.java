@@ -1,6 +1,6 @@
 package limma.application.game;
 
-import limma.ui.browser.SimpleNavigationNode;
+import limma.ui.browser.model.SimpleBrowserNode;
 import limma.ui.dialogs.Task;
 import limma.ui.dialogs.TaskFeedback;
 import limma.utils.DirectoryScanner;
@@ -11,10 +11,10 @@ import java.util.Iterator;
 
 class LoadC64GamesTask implements Task {
     private final File gamesDir;
-    private SimpleNavigationNode c64Node;
+    private SimpleBrowserNode c64Node;
     private GameConfig gameConfig;
 
-    public LoadC64GamesTask(GameConfig gameConfig, SimpleNavigationNode c64Node) {
+    public LoadC64GamesTask(GameConfig gameConfig, SimpleBrowserNode c64Node) {
         this.c64Node = c64Node;
         this.gameConfig = gameConfig;
         this.gamesDir = gameConfig.getC64GamesDir();
@@ -35,7 +35,7 @@ class LoadC64GamesTask implements Task {
 
         for (Iterator i = files.iterator(); i.hasNext();) {
             GameFile gameFile = (GameFile) i.next();
-            c64Node.add(new GameNavigationNode(gameFile, gameConfig));
+            c64Node.add(new GameBrowserNode(gameFile, gameConfig));
         }
         c64Node.sortByTitle();
     }

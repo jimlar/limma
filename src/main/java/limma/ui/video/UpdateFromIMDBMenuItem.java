@@ -1,7 +1,7 @@
 package limma.ui.video;
 
 import limma.domain.video.Video;
-import limma.ui.browser.MenuItem;
+import limma.ui.browser.model.MenuItem;
 import limma.ui.dialogs.DialogManager;
 
 class UpdateFromIMDBMenuItem extends MenuItem {

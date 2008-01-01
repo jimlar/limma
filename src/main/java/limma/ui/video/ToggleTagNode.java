@@ -2,12 +2,12 @@ package limma.ui.video;
 
 import limma.domain.video.Video;
 import limma.domain.video.VideoRepository;
-import limma.ui.browser.NavigationNode;
+import limma.ui.browser.model.BrowserModelNode;
 import limma.ui.dialogs.DialogManager;
 import limma.ui.dialogs.Task;
 import limma.ui.dialogs.TaskFeedback;
 
-class ToggleTagNode extends NavigationNode {
+class ToggleTagNode extends BrowserModelNode {
     private String tag;
     private Video video;
     private VideoRepository videoRepository;

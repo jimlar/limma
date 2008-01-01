@@ -7,23 +7,23 @@ import limma.application.video.VideoPlayer;
 import limma.domain.video.VideoRepository;
 import limma.ui.UIProperties;
 import limma.ui.browser.Browser;
-import limma.ui.browser.MenuItem;
-import limma.ui.browser.NavigationModel;
+import limma.ui.browser.model.BrowserModel;
+import limma.ui.browser.model.MenuItem;
 import limma.ui.dialogs.DialogManager;
 
 
 public class VideoPlugin implements Plugin {
     private DialogManager dialogManager;
-    private NavigationModel navigationModel;
+    private BrowserModel browserModel;
     private VideoRepository videoRepository;
-    private MoviesNavigationNode moviesNode;
+    private MoviesBrowserNode moviesNode;
 
-    public VideoPlugin(final DialogManager dialogManager, VideoConfig videoConfig, VideoPlayer videoPlayer, NavigationModel navigationModel, Browser browser, PlayerManager playerManager, UIProperties uiProperties, VideoRepository videoRepository) {
+    public VideoPlugin(final DialogManager dialogManager, VideoConfig videoConfig, VideoPlayer videoPlayer, BrowserModel browserModel, Browser browser, PlayerManager playerManager, UIProperties uiProperties, VideoRepository videoRepository) {
         this.dialogManager = dialogManager;
-        this.navigationModel = navigationModel;
+        this.browserModel = browserModel;
         this.videoRepository = videoRepository;
 
-        moviesNode = new MoviesNavigationNode(videoPlayer, videoRepository);
+        moviesNode = new MoviesBrowserNode(videoPlayer, videoRepository);
         moviesNode.add(new PlayDVDDiscNode(dialogManager, videoConfig, playerManager));
 
         moviesNode.add(new MenuItem("Scan for new videos") {
@@ -32,11 +32,11 @@ public class VideoPlugin implements Plugin {
             }
         });
 
-        //browser.addCellRenderer(new VideoNavigationNodeRenderer(videoConfig, uiProperties));
+        //browser.addCellRenderer(new VideoBrowserNodeRenderer(videoConfig, uiProperties));
     }
 
     public void init() {
-        navigationModel.add(moviesNode);
+        browserModel.add(moviesNode);
     }
 
     private void scanForVideos() {

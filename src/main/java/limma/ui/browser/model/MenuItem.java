@@ -1,4 +1,4 @@
-package limma.ui.browser;
+package limma.ui.browser.model;
 
 import limma.ui.dialogs.DialogManager;
 

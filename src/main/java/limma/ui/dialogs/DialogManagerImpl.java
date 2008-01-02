@@ -32,24 +32,38 @@ public class DialogManagerImpl implements DialogManager {
         dialog.executeInDialog(task);
     }
 
-    public synchronized void open(LimmaDialog dialog) {
+    public synchronized void open(final LimmaDialog dialog) {
         if (dialogStack.contains(dialog)) {
             return;
         }
         dialogStack.push(dialog);
-        layeredPane.add(dialog, new Integer(JLayeredPane.POPUP_LAYER + dialogStack.size()));
-        dialog.setVisible(true);
-        dialog.invalidate();
-        dialog.validate();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                layeredPane.add(dialog, new Integer(JLayeredPane.POPUP_LAYER + dialogStack.size()));
+            }
+        });
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                dialog.setVisible(true);
+            }
+        });
     }
 
-    public synchronized void close(LimmaDialog dialog) {
+    public synchronized void close(final LimmaDialog dialog) {
         if (!dialogStack.contains(dialog)) {
             return;
         }
         dialogStack.remove(dialog);
-        dialog.setVisible(false);
-        layeredPane.remove(dialog);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                dialog.setVisible(false);
+            }
+        });
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                layeredPane.remove(dialog);
+            }
+        });
     }
 
     public synchronized LimmaDialog getTopDialog() {
@@ -60,8 +74,12 @@ public class DialogManagerImpl implements DialogManager {
     }
 
     public LimmaDialog createAndOpen(Class dialogClass) {
-        LimmaDialog limmaDialog = dialogFactory.createDialog(dialogClass);
+        LimmaDialog limmaDialog = create(dialogClass);
         limmaDialog.open();
         return limmaDialog;
+    }
+
+    public LimmaDialog create(Class dialogClass) {
+        return dialogFactory.createDialog(dialogClass);
     }
 }

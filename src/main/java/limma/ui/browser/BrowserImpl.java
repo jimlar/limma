@@ -123,7 +123,6 @@ public class BrowserImpl extends JPanel implements Browser {
                 rightList.setEnabled(true);
                 leftList.setEnabled(false);
                 activeList = rightList;
-                repaint();
             }
         });
     }
@@ -138,7 +137,6 @@ public class BrowserImpl extends JPanel implements Browser {
                 rightList.setEnabled(false);
                 leftList.setEnabled(true);
                 activeList = leftList;
-                repaint();
             }
         });
     }
@@ -148,7 +146,6 @@ public class BrowserImpl extends JPanel implements Browser {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     activeList.setSelectedIndex(activeList.getSelectedIndex() + 1);
-                    repaint();
                 }
             });
         }
@@ -159,7 +156,6 @@ public class BrowserImpl extends JPanel implements Browser {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     activeList.setSelectedIndex(activeList.getSelectedIndex() - 1);
-                    repaint();
                 }
             });
         }
@@ -182,7 +178,6 @@ public class BrowserImpl extends JPanel implements Browser {
                     activeList.setSelectedIndex(parent.getSelectedChildIndex());
                     selectedNodeChanged();
                 }
-                repaint();
             }
         });
     }
@@ -204,7 +199,6 @@ public class BrowserImpl extends JPanel implements Browser {
                     rightList.setSelectedIndex(selectedNode.getSelectedChildIndex());
                     selectedNodeChanged();
                 }
-                repaint();
             }
         });
     }

@@ -13,7 +13,8 @@ class UpdateFromIMDBMenuItem extends MenuItem {
     }
 
     public void performAction(DialogManager dialogManager) {
-        IMDBDialog imdbDialog = (IMDBDialog) dialogManager.createAndOpen(IMDBDialog.class);
+        IMDBDialog imdbDialog = (IMDBDialog) dialogManager.create(IMDBDialog.class);
         imdbDialog.setVideo(video);
+        imdbDialog.open();
     }
 }

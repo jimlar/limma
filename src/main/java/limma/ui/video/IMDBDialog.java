@@ -40,16 +40,19 @@ public class IMDBDialog extends LimmaDialog {
 
     public void open() {
         super.open();
-        textField.setText("");
-        textField.requestFocusInWindow();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                textField.requestFocusInWindow();
+            }
+        });
     }
 
-    public void setVideo(Video video) {
+    public void setVideo(final Video video) {
         this.video = video;
-        textField.setText("");
         if (video.hasImdbNumber()) {
             textField.setText(String.valueOf(video.getImdbNumber()));
         } else {
+            textField.setText("");
             dialogManager.executeInDialog(new DetectImdbNumberTask(video, textField));
         }
     }
@@ -61,8 +64,12 @@ public class IMDBDialog extends LimmaDialog {
                 close();
                 return true;
             case ACTION:
-                dialogManager.executeInDialog(new UpdateFromImdbTask(imdbService, videoConfig, video, getEnteredImdbNumber(), videoRepository));
-                close();
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        dialogManager.executeInDialog(new UpdateFromImdbTask(imdbService, videoConfig, video, getEnteredImdbNumber(), videoRepository));
+                        close();
+                    }
+                });
                 return true;
         }
         return false;
@@ -71,5 +78,4 @@ public class IMDBDialog extends LimmaDialog {
     private int getEnteredImdbNumber() {
         return Integer.parseInt(textField.getText());
     }
-
 }

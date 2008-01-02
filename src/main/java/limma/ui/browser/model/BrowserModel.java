@@ -34,8 +34,13 @@ public class BrowserModel {
 
             private void updateRightModels(int leftSelectedIndex) {
                 rightListModel.fireContentsChanged();
-                int rightSelectionIndex = getBaseNode().getChildren().get(leftSelectedIndex).getSelectedChildIndex();
-                rightListSelectionModel.setSelectionInterval(rightSelectionIndex, rightSelectionIndex);
+                BrowserModelNode selectedLeftNode = getBaseNode().getChildren().get(leftSelectedIndex);
+                int rightSelectionIndex = selectedLeftNode.getSelectedChildIndex();
+                if (selectedLeftNode.getSelectedChild() != null) {
+                    rightListSelectionModel.setSelectionInterval(rightSelectionIndex, rightSelectionIndex);
+                } else {
+                    rightListSelectionModel.clearSelection();
+                }
             }
         });
     }

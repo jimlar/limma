@@ -27,6 +27,42 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
         return lastUpdated;
     }
 
+    public List<Video> getVideosOfGenre(String genre) {
+        ArrayList<Video> result = new ArrayList<Video>();
+        for (Video video : videos) {
+            if (video.getGenres().contains(genre)) {
+                result.add(video);
+            }
+        }
+        return result;
+    }
+
+    public Set<String> getAllGenres() {
+        Set<String> result = new HashSet<String>();
+        for (Video video : getAllVideos()) {
+            result.addAll(video.getGenres());
+        }
+        return result;
+    }
+
+    public List<Video> getVideosWithActor(String actor) {
+        ArrayList<Video> result = new ArrayList<Video>();
+        for (Video video : videos) {
+            if (video.getActors().contains(actor)) {
+                result.add(video);
+            }
+        }
+        return result;
+    }
+
+    public Set<String> getAllActors() {
+        Set<String> result = new HashSet<String>();
+        for (Video video : getAllVideos()) {
+            result.addAll(video.getActors());
+        }
+        return result;
+    }
+
     public void save(Video video) {
         storeVideoMetaData();
     }
@@ -37,8 +73,7 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
 
     public List<Video> getVideosWithTag(String tag) {
         ArrayList<Video> result = new ArrayList<Video>();
-        for (Iterator i = getAllVideos().iterator(); i.hasNext();) {
-            Video video = (Video) i.next();
+        for (Video video : getAllVideos()) {
             if (video.getTags().contains(tag)) {
                 result.add(video);
             }
@@ -67,8 +102,8 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
 
     public List<String> getTags() {
         Set<String> tags = new HashSet<String>();
-        for (Iterator i = videos.iterator(); i.hasNext();) {
-            Video video = (Video) i.next();
+        for (Object video1 : videos) {
+            Video video = (Video) video1;
             tags.addAll(video.getTags());
         }
 
@@ -98,16 +133,15 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
 
     private List<VideoFile> getAllVideoFiles() {
         ArrayList<VideoFile> videoFiles = new ArrayList<VideoFile>();
-        for (Iterator i = videos.iterator(); i.hasNext();) {
-            Video video = (Video) i.next();
+        for (Object video1 : videos) {
+            Video video = (Video) video1;
             videoFiles.addAll(video.getFiles());
         }
         return videoFiles;
     }
 
     private void updateFileVideos(List<File> moviesFiles, List<File> persistentFiles) {
-        for (Iterator<File> i = moviesFiles.iterator(); i.hasNext();) {
-            File movieFile = i.next();
+        for (File movieFile : moviesFiles) {
             if (!persistentFiles.contains(movieFile)) {
                 System.out.println("Adding movie " + movieFile);
 
@@ -118,8 +152,7 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
                 persistentFiles.add(movieFile);
 
                 List<File> similarFiles = findSimilarFiles(movieFile, moviesFiles, videoConfig.getSimilarFileDistance());
-                for (Iterator j = similarFiles.iterator(); j.hasNext();) {
-                    File similarFile = (File) j.next();
+                for (File similarFile : similarFiles) {
                     System.out.println(" - found similar file " + similarFile);
                     if (!persistentFiles.contains(similarFile)) {
                         videoFile = new VideoFile(similarFile.getAbsolutePath());
@@ -149,19 +182,16 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
     }
 
     private List<File> getPersistentFiles() {
-        List videoFiles = getAllVideoFiles();
+        List<VideoFile> videoFiles = getAllVideoFiles();
         ArrayList<File> persistentFiles = new ArrayList<File>();
-        for (Iterator i = videoFiles.iterator(); i.hasNext();) {
-            VideoFile videoFile = (VideoFile) i.next();
+        for (VideoFile videoFile : videoFiles) {
             persistentFiles.add(videoFile.getFile());
         }
         return persistentFiles;
     }
 
     private void updateDvdDirectories(List<File> dvdFiles, List<File> persistentFiles) {
-        for (Iterator<File> i = dvdFiles.iterator(); i.hasNext();) {
-            File dvdFile = i.next();
-
+        for (File dvdFile : dvdFiles) {
             if (!persistentFiles.contains(dvdFile)) {
                 System.out.println("Adding DVD directory: " + dvdFile);
 
@@ -174,8 +204,8 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
 
     private void deleteVideosNoLongerOnDisk() {
         List<VideoFile> videoFiles = getAllVideoFiles();
-        for (Iterator i = videoFiles.iterator(); i.hasNext();) {
-            VideoFile videoFile = (VideoFile) i.next();
+        for (Object videoFile1 : videoFiles) {
+            VideoFile videoFile = (VideoFile) videoFile1;
             Video video = videoFile.getVideo();
 
             if (!videoFile.getFile().exists()) {

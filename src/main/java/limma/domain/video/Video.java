@@ -1,8 +1,6 @@
 package limma.domain.video;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 public class Video {
@@ -16,6 +14,8 @@ public class Video {
     private Set<VideoFile> files = new HashSet<VideoFile>();
     private Set<String> tags = new HashSet<String>();
     private Date created;
+    private Set<String> genres = new HashSet<String>();
+    private List<String> actors = new ArrayList<String>();
 
 
     public Video(String title) {
@@ -120,5 +120,27 @@ public class Video {
 
     public void setTags(Set<String> tags) {
         this.tags = tags;
+    }
+
+    public void setGenres(Set<String> genres) {
+        this.genres = genres;
+    }
+
+    public void setActors(List<String> actors) {
+        this.actors = actors;
+    }
+
+    public Set<String> getGenres() {
+        if (genres == null) {
+            return Collections.emptySet();
+        }
+        return genres;
+    }
+
+    public List<String> getActors() {
+        if (actors == null) {
+            return Collections.emptyList();
+        }
+        return actors;
     }
 }

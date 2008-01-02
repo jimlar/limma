@@ -43,6 +43,10 @@ class UpdateFromImdbTask implements Task {
             video.setPlot(info.getPlot());
             video.setRating(info.getRating());
             video.setYear(info.getYear());
+
+            video.setGenres(info.getGenres());
+            video.setActors(info.getActors());
+
             videoRepository.save(video);
 
             donwloadCoverIfNeeded(info, feedback);

@@ -21,7 +21,9 @@ public abstract class LimmaDialog extends JPanel implements CommandConsumer {
 
     public void invalidate() {
         setSize(getPreferredSize());
-        setBounds(getParent().getWidth() / 2 - getWidth() / 2, getParent().getHeight() / 2 - getHeight() / 2, getWidth(), getHeight());
+        if (getParent() != null) {
+            setBounds(getParent().getWidth() / 2 - getWidth() / 2, getParent().getHeight() / 2 - getHeight() / 2, getWidth(), getHeight());
+        }
         super.invalidate();
     }
 

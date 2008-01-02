@@ -50,9 +50,13 @@ public class BrowserPopupMenu extends LimmaDialog {
                 return true;
 
             case ACTION:
-                limma.ui.browser.model.MenuItem menuItem = (limma.ui.browser.model.MenuItem) list.getSelectedValue();
+                final limma.ui.browser.model.MenuItem menuItem = (limma.ui.browser.model.MenuItem) list.getSelectedValue();
                 close();
-                menuItem.performAction(getDialogManager());
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        menuItem.performAction(getDialogManager());
+                    }
+                });
                 return true;
 
         }

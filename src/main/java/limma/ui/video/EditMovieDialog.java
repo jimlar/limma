@@ -36,7 +36,11 @@ public class EditMovieDialog extends LimmaDialog {
 
     public void open() {
         super.open();
-        textField.requestFocusInWindow();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                textField.requestFocusInWindow();
+            }
+        });
     }
 
     public void setVideo(Video video) {

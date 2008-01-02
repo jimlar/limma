@@ -4,7 +4,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.Comparator;
 import java.util.List;
 
 public class SimpleBrowserNode extends BrowserModelNode {
@@ -50,8 +50,7 @@ public class SimpleBrowserNode extends BrowserModelNode {
     }
 
     public BrowserModelNode getFirstChildWithTitle(String title) {
-        for (Iterator<BrowserModelNode> i = children.iterator(); i.hasNext();) {
-            BrowserModelNode node = i.next();
+        for (BrowserModelNode node : children) {
             if (title.equals(node.getTitle())) {
                 return node;
             }
@@ -63,9 +62,12 @@ public class SimpleBrowserNode extends BrowserModelNode {
         children.clear();
     }
 
-
     public String toString() {
         return new ToStringBuilder(this).append("title", title).toString();
 
+    }
+
+    protected void sort(Comparator<BrowserModelNode> comparator) {
+        Collections.sort(children, comparator);
     }
 }

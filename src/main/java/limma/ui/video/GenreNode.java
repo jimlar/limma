@@ -7,14 +7,14 @@ import limma.ui.browser.model.SimpleBrowserNode;
 
 import java.util.List;
 
-public class AllMoviesNode extends SimpleBrowserNode {
+public class GenreNode extends SimpleBrowserNode {
+    public GenreNode(String genre, VideoPlayer videoPlayer, VideoRepository videoRepository) {
+        super(genre);
 
-    public AllMoviesNode(VideoPlayer videoPlayer, VideoRepository videoRepository) {
-        super("All");
-
-        List<Video> allVideos = videoRepository.getAllVideos();
+        List<Video> allVideos = videoRepository.getVideosOfGenre(genre);
         for (Video video : allVideos) {
             add(new MovieBrowserNode(video, videoPlayer, videoRepository));
         }
+        sortByTitle();
     }
 }

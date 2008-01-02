@@ -10,7 +10,6 @@ import limma.ui.dialogs.Task;
 import limma.ui.dialogs.TaskFeedback;
 
 import javax.swing.*;
-import java.util.Iterator;
 
 class InitializeMusicMenuTask implements Task {
     private SimpleBrowserNode musicNode;
@@ -31,19 +30,17 @@ class InitializeMusicMenuTask implements Task {
         final TrackContainerNode albumsNode = new TrackContainerNode("Albums", musicPlayer, playerManager);
         final TrackContainerNode songsNode = new TrackContainerNode("Songs", musicPlayer, playerManager);
 
-        java.util.List musicFiles = musicRepository.getAll();
+        java.util.List<MusicFile> musicFiles = musicRepository.getAll();
 
-        for (Iterator i = musicFiles.iterator(); i.hasNext();) {
-            MusicFile file = (MusicFile) i.next();
+        for (MusicFile file : musicFiles) {
             songsNode.add(new TrackNode(file.getArtist() + ": " + file.getTitle(), file, musicPlayer, playerManager));
 
             addToArtistsNode(artistsNode, file);
             addToAlbumsNode(albumsNode, file);
         }
 
-        for (Iterator<BrowserModelNode> i = artistsNode.getChildren().iterator(); i.hasNext();) {
-            SimpleBrowserNode artistNode = (SimpleBrowserNode) i.next();
-            artistNode.sortByTitle();
+        for (BrowserModelNode artistNode : artistsNode.getChildren()) {
+            ((SimpleBrowserNode) artistNode).sortByTitle();
         }
 
         artistsNode.sortByTitle();

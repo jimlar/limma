@@ -2,6 +2,8 @@ package limma.application.video;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
+import java.util.*;
+
 public class IMDBInfo {
     private int imdbNumber;
     private String director;
@@ -11,6 +13,8 @@ public class IMDBInfo {
     private String rating;
     private int year;
     private String cover;
+    private Set<String> genres = new HashSet<String>();
+    private List<String> actors = new ArrayList<String>();
 
     public int getImdbNumber() {
         return imdbNumber;
@@ -78,5 +82,21 @@ public class IMDBInfo {
 
     public String toString() {
         return new ReflectionToStringBuilder(this).toString();
+    }
+
+    public Set<String> getGenres() {
+        return genres;
+    }
+
+    public void addGenres(Collection<String> genres) {
+        this.genres.addAll(genres);
+    }
+
+    public List<String> getActors() {
+        return actors;
+    }
+
+    public void addActors(List<String> actors) {
+        this.actors.addAll(actors);
     }
 }

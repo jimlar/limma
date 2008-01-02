@@ -1,11 +1,16 @@
 package limma.application.video;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
+import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.HtmlAttr;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.xpath.HtmlUnitXPath;
+import org.jaxen.JaxenException;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +18,14 @@ import java.util.regex.Pattern;
 public class IMDBServiceImpl implements IMDBService {
     private Pattern titleAndYearPattern;
     private WebClient webClient;
+    private HtmlUnitXPath directorXPath;
+    private HtmlUnitXPath plotOutlineXPath;
+    private HtmlUnitXPath plotSummaryXPath;
+    private HtmlUnitXPath runtimeXPath;
+    private HtmlUnitXPath ratingXPath;
+    private HtmlUnitXPath coverXPath;
+    private HtmlUnitXPath genreXPath;
+    private HtmlUnitXPath actorsXPath;
 
     public IMDBServiceImpl() {
         this(new WebClient());
@@ -24,6 +37,20 @@ public class IMDBServiceImpl implements IMDBService {
         webClient.setThrowExceptionOnFailingStatusCode(false);
         webClient.setJavaScriptEnabled(false);
         titleAndYearPattern = Pattern.compile(".*?(.+) \\((\\d+).*\\).*");
+
+        try {
+            directorXPath = new HtmlUnitXPath("//h5[text()='Director:']/following-sibling::*");
+            plotOutlineXPath = new HtmlUnitXPath("//h5[text()='Plot Outline:']");
+            plotSummaryXPath = new HtmlUnitXPath("//h5[text()='Plot Summary:']");
+            runtimeXPath = new HtmlUnitXPath("//h5[text()='Runtime:']");
+            ratingXPath = new HtmlUnitXPath("//div[@class='general rating']/b[2]");
+            coverXPath = new HtmlUnitXPath("//a[@name='poster']/img/@src");
+            genreXPath = new HtmlUnitXPath("//h5[text()='Genre:']/following-sibling::a[starts-with(@href, '/Sections/Genres')]");
+            actorsXPath = new HtmlUnitXPath("//table[@class='cast']/tbody/tr/td[@class='nm']/a");
+
+        } catch (JaxenException e) {
+            throw new IllegalStateException("Could not create xpath expression", e);
+        }
     }
 
     public IMDBInfo getInfo(int imdbNumber) throws IOException {
@@ -38,65 +65,75 @@ public class IMDBServiceImpl implements IMDBService {
             imdbInfo.setYear(Integer.parseInt(matcher.group(2)));
         }
 
-        HtmlElement titleElement = page.getDocumentElement().getOneHtmlElementByAttribute("strong", "class", "title");
-        HtmlElement contentCell = titleElement.getEnclosingElement("td");
+        imdbInfo.setDirector(getText(page, directorXPath));
 
-        HtmlElement directedByLabel = getElementContainingText("Directed by", contentCell);
-        imdbInfo.setDirector(getSiblingText(directedByLabel, HtmlAnchor.class));
-
-        HtmlElement plotOutlineLabel = getElementContainingText("Plot ", contentCell);
-        if (plotOutlineLabel != null && plotOutlineLabel.getNextSibling() != null) {
-            imdbInfo.setPlot(plotOutlineLabel.getNextSibling().asText().trim());
+        imdbInfo.setPlot(getSiblingText(page, plotOutlineXPath));
+        if (imdbInfo.getPlot() == null) {
+            imdbInfo.setPlot(getSiblingText(page, plotSummaryXPath));
         }
 
-        HtmlElement runtimeLabel = getElementContainingText("Runtime:", contentCell);
-        if (runtimeLabel != null && runtimeLabel.getNextSibling() != null) {
-            imdbInfo.setRuntime(runtimeLabel.getNextSibling().asText().trim());
-        }
+        imdbInfo.setRuntime(getSiblingText(page, runtimeXPath));
+        imdbInfo.setRating(getText(page, ratingXPath));
+        imdbInfo.setCover(getAttributeValue(page, coverXPath));
 
+        imdbInfo.addGenres(getTexts(page, genreXPath));
+        imdbInfo.addActors(getTexts(page, actorsXPath));
 
-        HtmlElement ratingLabel = getElementContainingText("User Rating:", contentCell);
-        String ratingText = getSiblingText(ratingLabel, UnknownHtmlElement.class);
-        imdbInfo.setRating(ratingText);
-
-        List anchors = contentCell.getHtmlElementsByAttribute("a", "name", "poster");
-        if (!anchors.isEmpty()) {
-            HtmlAnchor posterLink = (HtmlAnchor) anchors.get(0);
-            HtmlImage poster = (HtmlImage) posterLink.getHtmlElementsByTagName("img").get(0);
-            imdbInfo.setCover(poster.getSrcAttribute());
-        }
         return imdbInfo;
     }
 
-    private HtmlElement getElementContainingText(String text, HtmlElement element) {
-        if (element == null) {
-            return null;
-        }
-        for (Iterator i = element.getChildElementsIterator(); i.hasNext();) {
-            HtmlElement child = (HtmlElement) i.next();
-            if (child.asText().indexOf(text) != -1) {
-                return getElementContainingText(text, child);
+    private List<String> getTexts(HtmlPage page, HtmlUnitXPath xPath) {
+        List<String> result = new ArrayList<String>();
+        try {
+            List genres = xPath.selectNodes(page);
+            for (Object genre : genres) {
+                DomNode node = (DomNode) genre;
+                result.add(asText(node));
             }
+        } catch (JaxenException e) {
         }
-        if (element.asText().indexOf(text) != -1) {
-            return element;
-        }
-        return null;
+
+        return result;
     }
 
-    private String getSiblingText(DomNode start, Class elementClass) {
-        if (start == null) {
+    private String getAttributeValue(HtmlPage page, HtmlUnitXPath xPath) {
+        try {
+            HtmlAttr result = (HtmlAttr) xPath.selectSingleNode(page);
+            if (result == null) {
+                return null;
+            }
+            return result.getValue().toString();
+        } catch (JaxenException e) {
             return null;
         }
-        DomNode sibling = start.getNextSibling();
-        if (sibling == null) {
-            return null;
-        }
-        if (elementClass.isInstance(sibling)) {
-            return sibling.asText().trim();
-        }
+    }
 
-        return getSiblingText(sibling, elementClass);
+    private String getSiblingText(HtmlPage page, HtmlUnitXPath xpath) {
+        try {
+            HtmlElement result = (HtmlElement) xpath.selectSingleNode(page);
+            if (result == null) {
+                return null;
+            }
+            return asText(result.getNextSibling());
+
+        } catch (JaxenException e) {
+            return null;
+        }
+    }
+
+    private String getText(HtmlPage page, HtmlUnitXPath xPath) {
+        try {
+            return asText((DomNode) xPath.selectSingleNode(page));
+        } catch (JaxenException e) {
+            return null;
+        }
+    }
+
+    private String asText(DomNode node) {
+        if (node == null) {
+            return null;
+        }
+        return node.asText().trim();
     }
 
     private HtmlPage getPage(int imdbNumber) throws IOException {

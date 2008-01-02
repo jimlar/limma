@@ -12,8 +12,9 @@ import java.util.List;
 public class AllMoviesNode extends BrowserModelNode {
     private VideoPlayer videoPlayer;
     private VideoRepository videoRepository;
-    private List<Video> allVideos = new ArrayList<Video>();
+
     private Date lastUpdated;
+    private List<BrowserModelNode> children = new ArrayList<BrowserModelNode>();
 
     public AllMoviesNode(VideoPlayer videoPlayer, VideoRepository videoRepository) {
         this.videoPlayer = videoPlayer;
@@ -24,7 +25,17 @@ public class AllMoviesNode extends BrowserModelNode {
 
     private void refreshVideosIfNeeded() {
         if (lastUpdated == null || lastUpdated.before(videoRepository.getLastUpdated())) {
-            allVideos = videoRepository.getAllVideos();
+            System.out.println("Rebuilding video menu");
+
+            List<Video> allVideos = videoRepository.getAllVideos();
+            children.clear();
+            for (Object o : allVideos) {
+                Video video = (Video) o;
+                MovieBrowserNode movieNode = new MovieBrowserNode(video, videoPlayer, videoRepository);
+                movieNode.setParent(this);
+                children.add(movieNode);
+            }
+
             lastUpdated = videoRepository.getLastUpdated();
         }
     }
@@ -35,14 +46,6 @@ public class AllMoviesNode extends BrowserModelNode {
 
     public List<BrowserModelNode> getChildren() {
         refreshVideosIfNeeded();
-
-        ArrayList<BrowserModelNode> children = new ArrayList<BrowserModelNode>();
-        for (Object o : allVideos) {
-            Video video = (Video) o;
-            MovieBrowserNode movieNode = new MovieBrowserNode(video, videoPlayer, videoRepository);
-            movieNode.setParent(this);
-            children.add(movieNode);
-        }
         return children;
     }
 }

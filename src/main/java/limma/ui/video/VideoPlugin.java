@@ -65,7 +65,7 @@ public class VideoPlugin implements Plugin {
             }
         });
 
-        browser.addCellRenderer(new VideoBrowserNodeRenderer(videoConfig, uiProperties));
+//        browser.addCellRenderer(new VideoBrowserNodeRenderer(videoConfig, uiProperties));
     }
 
     public void init() {

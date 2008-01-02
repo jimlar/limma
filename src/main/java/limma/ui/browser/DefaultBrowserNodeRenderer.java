@@ -5,31 +5,32 @@ import limma.ui.browser.model.BrowserModelNode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
-class DefaultBrowserNodeRenderer extends JLabel implements BrowserNodeRenderer {
+class DefaultBrowserNodeRenderer extends JLabel2D implements BrowserNodeRenderer {
     private boolean selected;
-    private BrowserModelNode node;
     private UIProperties uiProperties;
-    private boolean cellHasFocus;
 
     public DefaultBrowserNodeRenderer(UIProperties uiProperties) {
+        super("");
         this.uiProperties = uiProperties;
         setOpaque(false);
         setFont(uiProperties.getLargeFont());
         setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+
+        setStroke(new BasicStroke(10f));
+        setForeground(Color.white);
+        setOutlineColor(Color.black);
     }
 
     public boolean supportsRendering(BrowserModelNode value) {
         return true;
     }
 
-    public Component getNodeRendererComponent(BrowserList browserList, BrowserModelNode value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getNodeRendererComponent(BrowserList browserList, BrowserModelNode node, int index, boolean isSelected, boolean cellHasFocus) {
         this.selected = isSelected;
-        this.cellHasFocus = cellHasFocus;
-        node = value;
         setComponentOrientation(browserList.getComponentOrientation());
-        setForeground(isSelected || cellHasFocus ? Color.white : Color.black);
+//        setForeground(isSelected || cellHasFocus ? Color.black : Color.white);
+//        setOutlineColor(isSelected || cellHasFocus ? Color.white : Color.black);
         setText(node.getTitle());
         return this;
     }
@@ -45,18 +46,8 @@ class DefaultBrowserNodeRenderer extends JLabel implements BrowserNodeRenderer {
             graphics.setColor(new Color(0x428ac5));
             graphics.drawLine(0, getHeight() - 1, getHeight(), getHeight() - 1);
         }
-//        if (!node.getChildren().isEmpty()) {
-//            graphics.setPaint(getForeground());
-//            drawRigthString(graphics, "+");
-//        }
         super.paintComponent(g);
         graphics.setComposite(oldComposite);
-    }
-
-    private void drawRigthString(Graphics2D graphics, String str) {
-        Rectangle2D stringBounds = getFont().getStringBounds(str, graphics.getFontRenderContext());
-        FontMetrics fontMetrics = getFontMetrics(getFont());
-        graphics.drawString(str, (int) (getWidth() - stringBounds.getWidth()) - 10, (int) fontMetrics.getHeight() - fontMetrics.getDescent());
     }
 
     private void paintGradient(Graphics2D graphics) {
@@ -87,8 +78,8 @@ class DefaultBrowserNodeRenderer extends JLabel implements BrowserNodeRenderer {
         }
         // p should now be the JList.
         boolean colorMatch = (back != null) && (p != null) &&
-                             back.equals(p.getBackground()) &&
-                             p.isOpaque();
+                back.equals(p.getBackground()) &&
+                p.isOpaque();
         return !colorMatch && super.isOpaque();
     }
 

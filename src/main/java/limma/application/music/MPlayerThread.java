@@ -24,7 +24,7 @@ class MPlayerThread extends Thread {
     public void run() {
         try {
             ExternalCommand playerCommand = musicConfig.getMPlayerCommand();
-            process = Runtime.getRuntime().exec(playerCommand.getCommandLine(new String[]{"-slave", musicFile.getFile().getAbsolutePath()}));
+            process = Runtime.getRuntime().exec(playerCommand.getCommandLine(new String[]{"-slave", musicConfig.getDiskFile(musicFile).getAbsolutePath()}));
 
             input("get_time_length");
 

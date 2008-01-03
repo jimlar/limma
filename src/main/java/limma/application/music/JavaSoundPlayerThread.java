@@ -18,9 +18,11 @@ class JavaSoundPlayerThread extends Thread {
     private SourceDataLine line;
     private MusicFile currentFile;
     private JavaSoundMusicPlayer player;
+    private MusicConfig musicConfig;
 
-    public JavaSoundPlayerThread(JavaSoundMusicPlayer player) {
+    public JavaSoundPlayerThread(JavaSoundMusicPlayer player, MusicConfig musicConfig) {
         this.player = player;
+        this.musicConfig = musicConfig;
         setDaemon(true);
         start();
     }
@@ -75,7 +77,7 @@ class JavaSoundPlayerThread extends Thread {
     }
 
     private void openAudioInput(MusicFile musicFile) throws IOException, UnsupportedAudioFileException {
-        audioInputStream = AudioSystem.getAudioInputStream(musicFile.getFile());
+        audioInputStream = AudioSystem.getAudioInputStream(musicConfig.getDiskFile(musicFile));
         inputAudioFormat = audioInputStream.getFormat();
 
         /* Wrap input in PCM conversion filter */

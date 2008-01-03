@@ -11,7 +11,7 @@ public class ExternalMusicPlayer extends AbstractMusicPlayer {
     private MPlayerThread mPlayerThread;
 
     public ExternalMusicPlayer(MusicConfig musicConfig, UIProperties uiProperties) {
-        super(uiProperties);
+        super(uiProperties, musicConfig);
         this.musicConfig = musicConfig;
 
         Runtime.getRuntime().addShutdownHook(new Thread() {

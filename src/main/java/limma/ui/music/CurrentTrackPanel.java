@@ -1,5 +1,6 @@
 package limma.ui.music;
 
+import limma.application.music.MusicConfig;
 import limma.domain.music.MusicFile;
 import limma.ui.AntialiasLabel;
 import limma.ui.UIProperties;
@@ -20,10 +21,12 @@ public class CurrentTrackPanel extends JPanel {
     private AntialiasLabel tracksLabel;
     private CoverImage coverLabel;
     private UIProperties uiProperties;
+    private MusicConfig musicConfig;
 
-    public CurrentTrackPanel(UIProperties uiProperties) {
+    public CurrentTrackPanel(UIProperties uiProperties, MusicConfig musicConfig) {
         super(new GridBagLayout());
         this.uiProperties = uiProperties;
+        this.musicConfig = musicConfig;
 
         coverLabel = new CoverImage();
         addRow(coverLabel);
@@ -74,7 +77,7 @@ public class CurrentTrackPanel extends JPanel {
     }
 
     private ImageIcon findCoverImage(MusicFile file) {
-        File dir = file.getFile().getParentFile();
+        File dir = musicConfig.getDiskFile(file).getParentFile();
         File[] jpegFiles = dir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.toLowerCase().endsWith(".jpg");

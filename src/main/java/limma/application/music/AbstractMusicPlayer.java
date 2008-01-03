@@ -19,8 +19,8 @@ public abstract class AbstractMusicPlayer implements MusicPlayer {
     private boolean shuffle = true;
     private CurrentTrackPanel currentTrackPanel;
 
-    protected AbstractMusicPlayer(UIProperties uiProperties) {
-        currentTrackPanel = new CurrentTrackPanel(uiProperties);
+    protected AbstractMusicPlayer(UIProperties uiProperties, MusicConfig musicConfig) {
+        currentTrackPanel = new CurrentTrackPanel(uiProperties, musicConfig);
     }
 
     private void startPlaying(final MusicFile musicFile) {

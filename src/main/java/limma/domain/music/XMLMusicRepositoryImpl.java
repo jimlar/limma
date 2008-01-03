@@ -5,10 +5,7 @@ import limma.domain.AbstractXMLRepository;
 import limma.utils.DirectoryScanner;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements MusicRepository {
     private List<MusicFile> musicFiles;
@@ -56,7 +53,7 @@ public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements Mus
     private void deleteRemovedOrOutdatedFiles(int numDiskFiles, ProgressListener progressListener) {
         for (ListIterator i = musicFiles.listIterator(); i.hasNext();) {
             MusicFile musicFile = (MusicFile) i.next();
-            File diskFile = musicFile.getFile();
+            File diskFile = musicConfig.getDiskFile(musicFile);
             if (!diskFile.isFile() || diskFile.lastModified() != musicFile.getLastModified().getTime()) {
                 i.remove();
                 progressListener.progressUpdated(musicFiles.size() + numDiskFiles, i.nextIndex());
@@ -69,7 +66,7 @@ public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements Mus
         final ArrayList<File> persistentFiles = new ArrayList<File>();
         for (Iterator i = musicFiles.iterator(); i.hasNext();) {
             MusicFile musicFile = (MusicFile) i.next();
-            persistentFiles.add(musicFile.getFile());
+            persistentFiles.add(musicConfig.getDiskFile(musicFile));
         }
 
         final int[] filesScanned = new int[]{0};
@@ -78,7 +75,7 @@ public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements Mus
             public boolean visit(File file) {
                 if (isMusicFile(file)) {
                     if (!persistentFiles.contains(file)) {
-                        musicFiles.add(new MusicFile(file));
+                        musicFiles.add(new MusicFile(musicConfig, musicConfig.getPathRelativeToMusicDir(file), new Date(file.lastModified())));
                     }
                     filesScanned[0]++;
                     progressListener.progressUpdated(numDatabaseFiles + numDiskFiles, filesScanned[0]);

@@ -45,7 +45,7 @@ public class BrowserImpl extends JPanel implements Browser {
         scrollPane.setOpaque(false);
         scrollPane.setAutoscrolls(true);
         scrollPane.getViewport().setOpaque(false);
-        scrollPane.setViewportBorder(BorderFactory.createLineBorder(uiProperties.getBorderColor()));
+        scrollPane.setViewportBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, uiProperties.getBorderColor()));
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(scrollbar ? JScrollPane.VERTICAL_SCROLLBAR_ALWAYS : JScrollPane.VERTICAL_SCROLLBAR_NEVER);

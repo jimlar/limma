@@ -4,12 +4,13 @@ import limma.application.PlayerManager;
 import limma.application.music.MusicPlayer;
 import limma.domain.music.MusicFile;
 import limma.domain.music.MusicRepository;
-import limma.ui.browser.model.BrowserModelNode;
 import limma.ui.browser.model.SimpleBrowserNode;
 import limma.ui.dialogs.Task;
 import limma.ui.dialogs.TaskFeedback;
+import org.apache.commons.lang.StringUtils;
 
-import javax.swing.*;
+import java.util.Arrays;
+import java.util.List;
 
 class InitializeMusicMenuTask implements Task {
     private SimpleBrowserNode musicNode;
@@ -26,58 +27,27 @@ class InitializeMusicMenuTask implements Task {
 
     public void run(TaskFeedback feedback) {
         feedback.setStatusMessage("Loading music database...");
-        final TrackContainerNode artistsNode = new TrackContainerNode("Artists", musicPlayer, playerManager);
-        final TrackContainerNode albumsNode = new TrackContainerNode("Albums", musicPlayer, playerManager);
-        final TrackContainerNode songsNode = new TrackContainerNode("Songs", musicPlayer, playerManager);
 
-        java.util.List<MusicFile> musicFiles = musicRepository.getAll();
+        musicNode.removeAllChildren();
 
-        for (MusicFile file : musicFiles) {
-            songsNode.add(new TrackNode(file.getArtist() + ": " + file.getTitle(), file, musicPlayer, playerManager));
-
-            addToArtistsNode(artistsNode, file);
-            addToAlbumsNode(albumsNode, file);
+        for (MusicFile file : musicRepository.getAll()) {
+            List<String> pathElements = Arrays.asList(StringUtils.split(file.getPath(), '/'));
+            addNodes(file, musicNode, pathElements);
         }
+    }
 
-        for (BrowserModelNode artistNode : artistsNode.getChildren()) {
-            ((SimpleBrowserNode) artistNode).sortByTitle();
-        }
-
-        artistsNode.sortByTitle();
-        albumsNode.sortByTitle();
-
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                musicNode.removeAllChildren();
-                musicNode.add(artistsNode);
-                musicNode.add(albumsNode);
-                musicNode.add(songsNode);
+    private void addNodes(MusicFile file, SimpleBrowserNode parent, List<String> path) {
+        if (path.size() > 1) {
+            SimpleBrowserNode container = (SimpleBrowserNode) parent.getFirstChildWithTitle(path.get(0));
+            if (container == null) {
+                container = new TrackContainerNode(path.get(0), musicPlayer, playerManager);
+                parent.add(container);
             }
-        });
-    }
+            addNodes(file, container, path.subList(1, path.size()));
 
-    private void addToArtistsNode(SimpleBrowserNode artistsNode, MusicFile file) {
-        TrackContainerNode artistNode = (TrackContainerNode) artistsNode.getFirstChildWithTitle(file.getArtist());
-        if (artistNode == null) {
-            artistNode = new TrackContainerNode(file.getArtist(), musicPlayer, playerManager);
-            artistsNode.add(artistNode);
+        } else {
+            parent.add(new TrackNode(file.getTitle(), file, musicPlayer, playerManager));
         }
-
-        TrackContainerNode albumNode = (TrackContainerNode) artistNode.getFirstChildWithTitle(file.getAlbum());
-        if (albumNode == null) {
-            albumNode = new TrackContainerNode(file.getAlbum(), musicPlayer, playerManager);
-            artistNode.add(albumNode);
-        }
-        albumNode.add(new TrackNode(file.getTitle(), file, musicPlayer, playerManager));
-    }
-
-    private void addToAlbumsNode(SimpleBrowserNode albumsNode, MusicFile file) {
-        String albumName = file.getArtist() + ": " + file.getAlbum();
-        TrackContainerNode albumNode = (TrackContainerNode) albumsNode.getFirstChildWithTitle(albumName);
-        if (albumNode == null) {
-            albumNode = new TrackContainerNode(albumName, musicPlayer, playerManager);
-            albumsNode.add(albumNode);
-        }
-        albumNode.add(new TrackNode(file.getTitle(), file, musicPlayer, playerManager));
+        parent.sortByTitle();
     }
 }

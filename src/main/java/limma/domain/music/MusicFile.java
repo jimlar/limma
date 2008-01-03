@@ -1,13 +1,14 @@
 package limma.domain.music;
 
 import de.vdheide.mp3.MP3File;
+import limma.application.music.MusicConfig;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 
-public class MusicFile extends Object implements Serializable {
+public class MusicFile implements Serializable {
     private long id;
     private String path;
     private String artist;
@@ -21,9 +22,11 @@ public class MusicFile extends Object implements Serializable {
     public MusicFile() {
     }
 
-    public MusicFile(File file) {
-        this.path = file.getAbsolutePath();
-        this.lastModified = new Date(file.lastModified());
+    public MusicFile(MusicConfig musicConfig, String path, Date lastModified) {
+        this.path = path;
+        this.lastModified = lastModified;
+
+        File file = musicConfig.getDiskFile(this);
 
         readID3WithJavaMP3(file);
 
@@ -57,11 +60,6 @@ public class MusicFile extends Object implements Serializable {
 
         } catch (Exception e) {
         }
-    }
-
-
-    public File getFile() {
-        return new File(path);
     }
 
     public String getArtist() {
@@ -113,5 +111,9 @@ public class MusicFile extends Object implements Serializable {
 
     public Date getLastModified() {
         return lastModified;
+    }
+
+    public String getPath() {
+        return path;
     }
 }

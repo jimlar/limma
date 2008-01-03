@@ -18,11 +18,15 @@ public interface VideoRepository {
 
     Date getLastUpdated();
 
-    List<Video> getVideosOfGenre(String genre);
+    Set<Video> getVideosOfGenre(String genre);
 
     Set<String> getAllGenres();
 
-    List<Video> getVideosWithActor(String actor);
+    Set<Video> getVideosWithActor(String actor);
 
     Set<String> getAllActors();
+
+    Set<Video> getVideosWithDirector(String director);
+
+    Set<String> getAllDirectors();
 }

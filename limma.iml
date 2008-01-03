@@ -37,9 +37,7 @@
           <root url="jar://$M2_REPO$/java_mp3/java_mp3/0.3/java_mp3-0.3.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="intellijad://intellijad" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">

@@ -2,6 +2,7 @@ package limma.ui.video;
 
 import limma.application.video.VideoPlayer;
 import limma.domain.video.VideoRepository;
+import limma.ui.browser.model.BrowserModelNode;
 import limma.ui.browser.model.SimpleBrowserNode;
 
 import java.util.Set;
@@ -24,6 +25,7 @@ public class MoviesBrowserNode extends SimpleBrowserNode {
 
         add(new AllMoviesNode(videoPlayer, videoRepository));
         add(createGenresNode());
+        add(createDirectorsNode());
         add(createActorsNode());
         add(new NewMoviesNode(7, videoPlayer, videoRepository, "Last Weeks Movies"));
         add(new NewMoviesNode(30, videoPlayer, videoRepository, "Last Months Movies"));
@@ -31,6 +33,16 @@ public class MoviesBrowserNode extends SimpleBrowserNode {
         add(createTagsNode());
 
         add(dvdNode);
+    }
+
+    private BrowserModelNode createDirectorsNode() {
+        SimpleBrowserNode directorsNode = new SimpleBrowserNode("Directors");
+        Set<String> directors = videoRepository.getAllDirectors();
+        for (String director : directors) {
+            directorsNode.add(new DirectorNode(director, videoPlayer, videoRepository));
+        }
+        directorsNode.sortByTitle();
+        return directorsNode;
     }
 
     private SimpleBrowserNode createTagsNode() {

@@ -27,8 +27,8 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
         return lastUpdated;
     }
 
-    public List<Video> getVideosOfGenre(String genre) {
-        ArrayList<Video> result = new ArrayList<Video>();
+    public Set<Video> getVideosOfGenre(String genre) {
+        Set<Video> result = new HashSet<Video>();
         for (Video video : videos) {
             if (video.getGenres().contains(genre)) {
                 result.add(video);
@@ -45,8 +45,8 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
         return result;
     }
 
-    public List<Video> getVideosWithActor(String actor) {
-        ArrayList<Video> result = new ArrayList<Video>();
+    public Set<Video> getVideosWithActor(String actor) {
+        Set<Video> result = new HashSet<Video>();
         for (Video video : videos) {
             if (video.getActors().contains(actor)) {
                 result.add(video);
@@ -59,6 +59,26 @@ public class XMLVideoRepositoryImpl extends AbstractXMLRepository implements Vid
         Set<String> result = new HashSet<String>();
         for (Video video : getAllVideos()) {
             result.addAll(video.getActors());
+        }
+        return result;
+    }
+
+    public Set<Video> getVideosWithDirector(String director) {
+        Set<Video> result = new HashSet<Video>();
+        for (Video video : videos) {
+            if (director != null && director.equals(video.getDirector())) {
+                result.add(video);
+            }
+        }
+        return result;
+    }
+
+    public Set<String> getAllDirectors() {
+        Set<String> result = new HashSet<String>();
+        for (Video video : getAllVideos()) {
+            if (!StringUtils.isBlank(video.getDirector())){
+                result.add(video.getDirector());
+            }
         }
         return result;
     }

@@ -6,7 +6,7 @@ import java.util.*;
 public class DirectoryScanner {
     private File baseDir;
     private boolean sortAlphabetically;
-    private Set skipped = new HashSet();
+    private Set<File> skipped = new HashSet<File>();
 
     public DirectoryScanner(File baseDir) {
         this(baseDir, false);
@@ -36,18 +36,15 @@ public class DirectoryScanner {
             boolean descend = visitor.visit(file);
             if (descend) {
                 File[] childrenArray = file.listFiles();
-                List children = Arrays.asList(childrenArray != null ? childrenArray : new File[0]);
+                List<File> children = Arrays.asList(childrenArray != null ? childrenArray : new File[0]);
                 if (sortAlphabetically) {
-                    children = new ArrayList(children);
-                    Collections.sort(children, new Comparator() {
-                        public int compare(Object o1, Object o2) {
-                            return ((File) o1).getName().compareToIgnoreCase(((File) o2).getName());
-                        }
-                    });
+                    children = new ArrayList<File>(children);
+                    Collections.sort(children, new FilenameComparator());
                 }
-                for (Iterator i = children.iterator(); i.hasNext();) {
-                    File child = (File) i.next();
-                    accept(child, visitor);
+                for (File child : children) {
+                    if (!file.equals(child)) { //Wierd OSX bug? file is child to itself
+                        accept(child, visitor);
+                    }
                 }
             }
         } else {
@@ -57,5 +54,11 @@ public class DirectoryScanner {
 
     public static interface Visitor {
         boolean visit(File file);
+    }
+
+    private static class FilenameComparator implements Comparator<File> {
+        public int compare(File o1, File o2) {
+            return o1.getName().compareToIgnoreCase(o2.getName());
+        }
     }
 }

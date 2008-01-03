@@ -13,4 +13,4 @@ echo "LIMMA_HOME=${LIMMA_HOME}"
 echo "LIBS=${LIBS}"
 
 
-java -classpath $LIBS limma.Main
+java -Xmx256m -Xms64m -classpath $LIBS limma.Main

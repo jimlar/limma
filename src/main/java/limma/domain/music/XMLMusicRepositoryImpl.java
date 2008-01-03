@@ -5,7 +5,10 @@ import limma.domain.AbstractXMLRepository;
 import limma.utils.DirectoryScanner;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ListIterator;
 
 public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements MusicRepository {
     private List<MusicFile> musicFiles;
@@ -64,8 +67,7 @@ public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements Mus
     private void addMissingFiles(final int numDiskFiles, final ProgressListener progressListener) {
         final int numDatabaseFiles = musicFiles.size();
         final ArrayList<File> persistentFiles = new ArrayList<File>();
-        for (Iterator i = musicFiles.iterator(); i.hasNext();) {
-            MusicFile musicFile = (MusicFile) i.next();
+        for (MusicFile musicFile : musicFiles) {
             persistentFiles.add(musicConfig.getDiskFile(musicFile));
         }
 
@@ -73,7 +75,10 @@ public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements Mus
         DirectoryScanner scanner = new DirectoryScanner(musicConfig.getMusicDir(), true);
         scanner.accept(new DirectoryScanner.Visitor() {
             public boolean visit(File file) {
+                System.out.println("file = " + file);
                 if (isMusicFile(file)) {
+
+
                     if (!persistentFiles.contains(file)) {
                         musicFiles.add(new MusicFile(musicConfig, musicConfig.getPathRelativeToMusicDir(file), new Date(file.lastModified())));
                     }

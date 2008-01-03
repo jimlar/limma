@@ -59,6 +59,7 @@ public class MusicFile implements Serializable {
             lengthInSeconds = mp3File.getLength();
 
         } catch (Exception e) {
+        } catch (OutOfMemoryError e) {
         }
     }
 

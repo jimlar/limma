@@ -75,10 +75,7 @@ public class XMLMusicRepositoryImpl extends AbstractXMLRepository implements Mus
         DirectoryScanner scanner = new DirectoryScanner(musicConfig.getMusicDir(), true);
         scanner.accept(new DirectoryScanner.Visitor() {
             public boolean visit(File file) {
-                System.out.println("file = " + file);
                 if (isMusicFile(file)) {
-
-
                     if (!persistentFiles.contains(file)) {
                         musicFiles.add(new MusicFile(musicConfig, musicConfig.getPathRelativeToMusicDir(file), new Date(file.lastModified())));
                     }

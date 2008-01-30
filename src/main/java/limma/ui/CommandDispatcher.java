@@ -7,6 +7,7 @@ import limma.ui.dialogs.DialogManager;
 import limma.ui.dialogs.LimmaDialog;
 import org.picocontainer.Startable;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -34,7 +35,7 @@ public class CommandDispatcher extends EventQueue implements Startable {
         if (event instanceof KeyEvent && event.getID() == KeyEvent.KEY_PRESSED) {
 
             KeyEvent keyEvent = (KeyEvent) event;
-            Command command = keyConfig.getCommandForEvent(keyEvent);
+            final Command command = keyConfig.getCommandForEvent(keyEvent);
 
             LimmaDialog topDialog = dialogManager.getTopDialog();
             if (topDialog != null) {
@@ -45,7 +46,11 @@ public class CommandDispatcher extends EventQueue implements Startable {
             } else {
                 Player player = playerManager.getPlayer();
                 if (player == null || !player.consume(command)) {
-                    browser.consume(command);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            browser.consume(command);
+                        }
+                    });
                 }
                 return;
             }

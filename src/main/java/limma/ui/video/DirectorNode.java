@@ -15,6 +15,6 @@ public class DirectorNode extends SimpleBrowserNode {
         for (Video video : videos) {
             add(new MovieBrowserNode(video, videoPlayer, videoRepository));
         }
-        sortByTitle();
+        sort();
     }
 }

@@ -15,6 +15,6 @@ public class GenreNode extends SimpleBrowserNode {
         for (Video video : allVideos) {
             add(new MovieBrowserNode(video, videoPlayer, videoRepository));
         }
-        sortByTitle();
+        sort();
     }
 }

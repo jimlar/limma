@@ -3,8 +3,11 @@ package limma.ui.music;
 import limma.application.PlayerManager;
 import limma.application.music.MusicPlayer;
 import limma.domain.music.MusicFile;
+import limma.ui.browser.model.BrowserModelNode;
 import limma.ui.browser.model.SimpleBrowserNode;
 import limma.ui.dialogs.DialogManager;
+
+import java.io.File;
 
 public class TrackNode extends SimpleBrowserNode {
     private MusicFile musicFile;
@@ -29,5 +32,13 @@ public class TrackNode extends SimpleBrowserNode {
 
     public TrackContainerNode getTrackContainer() {
         return (TrackContainerNode) getParent();
+    }
+
+    public int compareTo(Object o) {
+        if (o instanceof TrackNode) {
+            return new File(getMusicFile().getPath()).getName().compareToIgnoreCase(new File(((TrackNode) o).getMusicFile().getPath()).getName());
+        }
+
+        return getTitle().compareToIgnoreCase(((BrowserModelNode) o).getTitle());
     }
 }

@@ -37,7 +37,7 @@ class LoadC64GamesTask implements Task {
             GameFile gameFile = (GameFile) i.next();
             c64Node.add(new GameBrowserNode(gameFile, gameConfig));
         }
-        c64Node.sortByTitle();
+        c64Node.sort();
     }
 
     private String getGameName(File file) {

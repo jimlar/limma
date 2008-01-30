@@ -41,7 +41,7 @@ public class MoviesBrowserNode extends SimpleBrowserNode {
         for (String director : directors) {
             directorsNode.add(new DirectorNode(director, videoPlayer, videoRepository));
         }
-        directorsNode.sortByTitle();
+        directorsNode.sort();
         return directorsNode;
     }
 
@@ -59,7 +59,7 @@ public class MoviesBrowserNode extends SimpleBrowserNode {
         for (String genre : genres) {
             genresNode.add(new GenreNode(genre, videoPlayer, videoRepository));
         }
-        genresNode.sortByTitle();
+        genresNode.sort();
         return genresNode;
     }
 
@@ -69,7 +69,7 @@ public class MoviesBrowserNode extends SimpleBrowserNode {
         for (String actor : actors) {
             actorsNode.add(new ActorNode(actor, videoPlayer, videoRepository));
         }
-        actorsNode.sortByTitle();
+        actorsNode.sort();
         return actorsNode;
     }
 }

@@ -38,7 +38,7 @@ class LoadSnesGamesTask implements Task {
             GameFile gameFile = (GameFile) i.next();
             snesNode.add(new GameBrowserNode(gameFile, gameConfig));
         }
-        snesNode.sortByTitle();
+        snesNode.sort();
     }
 
     private String getGameName(File file) {

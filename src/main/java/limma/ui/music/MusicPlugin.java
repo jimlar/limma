@@ -26,7 +26,7 @@ public class MusicPlugin implements Plugin {
     }
 
     public void init() {
-        musicNode = new SimpleBrowserNode("Music");
+        musicNode = new TrackContainerNode("Music", musicPlayer, playerManager);
         musicNode.add(new MenuItem("") {
 
             public String getTitle() {

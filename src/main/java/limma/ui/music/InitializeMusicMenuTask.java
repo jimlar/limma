@@ -48,6 +48,6 @@ class InitializeMusicMenuTask implements Task {
         } else {
             parent.add(new TrackNode(file.getTitle(), file, musicPlayer, playerManager));
         }
-        parent.sortByTitle();
+        parent.sort();
     }
 }

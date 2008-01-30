@@ -41,7 +41,7 @@ public class SimpleBrowserNode extends BrowserModelNode {
         return menuItems;
     }
 
-    public void sortByTitle() {
+    public void sort() {
         Collections.sort(children);
     }
 

@@ -27,7 +27,7 @@ public class MovieBrowserNode extends SimpleBrowserNode {
 
 //        add(createEditTagsNode(video));
         addFileNodes(video);
-        sortByTitle();
+        sort();
     }
 
     public Video getVideo() {

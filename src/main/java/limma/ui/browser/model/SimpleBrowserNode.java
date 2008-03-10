@@ -22,7 +22,7 @@ public class SimpleBrowserNode extends BrowserModelNode {
 
     public void add(BrowserModelNode node) {
         children.add(node);
-        if (node.getParent() != null) {
+        if (node.getParent() != null && node.getParent() != this) {
             throw new IllegalArgumentException("Cannot add a node that already is added elsewhere!");
         }
         node.setParent(this);
